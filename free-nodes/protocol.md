@@ -55,9 +55,18 @@
 | `trojan` | ✅ | ✅ | ✅ | ✅ |
 | `ss`（Shadowsocks） | ✅ 仅 AEAD | ✅ AEAD + 2022 | ✅ 含旧流加密 | ✅ 含旧流加密 |
 | `ssr` | ❌ | ❌ | ✅ | ❌ |
-| `hysteria2` / `hy2` | ❌ | ❌ | ✅ | ✅ |
+| `hysteria2` / `hy2` | ✅（装填方式特殊，见 4.6） | ❌ | ✅ | ✅ |
 | `hysteria`（v1） | ❌ | ❌ | ❌（本流水线不处理） | ❌ |
 | `tuic`（v5） | ❌ | ❌ | ✅ | ✅ |
+
+> **勘误（2026-10-25）**：早期版本把 v2ray 的 hysteria2 标为 ❌，是错的。v2fly 5.x
+> 支持 Hysteria2（官方文档 `config/proxy/hy2.md` + `config/stream/hy2.md`），本机
+> v2ray 5.53 实测：装填「hysteria2 代理层 + hysteria2 传输层」后对 sing-box 的
+> hysteria2 服务端端到端打通（HTTP 200）。**Xray 26.10 确实不支持**：二进制无
+> hysteria 字样，配置直接被拒。v2rayN 等客户端宣传「支持 Hysteria2」指的是它们
+> **捆绑了独立的 hysteria 官方内核**，不代表 Xray/v2fly 本体。
+> 容易误判的另一个原因：v2fly 对未知字段宽松（不报错、静默忽略），只跑 config
+> check 看不出装填错误，必须端到端实测。
 
 ### 3.2 传输层
 
@@ -185,6 +194,39 @@ v2ray/xray **没有任何 ss 插件机制**，带插件的 ss 节点必须判「
 > `tuic://` 的 userinfo 是 `uuid:password` 两段。`urllib` 会把 `password` 拆到
 > `urlsplit().password`，只取 `.username` 会导致 uuid 缺口令、配置生成失败（已修）。
 
+**v2ray 的 hysteria2 装填（特殊，2026-10-25 官方文档 + E2E 实测）**
+
+v2fly 5.x 把 Hysteria2 拆成两层：`TLS + HTTP3` 传输层（认证、拥塞控制）+
+`Proxy Header` 代理层（目标地址、Padding）。要连**官方版 / sing-box / mihomo**
+的 hysteria2 服务端，必须两层都写：
+
+```json
+{
+  "protocol": "hysteria2",
+  "settings": {"servers": [{"address": "a.com", "port": 443}]},
+  "streamSettings": {
+    "network": "hysteria2",
+    "security": "tls",
+    "tlsSettings": {"serverName": "a.com", "allowInsecure": true},
+    "hy2Settings": {"password": "口令"}
+  }
+}
+```
+
+要点（全部为 v2ray 5.53 实测 + 官方文档确认）：
+
+- 代理层 `settings.servers` **只有 `address` / `port`，没有密码字段**——密码在
+  传输层 `hy2Settings.password`。字段名是 `hy2Settings`（不是 hysteria2Settings）
+- 不配证书时官方默认行为即 `allowInsecure`；我们显式写 `security: tls` +
+  `allowInsecure`，否则报 `Hysteria2 based on QUIC that requires TLS.`
+- **不支持** `obfs`（salamander 混淆）与 `mport`（端口跳跃），且 v2fly 对未知
+  字段宽松、静默忽略——转换器遇到这两个参数直接判「不支持」，不许静默降级
+- 兼容性实测：v2ray 客户端 ↔ sing-box 服务端端到端 HTTP 200；
+  ↔ mihomo listener（hysteria2 入站）认证 404，**mihomo 入站不兼容 v2fly 实现**
+  （客户端只关心出站兼容，不影响本流水线）
+- Xray 26.10 无 hysteria2：protocol 名不被识别，配置直接被拒
+
+
 **vmess**（四内核）
 
 URI 是 base64(JSON)，字段落在配置里：
@@ -254,7 +296,9 @@ URI 是 base64(JSON)，字段落在配置里：
 | `ss2022` → v2ray | v2fly 未实现 2022 |
 | `ss2022` 密钥长度不符 → 全部内核 | 内核校验密钥长度 |
 | `ssr` → v2ray / xray / singbox | 只有 mihomo 支持 |
-| `hysteria2` / `tuic` → v2ray / xray | 协议未实现 |
+| `tuic` → v2ray / xray | 协议未实现 |
+| `hysteria2` → xray | 协议未实现（v2ray 已支持，见 §3.6 特殊装填） |
+| `hysteria2` + `obfs` / `mport` → v2ray | v2fly 无混淆/端口跳跃字段，未知字段被静默忽略 |
 | `hysteria`（v1） → 全部 | 四内核均不在支持范围 |
 | REALITY + v2ray | v2fly 无 REALITY |
 | REALITY 公钥非 43 字符 → 全部 | 内核拒绝，属于坏链接 |
