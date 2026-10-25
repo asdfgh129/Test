@@ -12,8 +12,8 @@
 输出（文档类全部在 Docs/ 子目录，md 日志按日期倒序累积）：
     Docs/health_check.md   人读报告（结论 + 指标 + 发现 + 建议动作）
     Docs/health_check.json 机读结果（最新一次）
-    Docs/known_issue.md    自检发现的问题（按日期倒序，同一天重跑替换当天小节）
-    Docs/review_log.md     跨天摘要（按日期倒序）
+    Docs/known_issues.md    自检发现的问题（按日期倒序，同一天重跑替换当天小节）
+    Docs/review_logs.md     跨天摘要（按日期倒序）
 
 退出码：0 = 健康，1 = 有告警，2 = 有严重问题
 """
@@ -99,7 +99,7 @@ _SINGBOX_NON_NODE = {"direct", "block", "dns", "selector", "urltest", "tor"}
 
 
 def parse_collection_log(path):
-    """解析 collection_log.md，返回条目列表（按时间正序）。
+    """解析 collection_logs.md，返回条目列表（按时间正序）。
 
     每条：{"header", "phases": {阶段名: {"declared", "repos": [(name, got, kind)]}},
            "raw", "uniq", "dropped"}
@@ -261,7 +261,7 @@ def check_repo_yield(find, entries):
       nofile = 目录里没有可识别的候选文件（命名/子目录规则不足）
     """
     if not entries:
-        find("warn", "仓库效率", "未找到采集日志，无法评估仓库产出率", "确认 collection_log.md 是否正常写入")
+        find("warn", "仓库效率", "未找到采集日志，无法评估仓库产出率", "确认 collection_logs.md 是否正常写入")
         return
     last = latest_entry(entries)
     cnt = Counter()
@@ -696,7 +696,7 @@ def write_reports(root, findings, metrics, entries, args):
                    "verdict": verdict, "metrics": metrics,
                    "findings": findings, "todo": todo}, fh, ensure_ascii=False, indent=1)
 
-    # known_issue.md：自检发现的问题统一记在这里（按日期倒序）
+    # known_issues.md：自检发现的问题统一记在这里（按日期倒序）
     issue_lines = [f"**结论：{verdict}**", ""]
     if todo:
         issue_lines.append("| 级别 | 领域 | 问题 | 建议动作 |")
@@ -712,7 +712,7 @@ def write_reports(root, findings, metrics, entries, args):
     # 标题固定为「自检发现」：同一天重跑替换当天该节，不按分钟累积出一堆碎片小节
     lay.append_issue(root, date_str, "自检发现", "\n".join(issue_lines))
 
-    # review_log.md：跨天摘要（按日期倒序，一天一节 = 当天最后一次自检的结论）
+    # review_logs.md：跨天摘要（按日期倒序，一天一节 = 当天最后一次自检的结论）
     ok_metric = metrics.get("各内核可用")
     ok_txt = "/".join(str(v) for v in ok_metric.values()) if isinstance(ok_metric, dict) else "-"
     lay.upsert_section(lay.review_log_path(root), date_str, "自检摘要",

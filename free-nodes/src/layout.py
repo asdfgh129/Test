@@ -4,7 +4,7 @@
 
 四内核（对外名，固定顺序）：v2ray → xray → clash → singbox
 
-目录结构（2026-10-25 起，根目录只放 README 与 CHANGELOGS，其余按用途分三个子目录）：
+目录结构（2026-10-25 起，根目录只放 README 与 CHANGELOGS，其余按用途分三个子目录 + Skills）：
 节点文件一律不分日期——过期节点没有意义，每次运行覆盖更新：
 
     <root>/
@@ -29,19 +29,24 @@
       Docs/                     「跟文档相关的文件」全部在这里
         protocol.md             四内核解析规范与实测校准报告
         proxy.md                自建代理与节点测试链路说明
+        known-issues.md         踩坑知识库（现象/根因/修复/教训）
+        sources.md              种子仓库来源说明
+        tools-setup.md          内核二进制部署/升级方法
         report.md               采集报告       ┐
         summary.md              验证汇总       │ 都是「按日期倒序」累积：
         summary.json            验证最新快照   │ 新条目插到顶部，同一天重跑替换当天小节，
         health_check.md         自检报告       │ 最多保留 MAX_SECTIONS 个小节
         health_check.json       自检最新快照   │
-        known_issue.md          已知问题清单   │
-        collection_log.md       采集日志       │
-        review_log.md           自检摘要       ┘
-      src/                      「脚本文件」+ 采集配置/状态（发布时由技能 scripts 同步）
+        known_issues.md         自检发现的问题 │
+        collection_logs.md      采集日志       │
+        review_logs.md          自检摘要       ┘
+      src/                      「脚本文件」+ 采集配置/状态（全链路脚本的唯一事实来源）
         collect_nodes.py / test_nodes.py / layout.py / pool.py / uplink.py …
         seed_repos.json         动态仓库清单（采集优先级 + 质量分）
         repo_quality.json       仓库质量历史
         kernel_state.json       内核版本与能力指纹基线
+      Skills/                   技能定义（SKILL.md；脚本与文档分别见 src/ 与 Docs/）
+      .workbuddy/memory/        项目记忆（MEMORY.md + 每日日志，纳入 git 跟踪）
 
 内核能力矩阵（CAPS）：采集时按「代理协议 + 传输层 + 加密/REALITY + flow」把同一个订阅链接
 里的节点分流到四个内核各自的文件；验证阶段再用真实内核作为最终裁判。
@@ -94,6 +99,7 @@ STATE_FILE = "pool_state.json"
 NODES_DIR = "nodes"                # 生成的节点信息（订阅/可用清单/主清单/元数据/池）
 DOCS_DIR = "Docs"                  # 文档（规范、报告、汇总、自检、日志）
 SRC_DIR = "src"                    # 脚本 + 采集配置/状态
+SKILLS_DIR = "Skills"              # 技能定义（SKILL.md）
 
 # md 日志（全部时间倒序，放 Docs/；CHANGELOG_MD 例外，按用户要求留根目录）
 REPORT_MD = "report.md"
@@ -101,20 +107,21 @@ SUMMARY_MD = "summary.md"
 SUMMARY_JSON = "summary.json"
 HEALTH_MD = "health_check.md"
 HEALTH_JSON = "health_check.json"
-ISSUE_MD = "known_issue.md"
-REVIEW_LOG_MD = "review_log.md"
-COLLECTION_LOG_MD = "collection_log.md"
+ISSUE_MD = "known_issues.md"           # 自检发现的问题（复数；与 known-issues.md 知识库不同文件）
+REVIEW_LOG_MD = "review_logs.md"
+COLLECTION_LOG_MD = "collection_logs.md"
 CHANGELOG_MD = "CHANGELOGS.md"     # 根目录（用户明确要求保留在 free-nodes/ 根下）
 SEED_FILE = "seed_repos.json"      # src/：动态仓库清单
 REPO_QUALITY_FILE = "repo_quality.json"   # src/：仓库质量历史
 KERNEL_STATE_FILE = "kernel_state.json"   # src/：内核版本与能力指纹基线
 MAX_SECTIONS = 30
 
-# 全量测试策略默认值（2026-10-25 起，用户要求：晚间时间空闲，候选不多就全测）。
+# 全量测试策略默认值（2026-10-25 起，用户要求：晚间时间空闲，候选不多就全测；
+# 上限最初笔误为 30000，用户当晚纠正为 3000——与 FULL_BELOW 相同，即每内核最多测 3000 个）。
 # 某内核候选数 ≤ FULL_BELOW → 全部测试；超过 → 只测排序前 MAX_TEST 个。
 # 取值集中在 layout.py：test_nodes.py 与 collect_nodes.py 的命令行默认值都读它。
 FULL_BELOW = 3000
-MAX_TEST = 30000
+MAX_TEST = 3000
 
 # ---------------------------------------------------------------- 能力矩阵
 
@@ -527,6 +534,10 @@ _LEGACY_MAP.update({
     SEED_FILE: (SRC_DIR, SEED_FILE),
     REPO_QUALITY_FILE: (SRC_DIR, REPO_QUALITY_FILE),
     KERNEL_STATE_FILE: (SRC_DIR, KERNEL_STATE_FILE),
+    # 2026-10-25 复数规范化之前的旧名（一次性迁移兼容，存量树里可能还有）
+    "known_issue.md": (DOCS_DIR, ISSUE_MD),
+    "collection_log.md": (DOCS_DIR, COLLECTION_LOG_MD),
+    "review_log.md": (DOCS_DIR, REVIEW_LOG_MD),
 })
 
 
@@ -727,7 +738,7 @@ def _main(argv):
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, help_text in (("log", "写任意 md 日志"),
                             ("changelog", "写根目录 CHANGELOGS.md（修复/变更）"),
-                            ("issue", "写 Docs/known_issue.md（问题）")):
+                            ("issue", "写 Docs/known_issues.md（问题）")):
         p = sub.add_parser(name, help=help_text)
         if name == "log":
             p.add_argument("--file", required=True, help="目标 md 文件路径")

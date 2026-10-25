@@ -5,8 +5,8 @@
 设计要点：
 - 只提交 free-nodes 目录（路径限定的 git add --all free-nodes），
   绝不碰工作区里其他未完成的改动（例如用户自己的 C++ 项目修改）。
-- 提交前把流水线脚本同步进 free-nodes/src/（发布物自包含：nodes/ + Docs/ + src/），
-  并清理历史遗留的日期目录（节点文件不再按日期分目录）；
+- 脚本自身就住在 free-nodes/src/（采集/验证/发布全链路的唯一事实来源），
+  提交即自动带上最新脚本，无需任何同步动作；
 - push 失败（GitHub 主站 443 被重置/超时很常见）时保留本地提交，
   把待推送状态写入 <workspace>/.git/free-nodes-pending-push.json，
   下次运行会先补推上一次没推上去的提交。
@@ -21,15 +21,15 @@ import datetime as dt
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import time
 from pathlib import Path
 
 DATE_DIR_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-# 这些条目不属于"每日快照"，清理时永远保留
-KEEP_NAMES = {"pool", "seed_repos.json", "collection_log.md", "review_log.md", "README.md", ".gitattributes"}
+# 这些条目不属于"每日快照"，清理时永远保留（新布局：nodes/Docs/src/Skills 三分层）
+KEEP_NAMES = {"nodes", "Docs", "src", "Skills", "README.md", "CHANGELOGS.md",
+              ".gitattributes", ".workbuddy"}
 
 
 def log(msg: str) -> None:
@@ -149,28 +149,6 @@ def remove_legacy_dirs(out_root: Path) -> list[str]:
     return removed
 
 
-def sync_src(workspace: Path, out_root: Path, skill_scripts: str) -> list[str]:
-    """把流水线脚本同步进 free-nodes/src/，让发布物自包含（节点 + 文档 + 脚本）。
-
-    技能 scripts/ 目录是唯一事实来源，这里只拷贝不修改；tools/publish_free_nodes.py
-    自身也放一份，仓库里就能看到完整的「采集 → 验证 → 发布」链路。
-    """
-    src = out_root / "src"
-    src.mkdir(parents=True, exist_ok=True)
-    copied: list[str] = []
-    if skill_scripts and os.path.isdir(skill_scripts):
-        for name in sorted(os.listdir(skill_scripts)):
-            if not name.endswith(".py"):
-                continue
-            shutil.copy2(os.path.join(skill_scripts, name), src / name)
-            copied.append(name)
-    pub = workspace / "tools" / "publish_free_nodes.py"
-    if pub.exists():
-        shutil.copy2(pub, src / pub.name)
-        copied.append(pub.name)
-    return copied
-
-
 def push_with_retry(workspace: Path, branch: str, retries: int, wait: int) -> tuple[bool, str]:
     last_err = ""
     for attempt in range(1, retries + 1):
@@ -244,8 +222,8 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="提交并推送 free-nodes 产物到 GitHub")
-    ap.add_argument("--workspace", default=str(Path(__file__).resolve().parent.parent),
-                    help="git 仓库根目录（默认脚本上一级）")
+    ap.add_argument("--workspace", default=str(Path(__file__).resolve().parent.parent.parent),
+                    help="git 仓库根目录（默认脚本上溯三级：src → free-nodes → 仓库根）")
     ap.add_argument("--dir", default="free-nodes", help="相对仓库的产物目录名，默认 free-nodes")
     ap.add_argument("--date", default=dt.date.today().isoformat(), help="提交信息里的日期，默认今天")
     ap.add_argument("--branch", default="master", help="目标分支，默认 master")
@@ -257,9 +235,8 @@ def main() -> int:
                          "auto=先探测本地代理端口，探测不到就用已验证节点自建代理"
                          "（也可用环境变量 GIT_PROXY）")
     ap.add_argument("--skill-scripts",
-                    default=os.path.join(os.path.expanduser("~"), ".workbuddy", "skills",
-                                         "free-nodes-collector", "scripts"),
-                    help="free-nodes-collector 的 scripts 目录（提供 uplink 模块）")
+                    default=str(Path(__file__).resolve().parent),
+                    help="uplink.py 所在目录（默认即本脚本所在目录 free-nodes/src/）")
     ap.add_argument("--uplink-rounds", type=int, default=5,
                     help="自建代理最多轮换多少轮（每轮一个节点），默认 5")
     ap.add_argument("--uplink-candidates", type=int, default=40,
@@ -298,15 +275,12 @@ def main() -> int:
     if pend and not args.no_push:
         log(f"[pending] 检测到上次未推送的提交（{pend.get('date', '?')}），本次会一并推送")
 
-    # 1. 清理历史遗留的日期目录（新布局是扁平的，节点文件不再按日期分目录）
+    # 1. 清理历史遗留的日期目录（新布局为 nodes/Docs/src 三分层，不再按日期分目录）
     removed = remove_legacy_dirs(out_root)
     if removed:
-        log(f"[prune] 移除历史日期目录：{', '.join(removed)}（新布局为扁平目录）")
+        log(f"[prune] 移除历史日期目录：{', '.join(removed)}")
 
-    # 2. 同步脚本进 free-nodes/src/（发布物自包含），再路径限定地暂存（只动 free-nodes）
-    synced = sync_src(workspace, out_root, args.skill_scripts)
-    if synced:
-        log(f"[src] 已同步 {len(synced)} 个脚本到 {out_root / 'src'}")
+    # 2. 路径限定地暂存（只动 free-nodes；脚本本身就在 src/ 里，无需同步）
     code, out = git(workspace, "add", "--all", "--", args.dir)
     if code != 0:
         log(f"[error] git add 失败：{out.strip()}")

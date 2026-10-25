@@ -1,7 +1,7 @@
 # proxy.md — 自建四内核代理与节点测试代码组成说明
 
 > 更新：2026-10-25（随内核版本 v2ray 5.53.0 / xray 26.10.21 / mihomo 1.19.33 / sing-box 1.14.4 校准）
-> 本文只覆盖「**自建代理**」与「**节点测试**」两条链路的全部代码；采集侧细节见 SKILL.md 与 `references/protocol.md`。
+> 本文只覆盖「**自建代理**」与「**节点测试**」两条链路的全部代码；采集侧细节见 `Skills/free-nodes-collector/SKILL.md` 与 `Docs/protocol.md`。
 
 ## 0. 总体架构
 
@@ -79,7 +79,7 @@
 | `direct_ok()` | 临时清空代理变量后直连实测探测地址；**区分** api.github.com 通但 github.com 不通的情况（采集可继续，push 需代理） |
 | `ensure(root, ...)` | 对外主入口：`start()` 起代理 → 失败且直连通 → 返回 direct → 都不通等 `retry_wait` 秒重试，最多 `retries` 次。返回 `(mode, uplink)`，调用方用完必须 `uplink.stop(up)` |
 
-**使用方**：`collect_nodes.py`（采集前置）、`tools/publish_free_nodes.py`（git push）、`test_nodes.py` 推测阶段（可选）。通道是**全局 opener**，所以搜索 API 与订阅下载都走代理，不只是下载。
+**使用方**：`collect_nodes.py`（采集前置）、`src/publish_free_nodes.py`（git push）、`test_nodes.py` 推测阶段（可选）。通道是**全局 opener**，所以搜索 API 与订阅下载都走代理，不只是下载。
 
 ## 4. 节点测试层 — `scripts/test_nodes.py`（核心之二）
 
@@ -122,7 +122,7 @@
 |---|---|
 | `test_one()` | 单节点完整流程：分配端口 → `build_config` → 预校验（失败记 config）→ 启动内核 → 等端口 → 探测 → 失败**二次复测**（区分偶发网络抖动）→ 分类 → 清理临时目录 |
 | `test_core()` | 单内核并发实测一批节点（ThreadPoolExecutor），收集可用结果与全部明细 |
-| 全量测试循环（main 内，默认） | 某内核候选 ≤ `--full-below`(3000) 时**全部测试**；超过则只测排序前 `--max-test`(30000) 个。排序 = 协议轮流交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序（TCP 不通的已在预筛剔除）。加 `--no-full-test` 回到旧的「可用数 < `--min-available`(10) 沿序追加，上限 limit×5、时间预算 1800s」模式；候选测完记 `exhausted=true` |
+| 全量测试循环（main 内，默认） | 某内核候选 ≤ `--full-below`(3000) 时**全部测试**；超过则只测排序前 `--max-test`(3000) 个。排序 = 协议轮流交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序（TCP 不通的已在预筛剔除）。加 `--no-full-test` 回到旧的「可用数 < `--min-available`(10) 沿序追加，上限 limit×5、时间预算 1800s」模式；候选测完记 `exhausted=true` |
 | `write_core_outputs()` | 写 `nodes/available_<core>.<ext>`（按延迟排序） |
 | `write_summary()` | 写 `Docs/summary.md` / `Docs/summary.json`：测试数、可用数、可用率、测试策略与轮次、**失败原因分布**、候选是否测完 |
 
@@ -153,15 +153,14 @@
 | `protocol_check.py` | **一致性回归**：56 个「URI → 装填 → 内核 config check」用例 + ss 加密白名单核对，验证转换器与四内核当前版本完全一致；内核升级后必跑 |
 | `health_check.py` | 产物自检：文件齐全性、可用率合理性、失败原因分布（config/unsupported 占比过高说明装填有问题）、镜像/配额/趋势等；输出 `Docs/health_check.md` |
 | `package_skill.py` | 重打包技能 zip |
-| `references/known-issues.md` | 24 条踩坑记录（每条含复现特征与修复方式） |
-| `references/protocol.md` | 四内核解析参数规范（与本文配套，讲「怎么装填」；本文讲「哪些代码负责装填」） |
+| `Docs/known-issues.md` | 24 条踩坑记录（每条含复现特征与修复方式） |
+| `Docs/protocol.md` | 四内核解析参数规范（与本文配套，讲「怎么装填」；本文讲「哪些代码负责装填」） |
 
 ## 7. 调用方
 
 | 文件 | 与本链路的关系 |
 |---|---|
-| `tools/publish_free_nodes.py` | 发布订阅到仓库；push 前把流水线脚本同步进 `free-nodes/src/`（发布物自包含）再 `uplink.ensure()` 起代理，git 子进程经环境变量走代理；失败写 pending 标记下次补推 |
-| `tools/migrate_layout.py` | 历史目录结构迁移（一次性工具） |
+| `src/publish_free_nodes.py` | 发布订阅到仓库；push 前 `uplink.ensure()` 起代理（脚本自身就在 src/ 里，提交即带上最新版，无需同步），git 子进程经环境变量走代理；失败写 pending 标记下次补推 |
 | WorkBuddy 定时任务 | 22:00 调 `collect_nodes.py --readme-only --test ...`，串起「代理 → 采集 → 测试 → 池更新 → 发布」全链路 |
 
 ## 8. 典型运行链路（节点测试部分）
@@ -169,7 +168,7 @@
 ```bash
 python scripts/collect_nodes.py \
   --out free-nodes --readme-only --test \
-  --test-full-below 3000 --test-max-test 30000 \
+  --test-full-below 3000 --test-max-test 3000 \
   --max-repos 80 --search-pages 2 --search-days 3 \
   --readme-date-tolerance 0
 ```
@@ -180,7 +179,7 @@ python scripts/collect_nodes.py \
 python scripts/test_nodes.py \
   --input free-nodes --out free-nodes \
   --cores v2ray,xray,clash,singbox \
-  --full-below 3000 --max-test 30000 --workers 12 \
+  --full-below 3000 --max-test 3000 --workers 12 \
   --test-url https://gstatic.com/generate_204 --test-timeout 12
 ```
 

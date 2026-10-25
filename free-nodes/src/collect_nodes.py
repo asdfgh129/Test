@@ -16,7 +16,7 @@ collect_nodes.py — 每日免费节点采集合并脚本（纯标准库，无�
    - nodes/nodes_uris.txt   内部主清单（全部唯一 URI，供验证阶段按内核能力取样）
    - nodes/nodes_meta.json  节点元数据（TCP 延迟 + 来源仓库）
    - Docs/report.md         采集报告（按日期倒序累积）
-   - Docs/collection_log.md 采集日志（按日期倒序累积）
+   - Docs/collection_logs.md 采集日志（按日期倒序累积）
    - src/seed_repos.json    动态仓库清单（贡献数 + 质量分，采集优先级依据）
 
 用法：

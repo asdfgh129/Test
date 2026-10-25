@@ -13,7 +13,7 @@ test_nodes.py — 分代理内核的节点可用性验证
    - singbox ：vmess / vless / trojan / ss / hysteria2 / tuic
    为每个节点生成该内核的临时配置 → 启动内核 → 通过本地 HTTP 代理访问测试地址 → 判定可用
 4. **全量测试策略（默认，晚间空闲时段）**：某内核候选数 ≤ --full-below（默认 3000）时
-   **全部测试**；超过则只测排序前 --max-test（默认 30000）个。排序沿用「协议轮流交错 +
+   **全部测试**；超过则只测排序前 --max-test（默认 3000）个。排序沿用「协议轮流交错 +
    仓库质量优先 + CF 前置排最后 + TCP 延迟升序」，TCP 不通的已在预筛阶段剔除。
    加 --no-full-test 可回到旧的「--limit 初始取样 + 可用数 < --min-available 自适应扩量」模式
 5. 输出（根目录下分三个子目录，每个内核只有 1 个文件）：
@@ -25,7 +25,7 @@ test_nodes.py — 分代理内核的节点可用性验证
 
 用法：
     python test_nodes.py --input <free-nodes 根目录>
-    python test_nodes.py --input <根目录> --full-below 3000 --max-test 30000
+    python test_nodes.py --input <根目录> --full-below 3000 --max-test 3000
     python test_nodes.py --input <根目录> --no-full-test --limit 200 --min-available 10
 """
 

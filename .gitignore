@@ -243,8 +243,9 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-# WorkBuddy 本地工作数据（记忆/会话），不入库
-.workbuddy/
+# WorkBuddy 本地工作数据（记忆/会话）：仅忽略仓库根的（该目录已改为指向
+# free-nodes/.workbuddy 的 junction，真实内容随 free-nodes 一起入库）
+/.workbuddy/
 
 # 技能打包产物（可用 package_skill.py 随时重建）
 dist/
@@ -252,3 +253,7 @@ dist/
 # 本地凭据：GitHub token 等，绝不入库
 github_token.txt
 *token*.local
+
+# Python 缓存：脚本 py_compile/运行的副产物，不入库
+__pycache__/
+*.pyc
