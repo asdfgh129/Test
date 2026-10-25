@@ -164,6 +164,73 @@ def push_with_retry(workspace: Path, branch: str, retries: int, wait: int) -> tu
     return False, last_err
 
 
+def load_uplink(scripts_dir: str):
+    """加载技能里的 uplink 模块（用已验证节点自建本地代理）。不可用则返回 None。"""
+    if not scripts_dir or not os.path.isdir(scripts_dir):
+        return None
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    try:
+        import uplink  # noqa: PLC0415
+        return uplink
+    except Exception as e:  # noqa: BLE001
+        log(f"[uplink] 模块加载失败（{scripts_dir}）：{str(e)[:80]}")
+        return None
+
+
+def recent_date_dirs(root: Path, limit: int = 3) -> list[str]:
+    """产物目录下最近几天的日期目录（新的在前），用作自建代理的节点来源。"""
+    if not root.is_dir():
+        return []
+    names = sorted((p.name for p in root.iterdir()
+                    if p.is_dir() and DATE_DIR_RE.match(p.name)), reverse=True)
+    return [str(root / n) for n in names[:limit]]
+
+
+def do_push(workspace: Path, args, up_mod, pool_dir: str, extra_dirs: list[str]) -> tuple[bool, str]:
+    """推送提交。
+
+    顺序：已有代理（--proxy 指定 / 探测到）→ 自建代理逐节点换核试 → 直连重试。
+    自建代理阶段的语义是「推不通就换节点、换内核，直到连通」。
+    """
+    global GIT_PROXY
+
+    # A. 已有可用代理：直接推
+    if GIT_PROXY:
+        return push_with_retry(workspace, args.branch, args.retries, args.retry_wait)
+
+    # B. 自建代理：每轮挑一个节点起本地内核，推不动就换下一个
+    if up_mod is not None:
+        tried: set[str] = set()
+        rounds = max(1, args.uplink_rounds)
+        for r in range(1, rounds + 1):
+            log(f"[uplink] 第 {r}/{rounds} 轮：从已验证节点里起本地代理 …")
+            # git push 只依赖 github.com，探测就只认它（api.github.com 通不代表能 push）
+            up = up_mod.start(pool_dir=pool_dir, extra_dirs=extra_dirs,
+                              max_candidates=args.uplink_candidates, skip=tried,
+                              probes=["https://github.com/"])
+            if up is None:
+                log("[uplink] 没有更多可用节点可试")
+                break
+            tried.add(up.uri)
+            GIT_PROXY = up.url
+            try:
+                code, out = git(workspace, "push", "origin", args.branch, timeout=180)
+            finally:
+                GIT_PROXY = ""
+            if code == 0:
+                up_mod.stop(up)
+                log(f"[push] 经自建代理推送成功（{up.describe()}）")
+                return True, out
+            tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"
+            log(f"[push] 该节点推送失败：{tail} → 换节点/内核重试")
+            up_mod.stop(up)
+        log("[push] 自建代理轮换全部失败，改直连重试")
+
+    # C. 直连兜底
+    return push_with_retry(workspace, args.branch, args.retries, args.retry_wait)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="提交并推送 free-nodes 产物到 GitHub")
     ap.add_argument("--workspace", default=str(Path(__file__).resolve().parent.parent),
@@ -172,23 +239,39 @@ def main() -> int:
     ap.add_argument("--date", default=dt.date.today().isoformat(), help="提交信息里的日期，默认今天")
     ap.add_argument("--branch", default="master", help="目标分支，默认 master")
     ap.add_argument("--keep-days", type=int, default=14, help="保留最近多少天的日期目录，0=不清理")
-    ap.add_argument("--retries", type=int, default=3, help="push 重试次数，默认 3")
+    ap.add_argument("--retries", type=int, default=3, help="直连 push 重试次数，默认 3")
     ap.add_argument("--retry-wait", type=int, default=20, help="重试间隔秒数，默认 20")
     ap.add_argument("--no-push", action="store_true", help="只提交不推送")
     ap.add_argument("--proxy", default=os.environ.get("GIT_PROXY", ""),
-                    help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890；填 auto 则自动探测常见本地端口"
+                    help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890；"
+                         "auto=先探测本地代理端口，探测不到就用已验证节点自建代理"
                          "（也可用环境变量 GIT_PROXY）")
+    ap.add_argument("--pool-dir", default="",
+                    help="可用节点池目录（默认 <仓库>/free-nodes/pool），自建代理的节点来源")
+    ap.add_argument("--skill-scripts",
+                    default=os.path.join(os.path.expanduser("~"), ".workbuddy", "skills",
+                                         "free-nodes-collector", "scripts"),
+                    help="free-nodes-collector 的 scripts 目录（提供 uplink 模块）")
+    ap.add_argument("--uplink-rounds", type=int, default=5,
+                    help="自建代理最多轮换多少轮（每轮一个节点），默认 5")
+    ap.add_argument("--uplink-candidates", type=int, default=40,
+                    help="每轮自建代理最多尝试的候选节点数，默认 40")
     args = ap.parse_args()
 
     global GIT_PROXY
     GIT_PROXY = (args.proxy or "").strip()
+    up_mod = None
     if GIT_PROXY.lower() == "auto":
-        log("[proxy] 自动探测本地代理端口 …")
+        log("[proxy] 先探测本机已有代理端口 …")
         GIT_PROXY = detect_proxy()
         if GIT_PROXY:
             log(f"[proxy] 探测到可用代理 {GIT_PROXY}")
         else:
-            log("[proxy] 未探测到可用代理，按直连推送")
+            up_mod = load_uplink(args.skill_scripts)
+            if up_mod is not None:
+                log("[proxy] 无现成代理，改为用已验证节点自建本地代理推送")
+            else:
+                log("[proxy] 无现成代理且 uplink 模块不可用，按直连推送")
     elif GIT_PROXY:
         log(f"[proxy] 推送走代理 {GIT_PROXY}")
 
@@ -197,21 +280,18 @@ def main() -> int:
         log(f"[error] {workspace} 不是 git 仓库")
         return 2
 
+    pool_dir = args.pool_dir or str(workspace / args.dir / "pool")
+    extra_dirs = recent_date_dirs(workspace / args.dir)
+
     out_root = workspace / args.dir
     if not out_root.is_dir():
         log(f"[error] 产物目录不存在：{out_root}")
         return 2
 
-    # 0. 上次没推成功的，先补推
+    # 0. 上次没推成功的提交：不单独推，最后统一推送（一次 push 会带上所有未推送提交）
     pend = read_pending(workspace)
     if pend and not args.no_push:
-        log(f"[pending] 发现上次未推送的提交：{pend.get('commit', '?')}（{pend.get('date', '?')}），先补推")
-        ok, _ = push_with_retry(workspace, args.branch, 1, args.retry_wait)
-        if ok:
-            clear_pending(workspace)
-            log("[pending] 补推成功，已清除待推送标记")
-        else:
-            log("[pending] 补推仍失败，稍后会带上本次提交一起重试")
+        log(f"[pending] 检测到上次未推送的提交（{pend.get('date', '?')}），本次会一并推送")
 
     # 1. 清理过期日期目录
     removed = prune_old_days(out_root, args.keep_days, dt.date.fromisoformat(args.date))
@@ -252,7 +332,7 @@ def main() -> int:
         clear_pending(workspace)
         return 0
 
-    ok, err = push_with_retry(workspace, args.branch, args.retries, args.retry_wait)
+    ok, err = do_push(workspace, args, up_mod, pool_dir, extra_dirs)
     if ok:
         clear_pending(workspace)
         log(f"[push] 成功，origin/{args.branch} 已更新")
