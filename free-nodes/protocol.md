@@ -55,16 +55,22 @@
 | `trojan` | ✅ | ✅ | ✅ | ✅ |
 | `ss`（Shadowsocks） | ✅ 仅 AEAD | ✅ AEAD + 2022 | ✅ 含旧流加密 | ✅ 含旧流加密 |
 | `ssr` | ❌ | ❌ | ✅ | ❌ |
-| `hysteria2` / `hy2` | ✅（装填方式特殊，见 4.6） | ❌ | ✅ | ✅ |
+| `hysteria2` / `hy2` | ✅（装填方式特殊，见 §3.6） | ✅（协议名 `hysteria`+`version:2`，见 §3.6） | ✅ | ✅ |
 | `hysteria`（v1） | ❌ | ❌ | ❌（本流水线不处理） | ❌ |
 | `tuic`（v5） | ❌ | ❌ | ✅ | ✅ |
 
-> **勘误（2026-10-25）**：早期版本把 v2ray 的 hysteria2 标为 ❌，是错的。v2fly 5.x
-> 支持 Hysteria2（官方文档 `config/proxy/hy2.md` + `config/stream/hy2.md`），本机
-> v2ray 5.53 实测：装填「hysteria2 代理层 + hysteria2 传输层」后对 sing-box 的
-> hysteria2 服务端端到端打通（HTTP 200）。**Xray 26.10 确实不支持**：二进制无
-> hysteria 字样，配置直接被拒。v2rayN 等客户端宣传「支持 Hysteria2」指的是它们
-> **捆绑了独立的 hysteria 官方内核**，不代表 Xray/v2fly 本体。
+> **勘误（2026-10-25，二次修正）**：早期版本把 v2ray、xray 的 hysteria2 都标为 ❌，
+> **两次都是错的**。① v2fly 5.x 支持 Hysteria2（官方文档 `config/proxy/hy2.md` +
+> `config/stream/hy2.md`），实测 v2ray↔sing-box 端到端 HTTP 200。② **Xray 同样支持**：
+> 自 v26.1.23 引入，本机 xray 26.10.21 二进制含 `HysteriaClientConfig` /
+> `HysteriaServerConfig` / `HysteriaInboundValidator` / `salamander` / `udphop` / `obfs`
+> 字样（678 处 hysteria），源码 `infra/conf/hysteria.go` + `proxy/hysteria/client.go` +
+> `transport/internet/hysteria/dialer.go` 可证，`xray run -test` 配置校验通过、客户端
+> 能拨号并完成到服务端的 TLS 握手。**早先判「Xray 不支持」是双重误判**：一是用
+> `xray.exe | grep`（扫的是进程 stdout 而非二进制文件）导致漏检；二是不知道 Xray 把
+> 它实现为 `protocol: "hysteria"` + `version: 2`（**不是** `hysteria2` 字样），按
+> `hysteria2` 去写配置自然被拒。教训：能力判定必须 grep 二进制**文件** + 查源码 +
+> E2E，不能只看进程输出、也不能只按协议名字面猜。
 > 容易误判的另一个原因：v2fly 对未知字段宽松（不报错、静默忽略），只跑 config
 > check 看不出装填错误，必须端到端实测。
 
@@ -224,7 +230,42 @@ v2fly 5.x 把 Hysteria2 拆成两层：`TLS + HTTP3` 传输层（认证、拥塞
 - 兼容性实测：v2ray 客户端 ↔ sing-box 服务端端到端 HTTP 200；
   ↔ mihomo listener（hysteria2 入站）认证 404，**mihomo 入站不兼容 v2fly 实现**
   （客户端只关心出站兼容，不影响本流水线）
-- Xray 26.10 无 hysteria2：protocol 名不被识别，配置直接被拒
+
+**xray 的 hysteria2 装填（2026-10-25 源码 + 二进制 + config check 实测）**
+
+Xray 自 v26.1.23 起支持 Hysteria2，但装填与 v2fly **完全不同**（源码
+`infra/conf/hysteria.go`、`proxy/hysteria/client.go`、`transport/internet/hysteria/dialer.go`）：
+
+```json
+{
+  "protocol": "hysteria",
+  "settings": {"version": 2, "address": "a.com", "port": 443},
+  "streamSettings": {
+    "network": "hysteria",
+    "hysteriaSettings": {"version": 2, "auth": "口令", "up": "100mbps", "down": "500mbps"},
+    "security": "tls",
+    "tlsSettings": {"serverName": "a.com"}
+  }
+}
+```
+
+要点：
+
+- **协议名是 `hysteria`（不是 `hysteria2`）**，且 `settings.version` 与
+  `hysteriaSettings.version` **都要写 2**，缺一个报 `version != 2`
+- `address` / `port` **平铺在 `settings`**（不是 `settings.servers[]`，也不是
+  `settings.server`——早期试过这两种都会被拨号时 nil 指针 panic）；认证口令在
+  传输层 `hysteriaSettings.auth`（对应 `Hysteria-Auth` 头），**不在 settings**
+- `up` / `down`（带宽，`<N>mbps`）是启用 hysteria2 的必要字段；端口跳跃写
+  `hysteriaSettings.udphop{port, interval}`；salamander 混淆写
+  `streamSettings.finalmask.udp[{type: salamander, settings:{password}}]`
+- `streamSettings.allowInsecure` 字段名还在但 **TLS 校验不吃它**；Xray 26 已移除
+  `tlsSettings.allowInsecure`，insecure 节点用 `tlsSettings.verifyPeerCertByName`
+  （= 服务名，跳过 CA、只校证书名）覆盖，见 §3.5
+- 实测状态：`xray run -test` 全过、客户端能拨号并完成到服务端的 TLS 握手；本机
+  回环 E2E 卡在**服务端** SNI 选证书（Go 服务端按 DNS 名匹配，测试证书无对应 SAN），
+  属回环测试假象，非客户端配置问题——对真实节点（证书匹配域名 + SNI）预期可用，
+  见 known-issues 第 27 条
 
 
 **vmess**（四内核）
@@ -297,9 +338,8 @@ URI 是 base64(JSON)，字段落在配置里：
 | `ss2022` 密钥长度不符 → 全部内核 | 内核校验密钥长度 |
 | `ssr` → v2ray / xray / singbox | 只有 mihomo 支持 |
 | `tuic` → v2ray / xray | 协议未实现 |
-| `hysteria2` → xray | 协议未实现（v2ray 已支持，见 §3.6 特殊装填） |
 | `hysteria2` + `obfs` / `mport` → v2ray | v2fly 无混淆/端口跳跃字段，未知字段被静默忽略 |
-| `hysteria`（v1） → 全部 | 四内核均不在支持范围 |
+| `hysteria`（v1） → 全部 | 四内核均不在支持范围（Xray 的 `hysteria` 只是 v2 的内部协议名） |
 | REALITY + v2ray | v2fly 无 REALITY |
 | REALITY 公钥非 43 字符 → 全部 | 内核拒绝，属于坏链接 |
 | `type=http`/`h2` → xray 26+ | HTTP 传输已移除，只能改用 xhttp stream-one |
@@ -328,3 +368,4 @@ URI 是 base64(JSON)，字段落在配置里：
 | 日期 | 变更 |
 |---|---|
 | 2026-10-25 | 建立本文件。按内核实测校准四内核支持矩阵；修复传输层静默退化为 tcp、trojan 缺 TLS、tuic 口令截断、ss 插件丢失、REALITY 公钥校验等 6 类解析缺陷；验证阶段引入失败原因分层与复测 |
+| 2026-10-25 | **二次勘误 xray hysteria2**：早先误判「Xray 不支持 Hysteria2」（`xray.exe\|grep` 扫了进程 stdout 漏检 + 不知道协议名是 `hysteria`+`version:2`）。本机 xray 26.10.21 二进制 678 处 hysteria 字样 + 源码 `infra/conf/hysteria.go` + `xray run -test` 实测确认支持（v26.1.23 引入）；§3.1 矩阵、§3.6 装填、§5 不支持表、`layout.CAPS`、`test_nodes.uri_to_v2ray_outbound` 全部改为支持，新增 salamander(udphop)/端口跳跃装填 |

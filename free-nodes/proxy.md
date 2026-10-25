@@ -69,7 +69,7 @@
 | `CORE_ORDER` | 内核尝试顺序 `["clash","singbox","xray","v2ray"]` —— 前两个协议覆盖最全，优先消耗 |
 | `DEFAULT_PROBES` | 通道可用性判定地址：`https://github.com/`（git push 实际目标）+ `https://api.github.com/rate_limit`（API 通道） |
 | `candidates(root, cores, limit)` | 汇总代理候选：**池节点优先**（`pool/pool_<core>.txt`），池空再从近期可用清单补 |
-| `_cores_for(node)` | 节点协议 → 可用内核映射（如 hysteria2 节点只试 clash/singbox） |
+| `_cores_for(node)` | 节点协议 → 可用内核映射（读 `layout.CAPS`：hysteria2 现四内核都试，顺序 clash→singbox→xray→v2ray） |
 | `class Uplink` | 一次代理会话：`core`（所用内核）、`uri`（节点）、`port`（本地端口）、`url`（`http://127.0.0.1:port`）、`proc`（进程句柄）、`stop()` |
 | `_free_port()` | 从 26000 起找空闲本地端口 |
 | `build_one(core, uri, ...)` | **单节点起核**：调 `test_nodes.build_config()` 生成配置 → 启动内核（`CREATE_NO_WINDOW`）→ `_probe()` 实测探测地址拿 2xx 才算成功 |
