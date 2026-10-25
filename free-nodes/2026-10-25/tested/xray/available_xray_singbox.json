@@ -1,0 +1,65 @@
+{
+ "log": {
+  "level": "info"
+ },
+ "outbounds": [
+  {
+   "type": "shadowsocks",
+   "tag": "EPODONIOS",
+   "server": "202.50.253.45",
+   "server_port": 19999,
+   "method": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4="
+  },
+  {
+   "type": "shadowsocks",
+   "tag": "DE",
+   "server": "49.12.253.100",
+   "server_port": 1080,
+   "method": "aes-256-gcm",
+   "password": "Ou_n6HeBKQw2d_N0UmTBBDmC"
+  },
+  {
+   "type": "shadowsocks",
+   "tag": "新西兰+V2CROSS.COM",
+   "server": "202.50.253.81",
+   "server_port": 19999,
+   "method": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4="
+  },
+  {
+   "type": "shadowsocks",
+   "tag": "RU",
+   "server": "46.17.43.227",
+   "server_port": 18443,
+   "method": "aes-256-gcm",
+   "password": "NTiHBg64fsY8u8DbGrtypD9gPGSL386p"
+  },
+  {
+   "type": "vless",
+   "tag": "HK",
+   "server": "156.226.168.166",
+   "server_port": 443,
+   "uuid": "f5f0babe-aea2-4f07-a1fc-3c9820253f49",
+   "flow": "xtls-rprx-vision",
+   "tls": {
+    "enabled": true,
+    "insecure": false,
+    "server_name": "www.uni-frankfurt.de",
+    "reality": {
+     "enabled": true,
+     "public_key": "gXOQOlynAB6Znbp902LRyX7eYSxTWrj7D2nRCB1gNmE",
+     "short_id": "6b7a8c9d"
+    },
+    "utls": {
+     "enabled": true,
+     "fingerprint": "firefox"
+    }
+   }
+  },
+  {
+   "type": "direct",
+   "tag": "direct"
+  }
+ ]
+}
