@@ -87,6 +87,44 @@ def clear_pending(workspace: Path) -> None:
         p.unlink()
 
 
+# 常见代理客户端默认端口，--proxy auto 时逐个探活
+PROXY_CANDIDATES = [
+    "127.0.0.1:7890", "127.0.0.1:7897", "127.0.0.1:7891", "127.0.0.1:7892",
+    "127.0.0.1:1080", "127.0.0.1:1081", "127.0.0.1:10808", "127.0.0.1:10809",
+    "127.0.0.1:2080", "127.0.0.1:2081", "127.0.0.1:8889", "127.0.0.1:6789",
+    "127.0.0.1:20171", "127.0.0.1:33210",
+]
+
+
+def detect_proxy(timeout: float = 8.0) -> str:
+    """扫描常见本地代理端口，返回第一个能通过代理取到 github.com 的地址。"""
+    import socket
+    import urllib.error
+    import urllib.request
+
+    for hp in PROXY_CANDIDATES:
+        host, port = hp.split(":")
+        try:
+            with socket.create_connection((host, int(port)), timeout=0.4):
+                pass
+        except OSError:
+            continue  # 端口没监听，直接跳过
+        proxy_url = f"http://{hp}"
+        opener = urllib.request.build_opener(
+            urllib.request.ProxyHandler({"http": proxy_url, "https": proxy_url})
+        )
+        try:
+            with opener.open("https://github.com/", timeout=timeout) as resp:
+                if 200 <= resp.status < 400:
+                    return proxy_url
+        except urllib.error.HTTPError as e:
+            if 200 <= e.code < 400:
+                return proxy_url
+        except Exception:
+            continue
+    return ""
+
+
 def prune_old_days(out_root: Path, keep_days: int, today: dt.date) -> list[str]:
     """删除 out_root 下早于 keep_days 天的日期目录，返回被删列表。"""
     if keep_days <= 0 or not out_root.is_dir():
@@ -138,12 +176,20 @@ def main() -> int:
     ap.add_argument("--retry-wait", type=int, default=20, help="重试间隔秒数，默认 20")
     ap.add_argument("--no-push", action="store_true", help="只提交不推送")
     ap.add_argument("--proxy", default=os.environ.get("GIT_PROXY", ""),
-                    help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890（也可用环境变量 GIT_PROXY）")
+                    help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890；填 auto 则自动探测常见本地端口"
+                         "（也可用环境变量 GIT_PROXY）")
     args = ap.parse_args()
 
     global GIT_PROXY
     GIT_PROXY = (args.proxy or "").strip()
-    if GIT_PROXY:
+    if GIT_PROXY.lower() == "auto":
+        log("[proxy] 自动探测本地代理端口 …")
+        GIT_PROXY = detect_proxy()
+        if GIT_PROXY:
+            log(f"[proxy] 探测到可用代理 {GIT_PROXY}")
+        else:
+            log("[proxy] 未探测到可用代理，按直连推送")
+    elif GIT_PROXY:
         log(f"[proxy] 推送走代理 {GIT_PROXY}")
 
     workspace = Path(args.workspace).resolve()
