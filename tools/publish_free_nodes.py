@@ -5,7 +5,7 @@
 设计要点：
 - 只提交 free-nodes 目录（路径限定的 git add --all free-nodes），
   绝不碰工作区里其他未完成的改动（例如用户自己的 C++ 项目修改）。
-- 提交前清理过期的日期目录（默认保留最近 14 天），避免仓库无限膨胀。
+- 提交前清理历史遗留的日期目录（新布局是扁平的，节点文件不再按日期分目录）；
 - push 失败（GitHub 主站 443 被重置/超时很常见）时保留本地提交，
   把待推送状态写入 <workspace>/.git/free-nodes-pending-push.json，
   下次运行会先补推上一次没推上去的提交。
@@ -125,20 +125,17 @@ def detect_proxy(timeout: float = 8.0) -> str:
     return ""
 
 
-def prune_old_days(out_root: Path, keep_days: int, today: dt.date) -> list[str]:
-    """删除 out_root 下早于 keep_days 天的日期目录，返回被删列表。"""
-    if keep_days <= 0 or not out_root.is_dir():
+def remove_legacy_dirs(out_root: Path) -> list[str]:
+    """删除历史遗留的日期目录（新布局是扁平的，节点文件不再按日期分目录）。
+
+    过期的节点没有意义：现在的做法是每次覆盖根目录下的最新文件，历史留在
+    collection_log.md / summary.md / known_issue.md / changelog.md 这些按日期倒序的 md 里。
+    """
+    if not out_root.is_dir():
         return []
-    cutoff = today - dt.timedelta(days=keep_days)
     removed: list[str] = []
     for child in sorted(out_root.iterdir()):
         if not child.is_dir() or child.name in KEEP_NAMES or not DATE_DIR_RE.match(child.name):
-            continue
-        try:
-            d = dt.date.fromisoformat(child.name)
-        except ValueError:
-            continue
-        if d >= cutoff:
             continue
         for f in sorted(child.rglob("*"), reverse=True):
             if f.is_file():
@@ -178,16 +175,7 @@ def load_uplink(scripts_dir: str):
         return None
 
 
-def recent_date_dirs(root: Path, limit: int = 3) -> list[str]:
-    """产物目录下最近几天的日期目录（新的在前），用作自建代理的节点来源。"""
-    if not root.is_dir():
-        return []
-    names = sorted((p.name for p in root.iterdir()
-                    if p.is_dir() and DATE_DIR_RE.match(p.name)), reverse=True)
-    return [str(root / n) for n in names[:limit]]
-
-
-def do_push(workspace: Path, args, up_mod, pool_dir: str, extra_dirs: list[str]) -> tuple[bool, str]:
+def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
     """推送提交。
 
     顺序：已有代理（--proxy 指定 / 探测到）→ 自建代理逐节点换核试 → 直连重试。
@@ -206,9 +194,8 @@ def do_push(workspace: Path, args, up_mod, pool_dir: str, extra_dirs: list[str])
         for r in range(1, rounds + 1):
             log(f"[uplink] 第 {r}/{rounds} 轮：从已验证节点里起本地代理 …")
             # git push 只依赖 github.com，探测就只认它（api.github.com 通不代表能 push）
-            up = up_mod.start(pool_dir=pool_dir, extra_dirs=extra_dirs,
-                              max_candidates=args.uplink_candidates, skip=tried,
-                              probes=["https://github.com/"])
+            up = up_mod.start(root=out_root, max_candidates=args.uplink_candidates,
+                              skip=tried, probes=["https://github.com/"])
             if up is None:
                 log("[uplink] 没有更多可用节点可试")
                 break
@@ -238,7 +225,6 @@ def main() -> int:
     ap.add_argument("--dir", default="free-nodes", help="相对仓库的产物目录名，默认 free-nodes")
     ap.add_argument("--date", default=dt.date.today().isoformat(), help="提交信息里的日期，默认今天")
     ap.add_argument("--branch", default="master", help="目标分支，默认 master")
-    ap.add_argument("--keep-days", type=int, default=14, help="保留最近多少天的日期目录，0=不清理")
     ap.add_argument("--retries", type=int, default=3, help="直连 push 重试次数，默认 3")
     ap.add_argument("--retry-wait", type=int, default=20, help="重试间隔秒数，默认 20")
     ap.add_argument("--no-push", action="store_true", help="只提交不推送")
@@ -246,8 +232,6 @@ def main() -> int:
                     help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890；"
                          "auto=先探测本地代理端口，探测不到就用已验证节点自建代理"
                          "（也可用环境变量 GIT_PROXY）")
-    ap.add_argument("--pool-dir", default="",
-                    help="可用节点池目录（默认 <仓库>/free-nodes/pool），自建代理的节点来源")
     ap.add_argument("--skill-scripts",
                     default=os.path.join(os.path.expanduser("~"), ".workbuddy", "skills",
                                          "free-nodes-collector", "scripts"),
@@ -280,9 +264,6 @@ def main() -> int:
         log(f"[error] {workspace} 不是 git 仓库")
         return 2
 
-    pool_dir = args.pool_dir or str(workspace / args.dir / "pool")
-    extra_dirs = recent_date_dirs(workspace / args.dir)
-
     out_root = workspace / args.dir
     if not out_root.is_dir():
         log(f"[error] 产物目录不存在：{out_root}")
@@ -293,10 +274,10 @@ def main() -> int:
     if pend and not args.no_push:
         log(f"[pending] 检测到上次未推送的提交（{pend.get('date', '?')}），本次会一并推送")
 
-    # 1. 清理过期日期目录
-    removed = prune_old_days(out_root, args.keep_days, dt.date.fromisoformat(args.date))
+    # 1. 清理历史遗留的日期目录（新布局是扁平的，节点文件不再按日期分目录）
+    removed = remove_legacy_dirs(out_root)
     if removed:
-        log(f"[prune] 移除过期目录：{', '.join(removed)}")
+        log(f"[prune] 移除历史日期目录：{', '.join(removed)}（新布局为扁平目录）")
 
     # 2. 路径限定地暂存（只动 free-nodes）
     code, out = git(workspace, "add", "--all", "--", args.dir)
@@ -332,7 +313,7 @@ def main() -> int:
         clear_pending(workspace)
         return 0
 
-    ok, err = do_push(workspace, args, up_mod, pool_dir, extra_dirs)
+    ok, err = do_push(workspace, args, up_mod, str(out_root))
     if ok:
         clear_pending(workspace)
         log(f"[push] 成功，origin/{args.branch} 已更新")
