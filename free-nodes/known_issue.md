@@ -2,6 +2,12 @@
 
 > 按日期倒序；自检发现的未修复问题、待观察项都记在这里
 
+## 2026-10-25 自检发现
+
+**结论：本次运行健康，未发现需要处理的问题**
+
+本次自检未发现需要修复的问题。
+
 ## 2026-10-25 上行通道在池为空时会降级直连（已知限制）
 
 - 用户要求「搜集仓库地址和下载节点数据时要先自建代理」。现有实现已满足：
@@ -14,14 +20,6 @@
   不是故障；采集结束后会重新填池，下次即可自建
 - 已核对 `http_via_proxy()` 不会在代理不通时因直连而假阳性：
   对未监听端口探测返回 `ok=False`
-
-## 2026-10-25 自检发现
-
-**结论：无严重问题，1 个告警可优化**
-
-| 级别 | 领域 | 问题 | 建议动作 |
-|---|---|---|---|
-| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ## 2026-10-25 仓库质量分倒挂（已修复）
 
