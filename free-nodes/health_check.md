@@ -1,0 +1,61 @@
+# 每日自检报告（时间倒序）
+
+> 按日期倒序累积，最新一次运行在最上面
+
+## 2026-10-25 13:46
+
+**结论：无严重问题，1 个告警可优化**
+
+### 关键指标
+
+| 指标 | 值 |
+|---|---|
+| 输出目录 | C:\Users\bemin\WorkBuddy\Test\free-nodes |
+| 目标节点 | 1000 |
+| 去重后节点 | 6632 |
+| 各内核订阅 | v2ray 5633、xray 6419、clash 6615、singbox 6529 |
+| 协议分布 | hy2 2 / hysteria2 179 / ss 1292 / ssr 32 / trojan 465 / vless 1649 / vmess 3013 |
+| TCP 可达 | 2016/6650（中位数 205ms） |
+| 验证已执行 | 是 |
+| 各内核可用 | {'v2ray': '27/202', 'xray': '42/202', 'clash': '51/205', 'singbox': '52/204'} |
+| 可用节点池 | v2ray 27、xray 43、clash 56、singbox 54 |
+
+### 发现与建议
+
+#### 🟡 [下载通道] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/
+
+- 建议动作：失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+
+#### 🔵 [产物] 主清单 6632 条；各内核订阅：v2ray 5633、xray 6419、clash 6615、singbox 6529
+
+
+#### 🔵 [规模] 节点数 6632 达到目标 1000
+
+
+#### 🔵 [仓库效率] 扫描仓库 30 个：有产出 11、解析不到节点 5、下载失败 5、无候选文件 0、README 无订阅链接跳过 9（产出率 52%，按有尝试采集的 21 个计算）
+
+
+#### 🔵 [README 采集] 20 个仓库的 README 声明了订阅链接，提取 23319 条节点
+
+
+#### 🔵 [延迟排序] 2016/6650 个服务器 TCP 可达（30%），延迟中位数 205ms，<100ms 共 229 条
+
+
+#### 🔵 [延迟排序] 806/6650 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后
+
+
+#### 🔵 [仓库质量] 已评分 10 个仓库，可用率 >=10% 的 4 个，长期 0 可用 1 个（下次采集会自动跳过）
+
+
+#### 🔵 [节点池] 池内节点：v2ray 27、xray 43、clash 56、singbox 54
+
+
+#### 🔵 [下载通道] jsDelivr 可用 2/4：fastly.jsdelivr.net、gcore.jsdelivr.net（不可达：cdn.jsdelivr.net、testingcf.jsdelivr.net）
+
+
+#### 🔵 [配额] GitHub 配额剩余 core 60/60、search 10/10（匿名）
+
+
+### 待办清单（需人工或自动修复）
+
+1. [warn] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ → 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选

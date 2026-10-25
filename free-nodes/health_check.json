@@ -1,0 +1,97 @@
+{
+ "generated_at": "2026-10-25T13:46:05+08:00",
+ "date": "2026-10-25",
+ "verdict": "无严重问题，1 个告警可优化",
+ "metrics": {
+  "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
+  "目标节点": 1000,
+  "去重后节点": 6632,
+  "各内核订阅": "v2ray 5633、xray 6419、clash 6615、singbox 6529",
+  "协议分布": "hy2 2 / hysteria2 179 / ss 1292 / ssr 32 / trojan 465 / vless 1649 / vmess 3013",
+  "TCP 可达": "2016/6650（中位数 205ms）",
+  "验证已执行": "是",
+  "各内核可用": {
+   "v2ray": "27/202",
+   "xray": "42/202",
+   "clash": "51/205",
+   "singbox": "52/204"
+  },
+  "可用节点池": "v2ray 27、xray 43、clash 56、singbox 54"
+ },
+ "findings": [
+  {
+   "level": "warn",
+   "area": "下载通道",
+   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
+   "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
+  },
+  {
+   "level": "info",
+   "area": "产物",
+   "title": "主清单 6632 条；各内核订阅：v2ray 5633、xray 6419、clash 6615、singbox 6529",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "规模",
+   "title": "节点数 6632 达到目标 1000",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "仓库效率",
+   "title": "扫描仓库 30 个：有产出 11、解析不到节点 5、下载失败 5、无候选文件 0、README 无订阅链接跳过 9（产出率 52%，按有尝试采集的 21 个计算）",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "README 采集",
+   "title": "20 个仓库的 README 声明了订阅链接，提取 23319 条节点",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "延迟排序",
+   "title": "2016/6650 个服务器 TCP 可达（30%），延迟中位数 205ms，<100ms 共 229 条",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "延迟排序",
+   "title": "806/6650 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "仓库质量",
+   "title": "已评分 10 个仓库，可用率 >=10% 的 4 个，长期 0 可用 1 个（下次采集会自动跳过）",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "节点池",
+   "title": "池内节点：v2ray 27、xray 43、clash 56、singbox 54",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "下载通道",
+   "title": "jsDelivr 可用 2/4：fastly.jsdelivr.net、gcore.jsdelivr.net（不可达：cdn.jsdelivr.net、testingcf.jsdelivr.net）",
+   "action": ""
+  },
+  {
+   "level": "info",
+   "area": "配额",
+   "title": "GitHub 配额剩余 core 60/60、search 10/10（匿名）",
+   "action": ""
+  }
+ ],
+ "todo": [
+  {
+   "level": "warn",
+   "area": "下载通道",
+   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
+   "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
+  }
+ ]
+}
