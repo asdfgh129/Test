@@ -2,6 +2,44 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-10-25 扩大仓库池 + token 接入 + README 按内核/日期取数
+
+- **token 接入**（用户提供）：新增 `load_github_token()` 查找链
+  `--token` → `GITHUB_TOKEN`/`GH_TOKEN` 环境变量 → 本地凭据文件
+  `~/.workbuddy/data/free-nodes-tools/github_token.txt`（权限 600，不在仓库内，
+  `.gitignore` 另加 `github_token.txt` 兜底）。实测配额 **核心 5000/时、搜索 30/分**
+  （匿名是 60/时、10/分）。日志只打印 `前4…后4` 打码形式
+- **仓库池扩大**：
+  - `SEARCH_QUERIES` 10 组 → **26 组**，补上按内核（mihomo/xray）、按协议
+    （hysteria2/tuic/reality/vmess/trojan/ss）、中文（免费机场/节点分享/订阅链接）、
+    日更型（daily free nodes）四类
+  - `search_repos()` 支持翻页：每页 100 条 × `--search-pages`（默认 2）
+  - 限速按身份自适应：带 token 2.2s/请求，匿名 6.5s
+  - `--max-repos` 30 → **80**，`--max-seeds` 15 → **30**
+  - 阶段 2 时间窗从「前一天」放宽到 `--search-days`（默认前 **3** 天）
+  - `seed_repos.json` 上限 80 → **300** 个仓库
+- **README 按内核分类**：新增 `KERNEL_LINK_HINTS`，从文件名 → 目录名 → 链接文字 → 域名
+  逐级识别 v2ray/xray/clash/singbox。识别出的节点写入对应内核文件时**豁免 CAPS 预筛**
+  （作者已声明格式，CAPS 的保守规则可能把真能用的判死）
+- **README 按日期筛选**：新增 `DATE_TOKEN_RE` / `DATE_HEADING_RE`，两种写法都认——
+  链接自带日期（`.../2026-10-25/all.txt`、`Nodes-20261025.txt`）和有日期小标题
+  （`### 2026-10-25` 下的链接，回溯 4000 字符取最近标题）。只取当天
+  （`--readme-date-tolerance` 默认 0）。**整份 README 没提日期 → 全部保留**，
+  否则非日更仓库会被一刀砍死。因日期跳过记 `-4` 状态，与「未声明链接」区分
+- **补 sing-box 反解**（`singbox_to_uri()`）：旧代码对 `kind=singbox` 直接返回空串，
+  导致 sing-box JSON 订阅的节点进不了 `nodes_uris.txt` 主清单 → **完全不参与可用性验证**。
+  现覆盖 ss/trojan/vless/vmess/hysteria2/tuic 六种，其余返回 None
+
+**验证结果**（隔离目录试跑，12 分 48 秒，不污染正式产物）：
+- 搜索：26 组关键词 × 1 页 = 26 次请求，去重 **396** 个仓库（阶段 1）；
+  阶段 2 放宽至 2026-10-22 起，去重 **689** 个仓库
+- 日期筛选真实命中：`VPN-Subcription-Links/ClashX-V2Ray-TopFreeProxy` 有 **17 个链接
+  因日期不是当天被跳过**，保留 10 个当天链接采到 255 条
+- 主清单 7189 条 → v2ray 6841 / xray 7110 / clash 7167 / singbox 6953
+- sing-box 反解：6 种协议往返一致（server/port 不变）；四内核原生校验
+  vless(reality/ws)/vmess 全接受、hysteria2 只有 clash/singbox 能构造（符合能力边界）；
+  端到端验证 sing-box 来源节点能进主清单与四个 sub 文件
+
 ## 2026-10-25 md 日志去重粒度修正
 
 - **问题**：`upsert_section()` 按「日期前缀」删旧小节，同一天写第二条不同主题时，
