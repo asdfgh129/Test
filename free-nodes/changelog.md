@@ -2,6 +2,33 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-10-25 md 日志去重粒度修正
+
+- **问题**：`upsert_section()` 按「日期前缀」删旧小节，同一天写第二条不同主题时，
+  会把当天先写入的记录整段抹掉（本次差点丢掉「布局重构与内核检查」整节，已用 git 恢复）
+- **改动**：加 `match_heading` 开关——`report/summary/health_check` 仍按日期替换（当天一份结论），
+  `changelog/known_issue` 改为按「日期 + 标题」替换（一天多事件并存）
+
+## 2026-10-25 修复仓库质量分倒挂
+
+- **改了什么**：`collect_nodes.quality_score()`
+  - 可用率 ≤0 或 `avg_latency` 为空时直接 `return rate*70`（延迟项 0），不再把「无数据」当满分
+  - 延迟归零点 1500ms → 5000ms（`100 - latency/50`），让 30 分权重真正起作用
+- **回填结果**（16 个仓库）：
+
+  | 仓库 | 可用率 | 旧分 | 新分 |
+  |---|---|---|---|
+  | snakem982/proxypool | 61.9% | 43.3 | **63.8** |
+  | Pawdroid/Free-servers | 65.0% | 45.5 | 54.9 |
+  | 0xRadikal/Free-v2ray-Configs | 11.4% | 8.0 | 29.0 |
+  | Epodonios/v2ray-configs | 2.6% | 13.9 | 26.4 |
+  | igareck/vpn-configs-for-russia | 33.3% | 23.3 | 23.3 |
+  | MatinGhanbari 等 5 个 0% 仓库 | 0.0% | 30.0 | **0.0** |
+
+- **验证**：排序恢复单调（可用高的分高、0 可用的垫底）；`repo_sort_key` 未改动，
+  采集优先级行为不变（仍按 `avail_rate`）
+- 记录：`references/known-issues.md` 第 19 条；`SKILL.md` 质量分公式说明同步更新
+
 ## 2026-10-25 布局重构与内核检查
 
 ### 输出布局重构：扁平 + 单文件制
