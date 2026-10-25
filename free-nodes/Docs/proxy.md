@@ -38,7 +38,7 @@
 | `...\bin\xray\xray.exe` | XTLS Xray-core 26.x |
 | `...\bin\mihomo\mihomo.exe` | Clash.Meta 内核 mihomo（对外统一叫 clash） |
 | `...\bin\singbox\sing-box.exe` | SagerNet sing-box |
-| `...\kernel_state.json` | `check_kernels.py` 维护的版本/能力指纹状态 |
+| `free-nodes/src/kernel_state.json` | `check_kernels.py` 维护的版本/能力指纹状态 |
 
 由 `check_kernels.py` 负责下载安装与更新；四个 exe 均不进 git（`.gitignore` 兜底）。
 
@@ -68,7 +68,7 @@
 |---|---|
 | `CORE_ORDER` | 内核尝试顺序 `["clash","singbox","xray","v2ray"]` —— 前两个协议覆盖最全，优先消耗 |
 | `DEFAULT_PROBES` | 通道可用性判定地址：`https://github.com/`（git push 实际目标）+ `https://api.github.com/rate_limit`（API 通道） |
-| `candidates(root, cores, limit)` | 汇总代理候选：**池节点优先**（`pool/pool_<core>.txt`），池空再从近期可用清单补 |
+| `candidates(root, cores, limit)` | 汇总代理候选：**池节点优先**（`nodes/pool/pool_<core>.<ext>`），池空再从近期可用清单补 |
 | `_cores_for(node)` | 节点协议 → 可用内核映射（读 `layout.CAPS`：hysteria2 现四内核都试，顺序 clash→singbox→xray→v2ray） |
 | `class Uplink` | 一次代理会话：`core`（所用内核）、`uri`（节点）、`port`（本地端口）、`url`（`http://127.0.0.1:port`）、`proc`（进程句柄）、`stop()` |
 | `_free_port()` | 从 26000 起找空闲本地端口 |
@@ -122,18 +122,18 @@
 |---|---|
 | `test_one()` | 单节点完整流程：分配端口 → `build_config` → 预校验（失败记 config）→ 启动内核 → 等端口 → 探测 → 失败**二次复测**（区分偶发网络抖动）→ 分类 → 清理临时目录 |
 | `test_core()` | 单内核并发实测一批节点（ThreadPoolExecutor），收集可用结果与全部明细 |
-| 扩量循环（main 内） | 每内核可用数 < `--min-available`(10) 时沿取样顺序追加下一轮；上限 `--limit`×5、时间预算 1800s；候选测完记 `exhausted=true`（此时不再加测） |
-| `write_core_outputs()` | 写 `available_<core>.txt`（时间排序） |
-| `write_summary()` | 写 `summary.md` / `summary.json`：测试数、可用数、可用率、扩量轮次、**失败原因分布**、候选是否测完 |
+| 全量测试循环（main 内，默认） | 某内核候选 ≤ `--full-below`(3000) 时**全部测试**；超过则只测排序前 `--max-test`(30000) 个。排序 = 协议轮流交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序（TCP 不通的已在预筛剔除）。加 `--no-full-test` 回到旧的「可用数 < `--min-available`(10) 沿序追加，上限 limit×5、时间预算 1800s」模式；候选测完记 `exhausted=true` |
+| `write_core_outputs()` | 写 `nodes/available_<core>.<ext>`（按延迟排序） |
+| `write_summary()` | 写 `Docs/summary.md` / `Docs/summary.json`：测试数、可用数、可用率、测试策略与轮次、**失败原因分布**、候选是否测完 |
 
 ## 5. 数据支撑层
 
 ### `scripts/pool.py`（VERSION=2）
 | 成员 | 功能 |
 |---|---|
-| `load_state()` / `save_state()` | `pool/pool_state.json`：12 字段元数据（每内核总数、最近可用时间等，不复制节点列表） |
+| `load_state()` / `save_state()` | `nodes/pool/pool_state.json`：12 字段元数据（每内核总数、最近可用时间等，不复制节点列表） |
 | `load()` / `merge()` / `prune()` | 池读写、把本轮测试结果并入（含延迟/可用率）、14 天淘汰 + 单内核 3000 上限 |
-| `_write_pool_file()` | 写 `pool/pool_<core>.txt`（起代理的候选来源） |
+| `_write_pool_file()` | 写 `nodes/pool/pool_<core>.<ext>`（起代理的候选来源） |
 | `retest_candidates()` | 池内优先复测节点（最近可用过的先测） |
 | `all_uris()` / `summary_lines()` | 汇总全部 URI / 生成 md 汇报段落 |
 
@@ -149,18 +149,18 @@
 
 | 脚本 | 功能 |
 |---|---|
-| `check_kernels.py` | 内核更新检查 + 自动安装；**能力指纹探测**（REALITY pbk、allowInsecure 等探针配置实测），指纹漂移写进 `kernel_state.json` 并告警 |
+| `check_kernels.py` | 内核更新检查 + 自动安装；**能力指纹探测**（REALITY pbk、allowInsecure 等探针配置实测），指纹漂移写进 `src/kernel_state.json` 并告警 |
 | `protocol_check.py` | **一致性回归**：56 个「URI → 装填 → 内核 config check」用例 + ss 加密白名单核对，验证转换器与四内核当前版本完全一致；内核升级后必跑 |
-| `health_check.py` | 产物自检：文件齐全性、可用率合理性、失败原因分布（config/unsupported 占比过高说明装填有问题）、镜像/配额/趋势等；输出 `health_check.md` |
+| `health_check.py` | 产物自检：文件齐全性、可用率合理性、失败原因分布（config/unsupported 占比过高说明装填有问题）、镜像/配额/趋势等；输出 `Docs/health_check.md` |
 | `package_skill.py` | 重打包技能 zip |
-| `references/known-issues.md` | 22 条踩坑记录（每条含复现特征与修复方式） |
+| `references/known-issues.md` | 24 条踩坑记录（每条含复现特征与修复方式） |
 | `references/protocol.md` | 四内核解析参数规范（与本文配套，讲「怎么装填」；本文讲「哪些代码负责装填」） |
 
 ## 7. 调用方
 
 | 文件 | 与本链路的关系 |
 |---|---|
-| `tools/publish_free_nodes.py` | 发布订阅到仓库；push 前 `uplink.ensure()` 起代理，git 子进程经环境变量走代理；失败写 pending 标记下次补推 |
+| `tools/publish_free_nodes.py` | 发布订阅到仓库；push 前把流水线脚本同步进 `free-nodes/src/`（发布物自包含）再 `uplink.ensure()` 起代理，git 子进程经环境变量走代理；失败写 pending 标记下次补推 |
 | `tools/migrate_layout.py` | 历史目录结构迁移（一次性工具） |
 | WorkBuddy 定时任务 | 22:00 调 `collect_nodes.py --readme-only --test ...`，串起「代理 → 采集 → 测试 → 池更新 → 发布」全链路 |
 
@@ -169,19 +169,27 @@
 ```bash
 python scripts/collect_nodes.py \
   --out free-nodes --readme-only --test \
-  --test-limit 200 --test-min-available 10 \
+  --test-full-below 3000 --test-max-test 30000 \
   --max-repos 80 --search-pages 2 --search-days 3 \
   --readme-date-tolerance 0
 ```
 
-单测节点测试（不采集）：
+单测节点测试（不采集；默认即全量测试）：
 
 ```bash
 python scripts/test_nodes.py \
   --input free-nodes --out free-nodes \
   --cores v2ray,xray,clash,singbox \
-  --limit 200 --min-available 10 --workers 12 \
+  --full-below 3000 --max-test 30000 --workers 12 \
   --test-url https://gstatic.com/generate_204 --test-timeout 12
+```
+
+回到旧的限量取样 + 自适应扩量模式：
+
+```bash
+python scripts/test_nodes.py \
+  --input free-nodes --out free-nodes \
+  --no-full-test --limit 200 --min-available 10 --workers 12
 ```
 
 ## 9. 依赖关系
@@ -194,9 +202,9 @@ collect_nodes.py ◄── uplink.py ──► test_nodes.py
     │                  │                │
     │                  ├────────────────┤
     ▼                  ▼                ▼
- pool.py          git/push          available_*.txt
-（下一轮起        （publish 脚本）    summary.md/json
- 代理的候选）                        pool/pool_*.txt
+ pool.py          git/push          nodes/available_*.*
+（下一轮起        （publish 脚本）    Docs/summary.md/json
+ 代理的候选）                        nodes/pool/pool_*.*
 ```
 
 - `uplink.py` 同时依赖 `collect_nodes`（网络工具）与 `test_nodes`（起核+探测），是两条链路的粘合层

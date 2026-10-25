@@ -325,7 +325,7 @@ URI 是 base64(JSON)，字段落在配置里：
    只在一个内核失败、其他内核可用 → 优先怀疑该内核的配置映射问题，而不是节点。
 2. TCP 预筛（2s 握手）与代理实测分开记录：TCP 都不通的节点根本不进入代理测试，
    避免把「服务器宕机」和「协议参数错」混为一谈。
-3. 每次跑完看 `summary.md` 的「失败原因分布」：出现成片的 `config` 就是转换器有 Bug，
+3. 每次跑完看 `Docs/summary.md` 的「失败原因分布」：出现成片的 `config` 就是转换器有 Bug，
    出现成片的 `unsupported` 就是能力矩阵需要对齐内核，而不是节点质量下降。
 
 ## 5. 已知不支持组合（本流水线主动跳过）
@@ -361,7 +361,7 @@ URI 是 base64(JSON)，字段落在配置里：
    （`uri_to_clash` / `uri_to_singbox` / `uri_to_v2ray_outbound`）→ 在 `protocol_check.py`
    里加用例（含预期「不支持」的用例）→ 通过后再跑采集。
 3. **禁止**为了让某个节点「测通」而放宽能力矩阵；矩阵只描述内核事实，不描述希望。
-4. 版本基线变化时，同步更新本文件 §1 的表格与相关说明，并在 `known_issue.md` 留一条记录。
+4. 版本基线变化时，同步更新本文件 §1 的表格与相关说明，并在 `Docs/known_issue.md` 留一条记录。
 
 ## 7. 变更记录
 
@@ -369,3 +369,4 @@ URI 是 base64(JSON)，字段落在配置里：
 |---|---|
 | 2026-10-25 | 建立本文件。按内核实测校准四内核支持矩阵；修复传输层静默退化为 tcp、trojan 缺 TLS、tuic 口令截断、ss 插件丢失、REALITY 公钥校验等 6 类解析缺陷；验证阶段引入失败原因分层与复测 |
 | 2026-10-25 | **二次勘误 xray hysteria2**：早先误判「Xray 不支持 Hysteria2」（`xray.exe\|grep` 扫了进程 stdout 漏检 + 不知道协议名是 `hysteria`+`version:2`）。本机 xray 26.10.21 二进制 678 处 hysteria 字样 + 源码 `infra/conf/hysteria.go` + `xray run -test` 实测确认支持（v26.1.23 引入）；§3.1 矩阵、§3.6 装填、§5 不支持表、`layout.CAPS`、`test_nodes.uri_to_v2ray_outbound` 全部改为支持，新增 salamander(udphop)/端口跳跃装填 |
+| 2026-10-25 | **目录布局调整 + 验证全量策略**（用户要求）：① free-nodes/ 根目录只保留 README.md 与 CHANGELOGS.md（changelog.md 更名），节点产物全部迁入 `nodes/`、文档迁入 `Docs/`、脚本与采集状态迁入 `src/`（发布时由技能 scripts 自动同步）；② 验证默认改为**全量测试**：某内核候选 ≤ 3000 全部实测，超过则只测排序前 30000 个（协议交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序），`--no-full-test` 可回退旧的限量取样 + 自适应扩量模式 |

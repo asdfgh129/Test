@@ -2,6 +2,11 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-10-25 内核检查与升级
+
+- v2ray 新增支持：hysteria2/-/tls、vless/tcp/vision（可考虑放宽 layout.CAPS）
+- xray 新增支持：hysteria2/-/tls（可考虑放宽 layout.CAPS）
+
 ## 2026-10-25 扩大仓库池 + token 接入 + README 按内核/日期取数
 
 - **token 接入**（用户提供）：新增 `load_github_token()` 查找链
