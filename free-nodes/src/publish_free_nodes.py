@@ -230,6 +230,7 @@ def main() -> int:
     GIT_PROXY = (args.proxy or "").strip()
     up_mod = None
     if GIT_PROXY.lower() == "auto":
+        GIT_PROXY = ""   # auto 不是代理地址：清空，真实通道在 do_push 里按轮次临时设置
         up_mod = load_uplink(args.skill_scripts)
         if up_mod is not None:
             log("[proxy] 用已验证节点自建本地代理（不探测本机端口）")
