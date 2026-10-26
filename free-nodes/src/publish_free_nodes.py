@@ -89,42 +89,8 @@ def clear_pending(workspace: Path) -> None:
         p.unlink()
 
 
-# 常见代理客户端默认端口，--proxy auto 时逐个探活
-PROXY_CANDIDATES = [
-    "127.0.0.1:7890", "127.0.0.1:7897", "127.0.0.1:7891", "127.0.0.1:7892",
-    "127.0.0.1:1080", "127.0.0.1:1081", "127.0.0.1:10808", "127.0.0.1:10809",
-    "127.0.0.1:2080", "127.0.0.1:2081", "127.0.0.1:8889", "127.0.0.1:6789",
-    "127.0.0.1:20171", "127.0.0.1:33210",
-]
-
-
-def detect_proxy(timeout: float = 8.0) -> str:
-    """扫描常见本地代理端口，返回第一个能通过代理取到 github.com 的地址。"""
-    import socket
-    import urllib.error
-    import urllib.request
-
-    for hp in PROXY_CANDIDATES:
-        host, port = hp.split(":")
-        try:
-            with socket.create_connection((host, int(port)), timeout=0.4):
-                pass
-        except OSError:
-            continue  # 端口没监听，直接跳过
-        proxy_url = f"http://{hp}"
-        opener = urllib.request.build_opener(
-            urllib.request.ProxyHandler({"http": proxy_url, "https": proxy_url})
-        )
-        try:
-            with opener.open("https://github.com/", timeout=timeout) as resp:
-                if 200 <= resp.status < 400:
-                    return proxy_url
-        except urllib.error.HTTPError as e:
-            if 200 <= e.code < 400:
-                return proxy_url
-        except Exception:
-            continue
-    return ""
+# 推送代理策略（用户明确要求）：--proxy auto 时**不探测本机已有代理端口**，
+# 直接用已验证节点自建本地代理；只有显式给出地址（--proxy http://... 或 GIT_PROXY）才用指定的。
 
 
 def remove_legacy_dirs(out_root: Path) -> list[str]:
@@ -180,7 +146,7 @@ def load_uplink(scripts_dir: str):
 def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
     """推送提交。
 
-    顺序：已有代理（--proxy 指定 / 探测到）→ 自建代理逐节点换核试 → 直连重试。
+    顺序：显式指定的代理 → 复用前序步骤登记的通道 → 逐个节点自建代理 → 直连重试。
     自建代理阶段的语义是「推不通就换节点、换内核，直到连通」。
     """
     global GIT_PROXY
@@ -189,15 +155,31 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
     if GIT_PROXY:
         return push_with_retry(workspace, args.branch, args.retries, args.retry_wait)
 
-    # B. 自建代理：每轮挑一个节点起本地内核，推不动就换下一个
+    # B. 自建代理：先复用前两步登记的通道，再每轮挑一个节点起本地内核，推不动就换下一个
     if up_mod is not None:
+        # B0. 复用第 1/2 步已登记的通道（git push 只依赖 github.com，探测就只认它）
+        reused = up_mod.resume(probes=["https://github.com/"])
+        if reused is not None:
+            GIT_PROXY = reused.url
+            try:
+                code, out = git(workspace, "push", "origin", args.branch, timeout=180)
+            finally:
+                GIT_PROXY = ""
+            up_mod.stop(reused)          # 整条流程结束，同时清掉登记
+            if code == 0:
+                log(f"[push] 经已有通道推送成功（{reused.describe()}）")
+                return True, out
+            tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"
+            log(f"[push] 已有通道推送失败：{tail} → 改为逐个节点新建通道")
+
         tried: set[str] = set()
         rounds = max(1, args.uplink_rounds)
         for r in range(1, rounds + 1):
             log(f"[uplink] 第 {r}/{rounds} 轮：从已验证节点里起本地代理 …")
             # git push 只依赖 github.com，探测就只认它（api.github.com 通不代表能 push）
             up = up_mod.start(root=out_root, max_candidates=args.uplink_candidates,
-                              skip=tried, probes=["https://github.com/"])
+                              skip=tried, probes=["https://github.com/"],
+                              register=False)   # 推送是最后一环，临时通道不必登记
             if up is None:
                 log("[uplink] 没有更多可用节点可试")
                 break
@@ -232,7 +214,8 @@ def main() -> int:
     ap.add_argument("--no-push", action="store_true", help="只提交不推送")
     ap.add_argument("--proxy", default=os.environ.get("GIT_PROXY", ""),
                     help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890；"
-                         "auto=先探测本地代理端口，探测不到就用已验证节点自建代理"
+                         "auto=不探测本机端口，直接用已验证节点自建本地代理"
+                         "（优先复用前序步骤登记的通道）"
                          "（也可用环境变量 GIT_PROXY）")
     ap.add_argument("--skill-scripts",
                     default=str(Path(__file__).resolve().parent),
@@ -247,16 +230,13 @@ def main() -> int:
     GIT_PROXY = (args.proxy or "").strip()
     up_mod = None
     if GIT_PROXY.lower() == "auto":
-        log("[proxy] 先探测本机已有代理端口 …")
-        GIT_PROXY = detect_proxy()
-        if GIT_PROXY:
-            log(f"[proxy] 探测到可用代理 {GIT_PROXY}")
+        up_mod = load_uplink(args.skill_scripts)
+        if up_mod is not None:
+            log("[proxy] 用已验证节点自建本地代理（不探测本机端口）")
         else:
-            up_mod = load_uplink(args.skill_scripts)
-            if up_mod is not None:
-                log("[proxy] 无现成代理，改为用已验证节点自建本地代理推送")
-            else:
-                log("[proxy] 无现成代理且 uplink 模块不可用，按直连推送")
+            log("[proxy] uplink 模块不可用，按直连重试")
+    elif GIT_PROXY:
+        log(f"[proxy] 推送走指定代理 {GIT_PROXY}")
     elif GIT_PROXY:
         log(f"[proxy] 推送走代理 {GIT_PROXY}")
 
@@ -312,6 +292,8 @@ def main() -> int:
     if not staged and not has_unpushed:
         log("[push] 本地与远端一致，无需推送")
         clear_pending(workspace)
+        if up_mod is not None:
+            up_mod.kill_session()   # 流程最后一环：顺手清掉前序步骤遗留的通道
         return 0
 
     ok, err = do_push(workspace, args, up_mod, str(out_root))

@@ -12,7 +12,7 @@
 输出（文档类全部在 Docs/ 子目录，md 日志按日期倒序累积）：
     Docs/health_check.md   人读报告（结论 + 指标 + 发现 + 建议动作）
     Docs/health_check.json 机读结果（最新一次）
-    Docs/known_issues.md    自检发现的问题（按日期倒序，同一天重跑替换当天小节）
+    Docs/known-issues.md    末尾「自检发现」区块（按日期倒序，同一天重跑替换当天小节）
     Docs/review_logs.md     跨天摘要（按日期倒序）
 
 退出码：0 = 健康，1 = 有告警，2 = 有严重问题
@@ -696,7 +696,7 @@ def write_reports(root, findings, metrics, entries, args):
                    "verdict": verdict, "metrics": metrics,
                    "findings": findings, "todo": todo}, fh, ensure_ascii=False, indent=1)
 
-    # known_issues.md：自检发现的问题统一记在这里（按日期倒序）
+    # known-issues.md 末尾「自检发现」区块：自检发现的问题统一记在这里（按日期倒序）
     issue_lines = [f"**结论：{verdict}**", ""]
     if todo:
         issue_lines.append("| 级别 | 领域 | 问题 | 建议动作 |")

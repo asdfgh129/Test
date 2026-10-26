@@ -19,18 +19,23 @@ agent_created: true
 
 ## 核心工作流
 
-**三步：采集 → 验证 → 自检。**
+**三步：采集 → 验证 → 自检。**采集前建议先做内核检查，且它和采集**在同一进程里跑**（`--check-kernels`），这样自建代理只建一次。
 
 ```bash
-# 1+2. 采集并自动做四内核可用性验证（--out 是输出根目录，内部按 nodes/Docs/src 分目录，不带日期）
-python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes --readme-only --test
+# 1+2. 内核检查 + 采集 + 四内核可用性验证（一条命令，代理只建一次）
+python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes --readme-only --test --check-kernels
 
 # 3. 自检：机械评估本次结果是否异常，输出待修复清单
 python <free-nodes>/src/health_check.py --dir <工作区>/free-nodes
 
-# 可选：内核版本 / 能力漂移检查（建议每次采集前跑）
+# 可选：单独跑内核版本 / 能力漂移检查（要连 api.github.com，必须带 token，否则走代理必 403）
 python <free-nodes>/src/check_kernels.py --root <工作区>/free-nodes
 ```
+
+> **为什么用 `--check-kernels` 而不是分两条命令**：内核检查要访问 `api.github.com`，本机直连不通时必须先自建代理。
+> 但内核子进程会随父进程退出被回收（本机 job 限制），所以**分步执行时第 1 步建的通道活不到第 2 步**；
+> 用 `--check-kernels` 把两步放进同一进程，通道建一次、采集直接接管（日志只出现一次 `[uplink] 通道就绪`）。
+> 分步执行仍然可用：每步都会先尝试接管已登记的通道，接管不到才自建（约 10~30 秒）。
 
 `health_check.py` 退出码：`0` 健康 / `1` 有告警 / `2` 有严重问题。有问题时按它的「待办清单」逐条处理，对照 `Docs/known-issues.md` 定位根因。
 
@@ -71,12 +76,13 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 | `--time-budget N` | 采集阶段时间预算（秒），默认 2400=40 分钟；0=不限。超预算停止扫描剩余仓库，已有结果照常输出 |
 | `--pool-dir <dir>` | 可用节点池目录（默认 `<输出根目录>/nodes/pool`） |
 | `--readme-only` | **只跟随 README 声明的订阅链接**，不再按文件名扫描仓库目录；README 没有订阅链接的仓库直接跳过（命中率集中、不浪费配额，代价是来源数量变少） |
-| `--uplink auto` | **默认值**。先用已验证节点自建本地代理访问 GitHub，代理不可用再直连，都不通则等 `--uplink-wait` 秒后重试（见下方「上行通道」） |
+| `--uplink auto` | **默认值**。先接管前一步登记的自建代理（用 `--check-kernels` 时与内核检查共用同一条通道，不会再建第二次），接管不到才用已验证节点自建；代理不可用再直连，都不通则等 `--uplink-wait` 秒后重试（见下方「上行通道」） |
 | `--uplink direct` | 只用直连，不自建代理 |
 | `--uplink <url>` | 指定现成代理，如 `http://127.0.0.1:7890` |
 | `--uplink-wait N` | 代理与直连都不通时每次重试前等待的秒数，默认 600=10 分钟 |
 | `--uplink-retries N` | 上述重试次数，默认 2 |
 | `--uplink-max-candidates N` | 自建代理时最多尝试多少个候选节点，默认 40 |
+| `--check-kernels` | 采集前在**同一进程**里先跑内核版本与能力检查，共用同一条自建代理通道（推荐：分步执行时通道无法跨进程存活，用它可避免重复搭建）。可配 `--check-kernels-update`（有新版本就升级）、`--check-kernels-skip-network`（只做本地能力指纹） |
 | `--test` | 采集完自动做四内核可用性验证 |
 | `--test-cores <list>` | 要验证的内核，默认 `v2ray,xray,clash,singbox` |
 | `--test-full-below N` | **全量测试阈值**（默认策略）：某内核候选数不超过 N 就**全部验证**，默认 3000 |
@@ -116,14 +122,13 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 |---|---|
 | `Docs/protocol.md` | 四内核解析规范与实测校准报告 |
 | `Docs/proxy.md` | 自建代理与节点测试链路代码组成说明 |
-| `Docs/known-issues.md` | 踩坑知识库（每条含现象/根因/修复/教训，修复闭环的对查表） |
+| `Docs/known-issues.md` | 踩坑知识库（每条含现象/根因/修复/教训，修复闭环的对查表）**+ 末尾「自检发现」区块**（`health_check.py` 自动写入，按日期倒序）。一个文件装两类内容，**不再有 `known_issues.md`** |
 | `Docs/sources.md` | 种子仓库来源与维护建议 |
 | `Docs/tools-setup.md` | 四内核二进制部署/升级方法 |
 | `Docs/report.md` | 采集报告：延迟分布、README 战果、仓库质量排行、协议分布、各内核分流数 |
 | `Docs/summary.md` / `Docs/summary.json` | 验证汇总：各内核测试数/可用数/可用率/测试策略与轮次 |
 | `Docs/collection_logs.md` | 每次运行的执行阶段、仓库清单、去重结果、输出路径 |
 | `Docs/health_check.md` / `Docs/health_check.json` | 自检结论 + 分级发现 + 待办清单 |
-| `Docs/known_issues.md` | 自检发现问题（按日期累积，时间倒序；与 `known-issues.md` 知识库是两个文件） |
 | `Docs/review_logs.md` | 跨天摘要（时间倒序） |
 
 **`src/` — 脚本与采集状态**（全链路脚本的**唯一事实来源**，直接在这里改，无同步动作）：
@@ -275,12 +280,18 @@ CF 网段清单在 `collect_nodes.CF_NET_CIDRS` 维护（官方 IPv4/IPv6 段）
 - **Xray 26.x 移除 `tlsSettings.allowInsecure`**（报错要求改用 `pinnedPeerCertSha256` / `verifyPeerCertByName`）——沿用老配置模板会让 xray **全部样本验证失败**，看起来像"节点全死了"
 - **v2fly 5.x 改了配置校验命令**（`-test -config` 报 `flag provided but not defined`，新写法是 `test -c`）——沿用老命令会让 v2ray 的每个样本都判"未被接受"
 
-所以每次采集前建议跑一次：
+所以每次采集前建议跑一次（**推荐与采集合并成一条命令**，代理只建一次）：
 
 ```bash
-python <free-nodes>/src/check_kernels.py --root <输出根目录>            # 只检查，不改动
+python <free-nodes>/src/check_kernels.py --root <输出根目录>            # 只检查，不改动（结束自动关通道）
 python <free-nodes>/src/check_kernels.py --root <输出根目录> --update   # 有新版本就下载安装
+python <free-nodes>/src/collect_nodes.py --out <输出根目录> --check-kernels   # 推荐：检查+采集一体
 ```
+
+**这一步本身就要访问 GitHub（`api.github.com` 查 release），所以它会先自建代理再查**：按
+`--uplink auto`（默认）用已验证节点起本地通道。走免费节点代理时出口 IP 与他人共享，**匿名配额
+（60/时）几乎必然 403，必须带 token**（`--token` 或凭据文件，自动读取）。检查结束后默认关掉通道；
+被 `collect_nodes.py --check-kernels` 调用时，通道直接移交给采集环节继续用。
 
 它做两件事：
 
@@ -289,7 +300,7 @@ python <free-nodes>/src/check_kernels.py --root <输出根目录> --update   # �
 
 内核原生校验命令由 `test_nodes.check_config()` 按候选链自动识别并缓存（`v2ray test -c` / `xray -test -config` / `mihomo -t -f` / `sing-box check -c`），版本变了也不会一次性全哑。
 
-退出码：`0` 无变化 / `1` 有新版本或能力变化 / `2` 检查失败。发现变化时脚本会自己往 `CHANGELOGS.md`（根目录）与 `Docs/known_issues.md` 追加记录。
+退出码：`0` 无变化 / `1` 有新版本或能力变化 / `2` 检查失败。发现变化时脚本会自己往 `CHANGELOGS.md`（根目录）与 `Docs/known-issues.md` 追加记录。
 
 ### 验证流程（TCP 预筛 + 全量实测 + 失败分层）
 
@@ -406,20 +417,31 @@ python <free-nodes>/src/protocol_check.py --core xray --verbose
 采集还能靠镜像凑合，`git push` 却完全不通。本机本来就有四个代理内核和一堆已实测可用的
 节点，于是脚本自己「拿节点起内核」，把 GitHub 流量交给它。
 
-`collect_nodes.py --uplink auto`（默认）的执行顺序：
+**建通道的时机（2026-10-26 用户要求）**：从内核检查那一步就开始建，后续步骤不再重复搭建。
 
-1. **自建代理**：候选节点按可靠性排序 —— `nodes/pool/pool_state.json`（实测通过过，ok_count 高、
+| 步骤 | 行为 |
+|---|---|
+| 1. `check_kernels.py` | **先自建代理再查版本**（查 release 要连 `api.github.com`）。独立运行时结束即关闭；被 `collect_nodes.py --check-kernels` 调用时，通道移交给采集环节 |
+| 2. `collect_nodes.py` | 用 `--check-kernels` 时**直接接管第 1 步的通道**（日志里 `[uplink] 通道就绪` 只出现一次）；没接管到才自建。采集结束主动停掉——验证阶段要独占本地端口，而且要测「节点本身」，留着代理既抢端口又污染代理环境变量 |
+| 5. `publish_free_nodes.py --proxy auto` | **不探测本机已有代理端口**，直接用已验证节点自建（先尝试接管登记在案的通道，推不通就换节点/换内核），全部失败才直连兜底 |
+
+`--uplink auto` 的自建顺序：
+
+1. **接管已登记通道**：`~/.workbuddy/data/free-nodes-tools/runtime/uplink_session.json`
+   （先校验 pid 存活再探活，通了一律直接用，不重新试节点）
+2. **自建代理**：候选节点按可靠性排序 —— `nodes/pool/pool_state.json`（实测通过过，ok_count 高、
    best_latency 低优先）→ `nodes/available_<core>.*`（各内核当日可用清单）→ `nodes/nodes_uris.txt` 兜底。
    先做 TCP 预筛，再逐条节点 × 内核（clash → singbox → xray → v2ray）起本地 HTTP 代理，
    用 `https://github.com/` + `https://api.github.com/rate_limit` 双探测，**2xx 才算通**
-2. **直连**：一个代理都起不来时才直连（先实测 GitHub 可达性，避免白等）
-3. **等 10 分钟重试**：代理和直连都不通，按 `--uplink-retries`（默认 2）等待后从第 1 步重来
+3. **直连**：一个代理都起不来时才直连（先实测 GitHub 可达性，避免白等）
+4. **等 10 分钟重试**：代理和直连都不通，按 `--uplink-retries`（默认 2）等待后从第 2 步重来
 
-采集结束后**先停掉这个代理内核，再进入四内核节点验证**：验证阶段要独占本地端口，而且
-要测的是「节点本身」，留着代理既抢端口也让代理环境变量影响后续请求。
+> **跨进程复用是尽力而为**：本机执行环境（job 限制）会在父进程退出时回收内核子进程，
+> 且 `CREATE_BREAKAWAY_FROM_JOB` 被拒（WinError 5），所以**分步执行**时第 2 步往往接管不到登记通道、
+> 只能重建（约 10~30 秒）。要确保「代理只建一次」，用 `collect_nodes.py --check-kernels` 合并跑。
 
-`src/publish_free_nodes.py`（提交推送 GitHub）用同一套 `uplink` 逻辑：
-现成代理 → 自建代理（**推不通就换节点、换内核，直到连通**）→ 直连兜底；
+推送到 GitHub（`src/publish_free_nodes.py`）：`--proxy auto` **不探测本机代理端口**，直接自建，
+**推不通就换节点、换内核，直到连通**；也可 `--proxy http://127.0.0.1:7890` 指定现成代理。
 全部失败则保留本地提交并记录待推送状态。
 
 单独自测一条通道是否可用：
@@ -524,7 +546,7 @@ python <free-nodes>/src/health_check.py --dir <输出根目录> --skip-network  
 
 - `Docs/health_check.md` — 结论 + 指标表 + 分级发现 + **待办清单**
 - `Docs/health_check.json` — 机读版（供自动化判断）
-- `Docs/known_issues.md` — 本次自检发现的问题（同一天重跑会替换当天小节，不会重复堆叠）
+- `Docs/known-issues.md` 末尾的「自检发现」区块 — 本次自检发现的问题（同一天重跑会替换当天小节，不会重复堆叠；上面的知识库条目不受影响）
 - `Docs/review_logs.md` — 每次运行一行摘要，跨天可追溯
 
 根目录的 `CHANGELOGS.md` 由人工/脚本在**修复或升级内核后**写入（`layout.append_changelog`），同样按日期倒序。
@@ -537,7 +559,7 @@ python <free-nodes>/src/health_check.py --dir <输出根目录> --skip-network  
 4. **改脚本并单点回归**：用该样本验证修复确实生效（不能只看整体数字变化）
 5. **重跑受影响环节**：解析类 → 重跑采集；验证类 → 重跑 `test_nodes.py`
 6. **再跑 `health_check.py`**，确认该 finding 消失且未引入新问题
-7. **记录**：向 `Docs/known-issues.md` 追加条目；同时在输出根目录的 `Docs/known_issues.md` 记「发现的问题」、根目录 `CHANGELOGS.md` 记「改了什么 + 验证结果」（都按日期倒序，同一天重跑替换当天小节）；行为变化同步更新本文件
+7. **记录**：向 `Docs/known-issues.md` 上方知识库按编号追加条目（新发现的现象/根因/修复/教训），自检结果由 `health_check.py` 自动写进同一个文件末尾的「自检发现」区块；根目录 `CHANGELOGS.md` 记「改了什么 + 验证结果」（都按日期倒序，同一天重跑替换当天小节）；行为变化同步更新本文件
 8. **提交推送**：`src/publish_free_nodes.py --proxy auto`（路径限定只提交 free-nodes；脚本自身就在 src/ 里，无需同步/打包）
 9. **汇报**：说明「发现什么 → 根因 → 改了什么 → 验证结果」
 

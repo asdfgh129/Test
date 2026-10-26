@@ -2,6 +2,26 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-10-26 上行通道前移 + 推送不探测本机端口 + known-issues 合并（用户三点要求）
+
+- **第 1 步就自建代理**：`check_kernels.py` 原先完全没有代理能力（`latest_release(proxy=...)`
+  参数留着没人传），查 `api.github.com` 只能指望直连。现在默认 `--uplink auto`：
+  用已验证节点建通道 → 查版本 → 结束关闭（独立运行无残留）
+- **代理只建一次**：`check_kernels` 拆出 `run_check() -> (rc, uplink_mod, handle)`，
+  `collect_nodes.py --check-kernels` 在同一进程里先跑检查、再接管该通道采集。
+  原因：本机 job 限制会在命令结束时回收 detached 子进程（`CREATE_BREAKAWAY_FROM_JOB`
+  被拒 WinError 5），跨进程复用只能尽力而为 → 详见 known-issues 第 34 条
+- **版本查询必须带 token**：走免费节点代理时出口 IP 与他人共享，匿名配额（60/时）
+  几乎必然 403（实测四核全被限流），`latest_release` 现在带 `Authorization`
+- **推送不探测本机端口**（用户要求）：`publish_free_nodes.py --proxy auto` 删掉
+  `PROXY_CANDIDATES` / `detect_proxy()`，直接用已验证节点自建（先尝试接管登记在案的通道）；
+  `--proxy http://...` 仍可指定现成代理
+- **known-issues 合并为一个文件**（用户要求）：`Docs/known-issues.md`（人工知识库）与
+  `Docs/known_issues.md`（自检表格）名字只差一个连字符、内容还会互相抄串。现合并为单文件：
+  上方编号知识库，末尾「自检发现」区块（条目用 `### 日期 标题`，`layout.append_issue`
+  独立插入、不碰知识库条目、幂等去重、最多 30 条）
+- 顺手修：`collect_nodes.py` 空结果时 `uniq[0]` 抛 `IndexError`（预算过短 / 来源全失败时整轮失败）
+
 ## 2026-10-25 内核检查与升级
 
 - v2ray 新增支持：hysteria2/-/tls、vless/tcp/vision（可考虑放宽 layout.CAPS）

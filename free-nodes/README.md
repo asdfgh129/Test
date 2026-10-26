@@ -33,13 +33,12 @@ free-nodes/
 ├─ Docs/                      文档（报告与日志统一时间倒序，新的在最前，保留最近 30 小节）
 │   ├─ protocol.md            四内核解析规范与实测校准报告
 │   ├─ proxy.md               自建代理与节点测试链路说明
-│   ├─ known-issues.md        踩坑知识库（现象 / 根因 / 修复 / 教训）
+│   ├─ known-issues.md        踩坑知识库（现象 / 根因 / 修复 / 教训）+ 末尾「自检发现」区块（脚本自动写）
 │   ├─ sources.md             种子仓库来源与维护建议
 │   ├─ tools-setup.md         四内核二进制部署 / 升级方法
 │   ├─ report.md              采集报告（延迟分布 / 协议分布 / 仓库质量排行）
 │   ├─ summary.md / .json     验证汇总（各内核测试数 / 可用数 / 可用率 / 测试策略）
 │   ├─ health_check.md / .json 自检报告（结论 + 分级发现 + 待办清单）
-│   ├─ known_issues.md        自检发现的问题（按日期累积；与 known-issues.md 知识库是两个文件）
 │   ├─ collection_logs.md     每次运行一条（执行阶段 / 仓库明细 / 去重结果）
 │   └─ review_logs.md         跨天摘要
 │

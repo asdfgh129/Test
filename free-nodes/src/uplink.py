@@ -38,6 +38,8 @@ import layout as lay  # noqa: E402
 import test_nodes as t  # noqa: E402
 
 CREATE_NO_WINDOW = 0x08000000 if os.name == "nt" else 0
+# 内核子进程与父进程解绑：第 1 步建好的通道要能在第 2、5 步继续用
+DETACHED_PROCESS = 0x00000008 if os.name == "nt" else 0
 
 # 内核尝试顺序：clash(mihomo) / sing-box 协议覆盖最全，先把它们用掉
 CORE_ORDER = ["clash", "singbox", "xray", "v2ray"]
@@ -153,14 +155,18 @@ def _cores_for(node):
 # ---------------------------------------------------------------- 起停内核
 
 class Uplink:
-    """一个正在运行的本地代理通道。"""
+    """一个正在运行的本地代理通道。
 
-    def __init__(self, port, core, uri, proc, tmpdir):
+    proc 为 None 表示「复用了别的进程起的通道」（pid 指向那个内核进程）。
+    """
+
+    def __init__(self, port, core, uri, proc, tmpdir, pid=0):
         self.port = port
         self.core = core
         self.uri = uri
         self.proc = proc
         self.tmpdir = tmpdir
+        self.pid = int(pid or (proc.pid if proc is not None else 0))
 
     @property
     def url(self):
@@ -219,7 +225,7 @@ def build_one(core, uri, tools_dir=None, probes=None, probe_timeout=15,
             ([exe, "-d", tmpdir, "-f", cfg_path] if core == "mihomo"
              else [exe] + spec["args"] + [cfg_path]),
             cwd=tmpdir, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            creationflags=CREATE_NO_WINDOW,
+            creationflags=CREATE_NO_WINDOW | DETACHED_PROCESS,
         )
         if not t.wait_port(port, startup_timeout):
             raise RuntimeError("内核启动超时")
@@ -256,25 +262,152 @@ def _cleanup(tmpdir):
         pass
 
 
-def stop(up):
-    """停掉上行通道（采集/推送结束后必须调用，避免端口与内核残留）。"""
-    if not up:
+# ---------------------------------------------------------------- 跨进程通道复用
+# 第 1 步（check_kernels）先把通道建好，第 2 步（采集）和第 5 步（推送）直接复用同一通道，
+# 不必各自重新逐个节点试连。做法：内核子进程 detached 启动（父进程退出后仍服务），
+# 通道信息登记到 tools 目录的 runtime/ 下（**不入 git**），后续进程据此探测并接管。
+
+SESSION_NAME = "uplink_session.json"
+
+
+def session_path(tools_dir=None):
+    base = os.path.dirname(os.path.abspath(tools_dir or DEFAULT_TOOLS))
+    return os.path.join(base, "runtime", SESSION_NAME)
+
+
+def _pid_alive(pid):
+    """判断 pid 是否还活着（Windows 用 OpenProcess，不依赖 psutil）。"""
+    pid = int(pid or 0)
+    if pid <= 0:
+        return False
+    if os.name == "nt":
+        import ctypes
+        h = ctypes.windll.kernel32.OpenProcess(0x1000, False, pid)  # QUERY_LIMITED_INFORMATION
+        if not h:
+            return False
+        try:
+            code = ctypes.c_ulong()
+            if not ctypes.windll.kernel32.GetExitCodeProcess(h, ctypes.byref(code)):
+                return False
+            return code.value == 259  # STILL_ACTIVE
+        finally:
+            ctypes.windll.kernel32.CloseHandle(h)
+    try:
+        os.kill(pid, 0)
+        return True
+    except OSError:
+        return False
+
+
+def _kill_pid(pid):
+    pid = int(pid or 0)
+    if pid <= 0:
         return
     try:
-        up.proc.kill()
-        up.proc.wait(timeout=3)
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/F", "/PID", str(pid)],
+                           capture_output=True, timeout=10)
+        else:
+            os.kill(pid, 15)
     except Exception:  # noqa: BLE001
         pass
+
+
+def save_session(up, tools_dir=None):
+    """把通道登记到状态文件，供后续步骤（采集/推送）复用。"""
+    path = session_path(tools_dir)
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({"url": up.url, "port": up.port, "core": up.core, "uri": up.uri,
+                       "pid": up.pid, "tmpdir": up.tmpdir,
+                       "created": time.strftime("%Y-%m-%d %H:%M:%S")},
+                      f, ensure_ascii=False, indent=1)
+        log(f"[uplink] 通道已登记（后续步骤可直接复用）：{path}")
+        return path
+    except OSError as e:
+        log(f"[uplink] 通道状态写入失败：{e}")
+        return None
+
+
+def load_session(tools_dir=None):
+    path = session_path(tools_dir)
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            got = json.load(f)
+        return got if isinstance(got, dict) and got.get("port") else None
+    except (OSError, ValueError):
+        return None
+
+
+def clear_session(tools_dir=None):
+    path = session_path(tools_dir)
+    try:
+        if os.path.exists(path):
+            os.remove(path)
+    except OSError:
+        pass
+
+
+def kill_session(tools_dir=None):
+    """停掉上一次遗留的通道（内核进程 + 临时目录），并清掉状态。"""
+    sess = load_session(tools_dir)
+    if sess:
+        _kill_pid(sess.get("pid"))
+        _cleanup(sess.get("tmpdir"))
+        log(f"[uplink] 已清理遗留通道 {sess.get('core')}（pid {sess.get('pid')}）")
+    clear_session(tools_dir)
+    return sess
+
+
+def resume(tools_dir=None, probes=None, probe_timeout=12):
+    """复用状态文件里的通道：进程活着 + 探测通过才返回 Uplink，否则清理并返回 None。"""
+    sess = load_session(tools_dir)
+    if not sess:
+        return None
+    port = int(sess.get("port") or 0)
+    if not port or not _pid_alive(sess.get("pid")):
+        log("[uplink] 上次登记的通道进程已退出，准备重建")
+        kill_session(tools_dir)
+        return None
+    ok, url, latency = _probe(port, probes or DEFAULT_PROBES, probe_timeout)
+    if not ok:
+        log("[uplink] 上次登记的通道探测不通，清理后重建")
+        kill_session(tools_dir)
+        return None
+    up = Uplink(port, sess.get("core", ""), sess.get("uri", ""), None,
+                sess.get("tmpdir") or "", pid=sess.get("pid"))
+    log(f"[uplink] 复用已有通道：{up.describe()}，{url} {round(latency)}ms")
+    return up
+
+
+def stop(up, drop_session=True, tools_dir=None):
+    """停掉上行通道（整条流程结束后必须调用，避免端口与内核残留）。"""
+    if not up:
+        return
+    if up.proc is not None:
+        try:
+            up.proc.kill()
+            up.proc.wait(timeout=3)
+        except Exception:  # noqa: BLE001
+            pass
+    elif up.pid:
+        _kill_pid(up.pid)
     _cleanup(up.tmpdir)
+    if drop_session:
+        clear_session(tools_dir)
     log(f"[uplink] 已停止通道 {up.core}（{up.url}）")
 
 
 def start(root=None, cores=None, tools_dir=None, probes=None,
           max_candidates=40, probe_timeout=15, startup_timeout=6, prefilter=True,
-          skip=()):
+          skip=(), register=True):
     """按候选顺序逐条起核试连，第一个通的就用它。全部失败返回 None。
 
     skip：本轮已经试过的节点 URI 集合（推送阶段「通了但 git 还是失败」时要换一批节点）。
+    register：建好后是否登记到状态文件供后续步骤复用（推送阶段的临时通道就不用登记）。
     """
     cand = candidates(root=root, cores=cores, limit=max_candidates + len(skip))
     if skip:
@@ -304,6 +437,8 @@ def start(root=None, cores=None, tools_dir=None, probes=None,
             up = build_one(core, node["uri"], tools_dir, probes, probe_timeout, startup_timeout)
             if up:
                 log(f"[uplink] 第 {tried} 次尝试命中（来源 {node.get('source', '?')}）")
+                if register:
+                    save_session(up, tools_dir)
                 return up
             if tried >= max_candidates:
                 return None
@@ -371,13 +506,22 @@ def direct_ok(probes=None, timeout=12):
 # ---------------------------------------------------------------- 兜底链
 
 def ensure(root=None, cores=None, tools_dir=None, probes=None,
-           retries=2, retry_wait=600, allow_direct=True, max_candidates=40, skip=()):
-    """建立上行通道：先自建代理 → 代理不可用则直连 → 直连也不通就等 retry_wait 秒重试。
+           retries=2, retry_wait=600, allow_direct=True, max_candidates=40, skip=(),
+           reuse=True):
+    """建立上行通道：复用已登记的通道 → 自建代理 → 直连 → 等待重试。
 
     root：扁平输出根目录（池 + 已发布的可用清单都在这里），用来自选候选节点。
+    reuse：先看状态文件里有没有前一步登记好的通道（第 1 步建的），通了就直接用，
+           避免采集阶段再逐个节点试连一遍。
     返回 (mode, uplink)：mode ∈ {"proxy", "direct", "none"}；mode=proxy 时 uplink 非空，
-    调用方用完后必须 uplink.stop(up)。
+    调用方用完后必须 uplink.stop(up)（想留给后续步骤则 stop(drop_session=False)）。
     """
+    if reuse:
+        up = resume(tools_dir=tools_dir, probes=probes)
+        if up:
+            set_proxy_env(up.url)
+            install_opener(up.url)
+            return "proxy", up
     for attempt in range(retries + 1):
         if attempt:
             log(f"[uplink] 等待 {retry_wait} 秒后重试（第 {attempt}/{retries} 次重试）…")

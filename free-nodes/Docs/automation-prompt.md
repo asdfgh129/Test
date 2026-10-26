@@ -2,6 +2,9 @@
 
 > 2026-10-25 整理。旧版 prompt 引用已删除的旧技能目录、`tools/publish_free_nodes.py`、
 > `--test-limit 200` 旧测试参数与 `free-nodes\known_issue.md` 旧文件名，已不适用。
+> **2026-10-26 按用户要求修订三点**：① 内核检查这一步就先自建代理，并与采集合并到同一进程
+> （`--check-kernels`），代理只建一次；② 推送不再探测本机已有代理端口，直接用已验证节点自建；
+> ③ 两个近似的 known-issues 文件合并为一个 `Docs/known-issues.md`。
 > 本会话无 automation_update 工具，无法直接改定时任务，请把下面全文粘贴到
 > 自动化「任务指令」里（覆盖旧版）。定时任务名：每日免费节点采集（v2ray/xray/clash/singbox）。
 
@@ -20,24 +23,32 @@
   日期只用于 md 日志的日期小节和提交信息，用 `date +%F` 取，不要自己推算。
 - GitHub token：已存放在 `C:\Users\bemin\.workbuddy\data\free-nodes-tools\github_token.txt`（权限 600，**不在 git 仓库内**）。脚本会自动读取（优先级 `--token` > `GITHUB_TOKEN` 环境变量 > 该文件），**不需要也不要在命令行里传 token，更不要把 token 内容写进任何文件或汇报里**。带 token 后核心配额 5000/时、搜索 30/分。
 
-【1. 内核版本与能力检查（先做，约 10~30 秒）】
+【1. 内核版本与能力检查（并入第 2 步，代理只建一次）】
+这一步要访问 `api.github.com` 查最新 release。本机直连不通时**必须先自建代理**，脚本已内置（`--uplink auto`）。
+但本机执行环境会在命令结束时回收内核子进程，**独立跑第 1 步建好的通道活不到第 2 步**，
+所以请用第 2 步命令里的 `--check-kernels` 把两步合并在同一进程里跑——通道只建一次，采集直接接管。
+
+仅诊断时才单独跑（结束会自动关闭通道，无残留）：
 ```
 C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\check_kernels.py --root C:\Users\bemin\WorkBuddy\Test\free-nodes
 ```
 - 对比四个内核（v2ray/xray/clash(mihomo)/singbox）本地版本与 GitHub 最新 release，并用「协议 × 传输层 × 加密方式」样本配置跑内核原生校验，比对 accepted 集合与 `src/kernel_state.json` 基线
+- **必须带 token**（脚本自动读取凭据文件）：走免费节点代理时出口 IP 与他人共享，匿名配额（60/时）几乎必然 403
 - 退出码 0 = 无变化；1 = 有新版本或能力变化；2 = 检查失败
 - 退出码 1 时：读输出的差异，判断是否影响节点处理逻辑（典型：Xray 移除 allowInsecure、v2fly 换校验命令、某内核新增/移除协议）。需要升级就 `--update` 重新跑一次；改了 `layout.CAPS` 或节点转换逻辑要写进根 `CHANGELOGS.md` 与 `Docs/protocol.md` §7 并在汇报里说明
 - 退出码 2 不阻断后续采集，记进汇报
 
-【2. 采集（不带内联测试）】
+【2. 采集（先跑内核检查，再采集；不带内联测试）】
 ```
-C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\collect_nodes.py --out C:\Users\bemin\WorkBuddy\Test\free-nodes --readme-only --max-repos 80 --search-pages 2 --search-days 3 --readme-date-tolerance 0
+C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\collect_nodes.py --out C:\Users\bemin\WorkBuddy\Test\free-nodes --readme-only --max-repos 80 --search-pages 2 --search-days 3 --readme-date-tolerance 0 --check-kernels
 ```
+`--check-kernels` 会在同一进程里先做第 1 步的内核检查，**共用同一条自建代理通道**：
+日志里 `[uplink] 通道就绪` 只应出现一次；出现两次说明没复用到，记进汇报。
 
 关键行为（脚本已内置，不要绕过）：
-- **上行通道（--uplink auto，默认）**：**搜索仓库地址与下载节点数据之前，先用「已验证可用的节点」自建本地代理内核**（按 clash → singbox → xray → v2ray 轮换，同一节点每个内核都试，探测 `https://github.com/` 或 `https://api.github.com/rate_limit` 拿到 2xx 才算通）；四内核都起不来才走直连；代理与直连都不通则等 10 分钟重试（`--uplink-wait 600 --uplink-retries 2`）。通道是全局 opener，所以**搜索 API 与节点下载都走它**，不只是下载。
+- **上行通道（--uplink auto，默认）**：**搜索仓库地址与下载节点数据之前，先用「已验证可用的节点」自建本地代理内核**（先接管已登记的通道；接管不到才按 clash → singbox → xray → v2ray 轮换自建，同一节点每个内核都试，探测 `https://github.com/` 或 `https://api.github.com/rate_limit` 拿到 2xx 才算通）；四内核都起不来才走直连；代理与直连都不通则等 10 分钟重试（`--uplink-wait 600 --uplink-retries 2`）。通道是全局 opener，所以**搜索 API 与节点下载都走它**，不只是下载。
   唯一的例外是「池与近期清单都为空」时无候选节点可起代理（首次运行/池被清空），此时会打印 `[uplink] 没有可用候选节点` 并降级直连——这不是故障，采集结束后会重新填池。
-- **采集完毕会先停掉这个代理内核**，再进入下一步验证——不要干预，也不要让代理进程残留
+- **采集完毕会先停掉这个代理内核**，再进入下一步验证——不要干预，也不要让代理进程残留（验证阶段要独占本地端口，且要测「节点本身」）
 - **README-only 模式（--readme-only）**：只跟随 README 里声明的订阅链接，不再扫描仓库目录
 - **README 按内核分类**：README 里常按内核分列订阅（「Clash 订阅」「sing-box 配置」「V2ray 订阅」），脚本会识别链接归属内核，日志里打印 `[info] <core>: N 条节点来自 README 声明的 <core> 订阅，豁免能力预筛`。这类节点保证进对应内核文件，不受 `layout.CAPS` 保守预筛影响
 - **README 按日期筛选（--readme-date-tolerance 0，即只取当天）**：日更仓库常按日期分列订阅，两种写法都认——链接自带日期（`.../2026-10-25/all.txt`）或有日期小标题（`### 2026-10-25` 下的链接）。只取当天；因日期不符被跳过的记 `-4` 状态（与「未声明订阅链接」区分）。整份 README 没提日期的按通用订阅全部保留。
@@ -71,11 +82,11 @@ C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\b
 
 【4. 有问题就修】
 若自检给出 critical 或 warn，按 SKILL.md「修复闭环」执行：
-- 对照 `Docs/known-issues.md` 找同类症状（第 9/9b/9c/9d 条是 README 采集缺失、延迟排序失效、仓库质量不落库、节点池不增长；第 10 条是验证时被节点劫持重定向；第 11 条是探测地址无区分度；第 12 条是 github.com 被重置与上行通道；第 13 条是 README-only 的取舍；第 14 条是可用数低于 10 时的自适应扩量；第 15 条是产物文件膨胀；第 16 条是内核升级导致「所有节点全死」；第 17 条是迁移脚本通配符与新命名撞车；第 18 条是自检统计函数读错格式；第 19 条是仓库质量分倒挂；第 20 条是 md 日志去重粒度；第 21 条是 README 按内核/按日期筛选的误判边界；第 28 条是目录布局三分层；第 29 条是全量测试策略；第 30 条是目录整合与 junction 兼容层；第 31 条是 90 分钟超时与测试量降级规则）
+- 对照 `Docs/known-issues.md` 找同类症状（第 9/9b/9c/9d 条是 README 采集缺失、延迟排序失效、仓库质量不落库、节点池不增长；第 10 条是验证时被节点劫持重定向；第 11 条是探测地址无区分度；第 12 条是 github.com 被重置与上行通道；第 13 条是 README-only 的取舍；第 14 条是可用数低于 10 时的自适应扩量；第 15 条是产物文件膨胀；第 16 条是内核升级导致「所有节点全死」；第 17 条是迁移脚本通配符与新命名撞车；第 18 条是自检统计函数读错格式；第 19 条是仓库质量分倒挂；第 20 条是 md 日志去重粒度；第 21 条是 README 按内核/按日期筛选的误判边界；第 28 条是目录布局三分层；第 29 条是全量测试策略；第 30 条是目录整合与 junction 兼容层；第 31 条是 90 分钟超时与测试量降级规则；第 32 条是目录重构漏改函数名导致写池崩溃；第 33 条是池目录被拼成 nodes/nodes/pool 的静默错位）
 - 抓 1 个失败样本（仓库 / URI / 内核）单独复现，不要凭猜测改代码
 - 改脚本后用该样本做单点回归，确认修复生效；重跑受影响环节（解析类→重跑采集，验证类→重跑 `src\test_nodes.py`）
 - 再跑一次 `health_check.py`，确认 finding 消失且未引入新问题
-- 记录：`Docs/known-issues.md` 追加条目；同时往 `Docs/known_issues.md` 和根 `CHANGELOGS.md` 按日期倒序写小节（按「日期+标题」去重，同一天不同主题并存；同一天同一标题重跑会替换）；采集执行情况写 `Docs/collection_logs.md`；观察项写 `Docs/review_logs.md`
+- 记录：`Docs/known-issues.md` 上方知识库按编号追加条目（现象/根因/修复/教训）；自检结果由 `health_check.py` 自动写进**同一个文件末尾的「自检发现」区块**（不再是单独文件）；根 `CHANGELOGS.md` 按日期倒序写小节（按「日期+标题」去重，同一天不同主题并存；同一天同一标题重跑会替换）；采集执行情况写 `Docs/collection_logs.md`；观察项写 `Docs/review_logs.md`
 - 行为有变化同步更新 `free-nodes/Skills/free-nodes-collector/SKILL.md`。**不要打包技能**（`package_skill.py` 已删除，`src/` 即唯一事实来源，提交推送即分发）；`__pycache__` 已被 .gitignore 全局忽略，无需清理
 只改有证据支撑的地方；推测性问题记入 `Docs/review_logs.md` 观察，不要凭感觉调参数。
 注意：每内核可用数个位数到十几个是免费节点的正常水位（探测地址要求真出境且走 HTTPS），不要为了数字好看换回 www.gstatic.com 或明文 http。
@@ -87,7 +98,7 @@ C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\b
 ```
 
 脚本行为：
-- `--proxy auto`：先探测本机已有代理端口；没有就用**已验证节点自建本地代理**推送（只认 `https://github.com/` 通不通），推不动就换节点、换内核继续试（`--uplink-rounds 5`），全部失败最后才直连重试
+- `--proxy auto`：**不探测本机已有代理端口**，直接用已验证节点自建本地代理推送（先尝试接管前面登记在案的通道；推不动就换节点、换内核继续试，`--uplink-rounds 5`），全部失败最后才直连重试。只认 `https://github.com/` 通不通（`api.github.com` 通不代表能 push）
 - 清理 free-nodes 下历史遗留的日期目录（三分层布局下 `nodes/`、`Docs/`、`src/`、`Skills/`、`.workbuddy/` 永久保留）
 - **只暂存 free-nodes 目录，并跳过凭据文件**；绝不提交工作区里的其他改动。仓库里还有用户的 C++ 项目（`Test\`、`Test.sln` 等），**严禁 git add -A / git add . / git commit -a**，也不要 reset / checkout / stash 用户的改动
 - 提交信息：`chore(free-nodes): 更新 <当天日期> 免费节点订阅`
@@ -99,7 +110,7 @@ C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\b
 - 若 collect_nodes.py 退出码 3（本次 0 条且保留旧结果），跳过提交推送，只说明配额/网络情况
 
 【6. 汇报】
-说明：内核检查结果（有无新版本 / 能力指纹是否变化）、上行通道用的哪个内核+节点（若有）/ 是否降级直连、搜索战果（多少个关键词×几页、去重后多少仓库、最终扫描多少个）、唯一节点数、协议分布、四内核分流数（`nodes/` 下各 sub 文件各多少条）、执行到第几级采集扩量、TCP 可达率与延迟中位数、README 采集战果（多少仓库声明了订阅链接 / 提取多少节点 / 多少个因「README 无链接」跳过 / 多少个因「日期不是当天」跳过 / 各内核各多少条节点）、仓库可用率 Top3 与最差 1 个、各内核可用数（v2ray / xray / clash / singbox，并注明共测多少个、候选是否已测完 exhausted）、各内核池内节点数、自检结论（几 critical 几 warn）、产物路径（`C:\Users\bemin\WorkBuddy\Test\free-nodes\nodes\` 下的 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / singbox_sub.json、available_* 四件、pool\ 下四个池文件 + pool_state.json；`Docs\` 下 report.md / summary.md+json / health_check.md+json；根目录 CHANGELOGS.md；`Docs\known_issues.md`、`Docs\collection_logs.md`）。
+说明：内核检查结果（有无新版本 / 能力指纹是否变化）、上行通道用的哪个内核+节点（若有）/ 是否降级直连 / `[uplink] 通道就绪` 出现几次（应只有一次）、搜索战果（多少个关键词×几页、去重后多少仓库、最终扫描多少个）、唯一节点数、协议分布、四内核分流数（`nodes/` 下各 sub 文件各多少条）、执行到第几级采集扩量、TCP 可达率与延迟中位数、README 采集战果（多少仓库声明了订阅链接 / 提取多少节点 / 多少个因「README 无链接」跳过 / 多少个因「日期不是当天」跳过 / 各内核各多少条节点）、仓库可用率 Top3 与最差 1 个、各内核可用数（v2ray / xray / clash / singbox，并注明共测多少个、候选是否已测完 exhausted）、各内核池内节点数、自检结论（几 critical 几 warn）、产物路径（`C:\Users\bemin\WorkBuddy\Test\free-nodes\nodes\` 下的 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / singbox_sub.json、available_* 四件、pool\ 下四个池文件 + pool_state.json；`Docs\` 下 report.md / summary.md+json / health_check.md+json / known-issues.md（知识库 + 末尾自检区块）/ collection_logs.md；根目录 CHANGELOGS.md）。
 再加上 GitHub 发布结果：提交 hash、推送是否成功（origin/master）、用的哪个代理内核+节点、失败原因与补推状态。
 若做了修复，按「发现了什么 → 根因 → 改了什么 → 验证结果」说明；无需修复则明确写「本次自检未发现问题」。
 若因配额导致节点数不足，说明配额余量（token 已配置，正常应为 5000/时），不要反复重试。

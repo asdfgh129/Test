@@ -29,7 +29,7 @@
       Docs/                     「跟文档相关的文件」全部在这里
         protocol.md             四内核解析规范与实测校准报告
         proxy.md                自建代理与节点测试链路说明
-        known-issues.md         踩坑知识库（现象/根因/修复/教训）
+        known-issues.md         踩坑知识库（现象/根因/修复/教训）+ 末尾「自检发现」区块（脚本自动写）
         sources.md              种子仓库来源说明
         tools-setup.md          内核二进制部署/升级方法
         report.md               采集报告       ┐
@@ -37,7 +37,6 @@
         summary.json            验证最新快照   │ 新条目插到顶部，同一天重跑替换当天小节，
         health_check.md         自检报告       │ 最多保留 MAX_SECTIONS 个小节
         health_check.json       自检最新快照   │
-        known_issues.md         自检发现的问题 │
         collection_logs.md      采集日志       │
         review_logs.md          自检摘要       ┘
       src/                      「脚本文件」+ 采集配置/状态（全链路脚本的唯一事实来源）
@@ -107,7 +106,11 @@ SUMMARY_MD = "summary.md"
 SUMMARY_JSON = "summary.json"
 HEALTH_MD = "health_check.md"
 HEALTH_JSON = "health_check.json"
-ISSUE_MD = "known_issues.md"           # 自检发现的问题（复数；与 known-issues.md 知识库不同文件）
+ISSUE_MD = "known-issues.md"           # 单一文件：踩坑知识库（人工编号条目）+ 末尾「自检发现」区块
+# 自检发现的问题写在同一个文件的末尾区块里（2026-10-26 合并：原先 known-issues.md 与
+# known_issues.md 并存，名字只差一个连字符，实际内容还会互相抄串，极易混淆）
+SELF_CHECK_TITLE = "## 自检发现（health_check 自动维护，按日期倒序）"
+SELF_CHECK_MAX = 30
 REVIEW_LOG_MD = "review_logs.md"
 COLLECTION_LOG_MD = "collection_logs.md"
 CHANGELOG_MD = "CHANGELOGS.md"     # 根目录（用户明确要求保留在 free-nodes/ 根下）
@@ -718,12 +721,83 @@ def append_changelog(root, date_str, heading, body):
                           match_heading=True)
 
 
+def _split_self_check(text):
+    """把 known-issues.md 拆成 (区块标题之前的行, 「自检发现」区块内的小节列表)。
+
+    小节用三级标题 `### <日期> <标题>`，与知识库的二级标题 `## N.` 天然分开，
+    所以写入自检记录永远不会挤掉知识库条目（这是合并两个文件时最关键的一点）。
+    """
+    lines = text.splitlines()
+    idx = next((i for i, ln in enumerate(lines)
+                if ln.strip().startswith("## 自检发现")), None)
+    if idx is None:
+        return lines, []
+    head = lines[:idx + 1]
+    sections = []
+    cur_title, cur_body = None, []
+    for ln in lines[idx + 1:]:
+        if ln.startswith("### "):
+            if cur_title is not None:
+                sections.append((cur_title, cur_body))
+            cur_title, cur_body = ln, []
+        elif cur_title is not None:
+            cur_body.append(ln)
+    if cur_title is not None:
+        sections.append((cur_title, cur_body))
+    return head, sections
+
+
 def append_issue(root, date_str, heading, body):
-    """自检发现的问题统一入口（同一天可多条，按「日期 + 标题」去重）。"""
-    return upsert_section(issue_path(root), date_str, heading, body,
-                          doc_title="已知问题清单（时间倒序）",
-                          intro="按日期倒序；自检发现的未修复问题、待观察项都记在这里",
-                          match_heading=True)
+    """自检发现的问题 → Docs/known-issues.md 末尾的「自检发现」区块。
+
+    与踩坑知识库同文件（用户要求合并，避免两个近似文件名混淆），但区块独立：
+    只在该区块内按「日期 + 标题」替换，按 SELF_CHECK_MAX 截断，绝不触碰上面的知识库条目。
+    """
+    path = issue_path(root)
+    text = ""
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as f:
+                text = f.read()
+        except OSError:
+            text = ""
+    first = text.splitlines()[0] if text.strip() else ""
+    if not first.startswith("# "):
+        # 文件不存在（或没有一级标题）：建骨架，知识库部分留空由人工补
+        text = ("# 免费节点采集 — 已知问题与踩坑记录\n\n"
+                "> 两类内容：① 踩坑知识库（人工维护，编号条目，每条含现象/根因/修复/教训）；\n"
+                "> ② 自检发现的问题（`health_check.py` 自动写入文件末尾「自检发现」区块，按日期倒序）。\n\n"
+                + SELF_CHECK_TITLE + "\n")
+
+    head, sections = _split_self_check(text)
+    if not any(ln.strip().startswith("## 自检发现") for ln in head):
+        # 老文件（合并前的知识库）没有这个区块标题，先补上再写条目
+        head = head + ["", SELF_CHECK_TITLE]
+    new_title = f"### {date_str} {heading}".rstrip()
+    new_body = body.rstrip("\n").splitlines()
+    sections = [(t, b) for t, b in sections
+                if " ".join(t.split()) != " ".join(new_title.split())]
+    sections.insert(0, (new_title, new_body))
+    if SELF_CHECK_MAX and len(sections) > SELF_CHECK_MAX:
+        sections = sections[:SELF_CHECK_MAX]
+
+    out = [ln.rstrip() for ln in head]
+    while out and not out[-1].strip():
+        out.pop()
+    out.append("")
+    for title, body_lines in sections:
+        out.append(title)
+        out.append("")
+        for ln in body_lines:
+            out.append(ln.rstrip())
+        while out and not out[-1].strip():
+            out.pop()
+        out.append("")
+
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(out).rstrip("\n") + "\n")
+    return path
 
 
 def now_stamp():
@@ -738,7 +812,7 @@ def _main(argv):
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, help_text in (("log", "写任意 md 日志"),
                             ("changelog", "写根目录 CHANGELOGS.md（修复/变更）"),
-                            ("issue", "写 Docs/known_issues.md（问题）")):
+                            ("issue", "写 Docs/known-issues.md 的「自检发现」区块（问题）")):
         p = sub.add_parser(name, help=help_text)
         if name == "log":
             p.add_argument("--file", required=True, help="目标 md 文件路径")

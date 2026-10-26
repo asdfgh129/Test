@@ -10,7 +10,7 @@
 2. **内核支持的东西有没有变**：用「一个协议 × 一种传输 × 一种加密」的样本配置，
    让内核自己做配置校验（xray/v2ray `-test`、mihomo `-t`、sing-box `check`），
    得到该内核当前真正接受的组合集合（能力指纹）。和上次的指纹对比：
-   - 以前能接受、现在不接受了 → 说明本机的节点处理逻辑可能过时，记 known_issues.md
+   - 以前能接受、现在不接受了 → 说明本机的节点处理逻辑可能过时，记 Docs/known-issues.md
    - 新增了能接受的组合 → 记 changelog.md，并提示可以放宽 layout.CAPS
 
 用法：
@@ -125,16 +125,20 @@ def ver_key(v):
     return tuple(int(x) for x in parts[:3])
 
 
-def http_json(url, timeout=20):
-    req = urllib.request.Request(url, headers={"User-Agent": "free-nodes-collector"})
+def http_json(url, timeout=20, token=""):
+    headers = {"User-Agent": "free-nodes-collector"}
+    if token:
+        # 走免费节点代理时出口 IP 与他人共享，匿名配额（60/时）几乎必然 403，必须带 token
+        headers["Authorization"] = f"Bearer {token}"
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=timeout, context=c._NOVERIFY_CTX) as r:  # noqa: SLF001
         return json.loads(r.read().decode("utf-8", "replace"))
 
 
-def latest_release(core, proxy=None):
+def latest_release(core, token=""):
     url = f"https://api.github.com/repos/{REPOS[core]['repo']}/releases/latest"
     try:
-        d = http_json(url)
+        d = http_json(url, token=token)
     except Exception as e:  # noqa: BLE001
         return None, f"查询失败：{str(e)[:80]}"
     tag = d.get("tag_name") or d.get("name") or ""
@@ -305,18 +309,38 @@ def save_state(root, state):
 
 # ---------------------------------------------------------------- 主流程
 
-def main():
-    ap = argparse.ArgumentParser(description="内核版本与能力变化检查")
-    ap.add_argument("--root", default="free-nodes", help="输出根目录（写 changelog/known_issue）")
-    ap.add_argument("--tools", default=None, help="内核 bin 目录")
-    ap.add_argument("--update", action="store_true", help="有新版本就自动下载替换")
-    ap.add_argument("--skip-network", action="store_true", help="不查上游版本（只做本地能力指纹）")
-    ap.add_argument("--date", default=None, help="日期标记 YYYY-MM-DD")
-    args = ap.parse_args()
+def run_check(root, tools=None, update=False, skip_network=False, date_str=None,
+              uplink_arg="auto", close_uplink=False, token=""):
+    """执行一次内核检查，返回 (退出码, uplink 模块, 通道 handle)。
 
-    root = os.path.abspath(args.root)
-    tools = args.tools or tools_dir()
-    date_str = args.date or datetime.now().strftime("%Y-%m-%d")
+    采集脚本可以 import 本模块直接调用 run_check()，在同一进程里共用它建立的通道：
+    本机执行环境会随父进程退出回收子进程，所以「第 1 步建、第 2 步用」只能靠同进程共享，
+    跨进程的状态文件复用是尽力而为（环境允许时有效）。
+    """
+    root = os.path.abspath(root)
+    tools = tools or tools_dir()
+    date_str = date_str or datetime.now().strftime("%Y-%m-%d")
+
+    # ── 上行通道：查版本与下载升级包都要访问 GitHub，这一步就把代理建好 ──
+    #    close_uplink=False 时留给调用方继续用（采集复用同一条通道）
+    up_mod, up_handle = None, None
+    if not skip_network and uplink_arg != "off":
+        try:
+            import uplink as up_mod  # noqa: PLC0415 — 延迟导入，避免 uplink 反向依赖本模块
+        except Exception as e:  # noqa: BLE001
+            log(f"[uplink] 模块加载失败，按直连继续：{str(e)[:80]}")
+            up_mod = None
+        if up_mod is not None:
+            if uplink_arg == "auto":
+                # 第 1 步不等待重试：池为空/没网时快速降级直连，别把整轮流程卡住
+                mode, up_handle = up_mod.ensure(root=root, retries=0, retry_wait=0)
+                log(f"[uplink] 上行通道：{mode}"
+                    + (f"（{up_handle.describe()}）" if up_handle else ""))
+            else:
+                up_mod.set_proxy_env(uplink_arg)
+                up_mod.install_opener(uplink_arg)
+                log(f"[uplink] 上行通道：使用指定代理 {uplink_arg}")
+
     state = load_state(root)
     state.setdefault("cores", {})
     changed, notes = [], []
@@ -330,8 +354,8 @@ def main():
             + (f"（版本 {local_v}）" if local_v else ""))
 
         # 1) 版本检查
-        if not args.skip_network:
-            latest, err = latest_release(core)
+        if not skip_network:
+            latest, err = latest_release(core, token=token)
             if err:
                 notes.append(f"{core} 版本查询失败：{err}")
                 log(f"[{core}] {err}")
@@ -342,7 +366,7 @@ def main():
                 if newer:
                     need = True
                     name, url = pick_asset(core, latest["assets"])
-                    if not args.update:
+                    if not update:
                         notes.append(f"{core} 有新版本 {latest['version']}（本地 {local_v}），"
                                      f"可用 --update 自动升级")
                     elif not url:
@@ -410,7 +434,37 @@ def main():
         log("[warn] 需要关注：\n  - " + "\n  - ".join(notes))
     if not changed and not notes:
         log("[done] 内核均为最新，能力指纹无变化")
-    return 1 if need else 0
+    if up_handle is not None:
+        if close_uplink:
+            up_mod.stop(up_handle)
+            up_handle = None
+        else:
+            log("[uplink] 通道保留给调用方复用（采集 --check-kernels 会直接接管，不再重复搭建）")
+    return (1 if need else 0), up_mod, up_handle
+
+
+def main():
+    ap = argparse.ArgumentParser(description="内核版本与能力变化检查")
+    ap.add_argument("--root", default="free-nodes", help="输出根目录（写 changelog/known_issue）")
+    ap.add_argument("--tools", default=None, help="内核 bin 目录")
+    ap.add_argument("--update", action="store_true", help="有新版本就自动下载替换")
+    ap.add_argument("--skip-network", action="store_true", help="不查上游版本（只做本地能力指纹）")
+    ap.add_argument("--uplink", default="auto",
+                    help="GitHub 访问通道：auto=先复用/自建本地代理（查 api.github.com 需要它），"
+                         "不通再直连；off=只用直连；也可直接给代理地址（如 http://127.0.0.1:7890）")
+    ap.add_argument("--keep-uplink", action="store_true",
+                    help="检查结束后保留自建代理通道（默认关闭；采集脚本 --check-kernels "
+                         "会在同一进程里直接接管通道，无需此开关）")
+    ap.add_argument("--token", default=None,
+                    help="GitHub token（查上游版本用）。走免费节点代理时出口 IP 与他人共享，"
+                         "匿名配额几乎必然 403，建议提供；默认按 token 查找链自动读取")
+    ap.add_argument("--date", default=None, help="日期标记 YYYY-MM-DD")
+    args = ap.parse_args()
+    rc, _, _ = run_check(root=args.root, tools=args.tools, update=args.update,
+                         skip_network=args.skip_network, date_str=args.date,
+                         uplink_arg=args.uplink, close_uplink=not args.keep_uplink,
+                         token=c.load_github_token(args.token))
+    return rc
 
 
 if __name__ == "__main__":

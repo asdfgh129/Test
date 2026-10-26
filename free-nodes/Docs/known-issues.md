@@ -1,7 +1,12 @@
 # 已知问题与修复档案
 
-自检（`health_check.py`）报出的症状，先来这里对照。每条记录：症状 → 根因 → 修复方式（含关键代码位置）。
-**修复完任何一条，都要把新发现追加到本文末尾。**
+本文是**一个文件、两类内容**（2026-10-26 合并：此前 `known-issues.md` 与 `known_issues.md`
+两个文件并存，名字只差一个连字符，实际内容还会互相抄串，极易混淆）：
+
+1. **踩坑知识库**（本文上方，人工维护）：每条 = 症状 → 根因 → 修复方式（含关键代码位置）
+2. **自检发现**（本文末尾区块，`health_check.py` 自动写入，按日期倒序）
+
+自检报出的症状，先上来对照。**修复完任何一条，都要按编号把新发现追加到末尾（自检区块之前）。**
 
 ---
 
@@ -863,6 +868,29 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
   3. 补救历史数据用**合并**（`pool.merge` 按 `host:port` 去重、累加 `ok_count`），
      不要图省事直接覆盖
 
+## 34. 分步执行时「第 1 步建的代理」活不到第 2 步（环境限制，已绕开）
+
+- **背景**：用户要求「内核检查那一步就自建代理保证连通，采集时直接用这条通道，不要重复搭建」。
+  直觉做法是把通道信息落盘（`runtime/uplink_session.json`）、内核子进程 detached 启动，
+  下一步读文件探活接管。
+- **现象**：登记成功、pid 也拿到了，但**下一个进程一启动就发现 pid 已死**
+  （`[uplink] 上次登记的通道进程已退出，准备重建`），复用 100% 失败
+- **根因**（本机执行环境）：命令跑在一个 job object 里，结束时整个 job 关闭，
+  `JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE` 会连带杀掉 detached 子进程；
+  试图用 `CREATE_BREAKAWAY_FROM_JOB`(0x01000000) 脱离 job，直接被拒 `[WinError 5] 拒绝访问`
+  （job 没开 breakaway 权限）。也就是说**这不是代码 bug，是环境不允许子进程活过父进程**
+- **解决（绕开）**：把第 1、2 步合并到**同一进程**——`check_kernels.py` 拆出可复用的
+  `run_check(...) -> (rc, uplink_mod, uplink_handle)`，`collect_nodes.py --check-kernels`
+  直接调用它，把返回的通道 handle 传给采集逻辑。实测 `[uplink] 通道就绪` 只出现一次，
+  采集期间不再试连节点
+- **保留的能力**：跨进程「交接」仍然实现了（状态文件 + pid 存活校验 + 探活），
+  环境允许时（例如普通桌面会话）能真的复用；分步执行时退化为重建（10~30 秒），不影响正确性
+- **教训**：
+  1. 任何「子进程要活过父进程」的设计，**先在目标环境实测存活**再动手写状态机
+     （`Popen(detached)` 立刻返回 alive=True 不代表父进程退出后还活着）
+  2. `CREATE_BREAKAWAY_FROM_JOB` 不是万能钥匙，job 没授权就是 WinError 5
+  3. 与其和沙箱较劲，不如**把需要共享状态的两步放进同一进程**——最省事也最可靠
+
 ## 修复后的固定动作（缺一不可）
 
 1. **单点回归**：用触发问题的样本（仓库 / 节点 URI）单独验证修复生效，不能只看整体数字
@@ -871,3 +899,16 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 4. **更新文档**：本文件追加条目；行为有变化时同步 `Skills/free-nodes-collector/SKILL.md`
 5. **提交推送**：`src/publish_free_nodes.py --proxy auto`（脚本自身就在 src/ 里，无需同步/打包）
 6. **写日志**：向用户说明「改了什么、为什么、验证结果」
+
+## 自检发现（health_check 自动维护，按日期倒序）
+
+### 2026-10-25 自检发现
+
+**结论：无严重问题，1 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+待观察（info）：
+- [性能] 采集耗时 43 分钟

@@ -3251,15 +3251,23 @@ def main():
                     help="只提取 README 中声明的订阅链接，不再扫描仓库目录；"
                          "README 没有订阅链接的仓库直接跳过")
     ap.add_argument("--uplink", default="auto",
-                    help="GitHub 访问通道：auto=先用已验证节点自建本地代理，不可用再直连，"
-                         "都不通则等待后重试；direct=只用直连；"
-                         "也可直接给代理地址（如 http://127.0.0.1:7890）")
+                    help="GitHub 访问通道：auto=优先复用第 1 步已登记的自建代理，"
+                         "没有则用已验证节点自建，不可用再直连，都不通则等待后重试；"
+                         "direct=只用直连；也可直接给代理地址（如 http://127.0.0.1:7890）")
     ap.add_argument("--uplink-wait", type=int, default=600,
                     help="代理与直连都不通时，每次重试前等待的秒数（默认 600=10 分钟）")
     ap.add_argument("--uplink-retries", type=int, default=2,
                     help="代理与直连都不通时的重试次数（默认 2）")
     ap.add_argument("--uplink-max-candidates", type=int, default=40,
                     help="自建代理时最多尝试多少个候选节点")
+    ap.add_argument("--check-kernels", action="store_true",
+                    help="采集前先在**同一进程**里跑内核版本与能力检查，共用同一条自建代理通道。"
+                         "本机执行环境会随父进程退出回收子进程，分步执行时第 1 步建的通道无法跨进程存活，"
+                         "用这个开关可保证代理只建一次（第 1、2 步合一）")
+    ap.add_argument("--check-kernels-update", action="store_true",
+                    help="配合 --check-kernels：有新版本就下载升级内核")
+    ap.add_argument("--check-kernels-skip-network", action="store_true",
+                    help="配合 --check-kernels：不查上游版本（只做本地能力指纹）")
     args = ap.parse_args()
     args.token = load_github_token(args.token)
 
@@ -3271,10 +3279,27 @@ def main():
     out_dir = os.path.abspath(args.out or "free-nodes")   # 扁平根目录，不再按日期建子目录
     seed_file = args.seed_file or lay.seed_file_path(out_dir)
 
+    # ── 可选：把内核检查跑在同一进程里，与采集共用一条上行通道 ──
+    #    分步执行时，第 1 步起的代理子进程会随父进程退出被回收（本机 job 限制），
+    #    所以「代理只建一次」靠这个开关实现（第 1、2 步合一）
+    pre_uplink_handle = None
+    if args.check_kernels:
+        try:
+            import check_kernels as ck  # noqa: PLC0415 — 延迟导入，避免顶层循环依赖
+            rc_ck, _, pre_uplink_handle = ck.run_check(
+                root=out_dir, update=args.check_kernels_update,
+                skip_network=args.check_kernels_skip_network, date_str=date_str,
+                uplink_arg=args.uplink, token=args.token)
+            print(f"[info] 内核检查完成（退出码 {rc_ck}）"
+                  + ("，采集沿用其建立的上行通道"
+                     if pre_uplink_handle else "，未建立通道，采集阶段自行处理"))
+        except Exception as e:  # noqa: BLE001
+            print(f"[warn] 内核检查失败，继续采集：{str(e)[:120]}")
+
     # ── 上行通道：优先用已验证的节点自建代理访问 GitHub，其次直连，都不通就等 10 分钟重试 ──
-    uplink_handle = None
-    uplink_mode = "direct"
-    if args.uplink not in ("off", "direct"):
+    uplink_handle = pre_uplink_handle
+    uplink_mode = "proxy" if pre_uplink_handle else "direct"
+    if uplink_handle is None and args.uplink not in ("off", "direct"):
         if args.uplink == "auto":
             uplink_mode, uplink_handle = uplink.ensure(
                 root=out_dir, retries=args.uplink_retries, retry_wait=args.uplink_wait,
@@ -3285,7 +3310,7 @@ def main():
             uplink_mode = "proxy"
             print(f"[info] 上行通道：使用指定代理 {args.uplink}")
         if uplink_handle:
-            atexit.register(uplink.stop, uplink_handle)
+            atexit.register(uplink.stop, uplink_handle)   # 异常退出兜底；正常流程在采集结束时主动停
         print(f"[info] 上行通道：{uplink_mode}"
               + (f"（{uplink_handle.describe()}）" if uplink_handle else ""))
 
@@ -3431,8 +3456,11 @@ def main():
         if args.keep_nodes and len(uniq) > args.keep_nodes:
             print(f"[info] 按延迟排序后截断：{len(uniq)} → {args.keep_nodes} 条（只留低延迟节点）")
             uniq = uniq[:args.keep_nodes]
-        print(f"[info] 延迟排序完成，最快 {uniq[0].get('tcp_latency')}ms / "
-              f"末尾 {'不可达' if uniq[-1].get('tcp_latency') is None else str(uniq[-1].get('tcp_latency')) + 'ms'}")
+        if uniq:
+            print(f"[info] 延迟排序完成，最快 {uniq[0].get('tcp_latency')}ms / "
+                  f"末尾 {'不可达' if uniq[-1].get('tcp_latency') is None else str(uniq[-1].get('tcp_latency')) + 'ms'}")
+        else:
+            print("[warn] 本次没有任何节点通过解析（预算过短或全部来源失败），按空结果继续落盘")
 
     meta_path, meta = write_nodes_meta(out_dir, uniq, date_str, tcp_stats) if uniq else (None, None)
     out = write_outputs(uniq, out_dir, date_str)
