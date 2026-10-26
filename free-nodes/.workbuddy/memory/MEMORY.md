@@ -4,8 +4,9 @@
 
 - 产出目录：`C:\Users\bemin\WorkBuddy\Test\free-nodes\` —— **三分层布局，不分日期**
   （根目录只留 `README.md` + `CHANGELOGS.md`；`nodes/` 订阅+available+nodes_uris/nodes_meta+pool/；
-  `Docs/` 全部文档与报告（protocol/proxy/sources/tools-setup/known-issues 知识库 +
-  known_issues/collection_logs/review_logs 复数日志 + report/summary/health_check）；
+  `Docs/` 全部文档与报告（protocol/proxy/sources/tools-setup + `known-issues.md` **单文件**：
+  上方踩坑知识库 + 末尾「自检发现」区块；collection_logs/review_logs 复数日志 +
+  report/summary/health_check）；
   `src/` **采集/验证/发布全链路脚本的唯一事实来源**（12 文件：9 脚本 + publish_free_nodes.py
   + seed_repos/repo_quality/kernel_state json）；`Skills/free-nodes-collector/SKILL.md` 技能定义；
   `.workbuddy/memory/` 项目记忆（已纳入 git 跟踪）。过期节点没有意义，禁止再建 YYYY-MM-DD 子目录）
@@ -68,6 +69,23 @@
 - 通道是全局 opener，所以**搜索 API 与节点下载都走它**，不只是下载
 - 池为空时无候选节点可起代理（首次运行），会降级直连 —— 属物理限制，不是故障
 - 推送探测只认 `https://github.com/`（api 通不代表能 push）
+
+## 上行通道生命周期（2026-10-26 用户三点要求落地）
+
+- **第 1 步就建代理**：`check_kernels.py` 查 `api.github.com` 前先自建通道（`--uplink auto`），
+  否则直连不通时版本检查必然失败。走免费节点代理时出口 IP 与他人共享，
+  **匿名配额 60/时 几乎必然 403，查版本必须带 token**（`latest_release` 已加 Authorization）
+- **代理只建一次 = 同进程合并**：`collect_nodes.py --check-kernels` 内部调
+  `check_kernels.run_check()`，把返回的通道 handle 直接交给采集。
+  **不能依赖「子进程活过父进程」**：本机 job 在命令结束时回收 detached 子进程，
+  `CREATE_BREAKAWAY_FROM_JOB` 被拒 WinError 5（详见 known-issues 第 34 条）；
+  `runtime/uplink_session.json` + pid/探活只是尽力而为的交接
+- **推送**：`publish_free_nodes.py --proxy auto` **不探测本机代理端口**（用户明确要求），
+  直接自建；`--proxy <url>` 才用指定代理。注意 `auto` 必须先清空 GIT_PROXY，
+  否则 git 会把字面量 "auto" 当代理地址（踩过：`Could not resolve proxy: auto`）
+- **known-issues 只有一个文件**：`Docs/known-issues.md`。知识库条目用 `## N.`，
+  自检条目用 `### 日期 标题` 且只在末尾「自检发现」区块内增删——
+  绝不能让 `upsert_section` 那套「插顶部 + 截断 30 条」作用在知识库上（会挤掉旧条目）
 
 ## 仓库约定
 
