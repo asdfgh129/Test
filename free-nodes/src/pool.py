@@ -198,7 +198,7 @@ def _write_pool_file(root, core, uris):
 def save(root, core, pool, date_str, state=None):
     """写该内核的池文件 + 更新共享状态。返回 {"path","count","state"}。"""
     core = lay.canon(core)
-    os.makedirs(pool_dir_of(root), exist_ok=True)
+    os.makedirs(lay.pool_dir(root), exist_ok=True)
     uris = [n["uri"] for n in pool.get("nodes", []) if n.get("uri")]
     try:
         path, n = _write_pool_file(root, core, uris)

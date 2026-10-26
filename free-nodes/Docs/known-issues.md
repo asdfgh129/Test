@@ -805,6 +805,64 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 - 两套参数名（collect 透传带前缀 / test_nodes 不带）是长期易错点，
   prompt 与 SKILL.md 都要写全名并标注区别
 
+## 32. 目录重构漏改函数名，写池崩溃害三个内核白等（已修复）
+
+- **现象**：2026-10-25 夜间全量测试，v2ray 跑满 1000 个（可用 43、耗时 776s、`available_v2ray.txt`
+  已落盘）后进程直接崩：`NameError: name 'pool_dir_of' is not defined`（`pool.py:201`）。
+  后果是 **xray / clash / singbox 三个内核一个都没测**，且 `pool_state.json` 也没更新
+- **根因**：目录布局重构（`pool/` 迁到 `nodes/pool/`）时，只把 `load_state()` 等处的
+  路径改成了 `lay.pool_dir(root)`，**漏了 `save()` 里这一处** `os.makedirs(pool_dir_of(root))`。
+  该函数名在重构前就不存在（应该是笔误残留），而它只在「每个内核测完写池」的分支被调用，
+  **导入期和常规冒烟都碰不到**，所以直到 v2ray 跑完 13 分钟才炸
+- **影响面判断**（重要）：`available_<core>.txt` 的写入在 `save()` **之前**，
+  所以 v2ray 的 43 条结果没丢；丢的是池文件与共享状态 + 后续三个内核的全部测试
+- **修复**：改为 `os.makedirs(lay.pool_dir(root), exist_ok=True)`；
+  用 tempdir 调 `pool.save()` 冒烟，确认能写出 `nodes/pool/pool_v2ray.txt`
+- **教训**：
+  1. 「路径单一事实来源 = `layout.py`」这条约定只管住**新代码**，管不住历史函数名残留——
+     改完必须全局 grep 旧标识符（`grep -rn "_dir_of\|_path_of" src/`），
+     **「能导入」不等于「每条分支都能跑」**
+  2. 崩溃发生在 per-core 循环内部：前面内核的成果已落盘、后面的跳过。补跑时要判断
+     「已落盘的可用清单」与「池/状态」是否一致——不一致就整轮重跑，别只补跑缺失的内核，
+     否则 available 与 pool 会长期对不上
+  3. 长任务（单内核 10 分钟级）动手前先用小样本（`--max-test` 取几十）跑通**完整写盘链路**，
+     别等真跑完才在最后一步炸
+
+## 33. 池目录被拼成 nodes/nodes/pool（静默错位，比崩溃更危险）（已修复）
+
+- **现象**：2026-10-26 补跑四核测试，日志一路正常（v2ray 32 / xray 37 / clash 43 / singbox 46、
+  `[done] 可用节点池：…/nodes/pool`），退出码 0。但实际产物：
+  - `nodes/available_*` 写在**正确位置**（`nodes/` 下）
+  - 池文件却写到了 **`nodes/nodes/pool/`**（多一层），而 **`nodes/pool/` 仍是昨天 13:39 的旧数据**
+- **根因**：`test_nodes.py:1067` 写成
+  `pool_root = dirname(args.pool_dir or lay.pool_dir(root))`。
+  旧平铺布局下 `pool_dir = <root>/pool`，`dirname` 得 `<root>` → 正确；
+  三分层后 `lay.pool_dir()` 返回 `<root>/nodes/pool`，`dirname` 得 `<root>/nodes`，
+  `pool.save()` 内部再拼一次 `nodes` → `<root>/nodes/nodes/pool`。
+  `collect_nodes.py` 还会把 `lay.pool_dir(out_dir)` 透传给 `--pool-dir`，同样踩坑
+- **为什么没人报错**：`os.makedirs` 会自己建目录，写入成功、返回值正常，
+  日志照样打印「池内共 N 条」——**不崩、不红、退出码 0**，只能靠交叉核对发现
+- **真实影响**（三条，都比"文件放错"本身更麻烦）：
+  1. `pool_state.json` 停在昨天（节点数 27/43/56/54），`uplink` 自建代理读的是旧池
+  2. 本轮池是**从空池起跑**的（加载的是新位置、尚不存在），历史累积节点没继承
+  3. available 与 pool 长期对不上，越跑越偏
+- **发现方式**：`find free-nodes -type f -newermt "2026-10-26 08:00"` 看今天到底改了哪些文件，
+  再比对 `nodes/pool/pool_state.json` 的 `updated` 与 `cores` 节点数 ——
+  **看时间戳和计数，比看日志可靠**
+- **修复**：
+  1. `pool_root` 语义回归「根」：不传 `--pool-dir` 时直接用 `root`，
+     显式传池目录时才 `dirname`（接口语义不变，`collect_nodes` 透传链自然正确）
+  2. 误写目录的数据**按 key 合并**回 `nodes/pool`（不是覆盖）：
+     v2ray 27→48、xray 43→66、clash 56→85、singbox 54→84，历史节点一个没丢；
+     随后删除 `nodes/nodes/`
+- **教训**：
+  1. **路径必须由 `layout` 一次性给全，调用方不许对助手返回值再 `dirname`/拼接**——
+     「助手算路径 + 调用方二次加工」就是重构地雷，本条与第 32 条同源
+  2. **静默错位比崩溃危险**：第 32 条崩在明处，13 分钟就暴露；本条一路绿灯，
+     直到核对时间戳才发现。长任务收工后固定抽查：产物路径 + mtime + 关键计数
+  3. 补救历史数据用**合并**（`pool.merge` 按 `host:port` 去重、累加 `ok_count`），
+     不要图省事直接覆盖
+
 ## 修复后的固定动作（缺一不可）
 
 1. **单点回归**：用触发问题的样本（仓库 / 节点 URI）单独验证修复生效，不能只看整体数字

@@ -1064,8 +1064,11 @@ def main():
     out_dir = os.path.abspath(args.out or root)
     date_str = args.date or time.strftime("%Y-%m-%d")
     seed_file = args.seed_file or lay.seed_file_path(root)
+    # 池根目录 = free-nodes 根（layout 内部会再拼 nodes/pool）。
+    # 旧平铺布局时这里写的是 dirname(lay.pool_dir(root))，三分层后那样会拼出
+    # nodes/nodes/pool（双拼），见 known-issues 第 33 条
     pool_root = None if args.no_pool else os.path.abspath(
-        os.path.dirname(args.pool_dir or lay.pool_dir(root)))
+        os.path.dirname(args.pool_dir) if args.pool_dir else root)
 
     # 采集阶段写出的延迟/来源仓库元数据：延迟用来优先取样，仓库用来算可用率
     meta = c.load_nodes_meta(root)

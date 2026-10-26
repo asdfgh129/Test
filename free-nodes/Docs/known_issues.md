@@ -4,9 +4,11 @@
 
 ## 2026-10-25 自检发现
 
-**结论：本次运行健康，未发现需要处理的问题**
+**结论：无严重问题，1 个告警可优化**
 
-本次自检未发现需要修复的问题。
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 待观察（info）：
 - [性能] 采集耗时 43 分钟

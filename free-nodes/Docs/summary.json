@@ -1,1256 +1,1195 @@
 {
  "date": "2026-10-25",
- "generated_at": "2026-10-25 13:44:46",
+ "generated_at": "2026-10-26 09:02:14",
  "cores": {
   "v2ray": {
-   "tested": 202,
-   "ok": 27,
+   "tested": 1000,
+   "ok": 32,
+   "unsupported": 3,
+   "config_error": 17,
+   "reasons": {
+    "tls": 761,
+    "unsupported": 3,
+    "reset": 2,
+    "timeout": 185,
+    "config": 17
+   },
    "rounds": 1,
    "min_available": 10,
-   "cand": 1802,
+   "cand": 4049,
    "exhausted": false,
    "cap": 1000,
    "file": "available_v2ray.txt",
    "nodes": [
     {
-     "host": "103.180.20.108",
-     "port": 8443,
+     "host": "125.227.86.45",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 388,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "59.125.69.22",
+     "port": 443,
      "proto": "vless",
-     "latency": 707,
-     "repo": "snakem982/proxypool"
+     "latency": 598,
+     "repo": "NiREvil/vless"
     },
     {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 912,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "host": "kw119.zxmm.eu.org",
+     "port": 20031,
+     "proto": "trojan",
+     "latency": 640,
+     "repo": "Delta-Kronecker/V2ray-Config"
     },
     {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 934,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "host": "185.148.107.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 748,
+     "repo": "Barabama/FreeNodes"
     },
     {
-     "host": "202.50.253.27",
+     "host": "155.46.167.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 785,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "185.148.104.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 813,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "8.34.70.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 824,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "185.162.229.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 830,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "location15.cpanel-host16.ir",
+     "port": 56137,
+     "proto": "ss",
+     "latency": 903,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "202.50.253.99",
      "port": 19999,
      "proto": "ss",
-     "latency": 935,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 917,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
      "host": "202.50.253.81",
      "port": 19999,
      "proto": "ss",
-     "latency": 950,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 920,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 922,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
      "host": "202.50.253.54",
      "port": 19999,
      "proto": "ss",
-     "latency": 954,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 950,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "tjxjp.m2k699.com",
+     "port": 24999,
+     "proto": "trojan",
+     "latency": 955,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 988,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "2.26.6.1",
+     "port": 2087,
+     "proto": "vless",
+     "latency": 990,
+     "repo": "igareck/vpn-configs-for-russia"
     },
     {
      "host": "202.50.253.90",
      "port": 19999,
      "proto": "ss",
-     "latency": 960,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1014,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
-     "host": "5.175.205.190",
-     "port": 27774,
-     "proto": "vless",
-     "latency": 985,
+     "host": "location8.cpanel-host10.ir",
+     "port": 56134,
+     "proto": "ss",
+     "latency": 1077,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "202.50.253.72",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1091,
+     "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "202.50.253.27",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1116,
      "repo": "snakem982/proxypool"
     },
     {
      "host": "202.50.253.36",
      "port": 19999,
      "proto": "ss",
-     "latency": 987,
+     "latency": 1193,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.45",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1352,
      "repo": "Pawdroid/Free-servers"
     },
     {
-     "host": "45.144.48.32",
-     "port": 57891,
+     "host": "v24.hdacd.com",
+     "port": 30824,
      "proto": "vmess",
-     "latency": 1010,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1439,
+     "repo": "PuddinCat/BestClash"
     },
     {
-     "host": "195.133.23.50",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1054,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1066,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1092,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "46.17.43.227",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1188,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "199.232.239.239",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1309,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1372,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "46.243.142.104",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1526,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "64.227.115.28",
-     "port": 443,
+     "host": "tjrb.m2k699.com",
+     "port": 24999,
      "proto": "trojan",
-     "latency": 1742,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "deliverya.online",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1913,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "59.125.69.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1951,
+     "latency": 1861,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "185.86.145.142",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1957,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "146.75.59.186",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2181,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "santehdv.site",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2426,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "172.66.0.1",
+     "host": "www.windowssearchtools.com",
      "port": 443,
      "proto": "vmess",
-     "latency": 2487,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 2008,
+     "repo": "NiREvil/vless"
     },
     {
-     "host": "49.12.253.100",
-     "port": 1080,
-     "proto": "ss",
-     "latency": 2697,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "host": "starlink-ft.251313.xyz",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 2143,
+     "repo": "Pawdroid/Free-servers"
     },
     {
-     "host": "172.66.1.36",
+     "host": "80.93.202.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 2281,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "8.6.112.206",
      "port": 443,
      "proto": "trojan",
-     "latency": 6240,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 2530,
+     "repo": "barry-far/V2ray-Config"
     },
     {
-     "host": "us22.sofast.live",
-     "port": 58011,
-     "proto": "vless",
-     "latency": 10251,
-     "repo": "Pawdroid/Free-servers"
+     "host": "blackshadow.dpdns.org",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2561,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "143.246.211.163",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 3030,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "47.250.84.25",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3787,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "us003.421421.xyz",
+     "port": 20230,
+     "proto": "trojan",
+     "latency": 5130,
+     "repo": "Barabama/FreeNodes"
     }
    ]
   },
   "xray": {
-   "tested": 202,
-   "ok": 42,
+   "tested": 1000,
+   "ok": 37,
+   "unsupported": 1,
+   "config_error": 6,
+   "reasons": {
+    "tls": 258,
+    "network": 515,
+    "timeout": 149,
+    "unsupported": 1,
+    "reset": 13,
+    "startup": 21,
+    "config": 6
+   },
    "rounds": 1,
    "min_available": 10,
-   "cand": 1970,
+   "cand": 4000,
    "exhausted": false,
    "cap": 1000,
    "file": "available_xray.txt",
    "nodes": [
     {
-     "host": "45.144.48.32",
-     "port": 57891,
-     "proto": "vmess",
-     "latency": 865,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 884,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
-     "host": "147.45.47.107",
-     "port": 443,
-     "proto": "vless",
-     "latency": 905,
-     "repo": "snakem982/proxypool"
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 893,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
-     "host": "202.50.253.81",
+     "host": "202.50.253.99",
      "port": 19999,
      "proto": "ss",
      "latency": 918,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.90",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 926,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
      "host": "202.50.253.27",
      "port": 19999,
      "proto": "ss",
-     "latency": 922,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 930,
+     "repo": "snakem982/proxypool"
     },
     {
-     "host": "45.128.78.176",
+     "host": "202.50.253.72",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 934,
+     "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "202.50.253.36",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 934,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.45",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 964,
+     "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "202.50.253.81",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1008,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "45.151.71.160",
      "port": 443,
      "proto": "vless",
-     "latency": 925,
+     "latency": 1009,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "147.45.46.157",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1039,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "188.164.248.110",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1127,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "funagfrdfs.alixxplay.com",
+     "port": 55688,
+     "proto": "vless",
+     "latency": 1158,
+     "repo": "zhuhaiuk/free-nodes"
+    },
+    {
+     "host": "85.155.149.9",
+     "port": 20285,
+     "proto": "vless",
+     "latency": 1211,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "213.152.165.203",
+     "port": 2092,
+     "proto": "vless",
+     "latency": 1229,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "77.239.102.129.sslip.io",
+     "port": 17232,
+     "proto": "vless",
+     "latency": 1247,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.200",
+     "port": 2092,
+     "proto": "vless",
+     "latency": 1255,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "2.26.6.1",
+     "port": 2087,
+     "proto": "vless",
+     "latency": 1292,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "213.152.165.201",
+     "port": 2095,
+     "proto": "vless",
+     "latency": 1435,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.205",
+     "port": 2095,
+     "proto": "vless",
+     "latency": 1476,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "one-for-all.levikogjgfdd.ir",
+     "port": 2096,
+     "proto": "vless",
+     "latency": 1556,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "109.234.211.232",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1592,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "213.152.165.203",
+     "port": 2093,
+     "proto": "vless",
+     "latency": 1601,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.205",
+     "port": 2093,
+     "proto": "vless",
+     "latency": 1661,
      "repo": "snakem982/proxypool"
     },
     {
      "host": "202.50.253.63",
      "port": 19999,
      "proto": "ss",
-     "latency": 935,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1664,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
-     "host": "202.50.253.99",
-     "port": 19999,
+     "host": "143.246.211.163",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1697,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "location15.cpanel-host16.ir",
+     "port": 56137,
      "proto": "ss",
-     "latency": 937,
-     "repo": "Pawdroid/Free-servers"
+     "latency": 1711,
+     "repo": "barry-far/V2ray-Config"
     },
     {
-     "host": "202.50.253.72",
-     "port": 19999,
+     "host": "213.152.165.201",
+     "port": 2093,
+     "proto": "vless",
+     "latency": 1818,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "www.windowssearchtools.com",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 1974,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "location8.cpanel-host10.ir",
+     "port": 56134,
      "proto": "ss",
-     "latency": 960,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 2124,
+     "repo": "barry-far/V2ray-Config"
     },
     {
-     "host": "45.151.71.162",
+     "host": "109.73.192.248",
      "port": 443,
      "proto": "vless",
-     "latency": 961,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 963,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "45.151.71.165",
-     "port": 443,
-     "proto": "vless",
-     "latency": 978,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 994,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "195.133.23.50",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 996,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1004,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "193.160.140.119",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1016,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "193.223.104.140",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1030,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1047,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "91.242.228.29",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1068,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "147.45.46.169",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1167,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "201.51.8.163",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1185,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "177.3.220.124",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1188,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "se1.mycloud1.org",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1196,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "pl1.mycloud1.org",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1196,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "51.77.108.218",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1226,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "46.17.43.227",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1246,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "lv6.himoy.space",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1248,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "113.30.154.207",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1316,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "213.152.165.204",
-     "port": 2092,
-     "proto": "vless",
-     "latency": 1378,
+     "latency": 2191,
      "repo": "snakem982/proxypool"
     },
     {
      "host": "213.152.165.203",
-     "port": 2092,
+     "port": 2091,
      "proto": "vless",
-     "latency": 1434,
-     "repo": "snakem982/proxypool"
+     "latency": 2210,
+     "repo": "Pawdroid/Free-servers"
     },
     {
      "host": "213.152.165.200",
-     "port": 2093,
+     "port": 2095,
      "proto": "vless",
-     "latency": 1595,
+     "latency": 2444,
      "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "83.168.69.15",
-     "port": 56229,
-     "proto": "vless",
-     "latency": 1715,
-     "repo": "Pawdroid/Free-servers"
     },
     {
      "host": "213.152.165.200",
      "port": 2090,
      "proto": "vless",
-     "latency": 2049,
+     "latency": 2473,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "213.152.165.203",
-     "port": 2093,
-     "proto": "vless",
-     "latency": 2093,
-     "repo": "snakem982/proxypool"
+     "host": "45-149-147-213.sslip.io",
+     "port": 4444,
+     "proto": "trojan",
+     "latency": 2766,
+     "repo": "barry-far/V2ray-Config"
     },
     {
-     "host": "213.152.165.205",
-     "port": 2090,
-     "proto": "vless",
-     "latency": 2104,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2119,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "santehdv.site",
+     "host": "www.speedtest.net",
      "port": 443,
      "proto": "vless",
-     "latency": 2197,
-     "repo": "snakem982/proxypool"
+     "latency": 3143,
+     "repo": "Barabama/FreeNodes"
     },
     {
      "host": "138.124.79.6",
      "port": 443,
      "proto": "vless",
-     "latency": 2393,
+     "latency": 3628,
      "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "fin3.himoy.space",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2514,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "213.152.165.203",
-     "port": 2095,
-     "proto": "vless",
-     "latency": 2520,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "151.241.138.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2581,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "198.16.113.222",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 3967,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "49.12.253.100",
-     "port": 1080,
-     "proto": "ss",
-     "latency": 3972,
-     "repo": "0xRadikal/Free-v2ray-Configs"
     }
    ]
   },
   "clash": {
-   "tested": 205,
-   "ok": 51,
+   "tested": 1000,
+   "ok": 43,
+   "unsupported": 0,
+   "config_error": 2,
+   "reasons": {
+    "network": 69,
+    "tls": 849,
+    "timeout": 32,
+    "startup": 5,
+    "config": 2
+   },
    "rounds": 1,
    "min_available": 10,
-   "cand": 1923,
+   "cand": 4668,
    "exhausted": false,
    "cap": 1000,
    "file": "available_clash.yaml",
    "nodes": [
     {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 898,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 921,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 928,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 928,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "45.144.48.32",
-     "port": 57891,
-     "proto": "vmess",
-     "latency": 931,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 938,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 943,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "5.175.205.190",
-     "port": 27774,
-     "proto": "vless",
-     "latency": 973,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "45.151.71.165",
-     "port": 443,
-     "proto": "vless",
-     "latency": 994,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 995,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "46.17.43.227",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1031,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "147.45.47.107",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1040,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "45.128.78.176",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1054,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "49.12.253.100",
-     "port": 1080,
-     "proto": "ss",
-     "latency": 1080,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "51.77.108.218",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1082,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "se1.mycloud1.org",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1109,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1113,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "193.223.104.140",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1135,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "91.242.228.29",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1139,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "103.180.20.108",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1154,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "pl1.mycloud1.org",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1161,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "151.241.138.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1171,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "113.30.154.207",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1196,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "147.45.46.169",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1233,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "201.51.8.163",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1239,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "lv6.himoy.space",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1303,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "164.92.223.252",
+     "host": "125.227.86.45",
      "port": 443,
      "proto": "trojan",
-     "latency": 1329,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 343,
+     "repo": "Delta-Kronecker/V2ray-Config"
     },
     {
-     "host": "213.152.165.203",
-     "port": 2092,
-     "proto": "vless",
-     "latency": 1362,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "177.3.220.124",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1415,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "tjadly.m2k699.com",
+     "host": "tjxjp.m2k699.com",
      "port": 24999,
      "proto": "trojan",
-     "latency": 1451,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "tjmlxy.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 1508,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "fin3.himoy.space",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1525,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "213.152.165.200",
-     "port": 2093,
-     "proto": "vless",
-     "latency": 1562,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "213.152.165.203",
-     "port": 2095,
-     "proto": "vless",
-     "latency": 1585,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "tjtw.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 1628,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "213.152.165.203",
-     "port": 2093,
-     "proto": "vless",
-     "latency": 1648,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "tjhg.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 1649,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "tjxg.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 1756,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "santehdv.site",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1778,
-     "repo": "snakem982/proxypool"
+     "latency": 427,
+     "repo": "Delta-Kronecker/V2ray-Config"
     },
     {
      "host": "59.125.69.22",
      "port": 443,
      "proto": "vless",
-     "latency": 1802,
-     "repo": "snakem982/proxypool"
+     "latency": 496,
+     "repo": "NiREvil/vless"
     },
     {
-     "host": "146.75.59.186",
-     "port": 443,
+     "host": "80.93.202.40",
+     "port": 8880,
      "proto": "vless",
-     "latency": 1814,
-     "repo": "snakem982/proxypool"
+     "latency": 766,
+     "repo": "Barabama/FreeNodes"
     },
     {
-     "host": "tjmg2.m2k699.com",
-     "port": 24999,
+     "host": "185.148.107.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 795,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "155.46.167.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 830,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "kw119.zxmm.eu.org",
+     "port": 20031,
      "proto": "trojan",
-     "latency": 2073,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "213.152.165.205",
-     "port": 2090,
-     "proto": "vless",
-     "latency": 2216,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "213.152.165.200",
-     "port": 2090,
-     "proto": "vless",
-     "latency": 2266,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2346,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "198.16.113.222",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2878,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "172.66.1.36",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 4239,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "138.124.79.6",
-     "port": 443,
-     "proto": "vless",
-     "latency": 4785,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "starlink-ft.251313.xyz",
-     "port": 443,
-     "proto": "hysteria2",
-     "latency": 7954,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "143.246.211.163",
-     "port": 443,
-     "proto": "hysteria2",
-     "latency": 8414,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "us22.sofast.live",
-     "port": 58011,
-     "proto": "vless",
-     "latency": 10459,
-     "repo": "Pawdroid/Free-servers"
-    }
-   ]
-  },
-  "singbox": {
-   "tested": 204,
-   "ok": 52,
-   "rounds": 1,
-   "min_available": 10,
-   "cand": 1898,
-   "exhausted": false,
-   "cap": 1000,
-   "file": "available_singbox.json",
-   "nodes": [
-    {
-     "host": "103.180.20.108",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 786,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "5.175.205.190",
-     "port": 27774,
-     "proto": "vless",
      "latency": 848,
-     "repo": "snakem982/proxypool"
+     "repo": "Delta-Kronecker/V2ray-Config"
     },
     {
-     "host": "202.50.253.18",
+     "host": "66.235.200.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 885,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "185.162.229.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 887,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "202.50.253.81",
      "port": 19999,
      "proto": "ss",
-     "latency": 887,
-     "repo": "snakem982/proxypool"
+     "latency": 889,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "8.34.70.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 893,
+     "repo": "barry-far/V2ray-Config"
     },
     {
      "host": "202.50.253.27",
      "port": 19999,
      "proto": "ss",
-     "latency": 924,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 923,
+     "repo": "snakem982/proxypool"
     },
     {
-     "host": "45.151.71.165",
-     "port": 443,
-     "proto": "vless",
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
      "latency": 925,
-     "repo": "snakem982/proxypool"
+     "repo": "peasoft/NoMoreWalls"
     },
     {
      "host": "202.50.253.72",
      "port": 19999,
      "proto": "ss",
-     "latency": 934,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 945,
+     "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "funagfrdfs.alixxplay.com",
+     "port": 55688,
+     "proto": "vless",
+     "latency": 970,
+     "repo": "zhuhaiuk/free-nodes"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 985,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 994,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "funagfrdfs.alixxplay.com",
+     "port": 54528,
+     "proto": "vless",
+     "latency": 996,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "109.104.153.43",
+     "port": 33336,
+     "proto": "ssr",
+     "latency": 1034,
+     "repo": "barry-far/V2ray-Config"
     },
     {
      "host": "202.50.253.90",
      "port": 19999,
      "proto": "ss",
-     "latency": 934,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 955,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 966,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 980,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "45.144.48.32",
-     "port": 57891,
-     "proto": "vmess",
-     "latency": 981,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 985,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "193.223.104.140",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1003,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "59.125.69.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1013,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "195.133.23.50",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1028,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "45.151.71.162",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1049,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "201.51.8.163",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1056,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "91.242.228.29",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1145,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "193.160.140.119",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1149,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "45.128.78.176",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1149,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "147.45.47.107",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1178,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "tjhg.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 1184,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "213.152.165.204",
-     "port": 2092,
-     "proto": "vless",
-     "latency": 1225,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "pl1.mycloud1.org",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1243,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "se1.mycloud1.org",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1252,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "147.45.46.169",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1316,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "tjxg.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 1347,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "49.12.253.100",
-     "port": 1080,
-     "proto": "ss",
-     "latency": 1380,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "113.30.154.207",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1421,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "213.152.165.203",
-     "port": 2095,
-     "proto": "vless",
-     "latency": 1578,
-     "repo": "snakem982/proxypool"
+     "latency": 1065,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
      "host": "202.50.253.99",
      "port": 19999,
      "proto": "ss",
-     "latency": 1634,
-     "repo": "Pawdroid/Free-servers"
+     "latency": 1069,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "2.26.6.1",
+     "port": 2087,
+     "proto": "vless",
+     "latency": 1092,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "location15.cpanel-host16.ir",
+     "port": 56137,
+     "proto": "ss",
+     "latency": 1111,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "188.164.248.110",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1190,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "77.239.102.129.sslip.io",
+     "port": 17232,
+     "proto": "vless",
+     "latency": 1281,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "vless.gem-audio2.us.ci",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1360,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "213.152.165.201",
+     "port": 2095,
+     "proto": "vless",
+     "latency": 1410,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.205",
+     "port": 2095,
+     "proto": "vless",
+     "latency": 1411,
+     "repo": "snakem982/proxypool"
     },
     {
      "host": "213.152.165.203",
      "port": 2092,
      "proto": "vless",
-     "latency": 1659,
+     "latency": 1436,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.200",
+     "port": 2092,
+     "proto": "vless",
+     "latency": 1452,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.200",
+     "port": 2095,
+     "proto": "vless",
+     "latency": 1567,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "109.234.211.232",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1627,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "213.152.165.205",
+     "port": 2093,
+     "proto": "vless",
+     "latency": 1766,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "tjrb.m2k699.com",
+     "port": 24999,
+     "proto": "trojan",
+     "latency": 1806,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "143.246.211.163",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1945,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "213.152.165.203",
+     "port": 2091,
+     "proto": "vless",
+     "latency": 2183,
+     "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "213.152.165.200",
+     "port": 2090,
+     "proto": "vless",
+     "latency": 2222,
      "repo": "snakem982/proxypool"
     },
     {
      "host": "213.152.165.203",
      "port": 2093,
      "proto": "vless",
-     "latency": 1677,
+     "latency": 2328,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "138.124.79.6",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2687,
+     "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "location8.cpanel-host10.ir",
+     "port": 56134,
+     "proto": "ss",
+     "latency": 3229,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "213.152.165.201",
+     "port": 2093,
+     "proto": "vless",
+     "latency": 4562,
      "repo": "snakem982/proxypool"
     },
     {
      "host": "202.50.253.36",
      "port": 19999,
      "proto": "ss",
-     "latency": 1757,
+     "latency": 5896,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "v24.hdacd.com",
+     "port": 30824,
+     "proto": "vmess",
+     "latency": 7902,
+     "repo": "PuddinCat/BestClash"
+    }
+   ]
+  },
+  "singbox": {
+   "tested": 1000,
+   "ok": 46,
+   "unsupported": 0,
+   "config_error": 2,
+   "reasons": {
+    "reset": 628,
+    "tls": 321,
+    "refused": 3,
+    "config": 2
+   },
+   "rounds": 1,
+   "min_available": 10,
+   "cand": 4557,
+   "exhausted": false,
+   "cap": 1000,
+   "file": "available_singbox.json",
+   "nodes": [
+    {
+     "host": "125.227.86.45",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 430,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "tjxjp.m2k699.com",
+     "port": 24999,
+     "proto": "trojan",
+     "latency": 480,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "location15.cpanel-host16.ir",
+     "port": 56137,
+     "proto": "ss",
+     "latency": 769,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "8.34.70.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 800,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "185.148.107.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 802,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "155.46.167.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 830,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "80.93.202.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 851,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "202.50.253.81",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 903,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 908,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 911,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 919,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "185.162.229.40",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 927,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "202.50.253.99",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 933,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.36",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 936,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.90",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 942,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "185.148.104.30",
+     "port": 8880,
+     "proto": "vless",
+     "latency": 969,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "funagfrdfs.alixxplay.com",
+     "port": 55688,
+     "proto": "vless",
+     "latency": 1030,
+     "repo": "zhuhaiuk/free-nodes"
+    },
+    {
+     "host": "2.26.6.1",
+     "port": 2087,
+     "proto": "vless",
+     "latency": 1073,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "tjrb.m2k699.com",
+     "port": 24999,
+     "proto": "trojan",
+     "latency": 1074,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "location8.cpanel-host10.ir",
+     "port": 56134,
+     "proto": "ss",
+     "latency": 1121,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "202.50.253.45",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1146,
      "repo": "Pawdroid/Free-servers"
     },
     {
-     "host": "46.17.43.227",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1820,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "146.75.59.186",
+     "host": "188.164.248.110",
      "port": 443,
      "proto": "vless",
-     "latency": 1938,
+     "latency": 1183,
+     "repo": "Barabama/FreeNodes"
+    },
+    {
+     "host": "202.50.253.72",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1193,
+     "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "202.50.253.27",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1238,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "tjadly.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 2004,
+     "host": "213.152.165.203",
+     "port": 2092,
+     "proto": "vless",
+     "latency": 1248,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "tjmg2.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 2127,
+     "host": "213.152.165.200",
+     "port": 2092,
+     "proto": "vless",
+     "latency": 1257,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "77.239.102.129.sslip.io",
+     "port": 17232,
+     "proto": "vless",
+     "latency": 1339,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.201",
+     "port": 2095,
+     "proto": "vless",
+     "latency": 1374,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.200",
+     "port": 2095,
+     "proto": "vless",
+     "latency": 1430,
      "repo": "snakem982/proxypool"
     },
     {
      "host": "213.152.165.205",
-     "port": 2090,
+     "port": 2095,
      "proto": "vless",
-     "latency": 2291,
+     "latency": 1463,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "213.152.165.200",
-     "port": 2090,
-     "proto": "vless",
-     "latency": 2307,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "198.16.113.222",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2339,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "tjmlxy.m2k699.com",
-     "port": 24999,
-     "proto": "trojan",
-     "latency": 2473,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "51.77.108.218",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2908,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "santehdv.site",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3218,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "172.66.0.1",
-     "port": 443,
-     "proto": "vmess",
-     "latency": 3554,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "213.152.165.200",
+     "host": "213.152.165.203",
      "port": 2093,
      "proto": "vless",
-     "latency": 3903,
+     "latency": 1572,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "172.66.1.36",
+     "host": "213.152.165.205",
+     "port": 2093,
+     "proto": "vless",
+     "latency": 1610,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "213.152.165.201",
+     "port": 2093,
+     "proto": "vless",
+     "latency": 1634,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "8.6.112.206",
      "port": 443,
      "proto": "trojan",
-     "latency": 5256,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1666,
+     "repo": "barry-far/V2ray-Config"
+    },
+    {
+     "host": "47.250.84.25",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1744,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "www.windowssearchtools.com",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 1897,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "support.zoom.us",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1917,
+     "repo": "igareck/vpn-configs-for-russia"
     },
     {
      "host": "143.246.211.163",
      "port": 443,
      "proto": "hysteria2",
-     "latency": 5815,
+     "latency": 2081,
      "repo": "igareck/vpn-configs-for-russia"
     },
     {
-     "host": "starlink-ft.251313.xyz",
-     "port": 443,
-     "proto": "hysteria2",
-     "latency": 7013,
+     "host": "213.152.165.203",
+     "port": 2091,
+     "proto": "vless",
+     "latency": 2086,
      "repo": "Pawdroid/Free-servers"
+    },
+    {
+     "host": "109.73.192.248",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2276,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "kw119.zxmm.eu.org",
+     "port": 20031,
+     "proto": "trojan",
+     "latency": 2443,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "213.152.165.200",
+     "port": 2090,
+     "proto": "vless",
+     "latency": 2447,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "funagfrdfs.alixxplay.com",
+     "port": 54528,
+     "proto": "vless",
+     "latency": 3243,
+     "repo": "snakem982/proxypool"
     },
     {
      "host": "138.124.79.6",
      "port": 443,
      "proto": "vless",
-     "latency": 7137,
+     "latency": 3575,
      "repo": "Pawdroid/Free-servers"
     },
     {
-     "host": "199.232.78.160",
+     "host": "59.125.69.22",
      "port": 443,
      "proto": "vless",
-     "latency": 7286,
-     "repo": "snakem982/proxypool"
+     "latency": 4574,
+     "repo": "NiREvil/vless"
     },
     {
-     "host": "us22.sofast.live",
-     "port": 58011,
-     "proto": "vless",
-     "latency": 11002,
-     "repo": "Pawdroid/Free-servers"
+     "host": "v24.hdacd.com",
+     "port": 30824,
+     "proto": "vmess",
+     "latency": 8933,
+     "repo": "PuddinCat/BestClash"
     }
    ]
   }
