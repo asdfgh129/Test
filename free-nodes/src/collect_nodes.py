@@ -439,7 +439,9 @@ DATE_HEADING_RE = re.compile(
 
 MD_LINK_RE = re.compile(r"\[([^\]\n]{0,80})\]\(\s*(https?://[^)\s]+)\s*\)")
 HREF_LINK_RE = re.compile(r"""href=["'](https?://[^"'\s]+)["']""", re.IGNORECASE)
-URL_RE = re.compile(r"https?://[^\s\)\]\"'<>，。；、]+")
+# 排除字符里必须有反引号与星号：中文 README 极爱用 `裸链接`（行内代码）和 **加粗链接**，
+# 这两种装饰符不在排除集里就会被吸进 URL 尾部，拼出一个 404 的地址（见 known-issues 第 35 条）。
+URL_RE = re.compile(r"https?://[^\s\)\]\"'<>`*|，。；、]+")
 # clash/sing-box 的一键导入链接，真正的订阅地址在 ?url= 里
 IMPORT_LINK_RE = re.compile(r"(?:clash(?:meta|-meta)?|sing-?box)://[^\s\)\]\"'<>，。；、]+",
                             re.IGNORECASE)
@@ -708,7 +710,8 @@ def find_readme(items):
 
 
 def _strip_url_tail(url):
-    return url.rstrip(".,;:，。；、)]}>'\"")
+    # 反引号/星号/竖线来自 markdown 装饰（行内代码、加粗、表格分隔），一律剥掉
+    return url.rstrip(".,;:，。；、)]}>'\"`*|")
 
 
 def _repo_path_from_url(url, repo_full):

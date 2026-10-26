@@ -2,6 +2,18 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-10-26 README 反引号/加粗裸链接被吸进 URL 导致 404（已修复）
+
+- **问题**：`URL_RE` 的排除字符集没有反引号和星号，中文 README 常见的
+  `` `https://...` ``（行内代码）与 `**https://...**`（加粗）写法会把装饰符带进 URL 尾部，
+  下载必然 404。本次采集命中 2 例（`ts-sf/fly` 的 `clash`、`tglaoshiji/nodeshare` 的 `freenode`），
+  日志里表现为「README 声明的链接全部下载失败」
+- **改动**：`collect_nodes.py` 的 `URL_RE` 排除集加 `` ` ``/`*`/`|`；
+  `_strip_url_tail()` 的 rstrip 集合同步扩充
+- **验证**：单点回归 `ts-sf/fly` README，链接目标由 `.../main/clash`` ` ``（404）
+  变为干净的 `.../main/clash`，并正确识别为 `kernel=clash` 订阅
+- 详见 `Docs/known-issues.md` 第 35 条
+
 ## 2026-10-26 上行通道前移 + 推送不探测本机端口 + known-issues 合并（用户三点要求）
 
 - **第 1 步就自建代理**：`check_kernels.py` 原先完全没有代理能力（`latest_release(proxy=...)`

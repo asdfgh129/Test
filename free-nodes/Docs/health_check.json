@@ -1,14 +1,14 @@
 {
- "generated_at": "2026-10-26T10:45:18+08:00",
- "date": "2026-10-25",
+ "generated_at": "2026-10-26T23:25:50+08:00",
+ "date": "2026-10-26",
  "verdict": "无严重问题，1 个告警可优化",
  "metrics": {
   "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
   "目标节点": 1000,
-  "去重后节点": 12993,
-  "各内核订阅": "v2ray 11463、xray 10727、clash 12873、singbox 12597",
-  "协议分布": "hysteria 1 / hysteria2 281 / ss 1837 / ssr 1 / trojan 1852 / tuic 2 / vless 5645 / vmess 3374",
-  "TCP 可达": "5013/13021（中位数 201ms）",
+  "去重后节点": 7897,
+  "各内核订阅": "v2ray 7603、xray 6484、clash 7757、singbox 7546",
+  "协议分布": "hy2 3 / hysteria 1 / hysteria2 182 / ss 569 / ssr 1 / trojan 331 / tuic 2 / vless 4781 / vmess 2027",
+  "TCP 可达": "2842/7908（中位数 209ms）",
   "验证已执行": "是",
   "各内核可用": {
    "v2ray": "32/1000",
@@ -21,44 +21,44 @@
  "findings": [
   {
    "level": "warn",
-   "area": "下载通道",
-   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
-   "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
+   "area": "验证",
+   "title": "v2ray 文件条数 52 ≠ 汇总可用数 32",
+   "action": "汇总与文件写出不一致，需排查"
   },
   {
    "level": "info",
    "area": "产物",
-   "title": "主清单 12993 条；各内核订阅：v2ray 11463、xray 10727、clash 12873、singbox 12597",
+   "title": "主清单 7897 条；各内核订阅：v2ray 7603、xray 6484、clash 7757、singbox 7546",
    "action": ""
   },
   {
    "level": "info",
    "area": "规模",
-   "title": "节点数 12993 达到目标 1000",
+   "title": "节点数 7897 达到目标 1000",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库效率",
-   "title": "扫描仓库 61 个：有产出 16、解析不到节点 16、下载失败 12、无候选文件 0、README 无订阅链接跳过 17（产出率 36%，按有尝试采集的 44 个计算）",
+   "title": "扫描仓库 74 个：有产出 17、解析不到节点 18、下载失败 17、无候选文件 0、README 无订阅链接跳过 22（产出率 33%，按有尝试采集的 52 个计算）",
    "action": ""
   },
   {
    "level": "info",
    "area": "README 采集",
-   "title": "44 个仓库的 README 声明了订阅链接，提取 54009 条节点",
+   "title": "52 个仓库的 README 声明了订阅链接，提取 66944 条节点",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "5013/13021 个服务器 TCP 可达（38%），延迟中位数 201ms，<100ms 共 692 条",
+   "title": "2842/7908 个服务器 TCP 可达（36%），延迟中位数 209ms，<100ms 共 301 条",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "2159/13021 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
+   "title": "1107/7908 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
    "action": ""
   },
   {
@@ -76,28 +76,16 @@
   {
    "level": "info",
    "area": "性能",
-   "title": "采集耗时 43 分钟",
+   "title": "采集耗时 36 分钟",
    "action": "偏慢，可关注是否有大文件反复重试"
-  },
-  {
-   "level": "info",
-   "area": "下载通道",
-   "title": "jsDelivr 可用 2/4：fastly.jsdelivr.net、gcore.jsdelivr.net（不可达：cdn.jsdelivr.net、testingcf.jsdelivr.net）",
-   "action": ""
-  },
-  {
-   "level": "info",
-   "area": "配额",
-   "title": "GitHub 配额剩余 core 56/60、search 10/10（匿名）",
-   "action": ""
   }
  ],
  "todo": [
   {
    "level": "warn",
-   "area": "下载通道",
-   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
-   "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
+   "area": "验证",
+   "title": "v2ray 文件条数 52 ≠ 汇总可用数 32",
+   "action": "汇总与文件写出不一致，需排查"
   }
  ]
 }
