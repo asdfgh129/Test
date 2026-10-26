@@ -48,11 +48,18 @@ C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\b
 
 【2b. 验证（独立一步，全量策略）】
 ```
-C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\test_nodes.py --input C:\Users\bemin\WorkBuddy\Test\free-nodes --cores v2ray,xray,clash,singbox --full-below 3000 --max-test 3000
+C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\test_nodes.py --input C:\Users\bemin\WorkBuddy\Test\free-nodes --cores v2ray,xray,clash,singbox --full-below 3000 --max-test 1000
 ```
 - **注意参数名**：`test_nodes.py` 用 `--full-below/--max-test`（不带 `--test-` 前缀）；`--test-full-below/--test-max-test` 是 `collect_nodes.py` 的透传参数名，传给 test_nodes.py 会直接报错退出
 - 全量策略：每内核候选 ≤3000 全部实测；超过只测排序前 3000 个（排序 = 协议交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序）。`--limit/--min-available` 在全量模式下不生效，别传
-- **时间预算（重要）**：单次自动化运行有 90 分钟硬上限，采集约 30~45 分钟、全量测试约 50~70 分钟、自检+发布约 7 分钟。若启动验证时距运行开始已超过 35 分钟，用 `--max-test 1500` 减半测试量——**优先保证发布成功，不要为多测而超时**（超时=整晚白干，池会跨天累积，不差这一晚）
+- **时间预算（重要，2026-10-26 实测校准）**：单次自动化运行有 90 分钟硬上限，
+  采集约 30~45 分钟、自检+发布约 7 分钟。**实测吞吐只有约 3~5 个可用节点/分钟**，
+  1000/核约需 13~20 分钟（v2ray 13min→32 个、xray 13min→37 个、clash 15min→43 个、
+  singbox 17min→46 个），四核连跑合计 **50~60 分钟**；
+  而 3000/核实测需要 **3~5 小时**，绝对跑不完（2026-10-25 那次就是这么超时的）。
+  所以默认 `--max-test 1000`；若启动验证时距运行开始已超过 35 分钟，
+  再降到 `--max-test 600`——**优先保证发布成功，不要为多测而超时**
+  （超时=整晚白干，池会跨天累积，不差这一晚）
 - 每内核一个跨天可用节点池（`nodes/pool/`）+ 一份共享 `nodes/pool/pool_state.json`，验证结束自动更新
 
 【3. 自检】

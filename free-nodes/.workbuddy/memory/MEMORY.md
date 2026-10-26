@@ -77,6 +77,14 @@
 - **路径单一事实来源 = `free-nodes/src/layout.py`**（sub_path/avail_path/pool_path/uris_path/
   meta_path/report_path/summary_path/health_path/issue_path/seed_file_path 等助手），
   全脚本禁止硬编码 join；改目录布局只改 layout.py + `migrate_legacy_flat()`
+- **路径助手的返回值不许二次加工**（known-issues 第 32/33 条的血泪）：
+  `dirname(lay.pool_dir(root))` 在旧平铺布局下是对的，三分层后拼出 `nodes/nodes/pool`；
+  调用方要么直接传 `root`、要么直接用助手给的最终路径，禁止「助手路径 + 自己再取父目录/再拼一层」
+- 改布局后的固定自检两条：① `grep -rn "_dir_of\|_path_of\|dirname(lay\." src/` 扫旧标识符与二次加工；
+  ② 长任务收工后抽查「产物路径 + mtime + 关键计数」——静默错位不报错、退出码照样 0，
+  只有比对时间戳和节点数才看得出来
+- 补救错写的数据用**合并**（`pool.merge` 按 `host:port` 去重、累加 `ok_count`），
+  别图省事直接覆盖，否则历史累积节点就没了
 - md 日志去重粒度：`Docs/report`/`Docs/summary`/`Docs/health_check` 按**日期**替换；
   根 `CHANGELOGS.md`/`Docs/known_issues.md` 按**日期+标题**替换（一天多事件并存）
 - 仓库根 `.workbuddy` 是指向 `free-nodes/.workbuddy` 的 junction（宿主 memory 系统固定读
