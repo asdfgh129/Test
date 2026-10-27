@@ -1176,6 +1176,9 @@ def main():
                     help="整轮验证的墙钟时间预算（秒），0=不限（默认）。"
                          "到期后不再提交新节点、跳过尚未开始的内核，"
                          "但已测结果照常落盘——用于平台强杀前自己优雅收尾，见 known-issues 第 36 条")
+    ap.add_argument("--fair-budget", action="store_true",
+                    help="把整轮墙钟预算按「尚未开始的内核数」均分（须配合 --time-budget）。"
+                         "避免排在前面的内核吃满预算、后面的内核一个节点都没测，见 known-issues 第 38 条")
     ap.add_argument("--no-escalate", action="store_true", help="关闭自适应扩量，只测初始取样")
     ap.add_argument("--workers", type=int, default=12, help="单内核并发测试数")
     ap.add_argument("--tcp-workers", type=int, default=64, help="TCP 预筛并发数")
@@ -1294,7 +1297,7 @@ def main():
     rate_map = {r["full_name"]: (r.get("avail_rate") if r.get("tested") else RATE_PRIOR)
                 for r in seed_data.get("repos", [])}
 
-    for core in cores:
+    for ci, core in enumerate(cores):
         if core not in CORES:
             print(f"[warn] 未知内核 {core}，跳过", file=sys.stderr)
             continue
@@ -1382,6 +1385,24 @@ def main():
                 print(f"[info] {core}：池内复测 {len(retest)} 个（TCP 可达 {len(retest_alive)} 个）")
 
         print(f"[info] {core}：候选 {len(cand)} 个，本轮测试 {len(sampled)} 个")
+
+        # ── 公平分配墙钟（--fair-budget）──
+        # 顺序跑内核时，排在前面的内核会把整窗预算吃光，后面的内核一个节点都测不到
+        # （2026-10-27 首窗口实测：v2ray 吃满 2321s，xray/clash/singbox 全部「预算已用满，跳过」，
+        #  三个内核当天没有任何新数据，available_* 还是前一天的旧文件）。
+        # 这里把「剩余墙钟」按「本内核 + 还很后面的内核数」均分：前一个内核提前测完留下的空档，
+        # 会在下一个内核开始时被重新均分吸收，不会浪费。只改「谁先测多少时间」，
+        # 不改 --full-below / --max-test 的取样口径（每个内核的取样上限仍是 3000）。
+        if args.fair_budget and deadline:
+            left = max(1, sum(1 for _c in cores[ci:] if _c in CORES))
+            remain = deadline - time.time()
+            if left > 1 and remain > 0:
+                share = remain / left
+                args._deadline = time.time() + share
+                print(f"[info] {core}：公平分配墙钟 {share:.0f}s"
+                      f"（剩余 {remain / 60:.0f} 分钟 ÷ {left} 个内核）")
+            else:
+                args._deadline = deadline
         results, tested = test_core(core, sampled, args.tools, args.workers, args, allocator)
         if results is None:
             stats[core] = None

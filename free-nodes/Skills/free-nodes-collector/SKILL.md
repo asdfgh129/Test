@@ -93,6 +93,7 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 | `--test-limit-cap N` | [旧模式] 单内核累计验证上限，默认 0=自动（`--test-limit` 的 5 倍，且不低于 `--test-min-available` 的 10 倍） |
 | `--time-budget N`（test_nodes.py） | 整轮验证的**墙钟预算**（秒），默认 **0 = 不限**。到期后不再提交新节点、跳过尚未开始的内核，已测结果照常落盘；要补跑剩下的内核用 `--cores <内核>` + `--resume-tested`。用途只有一个：在平台强杀之前自己优雅收尾、给发布留时间。**它不是测试量上限**——每内核测多少由候选数与窗口决定，不要用拍脑袋的数字去压 |
 | `--resume-tested`（test_nodes.py） | **多窗口续跑**（默认关）。开了就：① 跳过本日已测过的节点，只测排序里的下一批候选；② 把本次已测记录写进 `nodes/tested_state.json`（按日期自动重置）；③ 把前面窗口已验证可用的节点并回 available 文件与汇总。**只有第二/第三个窗口才开**——单窗口开了等于多写一个状态文件，无副作用但不必要 |
+| `--fair-budget`（test_nodes.py） | 把整轮墙钟按「尚未开始的内核数」**均分**（需配合 `--time-budget`）。内核顺序跑，不均分的话第一个内核会吃光预算、后面内核一个都不测（第 38 条）。**只改时间分配，不改 `--max-test` 取样口径** |
 | `--test-url <url>` | 验证目标地址，默认 `https://gstatic.com/generate_204`（**裸域 HTTPS**，见下方「探测地址为什么用裸域」） |
 | `--no-mirror-check` | 跳过开头的通道探活（省 10s，但会退化成"每文件都去撞死镜像"） |
 | `FREE_NODES_MIRRORS`（环境变量） | 覆盖 raw 镜像候选池（逗号分隔），设为空字符串可禁用镜像。默认 11 个候选，实际只用探活通过的 |
@@ -335,6 +336,14 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --check-kernels
      `summary.md` 的「本轮未跑完」说明。
    多个窗口写同一份汇总时，`Docs/summary.*` 会**累积同一天前面窗口的内核结果**，
    不会因为本窗口只测了 clash 就把 v2ray 从汇总里抹掉。
+7. **按内核均分墙钟（`--fair-budget`，推荐第二/第三窗口都加）**：内核是**顺序**跑的，
+   而 `--time-budget` 原先对每个内核都用「整轮剩余时间」，于是候选多的第一个内核会把预算吃光，
+   后面的内核直接「预算已用满，跳过」（2026-10-27 首窗口：v2ray 吃满 2321s，
+   xray/clash/singbox 当天零数据，available 文件停在前一天，见 known-issues 第 38 条）。
+   开了这个开关就把剩余墙钟按「本内核 + 后面还没跑的内核数」均分，每个内核开始时重算，
+   前面内核提前测完的空档自动被后面吸收。**只改时间分配，不改取样口径**
+   （`--full-below` / `--max-test` 仍是 3000）。取舍是「四个内核都有当天新数据」
+   优先于「一个内核测满」——免费节点的价值在新鲜度。
 
 判定口径与每类原因的原文证据见 `Docs/protocol.md` 第 4 节；`Docs/summary.md` 会给出
 「不支持 / 配置错误 / 不可达」三列与「失败原因分布」表——成片 `config` 是转换器有 Bug，
@@ -350,8 +359,13 @@ python <free-nodes>/src/test_nodes.py --input <输出根目录> --cores v2ray,xr
 python <free-nodes>/src/collect_nodes.py --out <输出根目录> --test --test-full-below 3000 --test-max-test 3000
 
 # 第二个/第三个窗口续跑：接着测本日还没测过的候选，并累积当日已可用的节点
+# --fair-budget 把剩余墙钟按内核数均分，避免第一个内核吃光预算、后面内核零数据
 python <free-nodes>/src/test_nodes.py --input <输出根目录> --cores v2ray,xray,clash,singbox \
-  --resume-tested --time-budget 4800 --date <采集当天日期>
+  --resume-tested --time-budget 4800 --fair-budget --date <采集当天日期>
+
+# 跨零点收尾时，自检也必须带 --date <采集日>，否则会另起一天的小节（本次踩过：
+# 23:45 起跑、00:57 跑完自检 → 数据记到了 2026-10-28 名下）
+python <free-nodes>/src/health_check.py --dir <输出根目录> --date <采集当天日期>
 ```
 
 #### 探测地址为什么用裸域 HTTPS
