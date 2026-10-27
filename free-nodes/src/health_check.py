@@ -715,13 +715,18 @@ def write_reports(root, findings, metrics, entries, args):
     # review_logs.md：跨天摘要（按日期倒序，一天一节 = 当天最后一次自检的结论）
     ok_metric = metrics.get("各内核可用")
     ok_txt = "/".join(str(v) for v in ok_metric.values()) if isinstance(ok_metric, dict) else "-"
+    # match_heading=True：只替换「同日期 + 同标题」的自动摘要小节。
+    # 之前用默认的「同日期」判重（startswith("## <date>")），会把同一天手写的
+    # 「## 2026-10-27 第二窗口（…）」整段误删——手写小节标题同样以日期开头，
+    # 被当成旧摘要覆盖（2026-10-27 第三窗口实测丢失，已从 git 恢复）。
     lay.upsert_section(lay.review_log_path(root), date_str, "自检摘要",
                        f"- 去重后节点：{metrics.get('去重后节点', '-')}"
                        f"（目标 {metrics.get('目标节点', '-')}）\n"
                        f"- 各内核可用：{ok_txt}\n"
                        f"- 结论：{verdict}；待修复 {len(todo)} 项",
                        doc_title="每日采集自检日志（时间倒序）",
-                       intro="跨天摘要，按日期倒序")
+                       intro="跨天摘要，按日期倒序",
+                       match_heading=True)
 
     return md_path, json_path, n_crit, n_warn
 

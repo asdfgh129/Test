@@ -1004,6 +1004,24 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
   尾部那 1400 个基本是白测。暂不改参数（用户明确要求测试量不设人为上限），
   记录在 `Docs/review_logs.md` 观察
 
+## 39. 自检写 review_logs 时按日期判重，把同日期的手写「窗口」小节整段删掉
+
+- **现象**（2026-10-27 第三窗口，跑完 `health_check.py --date 2026-10-27`）：
+  `Docs/review_logs.md` 里手写的「## 2026-10-27 第二窗口（23:45 起跑…）」整段消失，
+  只剩脚本生成的「## 2026-10-27 自检摘要」。日志文件本身没报错、退出码 0
+- **根因**：`layout.upsert_section` 默认 `match_heading=False`（日报模式），
+  判重是 `t[0].startswith(f"## {date_str}")`——只要标题以日期开头就算「同一天旧小节」，
+  于是手写小节（标题同样以 `## 2026-10-27` 开头）被当成旧摘要覆盖掉
+- **为什么日报用前缀匹配**：`summary.md` / `report.md` 的小节标题带时间
+  （`## 2026-10-27 00:56`），每次运行标题都不同，只能按日期前缀替换，否则会越积越多
+- **修复**：`review_logs.md` 这个「混装手写小节」的文件改为 `match_heading=True`
+  （只替换「同日期 + 同标题=自检摘要」的小节），一行参数，不动日报类的行为
+- **验证**：修完连跑两次 `health_check.py --date 2026-10-27`（一次 `--skip-network`、一次完整），
+  两次小节列表都是「自检摘要 / 第三窗口 / 第二窗口 / 10-26 / 10-25」，手写小节完好，
+  自动摘要仍只有一条且被正确替换
+- **教训**：凡是「脚本自动写 + 人手也会写」的同一个 md，判重键必须带上标题，
+  不能只用日期；这类丢数据的事退出码永远是 0，只能靠看文件内容发现
+
 ## 修复后的固定动作（缺一不可）
 
 1. **单点回归**：用触发问题的样本（仓库 / 节点 URI）单独验证修复生效，不能只看整体数字
@@ -1022,12 +1040,14 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 | 级别 | 领域 | 问题 | 建议动作 |
 |---|---|---|---|
 | warn | 验证 | v2ray 可用率异常低 2.2%（69/3097） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+| warn | 下载通道 | 镜像失效 10/13：https://gh.monlor.com/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://ghfast.top/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 待观察（info）：
 - [性能] 采集耗时 34 分钟
 
 ### 2026-10-28 自检发现
+
+
 
 
 **结论：无严重问题，2 个告警可优化**
@@ -1046,6 +1066,8 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 
 
 
+
+
 **结论：无严重问题，1 个告警可优化**
 
 | 级别 | 领域 | 问题 | 建议动作 |
@@ -1056,6 +1078,8 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 - [性能] 采集耗时 36 分钟
 
 ### 2026-10-25 自检发现
+
+
 
 
 
