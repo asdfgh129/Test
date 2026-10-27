@@ -2,6 +2,114 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
+## 2026-10-27 23:21
+
+- 预筛：TCP 连通 6772/16620 个节点
+- 测试地址：`https://gstatic.com/generate_204`，并发 12
+- 测试策略：全量——候选 ≤ 3000 个全部测试；超过则只测排序前 3000 个
+- 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；网络类失败复测 1 次；「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）
+- 总耗时：44.6 分钟
+
+| 代理内核 | 测试数量 | 可用数量 | 可用率 | 不支持 | 配置错误 | 不可达 | 轮次 | 可用文件 |
+|---|---|---|---|---|---|---|---|---|
+| v2ray | 1584 | 54 | 3.5% | 3 | 23 | 1504 | 截断（上限 3000） | `nodes/available_v2ray.txt` |
+
+> **本轮未跑完**（墙钟预算到期主动收尾或分窗口续跑，不是失败）：未开始：xray、clash、singbox；中途截断：v2ray（1584/3005）。已测结果全部有效且已落盘，剩余部分下次运行用 `--cores` + `--resume-tested` 接着测。
+
+### 失败原因分布
+
+「不支持 / 配置被拒绝」属于本机内核能力或参数问题，不是节点问题；只有 tls / auth / refused / reset / timeout 才是节点侧的失败证据。
+
+| 代理内核 | 原因 | 数量 |
+|---|---|---|
+| v2ray | TLS 握手失败（证书/协议不匹配） | 1176 |
+| v2ray | 连接超时 | 328 |
+| v2ray | 配置被内核拒绝（参数不符） | 23 |
+| v2ray | 该内核不支持（协议/传输/加密/插件） | 3 |
+
+
+### 可用节点池（跨天累积）
+
+每个内核一份池文件：实测通过的节点自动入池，池内节点次日继续复测，连续多天未通过则淘汰。
+
+| 内核 | 池内节点 | 今日新增 | 今日复测通过 | 池文件 |
+|---|---|---|---|---|
+| v2ray | 89 | 41 | 13 | `pool/pool_v2ray.txt` |
+
+池目录：`nodes/pool`（`pool_<core>.<ext>` 可直接导入客户端；`pool_state.json` 存首见/最近通过/通过次数/最佳延迟）
+
+
+### 仓库节点可用率（本次实测）
+
+可用率是仓库质量的硬指标：连续偏低会降低采集优先级，长期 0 可用会被跳过。
+
+| 仓库 | 实测 | 可用 | 可用率 | 平均延迟 | 质量分 |
+|---|---|---|---|---|---|
+| ermaozi01/free_clash_vpn | 1 | 1 | 100% | 8863ms | 70.0 |
+| Pawdroid/Free-servers | 7 | 3 | 43% | 2968ms | 42.2 |
+| 0xRadikal/Free-v2ray-Configs | 43 | 17 | 40% | 1093ms | 51.1 |
+| Danialsamadi/v2go | 23 | 9 | 39% | 2538ms | 42.2 |
+| snakem982/proxypool | 29 | 6 | 21% | 1333ms | 36.5 |
+| kooker/FreeSubsCheck | 12 | 2 | 17% | 776ms | 37.0 |
+| peasoft/NoMoreWalls | 117 | 11 | 9% | 2190ms | 23.4 |
+| Barabama/FreeNodes | 38 | 1 | 3% | 7454ms | 1.8 |
+| barry-far/V2ray-Config | 39 | 1 | 3% | 12385ms | 1.8 |
+| nyeinkokoaung404/V2ray-Configs | 653 | 3 | 0% | 4858ms | 1.2 |
+| Epodonios/v2ray-configs | 9 | 0 | 0% | -ms | 0.0 |
+| Hidashimora/free-vpn-anti-rkn | 125 | 0 | 0% | -ms | 0.0 |
+| iboxz/free-v2ray-collector | 2 | 0 | 0% | -ms | 0.0 |
+| VPN-Subcription-Links/ClashX-V2Ray-TopFreeProxy | 1 | 0 | 0% | -ms | 0.0 |
+| liketolivefree/kobabi | 485 | 0 | 0% | -ms | 0.0 |
+
+
+### 各内核可用节点详情
+
+#### v2ray（54 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `146.190.157.232:39644` | ss | 651ms | 0xRadikal/Free-v2ray-Configs |
+| `89.125.70.179:8388` | ss | 705ms | kooker/FreeSubsCheck |
+| `24.199.106.240:9998` | trojan | 768ms | 0xRadikal/Free-v2ray-Configs |
+| `91.107.128.44:36812` | vmess | 770ms | snakem982/proxypool |
+| `45.32.140.119:9304` | trojan | 801ms | 0xRadikal/Free-v2ray-Configs |
+| `164.92.73.218:8931` | trojan | 808ms | Danialsamadi/v2go |
+| `137.184.178.208:4804` | trojan | 814ms | Danialsamadi/v2go |
+| `45.32.135.70:9213` | trojan | 814ms | 0xRadikal/Free-v2ray-Configs |
+| `147.182.232.6:4853` | trojan | 818ms | 0xRadikal/Free-v2ray-Configs |
+| `149.28.214.139:7604` | trojan | 818ms | 0xRadikal/Free-v2ray-Configs |
+| `209.38.66.47:6105` | trojan | 830ms | 0xRadikal/Free-v2ray-Configs |
+| `147.182.203.237:6022` | trojan | 837ms | Danialsamadi/v2go |
+| `144.126.223.93:8911` | trojan | 843ms | Danialsamadi/v2go |
+| `177.202.111.20:56137` | ss | 846ms | kooker/FreeSubsCheck |
+| `66.163.114.132:443` | trojan | 855ms | 0xRadikal/Free-v2ray-Configs |
+| `64.23.151.246:7801` | trojan | 867ms | 0xRadikal/Free-v2ray-Configs |
+| `137.184.234.144:8563` | trojan | 902ms | 0xRadikal/Free-v2ray-Configs |
+| `216.152.156.42:443` | trojan | 903ms | snakem982/proxypool |
+| `202.50.253.99:19999` | ss | 946ms | Pawdroid/Free-servers |
+| `66.163.114.106:443` | trojan | 946ms | 0xRadikal/Free-v2ray-Configs |
+| `216.152.156.49:443` | trojan | 959ms | 0xRadikal/Free-v2ray-Configs |
+| `66.163.114.114:443` | trojan | 968ms | snakem982/proxypool |
+| `202.50.253.36:19999` | ss | 988ms | snakem982/proxypool |
+| `202.50.253.18:19999` | ss | 990ms | peasoft/NoMoreWalls |
+| `216.152.156.65:443` | trojan | 998ms | peasoft/NoMoreWalls |
+| `91.206.92.238:18443` | ss | 1017ms | peasoft/NoMoreWalls |
+| `216.152.156.81:443` | trojan | 1044ms | 0xRadikal/Free-v2ray-Configs |
+| `64.83.20.73:8388` | ss | 1177ms | 0xRadikal/Free-v2ray-Configs |
+| `64.176.163.182:443` | trojan | 1333ms | 0xRadikal/Free-v2ray-Configs |
+| `177.202.111.21:56137` | ss | 1689ms | peasoft/NoMoreWalls |
+| `47.250.84.25:443` | trojan | 1754ms | peasoft/NoMoreWalls |
+| `31.185.105.12:443` | hysteria2 | 1782ms | 0xRadikal/Free-v2ray-Configs |
+| `renderer-bridge-1-881.mirra.now:443` | vless | 1813ms | peasoft/NoMoreWalls |
+| `202.50.253.90:19999` | ss | 1969ms | peasoft/NoMoreWalls |
+| `8.6.112.206:443` | trojan | 2052ms | Danialsamadi/v2go |
+| `www.qarvian.ir:443` | vless | 2179ms | snakem982/proxypool |
+| `146.75.59.186:443` | vless | 2192ms | snakem982/proxypool |
+| `suq.deev-guard.ir:15470` | ss | 2206ms | Danialsamadi/v2go |
+| `201.24.121.243:443` | vless | 2316ms | peasoft/NoMoreWalls |
+| `172.64.229.21:443` | vmess | 2361ms | nyeinkokoaung404/V2ray-Configs |
+| … | 共 54 个 | | |
+
 ## 2026-10-25 09:02
 
 - 预筛：TCP 连通 4776/12993 个节点
