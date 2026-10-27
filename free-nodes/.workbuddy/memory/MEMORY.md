@@ -29,11 +29,25 @@
   排序 = 协议交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序）；
   summary 里 `exhausted=true` 表示候选已全部测完，此时不要再加测试量、也不要放宽探测地址。
   旧模式（`--no-full-test` 回退「可用数 <10 沿序追加，上限 limit×5、预算 1800s」）仅供对比
+- **时间限制的真相（2026-10-27 用户追问后核实）**：
+  - 平台对单次自动化运行有 **90 分钟强制取消**（`[CANCELLED] Run timed out`，
+    10-25 22:00 起跑、23:30 被砍）——**不是我们定的，任务内部改不掉，automation 也没有超时字段**
+  - 曾经写在 prompt 里的「超过 35 分钟就 `--max-test 600`」是**我们自己拍的数字**，
+    2026-10-27 已删除。用户明确要求「不要设限」：`--max-test` 一律给 3000，
+    不按固定测试量降级
+  - 正确做法：**测试量不设人为上限**，靠 `test_nodes.py --time-budget N`（默认 0=不限）
+    在平台强杀前主动收尾——到期停止提交新节点、跳过未开始的内核，已测结果立即落盘，
+    `summary.md` 标「本轮未跑完（主动收尾，不是失败）」，`summary.json` 有 `sampled/partial`；
+    剩余内核用 `--cores <内核>` 补跑
+  - **增量落盘**：每内核测完立即写 `available_*`/`Docs/summary.*`/仓库质量/`pool_state.json`，
+    被强杀最多丢当前内核（此前只在四核全跑完后才写，被砍等于整晚白干）
 - 仓库池：26 组关键词 × 2 页（100 条/页）× 三级扩量，`src/seed_repos.json` 上限 300 个
-- **自动化 prompt 更新受限**：本会话无 automation_update 工具（ToolSearch 也搜不到），
-  定时任务 prompt 仍是旧版（引用旧技能目录路径、`tools/publish_free_nodes.py`、
-  `--test-limit 200 --test-min-available 10` 旧测试参数、`free-nodes\known_issue.md` 旧文件名）。
-  已准备好新版 prompt 文本待用户手工粘贴；junction 兼容层保证旧路径暂时不炸
+- **自动化 prompt 已可自助更新**（2026-10-27 起 `automation_update` 工具可用，
+  id `a3d7bb22-948c-4326-b344-f4c5535ddcd0`）：已把 35 分钟/600 那条换成 `--time-budget` 规则，
+  并把 known-issues 第 34/35/36 条写进第 4 步
+- **`test_nodes.py` 两个易踩的坑**：① `ThreadPoolExecutor.map` 会一次性吃空迭代器，
+  写在生成器里的时间检查形同虚设，必须按块提交；② 模块顶层有 `as c`/`as lay` 别名，
+  函数内禁止用 `c`、`lay` 当循环变量（会把 `c.quality_score` 变成字符串属性错误）
 
 ## 四内核协议能力（2026-10-25 实测校准，详见 Docs/protocol.md）
 
