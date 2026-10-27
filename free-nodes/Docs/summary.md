@@ -2,22 +2,22 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
-## 2026-10-27 00:56
+## 2026-10-27 02:46
 
-- 预筛：TCP 连通 6834/16620 个节点
+- 预筛：TCP 连通 6838/16620 个节点
 - 测试地址：`https://gstatic.com/generate_204`，并发 12
 - 测试策略：全量——候选 ≤ 3000 个全部测试；超过则只测排序前 3000 个
 - 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；网络类失败复测 1 次；「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）
-- 总耗时：65.0 分钟
+- 总耗时：75.2 分钟
 
 | 代理内核 | 测试数量 | 可用数量 | 可用率 | 不支持 | 配置错误 | 不可达 | 轮次 | 可用文件 |
 |---|---|---|---|---|---|---|---|---|
-| v2ray | 2160 | 61 | 2.8% | 0 | 7 | 2092 | 截断（上限 3000） | `nodes/available_v2ray.txt` |
-| xray | 624 | 65 | 10.4% | 1 | 0 | 558 | 截断（上限 3000） | `nodes/available_xray.txt` |
+| v2ray | 3097 | 69 | 2.2% | 0 | 18 | 3010 | 截断（上限 3000） | `nodes/available_v2ray.txt` |
+| xray | 2592 | 80 | 3.1% | 0 | 3 | 2509 | 截断（上限 3000） | `nodes/available_xray.txt` |
 | clash | 792 | 75 | 9.5% | 0 | 0 | 717 | 截断（上限 3000） | `nodes/available_clash.yaml` |
 | singbox | 840 | 68 | 8.1% | 0 | 0 | 772 | 截断（上限 3000） | `nodes/available_singbox.json` |
 
-> **本轮未跑完**（墙钟预算到期主动收尾或分窗口续跑，不是失败）：中途截断：v2ray（2160/1520）；中途截断：xray（624/3007）；中途截断：clash（792/3008）；中途截断：singbox（840/3007）。已测结果全部有效且已落盘，剩余部分下次运行用 `--cores` + `--resume-tested` 接着测。
+> **本轮未跑完**（墙钟预算到期主动收尾或分窗口续跑，不是失败）：未开始：clash、singbox；中途截断：xray（2592/2414）。已测结果全部有效且已落盘，剩余部分下次运行用 `--cores` + `--resume-tested` 接着测。
 
 ### 失败原因分布
 
@@ -25,14 +25,14 @@
 
 | 代理内核 | 原因 | 数量 |
 |---|---|---|
-| v2ray | TLS 握手失败（证书/协议不匹配） | 401 |
-| v2ray | 连接超时 | 161 |
-| v2ray | 配置被内核拒绝（参数不符） | 7 |
-| xray | 网络层失败 | 224 |
-| xray | TLS 握手失败（证书/协议不匹配） | 169 |
-| xray | 连接超时 | 160 |
+| v2ray | TLS 握手失败（证书/协议不匹配） | 720 |
+| v2ray | 连接超时 | 199 |
+| v2ray | 配置被内核拒绝（参数不符） | 18 |
+| xray | 网络层失败 | 1035 |
+| xray | TLS 握手失败（证书/协议不匹配） | 591 |
+| xray | 连接超时 | 319 |
 | xray | 连接被重置 | 5 |
-| xray | 该内核不支持（协议/传输/加密/插件） | 1 |
+| xray | 配置被内核拒绝（参数不符） | 3 |
 | clash | TLS 握手失败（证书/协议不匹配） | 633 |
 | clash | 网络层失败 | 49 |
 | clash | 连接超时 | 35 |
@@ -46,10 +46,10 @@
 
 | 内核 | 池内节点 | 今日新增 | 今日复测通过 | 池文件 |
 |---|---|---|---|---|
-| v2ray | 95 | 6 | 55 | `pool/pool_v2ray.txt` |
-| xray | 121 | 55 | 10 | `pool/pool_xray.txt` |
-| clash | 148 | 63 | 12 | `pool/pool_clash.yaml` |
-| singbox | 141 | 57 | 11 | `pool/pool_singbox.json` |
+| v2ray | 98 | 3 | 66 | `pool/pool_v2ray.txt` |
+| xray | 134 | 13 | 67 | `pool/pool_xray.txt` |
+| clash | 148 | 0 | 0 | `pool/pool_clash.yaml` |
+| singbox | 141 | 0 | 0 | `pool/pool_singbox.json` |
 
 池目录：`nodes/pool`（`pool_<core>.<ext>` 可直接导入客户端；`pool_state.json` 存首见/最近通过/通过次数/最佳延迟）
 
@@ -60,40 +60,42 @@
 
 | 仓库 | 实测 | 可用 | 可用率 | 平均延迟 | 质量分 |
 |---|---|---|---|---|---|
-| ermaozi01/free_clash_vpn | 2 | 2 | 100% | 11234ms | 70.0 |
-| Pawdroid/Free-servers | 31 | 14 | 45% | 3005ms | 43.6 |
-| Danialsamadi/v2go | 93 | 32 | 34% | 2135ms | 41.3 |
-| snakem982/proxypool | 108 | 28 | 26% | 2417ms | 33.6 |
-| igareck/vpn-configs-for-russia | 21 | 5 | 24% | 2233ms | 33.3 |
-| 0xRadikal/Free-v2ray-Configs | 396 | 90 | 23% | 1845ms | 34.8 |
-| kooker/FreeSubsCheck | 70 | 9 | 13% | 2641ms | 23.2 |
-| peasoft/NoMoreWalls | 292 | 28 | 10% | 2756ms | 20.2 |
-| Barabama/FreeNodes | 460 | 3 | 1% | 4615ms | 2.8 |
-| barry-far/V2ray-Config | 338 | 2 | 1% | 4380ms | 4.1 |
-| nyeinkokoaung404/V2ray-Configs | 757 | 2 | 0% | 3562ms | 8.8 |
-| zhuhaiuk/free-nodes | 8 | 0 | 0% | -ms | 0.0 |
-| Hidashimora/free-vpn-anti-rkn | 223 | 0 | 0% | -ms | 0.0 |
-| Epodonios/v2ray-configs | 24 | 0 | 0% | -ms | 0.0 |
-| VPN-Subcription-Links/ClashX-V2Ray-TopFreeProxy | 3 | 0 | 0% | -ms | 0.0 |
-| iboxz/free-v2ray-collector | 6 | 0 | 0% | -ms | 0.0 |
+| kooker/FreeSubsCheck | 5 | 5 | 100% | 3413ms | 79.5 |
+| Pawdroid/Free-servers | 2 | 2 | 100% | 1210ms | 92.7 |
+| Delta-Kronecker/V2ray-Config | 1 | 1 | 100% | 604ms | 96.4 |
+| NiREvil/vless | 1 | 1 | 100% | 2456ms | 85.3 |
+| 0xRadikal/Free-v2ray-Configs | 7 | 5 | 71% | 837ms | 75.0 |
+| Danialsamadi/v2go | 3 | 2 | 67% | 935ms | 71.1 |
+| snakem982/proxypool | 5 | 3 | 60% | 6201ms | 42.0 |
+| peasoft/NoMoreWalls | 7 | 4 | 57% | 2339ms | 56.0 |
+| barry-far/V2ray-Config | 129 | 4 | 3% | 5760ms | 2.2 |
+| nyeinkokoaung404/V2ray-Configs | 796 | 5 | 1% | 4408ms | 4.0 |
+| Barabama/FreeNodes | 265 | 1 | 0% | 6277ms | 0.3 |
+| liketolivefree/kobabi | 1575 | 1 | 0% | 12758ms | 0.0 |
+| Hidashimora/free-vpn-anti-rkn | 105 | 0 | 0% | -ms | 0.0 |
+| VPN-Subcription-Links/ClashX-V2Ray-TopFreeProxy | 6 | 0 | 0% | -ms | 0.0 |
+| iboxz/free-v2ray-collector | 8 | 0 | 0% | -ms | 0.0 |
+| Epodonios/v2ray-configs | 9 | 0 | 0% | -ms | 0.0 |
 
 
 ### 各内核可用节点详情
 
-#### v2ray（61 个可用）
+#### v2ray（69 个可用）
 
 | 节点 | 协议 | 延迟 | 来源仓库 |
 |---|---|---|---|
+| `89.125.70.179:8388` | ss | 592ms | kooker/FreeSubsCheck |
+| `125.227.86.45:443` | trojan | 604ms | Delta-Kronecker/V2ray-Config |
 | `146.190.157.232:39644` | ss | 651ms | 0xRadikal/Free-v2ray-Configs |
-| `89.125.70.179:8388` | ss | 705ms | kooker/FreeSubsCheck |
 | `91.107.128.44:46928` | vless | 737ms | 0xRadikal/Free-v2ray-Configs |
 | `24.199.106.240:9998` | trojan | 768ms | 0xRadikal/Free-v2ray-Configs |
 | `91.107.128.44:36812` | vmess | 770ms | snakem982/proxypool |
+| `rabin.142.251.153.7.savfasf.ir:41432` | vless | 771ms | 0xRadikal/Free-v2ray-Configs |
 | `45.32.140.119:9304` | trojan | 801ms | 0xRadikal/Free-v2ray-Configs |
 | `164.92.73.218:8931` | trojan | 808ms | Danialsamadi/v2go |
+| `147.182.232.6:4853` | trojan | 813ms | 0xRadikal/Free-v2ray-Configs |
 | `137.184.178.208:4804` | trojan | 814ms | Danialsamadi/v2go |
 | `45.32.135.70:9213` | trojan | 814ms | 0xRadikal/Free-v2ray-Configs |
-| `147.182.232.6:4853` | trojan | 818ms | 0xRadikal/Free-v2ray-Configs |
 | `149.28.214.139:7604` | trojan | 818ms | 0xRadikal/Free-v2ray-Configs |
 | `209.38.66.47:6105` | trojan | 830ms | 0xRadikal/Free-v2ray-Configs |
 | `147.182.203.237:6022` | trojan | 837ms | Danialsamadi/v2go |
@@ -101,10 +103,10 @@
 | `177.202.111.20:56137` | ss | 846ms | kooker/FreeSubsCheck |
 | `66.163.114.132:443` | trojan | 855ms | 0xRadikal/Free-v2ray-Configs |
 | `64.23.151.246:7801` | trojan | 867ms | 0xRadikal/Free-v2ray-Configs |
+| `171.22.119.74:8447` | vless | 877ms | 0xRadikal/Free-v2ray-Configs |
 | `137.184.234.144:8563` | trojan | 902ms | 0xRadikal/Free-v2ray-Configs |
 | `216.152.156.42:443` | trojan | 903ms | snakem982/proxypool |
-| `rabin.142.251.153.7.savfasf.ir:41432` | vless | 909ms | 0xRadikal/Free-v2ray-Configs |
-| `202.50.253.99:19999` | ss | 946ms | Pawdroid/Free-servers |
+| `202.50.253.99:19999` | ss | 933ms | Pawdroid/Free-servers |
 | `66.163.114.106:443` | trojan | 946ms | 0xRadikal/Free-v2ray-Configs |
 | `216.152.156.49:443` | trojan | 959ms | 0xRadikal/Free-v2ray-Configs |
 | `66.163.114.114:443` | trojan | 968ms | snakem982/proxypool |
@@ -115,18 +117,16 @@
 | `216.152.156.81:443` | trojan | 1044ms | 0xRadikal/Free-v2ray-Configs |
 | `64.83.20.73:8388` | ss | 1177ms | 0xRadikal/Free-v2ray-Configs |
 | `64.176.163.182:443` | trojan | 1333ms | 0xRadikal/Free-v2ray-Configs |
+| `202.50.253.63:19999` | ss | 1455ms | peasoft/NoMoreWalls |
+| `202.50.253.81:19999` | ss | 1488ms | Pawdroid/Free-servers |
+| `202.50.253.90:19999` | ss | 1512ms | peasoft/NoMoreWalls |
 | `209.94.90.201:2083` | vless | 1588ms | igareck/vpn-configs-for-russia |
 | `177.202.111.21:56137` | ss | 1689ms | peasoft/NoMoreWalls |
 | `47.250.84.25:443` | trojan | 1754ms | peasoft/NoMoreWalls |
 | `31.185.105.12:443` | hysteria2 | 1782ms | 0xRadikal/Free-v2ray-Configs |
-| `renderer-bridge-1-881.mirra.now:443` | vless | 1813ms | peasoft/NoMoreWalls |
-| `202.50.253.90:19999` | ss | 1969ms | peasoft/NoMoreWalls |
-| `8.6.112.206:443` | trojan | 2052ms | Danialsamadi/v2go |
-| `www.qarvian.ir:443` | vless | 2179ms | snakem982/proxypool |
-| `146.75.59.186:443` | vless | 2192ms | snakem982/proxypool |
-| … | 共 61 个 | | |
+| … | 共 69 个 | | |
 
-#### xray（65 个可用）
+#### xray（80 个可用）
 
 | 节点 | 协议 | 延迟 | 来源仓库 |
 |---|---|---|---|
@@ -139,6 +139,7 @@
 | `163.245.42.48:443` | vless | 946ms | kooker/FreeSubsCheck |
 | `164.92.73.218:8931` | trojan | 963ms | Danialsamadi/v2go |
 | `91.206.92.238:18443` | ss | 999ms | peasoft/NoMoreWalls |
+| `91.196.163.150:8443` | vless | 1044ms | Danialsamadi/v2go |
 | `45.43.79.92:443` | vless | 1059ms | 0xRadikal/Free-v2ray-Configs |
 | `89.125.11.57:443` | vless | 1070ms | 0xRadikal/Free-v2ray-Configs |
 | `45.129.242.56:443` | vless | 1077ms | 0xRadikal/Free-v2ray-Configs |
@@ -159,7 +160,9 @@
 | `31.185.105.12:443` | hysteria2 | 1494ms | 0xRadikal/Free-v2ray-Configs |
 | `kz-central.v8x2b.lol:443` | vless | 1496ms | 0xRadikal/Free-v2ray-Configs |
 | `202.50.253.45:19999` | ss | 1498ms | Pawdroid/Free-servers |
+| `188.132.232.187:1443` | vless | 1507ms | barry-far/V2ray-Config |
 | `se1-cl3.vless-fiberstasis.top:443` | vless | 1637ms | 0xRadikal/Free-v2ray-Configs |
+| `45.92.218.130:443` | vless | 1647ms | nyeinkokoaung404/V2ray-Configs |
 | `109.234.211.232:443` | trojan | 1705ms | Danialsamadi/v2go |
 | `ru11.oshost.network:443` | vless | 1727ms | 0xRadikal/Free-v2ray-Configs |
 | `201.24.121.243:443` | vless | 1785ms | peasoft/NoMoreWalls |
@@ -167,10 +170,7 @@
 | `202.50.253.72:19999` | ss | 1874ms | peasoft/NoMoreWalls |
 | `13.143.172.34:4443` | vless | 1899ms | 0xRadikal/Free-v2ray-Configs |
 | `13.143.172.34:2096` | vless | 1913ms | 0xRadikal/Free-v2ray-Configs |
-| `209.206.51.236:2083` | vless | 1932ms | 0xRadikal/Free-v2ray-Configs |
-| `9.247.23.209:443` | vless | 2035ms | 0xRadikal/Free-v2ray-Configs |
-| `188.164.248.246:443` | vless | 2074ms | igareck/vpn-configs-for-russia |
-| … | 共 65 个 | | |
+| … | 共 80 个 | | |
 
 #### clash（75 个可用）
 

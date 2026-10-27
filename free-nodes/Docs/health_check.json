@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-28T00:57:57+08:00",
- "date": "2026-10-28",
+ "generated_at": "2026-10-28T02:46:53+08:00",
+ "date": "2026-10-27",
  "verdict": "无严重问题，2 个告警可优化",
  "metrics": {
   "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
@@ -11,18 +11,18 @@
   "TCP 可达": "6859/16629（中位数 234ms）",
   "验证已执行": "是",
   "各内核可用": {
-   "v2ray": "61/2160",
-   "xray": "65/624",
+   "v2ray": "69/3097",
+   "xray": "80/2592",
    "clash": "75/792",
    "singbox": "68/840"
   },
-  "可用节点池": "v2ray 95、xray 121、clash 148、singbox 141"
+  "可用节点池": "v2ray 98、xray 134、clash 148、singbox 141"
  },
  "findings": [
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 2.8%（61/2160）",
+   "title": "v2ray 可用率异常低 2.2%（69/3097）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
@@ -70,13 +70,13 @@
   {
    "level": "info",
    "area": "仓库质量",
-   "title": "已评分 27 个仓库，可用率 >=10% 的 7 个，长期 0 可用 6 个（下次采集会自动跳过）",
+   "title": "已评分 27 个仓库，可用率 >=10% 的 10 个，长期 0 可用 4 个（下次采集会自动跳过）",
    "action": ""
   },
   {
    "level": "info",
    "area": "节点池",
-   "title": "池内节点：v2ray 95、xray 121、clash 148、singbox 141",
+   "title": "池内节点：v2ray 98、xray 134、clash 148、singbox 141",
    "action": ""
   },
   {
@@ -102,7 +102,7 @@
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 2.8%（61/2160）",
+   "title": "v2ray 可用率异常低 2.2%（69/3097）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {

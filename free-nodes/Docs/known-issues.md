@@ -1015,7 +1015,20 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 
 ## 自检发现（health_check 自动维护，按日期倒序）
 
+### 2026-10-27 自检发现
+
+**结论：无严重问题，2 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 验证 | v2ray 可用率异常低 2.2%（69/3097） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+待观察（info）：
+- [性能] 采集耗时 34 分钟
+
 ### 2026-10-28 自检发现
+
 
 **结论：无严重问题，2 个告警可优化**
 
@@ -1027,19 +1040,8 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 待观察（info）：
 - [性能] 采集耗时 34 分钟
 
-### 2026-10-27 自检发现
-
-
-**结论：无严重问题，1 个告警可优化**
-
-| 级别 | 领域 | 问题 | 建议动作 |
-|---|---|---|---|
-| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
-
-待观察（info）：
-- [性能] 采集耗时 34 分钟
-
 ### 2026-10-26 自检发现
+
 
 
 
@@ -1054,6 +1056,7 @@ src 目录的，references 文档直接用 Docs 目录的，不再进行不同�
 - [性能] 采集耗时 36 分钟
 
 ### 2026-10-25 自检发现
+
 
 
 
