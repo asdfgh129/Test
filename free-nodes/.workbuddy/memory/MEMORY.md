@@ -37,10 +37,23 @@
     不按固定测试量降级
   - 正确做法：**测试量不设人为上限**，靠 `test_nodes.py --time-budget N`（默认 0=不限）
     在平台强杀前主动收尾——到期停止提交新节点、跳过未开始的内核，已测结果立即落盘，
-    `summary.md` 标「本轮未跑完（主动收尾，不是失败）」，`summary.json` 有 `sampled/partial`；
-    剩余内核用 `--cores <内核>` 补跑
+    `summary.md` 标「本轮未跑完（主动收尾，不是失败）」，`summary.json` 有 `sampled/partial`
   - **增量落盘**：每内核测完立即写 `available_*`/`Docs/summary.*`/仓库质量/`pool_state.json`，
     被强杀最多丢当前内核（此前只在四核全跑完后才写，被砍等于整晚白干）
+- **一夜三窗口接力（2026-10-27 用户拍板「90 分钟跑不完就跑第 2 个、第 3 个」）**：
+  - 22:00 主任务（采集+验证）→ 23:45 第二窗口 → 01:30 第三窗口，后两个**只续跑验证、不采集**
+  - 自动化 id：主 `a3d7bb22-…` / 第二 `a4c4ae9d-9d70-4395-b78d-63a0a131e62d` /
+    第三 `19f100fb-c01d-4d31-9a1e-76444fbf51ad`
+  - **进度记录默认开**：`test_nodes.py` 无条件写 `nodes/tested_state.json`
+    （`{date, cores:{core:[host:port]}}`，路径助手 `layout.tested_state_path()`），
+    日期不符视为空。所以主窗口不用加任何参数，后两窗口才加 `--resume-tested`
+  - **`--resume-tested` 三件事**：跳过本日已测的 `host:port`（否则第二窗口从排序头部重测，
+    90 分钟全打水漂）；把每窗口已测写回；**把前面窗口已验证可用的节点并回** available 与汇总
+    （不并回会被冲掉——实测第二轮测 96 个全不可用，第一轮 20 个可用清零）
+  - 汇总累积：`Docs/summary.*` 会合并同一天前序窗口的内核结果，换 `--cores` 不会抹掉别的内核；
+    `tested` 记**本日累计**、`partial` 只针对**本窗口**，「本轮未跑完」只列本窗口真跑过的内核
+  - 第三窗口跨零点，`--date` 必须取 `Docs/summary.json` 的 `date`（采集日），不能用 `date +%F`
+  - 三窗口都要在验证前 `taskkill` 残留内核（前窗口被强杀会留 xray/v2ray/mihomo/sing-box 占端口）
 - 仓库池：26 组关键词 × 2 页（100 条/页）× 三级扩量，`src/seed_repos.json` 上限 300 个
 - **自动化 prompt 已可自助更新**（2026-10-27 起 `automation_update` 工具可用，
   id `a3d7bb22-948c-4326-b344-f4c5535ddcd0`）：已把 35 分钟/600 那条换成 `--time-budget` 规则，
