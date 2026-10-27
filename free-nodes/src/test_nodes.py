@@ -799,6 +799,21 @@ def test_one(core, uri, exe, allocator, test_url, test_timeout, startup_timeout,
     return last
 
 
+def _budget_limited(nodes, args, core):
+    """按墙钟预算节流取样：到期后不再提交新节点，已在跑的自然收尾。
+
+    为什么不直接杀进程：平台对单次自动化运行有 90 分钟硬上限（`[CANCELLED] Run timed out`，
+    见 known-issues 第 31 条），被强杀时 summary/pool 都不会落盘，整晚白跑。
+    自己看着表收尾，损失只有「没测到的那部分」，已测的一定留得下来。
+    """
+    deadline = getattr(args, "_deadline", None)
+    for i, n in enumerate(nodes):
+        if deadline and time.time() > deadline:
+            print(f"[warn] {core}：已达墙钟预算，停止提交新节点（已提交 {i}/{len(nodes)} 个）")
+            return
+        yield n
+
+
 def test_core(core, nodes, tools_dir, workers, args, allocator):
     """对一个内核并发实测一批节点，返回 (可用结果列表, 全部实测明细)。"""
     core = lay.canon(core)
@@ -823,12 +838,26 @@ def test_core(core, nodes, tools_dir, workers, args, allocator):
         if ok:
             print(f"[ok] {core} {node['proto']:<9} {node['host']}:{node['port']} {round(latency)}ms")
 
+    # 分批提交而不是 ex.map(worker, nodes)：ThreadPoolExecutor.map 会**一次性把迭代器吃空**
+    # （内部先 `[submit(...) for args in zip(*iterables)]`），预算检查会被跳过、等于没限时。
+    # 按 workers*2 一块提交，每块之间重查一次表，超时最多多跑一块。
+    chunk = max(workers, workers * 2)
     with ThreadPoolExecutor(max_workers=workers) as ex:
-        list(ex.map(worker, nodes))
+        batch = []
+        for n in _budget_limited(nodes, args, core):
+            batch.append(n)
+            if len(batch) >= chunk:
+                list(ex.map(worker, batch))
+                batch = []
+        if batch:
+            list(ex.map(worker, batch))
     elapsed = time.time() - t0
     unsup = sum(1 for t in tested if t["reason"] == "unsupported")
     cfg_err = sum(1 for t in tested if t["reason"] == "config")
-    print(f"[info] {core} 完成：测试 {len(nodes)} 个，可用 {len(results)} 个，"
+    if len(tested) < len(nodes):
+        print(f"[warn] {core}：时间预算到期，只测了 {len(tested)}/{len(nodes)} 个节点"
+              f"（未测的留给下一个运行窗口，不影响已测结果落盘）")
+    print(f"[info] {core} 完成：测试 {len(tested)} 个，可用 {len(results)} 个，"
           f"不支持 {unsup} 个，配置错误 {cfg_err} 个，耗时 {elapsed:.0f}s")
     return results, tested
 
@@ -880,7 +909,7 @@ def write_core_outputs(core, results, out_dir):
 
 
 def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
-                  pool_notes=None, repo_stats=None):
+                  pool_notes=None, repo_stats=None, budget_skipped=None):
     """写 Docs/summary.md（按日期倒序累积的小节）+ Docs/summary.json（最新一次快照）。"""
     if not args.no_full_test:
         policy_line = (f"- 测试策略：全量——候选 ≤ {args.full_below} 个全部测试；"
@@ -919,6 +948,20 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
             rt = str(rounds) if rounds <= 1 else f"{rounds}（候选{'已测完' if st.get('exhausted') else '未测完'}）"
         lines.append(f"| {core} | {st['tested']} | {st['ok']} | {rate} | {unsup} | {cfg_err} | "
                      f"{dead} | {rt} | `{lay.NODES_DIR}/{lay.AVAIL_FILE[lay.canon(core)]}` |")
+
+    # 墙钟预算收尾的说明：这**不是失败**，是主动让路给平台硬上限
+    partial_cores = [_core for _core, _st in stats.items() if _st and _st.get("partial")]
+    if budget_skipped or partial_cores:
+        notes = []
+        if budget_skipped:
+            notes.append(f"未开始：{'、'.join(budget_skipped)}")
+        # 变量名不能叫 c：本模块顶层 `import collect_nodes as c`，函数内再绑 c 会把
+        # 下方仓库质量表里的 c.quality_score 变成「字符串没有该属性」（踩过，2026-10-27）
+        for _pc in partial_cores:
+            notes.append(f"中途截断：{_pc}（{stats[_pc]['tested']}/{stats[_pc].get('sampled', '?')}）")
+        lines += ["", "> **本轮未跑完**（墙钟预算到期主动收尾，不是失败）："
+                  + "；".join(notes) + "。已测结果全部有效且已落盘，"
+                  "未测部分下次运行会用 `--cores` 指定内核补跑。"]
 
     # 失败原因分布：用来判断「测不过」到底是节点死了还是我们配错了
     detail_rows = []
@@ -996,6 +1039,8 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                        "cand": st.get("cand"),
                        "exhausted": st.get("exhausted"),
                        "cap": st.get("cap"),
+                       "sampled": st.get("sampled"),
+                       "partial": st.get("partial", False),
                        "file": lay.AVAIL_FILE[lay.canon(core)],
                        "nodes": [{"host": r["host"], "port": r["port"], "proto": r["proto"],
                                   "latency": r["latency"], "repo": r.get("repo", "")}
@@ -1034,6 +1079,10 @@ def main():
                     help="单内核累计测试上限，0=自动（--limit 的 5 倍，且不低于 min-available 的 10 倍）")
     ap.add_argument("--escalate-budget", type=int, default=1800,
                     help="单内核扩量的时间预算（秒），0=不限；默认 1800")
+    ap.add_argument("--time-budget", type=int, default=0,
+                    help="整轮验证的墙钟时间预算（秒），0=不限（默认）。"
+                         "到期后不再提交新节点、跳过尚未开始的内核，"
+                         "但已测结果照常落盘——用于平台强杀前自己优雅收尾，见 known-issues 第 36 条")
     ap.add_argument("--no-escalate", action="store_true", help="关闭自适应扩量，只测初始取样")
     ap.add_argument("--workers", type=int, default=12, help="单内核并发测试数")
     ap.add_argument("--tcp-workers", type=int, default=64, help="TCP 预筛并发数")
@@ -1109,6 +1158,13 @@ def main():
     stats, pool_notes, repo_stats = {}, {}, {}
     cores = lay.parse_cores(args.cores)
     pool_state = node_pool.load_state(pool_root) if pool_root else None
+    # 墙钟预算（0 = 不限）：平台对单次运行有 90 分钟硬上限，到点直接杀进程。
+    # 与其被杀，不如自己看着表收尾——没测到的留给下个窗口，测到的必须落盘
+    deadline = t0 + args.time_budget if args.time_budget > 0 else None
+    args._deadline = deadline
+    budget_skipped = []
+    if deadline:
+        print(f"[info] 时间预算 {args.time_budget}s（{time.strftime('%H:%M:%S', time.localtime(deadline))} 到点收尾）")
 
     # 仓库质量：取样时优先高质量仓库的节点（用户诉求：优先采/先测质量高的仓库）。
     # 用「实测可用率」排序而不是总分——总分里延迟权重会把「快但几乎全死」的仓库抬上来。
@@ -1119,6 +1175,11 @@ def main():
     for core in cores:
         if core not in CORES:
             print(f"[warn] 未知内核 {core}，跳过", file=sys.stderr)
+            continue
+        if deadline and time.time() > deadline:
+            print(f"[warn] {core}：墙钟预算已用满，跳过该内核（已完成的内核照常落盘；"
+                  f"下次运行可用 --cores {core} 单独补跑）")
+            budget_skipped.append(core)
             continue
         spec = CORES[core]
         # 先探测该内核当前的能力（如是否还接受 allowInsecure），避免生成无效配置
@@ -1264,7 +1325,8 @@ def main():
         stats[core] = {"tested": len(tested), "ok": len(results), "results": results,
                        "rounds": 1 + esc_rounds, "min_available": args.min_available,
                        "cand": len(cand), "exhausted": cursor >= len(ordered),
-                       "cap": cap,
+                       "cap": cap, "sampled": len(sampled),
+                       "partial": len(tested) < len(sampled),
                        "policy": "limited" if args.no_full_test else "full",
                        "unsupported": reasons.get("unsupported", 0),
                        "config_err": reasons.get("config", 0),
@@ -1287,6 +1349,15 @@ def main():
                   f"淘汰 {pool_dropped} → 池内共 {pool_notes[core]['count']} 条"
                   f"（{os.path.basename((saved or {}).get('path') or '')}）")
 
+        # 增量落盘：每个内核一结束就把汇总、仓库质量、共享池状态写一次。
+        # 万一这轮被平台强杀，已完成的内核不会白跑，也不会留下
+        # 「一个内核是新结果、其余是旧结果但 summary 还是旧数字」的混合状态
+        write_summary(out_dir, stats, args, date_str, len(nodes), len(alive),
+                      time.time() - t0, pool_notes=pool_notes,
+                      repo_stats=repo_stats, budget_skipped=budget_skipped)
+        if pool_state is not None:
+            node_pool.save_state(pool_root, pool_state, date_str)
+
     # 共享状态落盘（四内核共用一份 pool_state.json）
     if pool_state is not None:
         node_pool.save_state(pool_root, pool_state, date_str)
@@ -1306,7 +1377,7 @@ def main():
     summary = write_summary(out_dir, stats, args, date_str, len(nodes), len(alive),
                             time.time() - t0,
                             pool_notes=(pool_notes if pool_state is not None else None),
-                            repo_stats=repo_stats)
+                            repo_stats=repo_stats, budget_skipped=budget_skipped)
     print(f"[done] 汇总报告：{summary}")
     for core, st in stats.items():
         if st:

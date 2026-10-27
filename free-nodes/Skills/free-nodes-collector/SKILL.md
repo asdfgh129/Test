@@ -91,6 +91,7 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 | `--test-limit N` | [旧模式] 每个内核**单轮**验证的节点数（初始取样量，也是扩量时每轮的追加量），默认 200 |
 | `--test-min-available N` | [旧模式] **自适应扩量阈值**：某内核可用数低于该值就继续往后追加测试，默认 10；0=关闭扩量 |
 | `--test-limit-cap N` | [旧模式] 单内核累计验证上限，默认 0=自动（`--test-limit` 的 5 倍，且不低于 `--test-min-available` 的 10 倍） |
+| `--time-budget N`（test_nodes.py） | 整轮验证的**墙钟预算**（秒），默认 **0 = 不限**。到期后不再提交新节点、跳过尚未开始的内核，已测结果照常落盘；要补跑剩下的内核用 `--cores <内核>`。用途只有一个：在平台强杀之前自己优雅收尾、给发布留时间。**它不是测试量上限**——每内核测多少由候选数与窗口决定，不要用拍脑袋的数字去压 |
 | `--test-url <url>` | 验证目标地址，默认 `https://gstatic.com/generate_204`（**裸域 HTTPS**，见下方「探测地址为什么用裸域」） |
 | `--no-mirror-check` | 跳过开头的通道探活（省 10s，但会退化成"每文件都去撞死镜像"） |
 | `FREE_NODES_MIRRORS`（环境变量） | 覆盖 raw 镜像候选池（逗号分隔），设为空字符串可禁用镜像。默认 11 个候选，实际只用探活通过的 |
@@ -312,6 +313,13 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --check-kernels
    - `config`：配置生成出来了但被内核校验拒绝（参数不符）→ 同上
    - `tls` / `auth` / `refused` / `reset` / `timeout`：内核日志与客户端异常文本都指向节点侧 → 计入不可达
    - 网络类失败自动复测 `--retry`（默认 1）次，两次都失败才定案
+5. **增量落盘（抗强杀）**：每个内核测完立刻写一次 `available_<core>.*`、`Docs/summary.*`、
+   仓库质量与 `nodes/pool/pool_state.json`。平台对单次运行有 **90 分钟硬上限**
+   （超时消息 `[CANCELLED] Run timed out`，见 known-issues 第 31/36 条），
+   被强杀时**已完成的内核不会白跑**，也不会出现「一个内核是新数字、其余是旧数字」的混合状态。
+   想主动在强杀前收尾（例如给发布留 10 分钟），加 `--time-budget <秒>`：到期不再提交新节点、
+   跳过未开始的内核，`summary.md` 会标「本轮未跑完（墙钟预算到期主动收尾，不是失败）」，
+   下次用 `--cores <剩余内核>` 补跑即可。**默认 0 = 不限，不要用固定测试量去硬压**
 
 判定口径与每类原因的原文证据见 `Docs/protocol.md` 第 4 节；`Docs/summary.md` 会给出
 「不支持 / 配置错误 / 不可达」三列与「失败原因分布」表——成片 `config` 是转换器有 Bug，
