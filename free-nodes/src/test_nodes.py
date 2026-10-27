@@ -909,7 +909,8 @@ def write_core_outputs(core, results, out_dir):
 
 
 def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
-                  pool_notes=None, repo_stats=None, budget_skipped=None):
+                  pool_notes=None, repo_stats=None, budget_skipped=None,
+                  resume_skipped=None, ran_cores=None):
     """写 Docs/summary.md（按日期倒序累积的小节）+ Docs/summary.json（最新一次快照）。"""
     if not args.no_full_test:
         policy_line = (f"- 测试策略：全量——候选 ≤ {args.full_below} 个全部测试；"
@@ -950,18 +951,23 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                      f"{dead} | {rt} | `{lay.NODES_DIR}/{lay.AVAIL_FILE[lay.canon(core)]}` |")
 
     # 墙钟预算收尾的说明：这**不是失败**，是主动让路给平台硬上限
-    partial_cores = [_core for _core, _st in stats.items() if _st and _st.get("partial")]
-    if budget_skipped or partial_cores:
+    # 只报「本窗口真的跑过」的内核：合并进来的前窗口结果不该被当成这轮的截断
+    _ran = set(ran_cores) if ran_cores else None
+    partial_cores = [_core for _core, _st in stats.items()
+                     if _st and _st.get("partial") and (_ran is None or _core in _ran)]
+    if budget_skipped or partial_cores or resume_skipped:
         notes = []
         if budget_skipped:
             notes.append(f"未开始：{'、'.join(budget_skipped)}")
+        if resume_skipped:
+            notes.append(f"本日候选已测完、本次跳过：{'、'.join(resume_skipped)}")
         # 变量名不能叫 c：本模块顶层 `import collect_nodes as c`，函数内再绑 c 会把
         # 下方仓库质量表里的 c.quality_score 变成「字符串没有该属性」（踩过，2026-10-27）
         for _pc in partial_cores:
             notes.append(f"中途截断：{_pc}（{stats[_pc]['tested']}/{stats[_pc].get('sampled', '?')}）")
-        lines += ["", "> **本轮未跑完**（墙钟预算到期主动收尾，不是失败）："
+        lines += ["", "> **本轮未跑完**（墙钟预算到期主动收尾或分窗口续跑，不是失败）："
                   + "；".join(notes) + "。已测结果全部有效且已落盘，"
-                  "未测部分下次运行会用 `--cores` 指定内核补跑。"]
+                  "剩余部分下次运行用 `--cores` + `--resume-tested` 接着测。"]
 
     # 失败原因分布：用来判断「测不过」到底是节点死了还是我们配错了
     detail_rows = []
@@ -1041,6 +1047,7 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                        "cap": st.get("cap"),
                        "sampled": st.get("sampled"),
                        "partial": st.get("partial", False),
+                       "policy": st.get("policy"),
                        "file": lay.AVAIL_FILE[lay.canon(core)],
                        "nodes": [{"host": r["host"], "port": r["port"], "proto": r["proto"],
                                   "latency": r["latency"], "repo": r.get("repo", "")}
@@ -1054,6 +1061,92 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                                                       round(v["latency_sum"] / v["latency_n"]) if v["latency_n"] else None)}
                        for k, v in repo_stats.items()}, f, ensure_ascii=False, indent=1)
     return path
+
+
+# ------------------------------------------------- 多窗口续跑 / 汇总累积
+
+def load_tested_state(path, date_str):
+    """当日已测记录：{date, cores: {core: ["host:port", ...]}}。
+
+    日期不符视为空——每天采集新节点，进度不该跨天继承。读坏了也当空，
+    宁可多测一遍，也不能因为状态文件损坏把候选全跳过。
+    """
+    state = {"date": date_str, "cores": {}}
+    try:
+        with open(path, encoding="utf-8") as f:
+            d = json.load(f)
+    except FileNotFoundError:
+        return state
+    except Exception as exc:
+        print(f"[warn] 已测记录读取失败（按空处理）：{exc}", file=sys.stderr)
+        return state
+    if not isinstance(d, dict) or d.get("date") != date_str:
+        return state
+    cores = d.get("cores")
+    if isinstance(cores, dict):
+        state["cores"] = {k: v for k, v in cores.items() if isinstance(v, list)}
+    return state
+
+
+def save_tested_state(path, state):
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False)
+    except Exception as exc:
+        # 写不进去只影响下次续跑，不该中断验证
+        print(f"[warn] 已测记录写入失败：{exc}", file=sys.stderr)
+
+
+def load_prev_cores(path, date_str):
+    """同一天前几个窗口已写入的 summary.json 内核快照。
+
+    分窗口运行时每个窗口只测一部分内核，若直接覆盖 summary.json，
+    先跑完的内核会从汇总里消失（自检会当成没验证）。所以同日期要累积。
+    """
+    try:
+        with open(path, encoding="utf-8") as f:
+            d = json.load(f)
+    except Exception:
+        return {}
+    if not isinstance(d, dict) or d.get("date") != date_str:
+        return {}
+    cores = d.get("cores")
+    return cores if isinstance(cores, dict) else {}
+
+
+def prev_stat_to_stats(st):
+    """把 summary.json 里的快照还原成 write_summary 认识的内部结构。"""
+    if not isinstance(st, dict):
+        return None
+    d = dict(st)
+    d["results"] = [{"host": n.get("host"), "port": n.get("port"), "proto": n.get("proto"),
+                     "latency": n.get("latency"), "repo": n.get("repo", "")}
+                    for n in (st.get("nodes") or []) if isinstance(n, dict)]
+    d["config_err"] = st.get("config_error", 0)
+    d["tested"] = st.get("tested", 0) or 0
+    d["ok"] = st.get("ok", 0) or 0
+    return d
+
+
+def prev_ok_results(prev_cores, core, nodes):
+    """把前面窗口写进 summary 的可用节点还原成结果条目。
+
+    summary 只存 host/port/proto/latency/repo，不存 uri；这里用本次载入的
+    节点清单按 host:port 反查 uri，供写订阅文件用。查不到就丢弃（宁可少一条，
+    也不能写出残缺的配置）。
+    """
+    st = (prev_cores or {}).get(core) or {}
+    uri_map = {f"{n['host']}:{n['port']}": n["uri"] for n in nodes}
+    out = []
+    for n in st.get("nodes") or []:
+        if not isinstance(n, dict):
+            continue
+        uri = uri_map.get(f"{n.get('host')}:{n.get('port')}")
+        if not uri:
+            continue
+        out.append({"host": n["host"], "port": n["port"], "proto": n.get("proto"),
+                    "latency": n.get("latency"), "repo": n.get("repo", ""), "uri": uri})
+    return out
 
 
 # ---------------------------------------------------------------- 主流程
@@ -1106,6 +1199,9 @@ def main():
     ap.add_argument("--pool-max", type=int, default=node_pool.DEFAULT_MAX, help="单内核池上限")
     ap.add_argument("--no-pool", action="store_true", help="不读写可用节点池")
     ap.add_argument("--date", default=None, help="日期标记 YYYY-MM-DD（默认今天）")
+    ap.add_argument("--resume-tested", action="store_true",
+                    help="多窗口续跑：跳过本日已测过的节点、只测下一批候选，"
+                         "并把本次已测记录写进 nodes/tested_state.json")
     args = ap.parse_args()
 
     t0 = time.time()
@@ -1163,6 +1259,32 @@ def main():
     deadline = t0 + args.time_budget if args.time_budget > 0 else None
     args._deadline = deadline
     budget_skipped = []
+    resume_skipped = []
+    ran_cores = []
+    # 本日已测进度：**一律记录**（每个窗口都写，下个窗口才有的可续）；
+    # 但「跳过已测 / 并回旧可用」只在显式 --resume-tested 时生效，不改变默认取样行为
+    resume = args.resume_tested
+    tested_state_path = lay.tested_state_path(root)
+    tested_state = load_tested_state(tested_state_path, date_str)
+    if resume:
+        done_cores = {k: len(v) for k, v in tested_state["cores"].items() if v}
+        if done_cores:
+            print(f"[info] 续跑模式：本日已测记录 {done_cores}"
+                  f"（{os.path.basename(tested_state_path)}）")
+    # 分窗口运行时（22:00/23:45/01:30 各一次），每个窗口只测一部分内核。
+    # 汇总必须累积同一天前面窗口的结果，否则先跑完的内核会从 summary.json 里消失
+    prev_cores = load_prev_cores(lay.summary_json_path(out_dir), date_str)
+
+    def _merge_prev():
+        added = []
+        for _core, _st in prev_cores.items():
+            if _core in stats:
+                continue
+            _ps = prev_stat_to_stats(_st)
+            if _ps is not None:
+                stats[_core] = _ps
+                added.append(_core)
+        return added
     if deadline:
         print(f"[info] 时间预算 {args.time_budget}s（{time.strftime('%H:%M:%S', time.localtime(deadline))} 到点收尾）")
 
@@ -1231,6 +1353,23 @@ def main():
             print(f"[info] {core}：候选 {len(ordered)} 个超过全量阈值 {args.full_below}，"
                   f"按排序截取前 {len(sampled)} 个测试")
 
+        # 续跑（--resume-tested）：跳过本日已测过的节点，接着测排序里的下一批候选。
+        # 不加这个的话，第二个窗口会从排序头部重测一遍，把 90 分钟全花在重复劳动上
+        if resume:
+            done = set(tested_state["cores"].get(core) or [])
+            if done:
+                before = len(sampled)
+                kept = [n for n in sampled if f"{n['host']}:{n['port']}" not in done]
+                if kept:
+                    sampled = kept
+                    print(f"[info] {core}：续跑跳过本日已测 {before - len(kept)} 个，"
+                          f"本轮测试 {len(kept)} 个")
+                else:
+                    print(f"[info] {core}：本日候选已全部测过（{before} 个），"
+                          f"跳过该内核（available 文件保持不变）")
+                    resume_skipped.append(core)
+                    continue
+
         # 池内节点复测：前几天验证通过、今天新鲜列表里没有的，捞回来再试一次
         pool = node_pool.load(pool_state, core) if pool_state else {"nodes": []}
         pool_added = pool_updated = pool_dropped = 0
@@ -1247,6 +1386,7 @@ def main():
         if results is None:
             stats[core] = None
             continue
+        ran_cores.append(core)
 
         # ── 自适应扩量（仅旧模式 --no-full-test）：可用数不足就继续往后追加测试 ──
         # 免费节点失效快，固定取样常常只捞到个位数可用节点。只要可用数还不到
@@ -1292,7 +1432,18 @@ def main():
         if esc_rounds and len(results) >= args.min_available:
             print(f"[info] {core}：扩量达标——累计测试 {total_tested} 个，可用 {len(results)} 个")
 
-        # 同一 server:port 只保留一条（池复测与今日取样可能重叠）
+        # 续跑（--resume-tested）：把「本日前面窗口已验证可用」的节点并回来。
+        # 否则第二个窗口只测到排序尾部的差节点，会把 available 文件覆盖成更少甚至 0 条
+        # （实测踩过：第二轮测 96 个全不可用，20 个可用节点被冲掉）
+        win_tested, win_ok = len(tested), len(results)
+        prev_ok_added = 0
+        if resume:
+            prev_ok = prev_ok_results(prev_cores, core, nodes)
+            if prev_ok:
+                results.extend(prev_ok)
+                prev_ok_added = len(prev_ok)
+
+        # 同一 server:port 只保留一条（池复测、今日取样、前面窗口的结果可能重叠）
         uniq, seen_keys = [], set()
         for r in sorted(results, key=lambda x: x.get("latency") or 99999):
             k = f"{r['host']}:{r['port']}"
@@ -1301,6 +1452,17 @@ def main():
             seen_keys.add(k)
             uniq.append(r)
         results = uniq
+        if prev_ok_added:
+            print(f"[info] {core}：并入本日前面窗口已可用 {prev_ok_added} 个"
+                  f"→ 本日累计可用 {len(results)} 个")
+
+        # 进度落盘（无条件）：本窗口测过哪些节点必须留住，否则下个窗口会从排序头部重测
+        keyset = set(tested_state["cores"].get(core) or [])
+        keyset.update(f"{t['host']}:{t['port']}" for t in tested)
+        tested_state["cores"][core] = sorted(keyset)
+        save_tested_state(tested_state_path, tested_state)
+        print(f"[info] {core}：本日已测记录累计 {len(keyset)} 个"
+              f"（{os.path.basename(tested_state_path)}）")
 
         # 仓库可用率：本次实测（含失败）按来源仓库汇总，作为质量考核依据
         for t in tested:
@@ -1322,7 +1484,12 @@ def main():
         for t in tested:
             if not t["ok"]:
                 reasons[t.get("reason") or "unknown"] = reasons.get(t.get("reason") or "unknown", 0) + 1
-        stats[core] = {"tested": len(tested), "ok": len(results), "results": results,
+        # 续跑模式下「测试量」按本日累计算（前面窗口 + 本窗口去重后），
+        # 否则汇总里的可用率会把本窗口的小分母配上本日大分子
+        cum_tested = len(tested)
+        if resume:
+            cum_tested = len(tested_state["cores"].get(core) or []) or cum_tested
+        stats[core] = {"tested": cum_tested, "ok": len(results), "results": results,
                        "rounds": 1 + esc_rounds, "min_available": args.min_available,
                        "cand": len(cand), "exhausted": cursor >= len(ordered),
                        "cap": cap, "sampled": len(sampled),
@@ -1331,8 +1498,9 @@ def main():
                        "unsupported": reasons.get("unsupported", 0),
                        "config_err": reasons.get("config", 0),
                        "reasons": reasons}
-        # 只有「过完能力预筛、配置合法、网络层仍失败」的才算真不可达
-        unreachable = len(tested) - len(results) - reasons.get("unsupported", 0) \
+        # 只有「过完能力预筛、配置合法、网络层仍失败」的才算真不可达。
+        # 用本窗口的数字算：results 里含前面窗口并回来的节点，直接相减会出负数
+        unreachable = win_tested - win_ok - reasons.get("unsupported", 0) \
             - reasons.get("config", 0)
         print(f"[info] {core} 可用清单已写入 {outs['path']}（{outs['count']} 个节点）；"
               f"判定不可达 {unreachable} 个（已扣除不支持/配置错误）")
@@ -1352,9 +1520,11 @@ def main():
         # 增量落盘：每个内核一结束就把汇总、仓库质量、共享池状态写一次。
         # 万一这轮被平台强杀，已完成的内核不会白跑，也不会留下
         # 「一个内核是新结果、其余是旧结果但 summary 还是旧数字」的混合状态
+        _merge_prev()
         write_summary(out_dir, stats, args, date_str, len(nodes), len(alive),
                       time.time() - t0, pool_notes=pool_notes,
-                      repo_stats=repo_stats, budget_skipped=budget_skipped)
+                      repo_stats=repo_stats, budget_skipped=budget_skipped,
+                      resume_skipped=resume_skipped, ran_cores=ran_cores)
         if pool_state is not None:
             node_pool.save_state(pool_root, pool_state, date_str)
 
@@ -1374,10 +1544,12 @@ def main():
         except Exception as e:  # noqa: BLE001
             print(f"[warn] 仓库质量写入失败: {e}", file=sys.stderr)
 
+    _merge_prev()
     summary = write_summary(out_dir, stats, args, date_str, len(nodes), len(alive),
                             time.time() - t0,
                             pool_notes=(pool_notes if pool_state is not None else None),
-                            repo_stats=repo_stats, budget_skipped=budget_skipped)
+                            repo_stats=repo_stats, budget_skipped=budget_skipped,
+                            resume_skipped=resume_skipped, ran_cores=ran_cores)
     print(f"[done] 汇总报告：{summary}")
     for core, st in stats.items():
         if st:

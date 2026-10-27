@@ -91,7 +91,8 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 | `--test-limit N` | [旧模式] 每个内核**单轮**验证的节点数（初始取样量，也是扩量时每轮的追加量），默认 200 |
 | `--test-min-available N` | [旧模式] **自适应扩量阈值**：某内核可用数低于该值就继续往后追加测试，默认 10；0=关闭扩量 |
 | `--test-limit-cap N` | [旧模式] 单内核累计验证上限，默认 0=自动（`--test-limit` 的 5 倍，且不低于 `--test-min-available` 的 10 倍） |
-| `--time-budget N`（test_nodes.py） | 整轮验证的**墙钟预算**（秒），默认 **0 = 不限**。到期后不再提交新节点、跳过尚未开始的内核，已测结果照常落盘；要补跑剩下的内核用 `--cores <内核>`。用途只有一个：在平台强杀之前自己优雅收尾、给发布留时间。**它不是测试量上限**——每内核测多少由候选数与窗口决定，不要用拍脑袋的数字去压 |
+| `--time-budget N`（test_nodes.py） | 整轮验证的**墙钟预算**（秒），默认 **0 = 不限**。到期后不再提交新节点、跳过尚未开始的内核，已测结果照常落盘；要补跑剩下的内核用 `--cores <内核>` + `--resume-tested`。用途只有一个：在平台强杀之前自己优雅收尾、给发布留时间。**它不是测试量上限**——每内核测多少由候选数与窗口决定，不要用拍脑袋的数字去压 |
+| `--resume-tested`（test_nodes.py） | **多窗口续跑**（默认关）。开了就：① 跳过本日已测过的节点，只测排序里的下一批候选；② 把本次已测记录写进 `nodes/tested_state.json`（按日期自动重置）；③ 把前面窗口已验证可用的节点并回 available 文件与汇总。**只有第二/第三个窗口才开**——单窗口开了等于多写一个状态文件，无副作用但不必要 |
 | `--test-url <url>` | 验证目标地址，默认 `https://gstatic.com/generate_204`（**裸域 HTTPS**，见下方「探测地址为什么用裸域」） |
 | `--no-mirror-check` | 跳过开头的通道探活（省 10s，但会退化成"每文件都去撞死镜像"） |
 | `FREE_NODES_MIRRORS`（环境变量） | 覆盖 raw 镜像候选池（逗号分隔），设为空字符串可禁用镜像。默认 11 个候选，实际只用探活通过的 |
@@ -320,6 +321,20 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --check-kernels
    想主动在强杀前收尾（例如给发布留 10 分钟），加 `--time-budget <秒>`：到期不再提交新节点、
    跳过未开始的内核，`summary.md` 会标「本轮未跑完（墙钟预算到期主动收尾，不是失败）」，
    下次用 `--cores <剩余内核>` 补跑即可。**默认 0 = 不限，不要用固定测试量去硬压**
+6. **多窗口续跑（`--resume-tested`）**：一个 90 分钟窗口往往测不完四个内核，
+   就把一夜拆成 2~3 个窗口接力（22:00 采集+验证 / 23:45 续跑 / 01:30 再续跑）。
+   加了这个开关后：
+   - 读 `nodes/tested_state.json`，**跳过本日已测过的 host:port**，只测排序里的下一批候选
+     ——否则下个窗口会从排序头部重测一遍，90 分钟全花在重复劳动上；
+   - 每测完一个内核就把已测清单写回该文件（按日期自动重置，跨天不继承）；
+   - **把前面窗口已验证可用的节点并回** `available_<core>.*` 与汇总，
+     否则后续窗口只测到排序尾部的差节点，会把可用清单覆盖成更少甚至 0 条
+     （实测踩过：第二轮测 96 个全不可用，第一轮的 20 个可用节点被冲掉）；
+   - `summary.json` 里该内核的 `tested` 记的是**本日累计**（各窗口去重后），
+     `partial` 只针对本窗口，所以「测了多少」看 `tested`、「这轮跑完没」看 `partial` +
+     `summary.md` 的「本轮未跑完」说明。
+   多个窗口写同一份汇总时，`Docs/summary.*` 会**累积同一天前面窗口的内核结果**，
+   不会因为本窗口只测了 clash 就把 v2ray 从汇总里抹掉。
 
 判定口径与每类原因的原文证据见 `Docs/protocol.md` 第 4 节；`Docs/summary.md` 会给出
 「不支持 / 配置错误 / 不可达」三列与「失败原因分布」表——成片 `config` 是转换器有 Bug，
@@ -333,6 +348,10 @@ python <free-nodes>/src/test_nodes.py --input <输出根目录> --cores v2ray,xr
 
 # 采集时自动验证（默认即全量测试，可显式传阈值）
 python <free-nodes>/src/collect_nodes.py --out <输出根目录> --test --test-full-below 3000 --test-max-test 3000
+
+# 第二个/第三个窗口续跑：接着测本日还没测过的候选，并累积当日已可用的节点
+python <free-nodes>/src/test_nodes.py --input <输出根目录> --cores v2ray,xray,clash,singbox \
+  --resume-tested --time-budget 4800 --date <采集当天日期>
 ```
 
 #### 探测地址为什么用裸域 HTTPS

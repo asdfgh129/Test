@@ -93,6 +93,7 @@ POOL_FILE = {"v2ray": "pool_v2ray.txt", "xray": "pool_xray.txt",
 URIS_FILE = "nodes_uris.txt"       # 内部主清单
 META_FILE = "nodes_meta.json"
 STATE_FILE = "pool_state.json"
+TESTED_STATE_FILE = "tested_state.json"   # 当日已测节点记录（多窗口续跑用，按日期自动重置）
 
 # 子目录：根目录只留 README.md 与 CHANGELOGS.md（2026-10-25 布局调整）
 NODES_DIR = "nodes"                # 生成的节点信息（订阅/可用清单/主清单/元数据/池）
@@ -456,6 +457,11 @@ def pool_path(root, core):
 
 def pool_state_path(root):
     return os.path.join(pool_dir(root), STATE_FILE)
+
+
+def tested_state_path(root):
+    """当日已测记录放在 nodes/ 下（与池目录分开：池是跨天资产，这份是当天进度）。"""
+    return os.path.join(root, NODES_DIR, TESTED_STATE_FILE)
 
 
 def uris_path(root):
