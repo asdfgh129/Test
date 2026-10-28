@@ -907,11 +907,30 @@ def extract_readme_links(text, repo_full, today=None, tolerance=0):
     return found[:MAX_README_LINKS], stats
 
 
+def err_tag(e):
+    """把下载异常压成短标签，供日志区分「404 路径失效」与「超时/网络」两类失败。
+
+    之前所有失败都只记「下载失败」，自检报出的「下载通道 critical」因此无法归因：
+    实采一次抽样复现（2026-10-28）证明多数是 README 声明的路径已 404，
+    与镜像/通道无关，属上游改动。
+    """
+    if isinstance(e, urllib.error.HTTPError):
+        return f"HTTP {e.code}"
+    reason = getattr(e, "reason", None)
+    if isinstance(e, (TimeoutError, socket.timeout)) or \
+            isinstance(reason, (TimeoutError, socket.timeout)) or "timed out" in str(e):
+        return "超时"
+    return type(e).__name__
+
+
 def fetch_url_text(url, timeout=15):
     """下载任意 URL 的文本；raw.githubusercontent 走镜像回退链。
 
     超时比仓库内文件短——README 里声明的外部订阅地址不可控，
     一个慢站就能拖住整个仓库的采集。
+
+    404/410 立刻放弃剩余镜像：镜像只是转发原站内容，原站 404 时其余镜像必然也是 404，
+    逐个试完只是白等（实测一条死链走完镜像链要 23~37 秒，14 条就是 5 分钟以上）。
     """
     attempts = [url]
     if "raw.githubusercontent.com/" in url:
@@ -921,6 +940,10 @@ def fetch_url_text(url, timeout=15):
     for u in attempts:
         try:
             return http_get_text(u, retries=0, timeout=timeout)
+        except urllib.error.HTTPError as e:
+            last_err = e
+            if e.code in (404, 410):
+                break
         except Exception as e:  # noqa: BLE001
             last_err = e
     raise last_err
@@ -964,23 +987,26 @@ def collect_from_readme(repo_full, items, token, records, budget=90, workers=4,
             else:
                 t = fetch_url_text(target)
                 src = f"{repo_full}/README→{urllib.parse.urlsplit(target).netloc}"
-        except Exception:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001
             with lock:
-                detail.append((label, None))
+                # 带上失败原因标签：404（上游路径失效）与超时/网络要分开看，
+                # 前者属上游改动、无需修，后者才可能是镜像/通道问题
+                detail.append((label, None, err_tag(e)))
             return None
         local = []
         n = extract_text_into(t, src, repo_full, local, os.path.splitext(target)[1],
                               kernel=link.get("kernel"))
         with lock:
             records.extend(local)
-            detail.append((label, n))
+            detail.append((label, n, ""))
         return n
 
     total = 0
     with ThreadPoolExecutor(max_workers=max(1, min(workers, len(links)))) as ex:
         for n in ex.map(work, links):
             total += n or 0
-    detail_lines = [f"{lab}:{'下载失败' if n is None else n}" for lab, n in detail]
+    detail_lines = [f"{lab}:{f'下载失败({tag})' if n is None else n}"
+                    for lab, n, tag in detail]
     return len(links), total, detail_lines, lstats
 
 
@@ -3011,12 +3037,14 @@ def core_quota_remaining(token=None):
 def collect_from_repos(repo_list, token, records, processed, contrib, counters, date_str,
                        per_repo_files=3, phase_log=None, seed_data=None,
                        readme_stats=None, skip_bad=True, reorder=True, deadline=None,
-                       readme_only=False, date_tolerance=0):
+                       readme_only=False, date_tolerance=0, fail_reasons=None):
     """对一批仓库执行「读 README → 列文件 → 下载 → 提取」。
 
     contrib 记录各仓库贡献的原始节点数；phase_log 记录 (仓库名, 节点数) 供采集日志使用
     （None=无候选文件，-1=下载失败，-2=历史质量过低跳过，-3=README 无订阅链接，
      -4=README 有链接但日期不是当天而跳过）。
+    fail_reasons 记录 -1 的失败原因标签（HTTP 404 / 超时 / 网络异常名），
+    没有它自检只能看到「下载失败」，无法区分上游路径失效与通道故障。
     seed_data 提供仓库质量分：quality 高的仓库先采，历史 0 可用的直接跳过。
     readme_only=True 时只跟随 README 里声明的订阅链接，不再按文件名猜目录（命中率更集中，
     也避免在无效仓库上白耗配额）；README 里没有链接的仓库直接跳过。
@@ -3072,8 +3100,16 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
                     seen = "、".join(sorted(lstats.get("dates_seen") or {})[-3:])
                     kind, why = -4, (f"README 声明的 {lstats['date_skipped']} 个链接"
                                      f"日期不是当天（见到的日期：{seen or '未知'}），按策略跳过")
-                elif links and detail and all(str(d).endswith("下载失败") for d in detail):
-                    kind, why = -1, f"README 声明的 {links} 个链接全部下载失败"
+                elif links and detail and all("下载失败" in str(d) for d in detail):
+                    # 注意：失败明细现在带原因后缀（`clash:下载失败(HTTP 404)`），
+                    # 判断必须用 in 而不是 endswith，否则全部失败会被误归类成「解析不到节点」
+                    tags = [m.group(1) for m in
+                            (re.search(r"下载失败\(([^)]+)\)", str(d)) for d in detail) if m]
+                    tag = max(set(tags), key=tags.count) if tags else ""
+                    if tag and fail_reasons is not None:
+                        fail_reasons[full] = tag
+                    kind, why = -1, (f"README 声明的 {links} 个链接全部下载失败"
+                                     + (f"（{tag}）" if tag else ""))
                 elif links:
                     kind, why = 0, f"README 声明的 {links} 个链接已下载但解析不到节点"
                 else:
@@ -3133,7 +3169,7 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
 
 def append_collection_log(log_file, date_str, phases, raw_count, uniq, dropped,
                           scheme_cnt, out_dir, target_reached, note="", readme_stats=None,
-                          quality_hint=None):
+                          quality_hint=None, tcp_dead=0, fail_reasons=None):
     """追加一条采集日志：日期、执行阶段、仓库明细（名称+节点数）、结果汇总。
 
     readme_stats 记录各仓库 README 声明的订阅链接与从中拿到的节点数（README 是很多仓库
@@ -3155,7 +3191,9 @@ def append_collection_log(log_file, date_str, phases, raw_count, uniq, dropped,
             if got is None:
                 lines.append(f"  - {full}：无可候选文件")
             elif got == -1:
-                lines.append(f"  - {full}：下载失败")
+                # 带原因后缀供自检归因；health_check 的解析是前缀匹配，后缀向后兼容
+                reason = (fail_reasons or {}).get(full)
+                lines.append(f"  - {full}：下载失败" + (f"（{reason}）" if reason else ""))
             elif got == -2:
                 lines.append(f"  - {full}：质量过低跳过")
             elif got == -3:
@@ -3173,8 +3211,14 @@ def append_collection_log(log_file, date_str, phases, raw_count, uniq, dropped,
             for repo, st in sorted(hit.items(), key=lambda kv: -kv[1].get("nodes", 0)):
                 lines.append(f"  - {repo}：声明 {st['links']} 个 → 提取 {st.get('nodes', 0)} 条")
     scheme_str = " / ".join(f"{k} {v}" for k, v in scheme_cnt.items()) or "无"
+    lines.append(f"- 结果：原始 {raw_count} 条 → 两级去重后 {uniq} 条（剔除 {dropped}）")
+    if tcp_dead:
+        # 单独记一行：自检的趋势对比要按「采集总量（过滤前）」比较，
+        # 而 2026-10-28 之前的日志 uniq 本身就是过滤前的量（当时不过滤），
+        # 不区分就会把「过滤后 2744 条」和「历史 13021 条」直接比，天天报降幅 >60%
+        lines.append(f"- TCP 过滤：丢弃不可达 {tcp_dead} 条（采集总量 {uniq + tcp_dead} 条），"
+                     f"保留 {uniq} 条")
     lines += [
-        f"- 结果：原始 {raw_count} 条 → 两级去重后 {uniq} 条（剔除 {dropped}）",
         f"- 协议分布：{scheme_str}",
         f"- 输出目录：`{out_dir}`（nodes/ 下 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / "
         f"singbox_sub.json / nodes_uris.txt；Docs/ 下 report.md）",
@@ -3343,6 +3387,7 @@ def main():
     log_file = lay.collection_log_path(out_dir)
     report_repos = []
     phases = {}  # 阶段名 → [(仓库名, 节点数或 None)]，供采集日志使用
+    fail_reasons = {}  # 仓库名 → 失败原因标签（HTTP 404 / 超时 / …），写进采集日志供自检归因
 
     def uniq_count():
         return len(dedupe(list(records))[0])
@@ -3360,7 +3405,8 @@ def main():
                            date_str, phase_log=phases[name], seed_data=seed_data,
                            readme_stats=readme_stats, skip_bad=not args.keep_bad_repos,
                            deadline=deadline, readme_only=args.readme_only,
-                           date_tolerance=args.readme_date_tolerance)
+                           date_tolerance=args.readme_date_tolerance,
+                           fail_reasons=fail_reasons)
 
     # 质量快照（写入日志，便于追溯「为什么先采这个仓库」）
     scored = [r for r in seed_data.get("repos", []) if r.get("tested")]
@@ -3446,6 +3492,7 @@ def main():
 
     # ── TCP 延迟探测 + 升序排序（低延迟节点落在订阅最前面）──
     tcp_stats = {}
+    dead_dropped = 0
     if not args.no_latency_sort:
         reachable, probed = probe_latencies(uniq, args.latency_workers, args.latency_timeout)
         tcp_stats = {"workers": args.latency_workers, "timeout": args.latency_timeout,
@@ -3464,8 +3511,9 @@ def main():
             before = len(uniq)
             kept = [r for r in uniq if r.get("tcp_latency") is not None]
             if kept:
+                dead_dropped = before - len(kept)
                 uniq = kept
-                print(f"[info] 已丢弃 TCP 不可达节点 {before - len(uniq)} 条，"
+                print(f"[info] 已丢弃 TCP 不可达节点 {dead_dropped} 条，"
                       f"保留 {len(uniq)} 条（只发布 TCP 可达节点；--keep-dead 可关闭）")
             else:
                 print("[warn] TCP 探测结果全部不可达（网络异常？），"
@@ -3487,7 +3535,8 @@ def main():
                           quality_order=quality_hint)
     append_collection_log(log_file, date_str, phases, raw_count, len(uniq), dropped,
                           scheme_cnt, os.path.abspath(out_dir), len(uniq) >= args.target_nodes,
-                          readme_stats=readme_stats, quality_hint=quality_hint)
+                          readme_stats=readme_stats, quality_hint=quality_hint,
+                          tcp_dead=dead_dropped, fail_reasons=fail_reasons)
     print(f"[info] 采集日志已追加：{log_file}")
     print(f"[done] 报告：{report}")
     if meta_path:

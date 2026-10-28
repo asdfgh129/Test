@@ -99,6 +99,7 @@
   - wenxig/dongtai-sub：声明 3 个 → 提取 0 条
   - sakha1370/OpenRay：声明 10 个 → 提取 0 条
 - 结果：原始 29937 条 → 两级去重后 2744 条（剔除 23006）
+- TCP 过滤：丢弃不可达 4187 条（采集总量 6931 条），保留 2744 条
 - 协议分布：vless 3775 / vmess 2066 / trojan 670 / ss 334 / hysteria2 84 / tuic 2
 - 输出目录：`C:\Users\bemin\WorkBuddy\Test\free-nodes`（nodes/ 下 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / singbox_sub.json / nodes_uris.txt；Docs/ 下 report.md）
 

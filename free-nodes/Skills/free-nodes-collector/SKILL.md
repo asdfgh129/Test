@@ -95,6 +95,13 @@ python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的�
 
 只改有证据支撑的地方。成片 `config` 是转换器有 Bug，成片 `unsupported` 是能力矩阵要对齐内核，都不代表节点质量下降。
 
+**失败归因与两个数字口径（2026-10-28 起）**：
+- 采集日志里 `- repo：下载失败（HTTP 404）` = 上游路径失效（镜像只做转发，原站 404 时全链都是 404），
+  **不是通道问题**，不用去调镜像/超时；不带括号的是本次改动之前的老日志，要自己抓样本确认。
+  自检对「失败仓库里 ≥60% 是 404/410」自动降级为 warn（known-issues 第 42 条）
+- 看节点量一律看采集日志的 `- TCP 过滤：丢弃不可达 N 条（采集总量 M 条），保留 K 条`：
+  **M 才是和历史可比的口径**，K 是发布量（10-28 起默认只发 TCP 可达节点），拿 K 跟历史比会误判减产
+
 ## 参考文件索引（按需读，不要一次全读）
 
 细节都在 `Skills/free-nodes-collector/references/` 下。**一律按下面的绝对路径读**，不要按 `references/xxx.md` 相对路径解析——宿主技能目录 `~/.workbuddy/skills/free-nodes-collector/` 里的 `references` 软链指向 `Docs/`，相对解析会找错地方。只在遇到对应场景时读：

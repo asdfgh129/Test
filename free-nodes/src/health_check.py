@@ -102,7 +102,7 @@ def parse_collection_log(path):
     """解析 collection_logs.md，返回条目列表（按时间正序）。
 
     每条：{"header", "phases": {阶段名: {"declared", "repos": [(name, got, kind)]}},
-           "raw", "uniq", "dropped"}
+           "raw", "uniq", "dropped", "tcp_dead"}
     kind: ok / zero（下载成功但无节点）/ fail（下载失败）/ nofile（无可候选文件）
     """
     if not os.path.exists(path):
@@ -114,7 +114,8 @@ def parse_collection_log(path):
             if cur:
                 entries.append(cur)
             cur = {"header": line[3:].strip(), "phases": {}, "raw": None,
-                   "uniq": None, "dropped": None, "readme_repos": 0, "readme_nodes": 0}
+                   "uniq": None, "dropped": None, "tcp_dead": 0, "fail_reasons": {},
+                   "readme_repos": 0, "readme_nodes": 0}
             phase = None
             continue
         if cur is None:
@@ -132,6 +133,10 @@ def parse_collection_log(path):
                 kind = "ok" if got > 0 else "zero"
             elif m.group(3) == "下载失败":
                 got, kind = -1, "fail"
+                # `  - repo：下载失败（HTTP 404）` —— 原因标签用于区分上游路径失效与通道故障
+                rm = re.match(r"^\s+- .+?：下载失败（([^）]*)）", line)
+                if rm and rm.group(1).strip():
+                    cur["fail_reasons"][name] = rm.group(1).strip()
             elif m.group(3) == "无可候选文件":
                 got, kind = None, "nofile"
             else:
@@ -147,6 +152,11 @@ def parse_collection_log(path):
         m = re.search(r"原始 (\d+) 条.*?去重后 (\d+) 条（剔除 (\d+)）", line)
         if m:
             cur["raw"], cur["uniq"], cur["dropped"] = int(m.group(1)), int(m.group(2)), int(m.group(3))
+            continue
+        # `- TCP 过滤：丢弃不可达 4187 条（采集总量 6931 条），保留 2744 条`
+        m = re.match(r"^- TCP 过滤：丢弃不可达 (\d+) 条", line.strip())
+        if m:
+            cur["tcp_dead"] = int(m.group(1))
     if cur:
         entries.append(cur)
     return entries
@@ -288,10 +298,22 @@ def check_repo_yield(find, entries):
     else:
         find("critical", "仓库效率", detail, "产出率极低，按下面细分的失败类型逐项处理")
 
+    # 失败原因可区分时按原因定级：HTTP 404/410 是上游改了分支/文件名，
+    # 镜像只做转发、再多也是 404，属上游维护问题，报「通道故障」会把人带偏
+    reasons = last.get("fail_reasons") or {}
+    perm = sum(1 for v in reasons.values() if "404" in v or "410" in v)
     if total and fail / total > 0.25:
-        find("critical", "下载通道", f"{fail}/{total} 个仓库的文件下载失败（{fail/total:.0%}）",
-             "查 stderr 的 `下载失败` 行确认是超时还是截断；大文件（>2MB）应优先走 jsDelivr 并放宽超时，"
-             "镜像列表用 health_check 的镜像探测结果剔除失效项")
+        if fail and perm >= fail * 0.6:
+            find("warn", "下载通道",
+                 f"{fail}/{total} 个仓库下载失败（{fail/total:.0%}），其中 {perm} 个是上游路径失效"
+                 f"（HTTP 404/410）",
+                 "404 说明 README 声明的路径已不存在，镜像再多也无解：属上游维护问题，不用改通道；"
+                 "同一仓库连续 404 会被仓库质量分自动降权")
+        else:
+            find("critical", "下载通道", f"{fail}/{total} 个仓库的文件下载失败（{fail/total:.0%}）",
+                 "查 stderr 的 `下载失败` 行确认是超时还是截断（现在带原因标签）；"
+                 "大文件（>2MB）应优先走 jsDelivr 并放宽超时，"
+                 "镜像列表用 health_check 的镜像探测结果剔除失效项")
     if total and zero / total > 0.35:
         find("critical", "解析能力", f"{zero}/{total} 个仓库下载成功但解析不出节点",
              "多半是格式没覆盖：检查 clash YAML（块状 proxies 需迷你解析器）、"
@@ -497,14 +519,32 @@ def check_quota(find):
         find("warn", "配额", f"无法查询 GitHub 配额：{str(e)[:80]}", "检查网络；配额查询失败也意味着 API 调用可能不稳")
 
 
+def collected_of(entry):
+    """一次运行的「采集总量」（TCP 过滤前）。
+
+    2026-10-28 起采集侧默认丢弃 TCP 不可达节点，日志里的 uniq 变成过滤后的发布量；
+    而更早的日志 uniq 本身就是过滤前总量（当时不过滤）。趋势对比必须统一到采集总量，
+    否则「过滤后 2744」直接对「历史 13021」比，天天误报降幅 >60%。
+    """
+    if not entry or entry.get("uniq") is None:
+        return 0
+    return entry["uniq"] + (entry.get("tcp_dead") or 0)
+
+
 def check_trend(find, entries, today_uniq):
     latest = latest_entry(entries)
-    hist = [e["uniq"] for e in entries if e is not latest and e.get("uniq")]
-    if len(hist) < 2 or not today_uniq:
+    hist = [collected_of(e) for e in entries if e is not latest]
+    hist = [v for v in hist if v]
+    if len(hist) < 2:
+        return
+    today = collected_of(latest) or today_uniq or 0
+    if not today:
         return
     med = statistics.median(hist[-7:])
-    if med and today_uniq < med * 0.4:
-        find("warn", "趋势", f"今日 {today_uniq} 条，近几日中位数 {med:.0f} 条（降幅 >60%）",
+    if med and today < med * 0.4:
+        tail = (f"（TCP 过滤后发布 {today_uniq} 条）"
+                if latest and (latest.get("tcp_dead") or 0) else "")
+        find("warn", "趋势", f"今日采集 {today} 条{tail}，近几日中位数 {med:.0f} 条（降幅 >60%）",
              "对比近几日 collection_log，确认是上游整体减产还是本次采集/解析退化")
 
 
@@ -779,6 +819,7 @@ def main():
         "输出目录": root,
         "目标节点": args.target_nodes,
         "去重后节点": n,
+        "采集总量(过滤前)": collected_of(latest_entry(entries)) or "-",
         "各内核订阅": "、".join(f"{k} {v if v is not None else '-'}"
                           for k, v in (per_core or {}).items()) or "-",
         "协议分布": " / ".join(f"{k} {v}" for k, v in sorted((stats or {}).get("schemes", {}).items())) or "-",

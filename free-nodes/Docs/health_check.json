@@ -1,11 +1,12 @@
 {
- "generated_at": "2026-10-28T23:21:39+08:00",
+ "generated_at": "2026-10-28T23:54:02+08:00",
  "date": "2026-10-28",
- "verdict": "发现 1 个严重问题、6 个告警，需要处理",
+ "verdict": "发现 1 个严重问题、5 个告警，需要处理",
  "metrics": {
   "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
   "目标节点": 1000,
   "去重后节点": 2744,
+  "采集总量(过滤前)": 6931,
   "各内核订阅": "v2ray 2531、xray 2193、clash 2704、singbox 2611",
   "协议分布": "hysteria2 2 / ss 91 / trojan 444 / vless 1480 / vmess 727",
   "TCP 可达": "2744/2744（中位数 232ms）",
@@ -23,7 +24,7 @@
    "level": "critical",
    "area": "下载通道",
    "title": "14/51 个仓库的文件下载失败（27%）",
-   "action": "查 stderr 的 `下载失败` 行确认是超时还是截断；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项"
+   "action": "查 stderr 的 `下载失败` 行确认是超时还是截断（现在带原因标签）；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项"
   },
   {
    "level": "warn",
@@ -51,14 +52,8 @@
   },
   {
    "level": "warn",
-   "area": "趋势",
-   "title": "今日 2744 条，近几日中位数 13021 条（降幅 >60%）",
-   "action": "对比近几日 collection_log，确认是上游整体减产还是本次采集/解析退化"
-  },
-  {
-   "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
+   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   },
   {
@@ -127,7 +122,7 @@
    "level": "critical",
    "area": "下载通道",
    "title": "14/51 个仓库的文件下载失败（27%）",
-   "action": "查 stderr 的 `下载失败` 行确认是超时还是截断；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项"
+   "action": "查 stderr 的 `下载失败` 行确认是超时还是截断（现在带原因标签）；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项"
   },
   {
    "level": "warn",
@@ -155,14 +150,8 @@
   },
   {
    "level": "warn",
-   "area": "趋势",
-   "title": "今日 2744 条，近几日中位数 13021 条（降幅 >60%）",
-   "action": "对比近几日 collection_log，确认是上游整体减产还是本次采集/解析退化"
-  },
-  {
-   "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
+   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   }
  ]

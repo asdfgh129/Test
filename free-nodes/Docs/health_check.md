@@ -2,9 +2,9 @@
 
 > 按日期倒序累积，最新一次运行在最上面
 
-## 2026-10-28 23:21
+## 2026-10-28 23:54
 
-**结论：发现 1 个严重问题、6 个告警，需要处理**
+**结论：发现 1 个严重问题、5 个告警，需要处理**
 
 ### 关键指标
 
@@ -13,6 +13,7 @@
 | 输出目录 | C:\Users\bemin\WorkBuddy\Test\free-nodes |
 | 目标节点 | 1000 |
 | 去重后节点 | 2744 |
+| 采集总量(过滤前) | 6931 |
 | 各内核订阅 | v2ray 2531、xray 2193、clash 2704、singbox 2611 |
 | 协议分布 | hysteria2 2 / ss 91 / trojan 444 / vless 1480 / vmess 727 |
 | TCP 可达 | 2744/2744（中位数 232ms） |
@@ -24,7 +25,7 @@
 
 #### 🔴 [下载通道] 14/51 个仓库的文件下载失败（27%）
 
-- 建议动作：查 stderr 的 `下载失败` 行确认是超时还是截断；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项
+- 建议动作：查 stderr 的 `下载失败` 行确认是超时还是截断（现在带原因标签）；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项
 
 #### 🟡 [仓库效率] 扫描仓库 51 个：有产出 10、解析不到节点 14、下载失败 14、无候选文件 0、README 无订阅链接跳过 13（产出率 26%，按有尝试采集的 38 个计算）
 
@@ -42,11 +43,7 @@
 
 - 建议动作：同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
 
-#### 🟡 [趋势] 今日 2744 条，近几日中位数 13021 条（降幅 >60%）
-
-- 建议动作：对比近几日 collection_log，确认是上游整体减产还是本次采集/解析退化
-
-#### 🟡 [下载通道] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/
+#### 🟡 [下载通道] 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/
 
 - 建议动作：失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
 
@@ -83,13 +80,12 @@
 
 ### 待办清单（需人工或自动修复）
 
-1. [critical] 14/51 个仓库的文件下载失败（27%） → 查 stderr 的 `下载失败` 行确认是超时还是截断；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项
+1. [critical] 14/51 个仓库的文件下载失败（27%） → 查 stderr 的 `下载失败` 行确认是超时还是截断（现在带原因标签）；大文件（>2MB）应优先走 jsDelivr 并放宽超时，镜像列表用 health_check 的镜像探测结果剔除失效项
 2. [warn] 扫描仓库 51 个：有产出 10、解析不到节点 14、下载失败 14、无候选文件 0、README 无订阅链接跳过 13（产出率 26%，按有尝试采集的 38 个计算） → 产出率偏低，优先按下面细分的失败类型逐项处理
 3. [warn] 1 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 1050 条, 解析不到节点) → 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理
 4. [warn] v2ray 可用率异常低 1.3%（27/2118） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
 5. [warn] singbox 可用率异常低 2.9%（72/2509） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
-6. [warn] 今日 2744 条，近几日中位数 13021 条（降幅 >60%） → 对比近几日 collection_log，确认是上游整体减产还是本次采集/解析退化
-7. [warn] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ → 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+6. [warn] 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ → 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
 
 ## 2026-10-27 02:49
 
