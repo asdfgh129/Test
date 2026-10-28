@@ -5,8 +5,10 @@ test_nodes.py — 分代理内核的节点可用性验证
 
 流程：
 1. 读取根目录 nodes/nodes_uris.txt（内部主清单），并按各内核订阅文件里**实际发布**的节点做交集
-2. 第一级：TCP 连通性预筛（高并发，快速剔除服务器都不通的节点）
-3. 第二级：按代理内核逐一实测
+2. 第一级：TCP 连通性预筛（高并发，快速剔除服务器都不通的节点）。
+   采集阶段已默认丢弃 TCP 不可达节点（collect_nodes.py 的 --keep-dead 可关闭），
+   这里再筛一次是为了兜住「采集到验证之间新死的」节点
+3. 第二级：按代理内核逐一实测（默认 3s 超时、24 并发；超时即判失败不再等）
    - v2ray   ：vmess / vless / trojan / ss / hysteria2（不支持 REALITY、不支持 vless flow）
    - xray    ：vmess / vless / trojan / ss / hysteria2（支持 REALITY / flow）
    - clash   ：vmess / vless / trojan / ss / ssr / hysteria2 / tuic（内核是 mihomo）
@@ -783,6 +785,9 @@ def test_one(core, uri, exe, allocator, test_url, test_timeout, startup_timeout,
     1. 能力不支持 / 配置被内核拒绝 → 原因标 unsupported / config，**不算不可达**；
     2. 请求失败 → 抓内核日志归类（tls / auth / refused / reset / timeout）；
     3. 网络类失败再复测一次（retry），两次都失败才判不可用，排除偶发抖动。
+       **但 HTTP 超时类不重试**：3s 都没应答，再等 3s 只会同样超时（实测拿昨天可用节点
+       做 12s 复测，28 个 3s 判失败的里只有 2 个变可用，都是 4~5s 的慢节点），
+       而每次重试要多花一个完整超时的墙钟，是夜里跑不完的主要成本之一。
     """
     core = lay.canon(core)
     last = (False, 0, "未测试", "unknown")
@@ -794,6 +799,8 @@ def test_one(core, uri, exe, allocator, test_url, test_timeout, startup_timeout,
         last = (ok, latency, note, reason)
         if reason in ("unsupported", "config"):
             break           # 结构性失败，重试没有意义
+        if reason == "timeout":
+            break           # 超时重试几乎必然再超时，纯烧时间（见上面 docstring）
         if attempt < retry:
             time.sleep(0.3)
     return last
@@ -924,10 +931,11 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
         policy_line = "- 测试策略：限量——只测初始取样（--no-escalate）"
     lines = [
         f"- 预筛：TCP 连通 {tcp_alive}/{tcp_total} 个节点",
-        f"- 测试地址：`{args.test_url}`，并发 {args.workers}",
+        f"- 测试地址：`{args.test_url}`，并发 {args.workers}，超时 {args.test_timeout}s（超时即判失败，不再等）",
         policy_line,
-        f"- 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；网络类失败复测 {args.retry} 次；"
-        "「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）",
+        f"- 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；"
+        + (f"网络类失败复测 {args.retry} 次；" if args.retry else "不复测（实测复测收益 1.7%）；")
+        + "「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）",
         f"- 总耗时：{elapsed/60:.1f} 分钟",
         "",
         "| 代理内核 | 测试数量 | 可用数量 | 可用率 | 不支持 | 配置错误 | 不可达 | 轮次 | 可用文件 |",
@@ -1054,6 +1062,9 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                                  for r in st["results"]],
                    }) for core, st in stats.items()}}, f, ensure_ascii=False, indent=1)
     if repo_stats:
+        # --out 与 --input 不同时（诊断/临时目录），目标 src/ 可能还不存在，
+        # 直接 open 会 FileNotFoundError 把整轮汇总写崩（实测踩过）
+        os.makedirs(os.path.dirname(lay.repo_quality_path(root)), exist_ok=True)
         with open(lay.repo_quality_path(root), "w", encoding="utf-8") as f:
             json.dump({k: {**v, "avail_rate": round(v["ok"] / v["tested"], 3) if v["tested"] else 0,
                            "avg_latency": round(v["latency_sum"] / v["latency_n"]) if v["latency_n"] else None,
@@ -1180,15 +1191,24 @@ def main():
                     help="把整轮墙钟预算按「尚未开始的内核数」均分（须配合 --time-budget）。"
                          "避免排在前面的内核吃满预算、后面的内核一个节点都没测，见 known-issues 第 38 条")
     ap.add_argument("--no-escalate", action="store_true", help="关闭自适应扩量，只测初始取样")
-    ap.add_argument("--workers", type=int, default=12, help="单内核并发测试数")
-    ap.add_argument("--tcp-workers", type=int, default=64, help="TCP 预筛并发数")
-    ap.add_argument("--tcp-timeout", type=float, default=2.0, help="TCP 预筛超时（秒）")
-    ap.add_argument("--test-timeout", type=float, default=12.0,
-                    help="HTTP 验证超时（秒）。探测地址是裸域 HTTPS，必须真出境，"
-                         "实测耗时 0.9~16.7s，8s 会误杀大量真实可用节点")
+    ap.add_argument("--workers", type=int, default=24,
+                    help="单内核并发测试数（默认 24）。实测同一批节点：12 并发 1.3 节点/s、"
+                         "24 并发 6.2 节点/s——瓶颈是网络等待不是 CPU，4 核机器也吃得下")
+    ap.add_argument("--tcp-workers", type=int, default=256,
+                    help="TCP 预筛并发数（默认 256）。这里是纯 TCP 握手、无进程开销，"
+                         "实测 64 并发跑 16620 个节点要 8 分钟，直接把 --time-budget 吃光")
+    ap.add_argument("--tcp-timeout", type=float, default=1.5,
+                    help="TCP 预筛超时（秒，默认 1.5，与采集阶段的延迟探测一致）")
+    ap.add_argument("--test-timeout", type=float, default=3.0,
+                    help="HTTP 验证超时（秒，默认 3.0）。实测昨天已验证可用的 80 个节点："
+                         "耗时 p50=1.39s / p90=1.87s / max=2.24s，3s 只误杀 2.5%%（2/80，"
+                         "都是 4~5s 才返回的慢节点）；而 12s 下 3s 判失败的 28 个里只有这 2 个变可用。"
+                         "超时就判失败、不再等——每个超时节点白等 12s 是夜间跑不完的主因")
     ap.add_argument("--startup-timeout", type=float, default=6.0, help="内核启动等待（秒）")
-    ap.add_argument("--retry", type=int, default=1,
-                    help="网络类失败后的复测次数（默认 1 次；两次都失败才判不可用）")
+    ap.add_argument("--retry", type=int, default=0,
+                    help="网络类失败后的复测次数（默认 0，不复测）。2026-10-28 实测：3s 判失败的"
+                         " 117 个节点里，放宽到 12s 重测只有 2 个变可用（1.7%%，且都是 4~5s 慢节点），"
+                         "而复测一次要多花一整个超时的墙钟、吞吐直接腰斩——不值")
     ap.add_argument("--test-url", default=DEFAULT_TEST_URL,
                     help=f"验证用测试地址（默认 {DEFAULT_TEST_URL}，HTTPS）")
     ap.add_argument("--seed-file", default=None,
@@ -1302,10 +1322,19 @@ def main():
             print(f"[warn] 未知内核 {core}，跳过", file=sys.stderr)
             continue
         if deadline and time.time() > deadline:
-            print(f"[warn] {core}：墙钟预算已用满，跳过该内核（已完成的内核照常落盘；"
-                  f"下次运行可用 --cores {core} 单独补跑）")
-            budget_skipped.append(core)
-            continue
+            if not ran_cores:
+                # 预筛 + 采样等准备阶段就把预算吃光时，若直接跳过全部内核，整晚产物为空。
+                # 至少保证跑一个内核（实测 16620 个节点、64 并发预筛要 8 分钟，
+                # 会吃掉 --time-budget 的大半——并发已提到 256，这里只是兜底）
+                deadline = time.time() + 180
+                args._deadline = deadline
+                print(f"[warn] 预算已被预筛等准备阶段耗尽，至少给 {core} 180s 跑一轮"
+                      f"（否则整晚没有新产物）")
+            else:
+                print(f"[warn] {core}：墙钟预算已用满，跳过该内核（已完成的内核照常落盘；"
+                      f"下次运行可用 --cores {core} 单独补跑）")
+                budget_skipped.append(core)
+                continue
         spec = CORES[core]
         # 先探测该内核当前的能力（如是否还接受 allowInsecure），避免生成无效配置
         detect_core_features(core, os.path.join(args.tools, spec["dir"], spec["exe"]))

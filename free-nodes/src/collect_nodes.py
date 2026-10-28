@@ -3225,7 +3225,8 @@ def main():
                     help="[限量模式] 自适应扩量阈值：某内核可用数低于该值就继续追加测试（默认 10，0=关闭）")
     ap.add_argument("--test-limit-cap", type=int, default=0,
                     help="[限量模式] 单内核累计验证上限，0=自动（--test-limit 的 5 倍）")
-    ap.add_argument("--test-workers", type=int, default=12, help="单内核并发验证数")
+    ap.add_argument("--test-workers", type=int, default=24,
+                    help="单内核并发验证数（默认 24，与 test_nodes.py 一致；实测 12 并发只有 1.3 节点/s）")
     ap.add_argument("--test-cores", default="v2ray,xray,clash,singbox",
                     help="要验证的代理内核（默认 v2ray,xray,clash,singbox；clash 即 mihomo 内核）")
     ap.add_argument("--no-mirror-check", action="store_true",
@@ -3240,8 +3241,11 @@ def main():
                     help="跳过 TCP 延迟探测与排序（省 1-2 分钟，但订阅不按延迟排序）")
     ap.add_argument("--latency-workers", type=int, default=128, help="延迟探测并发数")
     ap.add_argument("--latency-timeout", type=float, default=1.5, help="延迟探测超时（秒）")
+    ap.add_argument("--keep-dead", action="store_true",
+                    help="保留 TCP 不可达节点（排在订阅末尾）。**默认丢弃**：只发布 TCP 可达的节点，"
+                         "订阅体积与后续验证量都不再含死节点（2026-10-28 用户要求）")
     ap.add_argument("--drop-dead", action="store_true",
-                    help="丢弃 TCP 不可达节点（默认保留并排在订阅末尾）")
+                    help="（兼容保留；丢弃 TCP 不可达节点已是默认行为，传了也不报错）")
     ap.add_argument("--keep-nodes", type=int, default=0,
                     help="按延迟排序后只保留前 N 条（0 = 不截断）")
     ap.add_argument("--keep-bad-repos", action="store_true",
@@ -3452,10 +3456,20 @@ def main():
         if cf_n:
             print(f"[info] 其中 {cf_n} 条是 Cloudflare 前置节点：TCP 握手快但代理多不通，"
                   f"已整体排在真实节点之后（避免霸占订阅头部）")
-        if args.drop_dead:
+        # 只发布 TCP 可达节点（默认）：TCP 都不通的节点不可能成为可用代理，
+        # 留在订阅里只会把文件撑大（实测 16620 条里仅 6838 条可达），
+        # 还会让后续验证把一半时间花在必然失败的节点上（2026-10-28 用户要求）。
+        # 注意：--no-latency-sort 时没做过探测，tcp_latency 全是 None，此时绝不能过滤。
+        if not args.keep_dead and not args.no_latency_sort:
             before = len(uniq)
-            uniq = [r for r in uniq if r.get("tcp_latency") is not None]
-            print(f"[info] 已丢弃 TCP 不可达节点 {before - len(uniq)} 条，保留 {len(uniq)} 条")
+            kept = [r for r in uniq if r.get("tcp_latency") is not None]
+            if kept:
+                uniq = kept
+                print(f"[info] 已丢弃 TCP 不可达节点 {before - len(uniq)} 条，"
+                      f"保留 {len(uniq)} 条（只发布 TCP 可达节点；--keep-dead 可关闭）")
+            else:
+                print("[warn] TCP 探测结果全部不可达（网络异常？），"
+                      "保留全部节点写入，避免本轮产物为空", file=sys.stderr)
         if args.keep_nodes and len(uniq) > args.keep_nodes:
             print(f"[info] 按延迟排序后截断：{len(uniq)} → {args.keep_nodes} 条（只留低延迟节点）")
             uniq = uniq[:args.keep_nodes]

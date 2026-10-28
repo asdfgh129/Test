@@ -1,6 +1,6 @@
 ---
 name: free-nodes-collector
-description: 免费节点每日采集与自检技能。用于每天跟踪 GitHub 上 v2ray/xray/clash/sing-box 等免费节点项目的当日更新，只检索当天有更新的仓库，先读每个仓库的 README 跟随其声明的订阅链接，按「完整链接」+「服务器地址:端口」两级去重，按四内核各自支持的代理协议/传输层/加密方式分流成 4 个订阅文件（nodes/v2ray_sub.txt、nodes/xray_sub.txt、nodes/clash_sub.yaml、nodes/singbox_sub.json），做 TCP 延迟探测并按延迟升序输出；内置四代理内核（v2ray/xray/mihomo(clash)/sing-box）可用性实测（默认全量测试：候选 ≤3000 全测，超过只测排序前 3000 个）、按仓库统计节点可用率作为仓库质量考核依据（下次优先采高质量仓库、跳过长期 0 可用仓库）、每内核跨天累积的可用节点池、三级自适应扩量、内核版本与能力漂移检查、以及采集后的自动自检（health_check.py 输出待修复清单）。产物不分日期，按 nodes/Docs/src 三分层存放。当用户要求"收集今天的免费节点"、"更新节点订阅"、"采集 GitHub 免费节点"、"合并去重节点"、"检查采集是否有问题"或触发每日定时任务时使用本技能。
+description: 免费节点每日采集与自检技能。用于每天跟踪 GitHub 上 v2ray/xray/clash/sing-box 等免费节点项目的当日更新，只检索当天有更新的仓库，先读每个仓库的 README 跟随其声明的订阅链接，按「完整链接」+「服务器地址:端口」两级去重，按四内核各自支持的代理协议/传输层/加密方式分流成 4 个订阅文件（nodes/v2ray_sub.txt、nodes/xray_sub.txt、nodes/clash_sub.yaml、nodes/singbox_sub.json），做 TCP 延迟探测、**默认只发布 TCP 可达节点**（不可达的整条丢弃）并按延迟升序输出；内置四代理内核（v2ray/xray/mihomo(clash)/sing-box）可用性实测（默认全量测试：候选 ≤2500 全测，超过只测排序前 2500 个；单节点 3s 超时、24 并发、超时即判失败不复测）、按仓库统计节点可用率作为仓库质量考核依据（下次优先采高质量仓库、跳过长期 0 可用仓库）、每内核跨天累积的可用节点池、三级自适应扩量、内核版本与能力漂移检查、以及采集后的自动自检（health_check.py 输出待修复清单）。产物不分日期，按 nodes/Docs/src 三分层存放。当用户要求"收集今天的免费节点"、"更新节点订阅"、"采集 GitHub 免费节点"、"合并去重节点"、"检查采集是否有问题"或触发每日定时任务时使用本技能。
 agent_created: true
 ---
 
@@ -70,7 +70,8 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 | `--no-latency-sort` | 跳过 TCP 延迟探测与排序（省 1-2 分钟，但订阅不按延迟排序、也不写 nodes_meta.json） |
 | `--latency-workers N` | 延迟探测并发，默认 128 |
 | `--latency-timeout S` | 延迟探测超时（秒），默认 1.5；高延迟线路多时可放宽到 2.5 |
-| `--drop-dead` | 丢弃 TCP 不可达节点（默认保留，排在订阅末尾） |
+| `--drop-dead` | （兼容保留，已是默认行为）丢弃 TCP 不可达节点 |
+| `--keep-dead` | **保留** TCP 不可达节点（排在订阅末尾）。默认丢弃：只发布 TCP 可达节点 |
 | `--keep-nodes N` | 按延迟排序后只保留前 N 条（0 = 不截断）；想「只要精华」时设 1000-2000 |
 | `--keep-bad-repos` | 不跳过历史可用率为 0 的仓库（默认跳过以省配额） |
 | `--time-budget N` | 采集阶段时间预算（秒），默认 2400=40 分钟；0=不限。超预算停止扫描剩余仓库，已有结果照常输出 |
@@ -85,8 +86,8 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 | `--check-kernels` | 采集前在**同一进程**里先跑内核版本与能力检查，共用同一条自建代理通道（推荐：分步执行时通道无法跨进程存活，用它可避免重复搭建）。可配 `--check-kernels-update`（有新版本就升级）、`--check-kernels-skip-network`（只做本地能力指纹） |
 | `--test` | 采集完自动做四内核可用性验证 |
 | `--test-cores <list>` | 要验证的内核，默认 `v2ray,xray,clash,singbox` |
-| `--test-full-below N` | **全量测试阈值**（默认策略）：某内核候选数不超过 N 就**全部验证**，默认 3000 |
-| `--test-max-test N` | **全量测试上限**：候选数超过 `--test-full-below` 时，只验证排序前 N 个，默认 3000。排序 = 协议轮流交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序 |
+| `--test-full-below N` | **全量测试阈值**（默认策略）：某内核候选数不超过 N 就**全部验证**，默认 2500 |
+| `--test-max-test N` | **全量测试上限**：候选数超过 `--test-full-below` 时，只验证排序前 N 个，默认 2500。排序 = 协议轮流交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序 |
 | `--test-no-full-test` | 关闭全量测试，回到「`--test-limit` 初始取样 + 自适应扩量」旧模式 |
 | `--test-limit N` | [旧模式] 每个内核**单轮**验证的节点数（初始取样量，也是扩量时每轮的追加量），默认 200 |
 | `--test-min-available N` | [旧模式] **自适应扩量阈值**：某内核可用数低于该值就继续往后追加测试，默认 10；0=关闭扩量 |
@@ -195,8 +196,8 @@ python <free-nodes>/src/collect_nodes.py --out <工作区>/free-nodes
 
 1. `v2ray_sub.txt`、`clash.yaml`、`singbox.json` 统一按「可达 → 非 CF → 延迟」排序写入：真实低延迟节点在最前
 2. **Cloudflare 前置节点整体降权**：它们的 TCP 握手只有 10-40ms（就近接入 CF 边缘），但代理是否真通取决于回源配置，免费节点里大量是死的。若纯按延迟排，订阅头部会被这类节点霸占、实测可用率直接塌到 0（2026-10-24 实测：低延迟 707 条里 90% 是 CF，采样 200 个只通 0-3 个）。因此它们排在**真实可达节点之后、不可达节点之前**
-3. 不可达节点（`tcp_latency = null`）排在最后，默认保留（免费节点抖动大，明天可能就通了）
-4. 需要「只要精华」时用 `--keep-nodes 1500` 截断，或 `--drop-dead` 直接丢弃不可达
+3. **不可达节点（`tcp_latency = null`）默认整条丢弃**（2026-10-28 起，用户要求「只采集 TCP 测试可达的节点」）：TCP 都不通的节点不可能成为可用代理，留在订阅里只把文件撑大（实测 16620 条里仅 ~6800 条可达），还会让验证把一半时间花在必然失败的节点上。想保留（比如偶发抖动、明天就通）用 `--keep-dead`
+4. 需要「只要精华」时用 `--keep-nodes 1500` 截断
 5. 结果落盘 `nodes_meta.json`：延迟分桶统计（<100 / 100-300 / 300-800 / >800ms / 不可达）+ 每节点延迟、是否 CF 前置、来源仓库
 
 CF 网段清单在 `collect_nodes.CF_NET_CIDRS` 维护（官方 IPv4/IPv6 段）。验证取样同样遵循这条规则：先测真实节点，CF 只做补位。
@@ -307,14 +308,15 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --check-kernels
 
 ### 验证流程（TCP 预筛 + 全量实测 + 失败分层）
 
-1. **TCP 预筛**：高并发（默认 64）测试服务器 `host:port` 是否可连，2s 超时，快速剔除死节点
-2. **内核实测（默认全量策略）**：对每个内核，候选 ≤ `--full-below`（3000）个时**全部测试**；超过则只测排序前 `--max-test`（3000）个。排序 = 协议轮流交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序。每个节点生成该内核的临时配置 → 启动内核 → 通过本地 HTTP 代理访问 `https://gstatic.com/generate_204`（裸域 HTTPS，走代理访问，只有真正把流量送出境外才可能返回 204）→ 判定可用并记录延迟
+1. **TCP 预筛**：高并发（默认 256）测试服务器 `host:port` 是否可连，1.5s 超时，快速剔除死节点。
+   采集侧默认已只发布 TCP 可达节点（`--keep-dead` 可关闭），这里的预筛只是复核「采集到验证之间新死的」
+2. **内核实测（默认全量策略）**：对每个内核，候选 ≤ `--full-below`（2500）个时**全部测试**；超过则只测排序前 `--max-test`（2500）个。排序 = 协议轮流交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序。每个节点生成该内核的临时配置 → 启动内核 → 通过本地 HTTP 代理访问 `https://gstatic.com/generate_204`（裸域 HTTPS，走代理访问，只有真正把流量送出境外才可能返回 204）→ 判定可用并记录延迟。**超时 3s，超过即判失败不再等**（并发 24）
 3. **限量模式（可选）**：加 `--no-full-test` 回到旧行为——每内核单轮 `--limit`（200）个初始取样，可用数低于 `--min-available`（10）时顺着同一顺序追加，直到达标 / 候选耗尽 / 触到单内核上限 / 时间预算用完。测试策略与轮次写进 `Docs/summary.md` / `Docs/summary.json`
 4. **失败分层**（决定"测不过"到底赖谁）：
    - `unsupported`：能力预筛或转换器判定该内核无法表达（协议/传输/加密/插件/残缺公钥）→ **不发布、不计入不可达**
    - `config`：配置生成出来了但被内核校验拒绝（参数不符）→ 同上
    - `tls` / `auth` / `refused` / `reset` / `timeout`：内核日志与客户端异常文本都指向节点侧 → 计入不可达
-   - 网络类失败自动复测 `--retry`（默认 1）次，两次都失败才定案
+   - 超时类不重试；其他网络类失败按 `--retry`（**默认 0，不复测**）控制。实测 3s 判失败的 117 个节点里放宽到 12s 只有 2 个变可用（1.7%），而复测一次要多花一整个超时、吞吐腰斩
 5. **增量落盘（抗强杀）**：每个内核测完立刻写一次 `available_<core>.*`、`Docs/summary.*`、
    仓库质量与 `nodes/pool/pool_state.json`。平台对单次运行有 **90 分钟硬上限**
    （超时消息 `[CANCELLED] Run timed out`，见 known-issues 第 31/36 条），
@@ -342,7 +344,7 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --check-kernels
    xray/clash/singbox 当天零数据，available 文件停在前一天，见 known-issues 第 38 条）。
    开了这个开关就把剩余墙钟按「本内核 + 后面还没跑的内核数」均分，每个内核开始时重算，
    前面内核提前测完的空档自动被后面吸收。**只改时间分配，不改取样口径**
-   （`--full-below` / `--max-test` 仍是 3000）。取舍是「四个内核都有当天新数据」
+   （`--full-below` / `--max-test` 仍是 2500）。取舍是「四个内核都有当天新数据」
    优先于「一个内核测满」——免费节点的价值在新鲜度。
 
 判定口径与每类原因的原文证据见 `Docs/protocol.md` 第 4 节；`Docs/summary.md` 会给出
@@ -352,11 +354,11 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --check-kernels
 ### 运行方式
 
 ```bash
-# 单独验证已有采集结果（默认全量测试：候选 ≤3000 全测，超过测排序前 3000 个）
+# 单独验证已有采集结果（默认全量测试：候选 ≤2500 全测，超过测排序前 2500 个）
 python <free-nodes>/src/test_nodes.py --input <输出根目录> --cores v2ray,xray,clash,singbox
 
 # 采集时自动验证（默认即全量测试，可显式传阈值）
-python <free-nodes>/src/collect_nodes.py --out <输出根目录> --test --test-full-below 3000 --test-max-test 3000
+python <free-nodes>/src/collect_nodes.py --out <输出根目录> --test --test-full-below 2500 --test-max-test 2500
 
 # 第二个/第三个窗口续跑：接着测本日还没测过的候选，并累积当日已可用的节点
 # --fair-budget 把剩余墙钟按内核数均分，避免第一个内核吃光预算、后面内核零数据
@@ -383,11 +385,16 @@ python <free-nodes>/src/health_check.py --dir <输出根目录> --date <采集�
 **这不是"更严"而是"更真"**：实测 6 个节点对比，`www + 明文 http` 全部 6/6 通过；裸域 HTTPS 只有 4/6 通过，
 多出来的两个节点 HTTPS 表现是「连接被重置」「TLS 握手超时」——现在网页全走 HTTPS，它们实际不可用，属于假可用。
 
-代价是耗时更长（实测 0.9～16.7s，因为要真出境），所以 `--test-timeout` 默认 12s、并发默认 12（8s 会误杀大量真实可用节点）。
+代价是耗时更长（要真出境），所以超时要给足——但 2026-10-28 实测把口径定了下来：
+拿昨天**已验证可用**的 80 个节点复测，单节点 HTTP 耗时 p50=1.39s / p90=1.87s / max=2.24s，
+`--test-timeout 3` 只误杀 2.5%（2/80，都是 4~5s 才返回的慢节点）；而超时节点从 12s 降到 3s，
+单节点成本直接砍掉四分之三。所以 `--test-timeout` 默认 **3s**、并发默认 **24**
+（实测 12 并发 1.3 节点/s、24 并发 4.9~5.7 节点/s，瓶颈是网络等待不是 CPU）。
 需要换探测点时用 `--test-url`，维持「裸域域名的 HTTPS 地址」即可，例如 `--test-url https://www.google.com/generate_204`。
 
-`--retry`（默认 1）控制网络类失败的复测次数；`--startup-timeout`（默认 6s）是内核端口就绪等待，
+`--retry`（默认 **0**，不复测）控制网络类失败的复测次数；`--startup-timeout`（默认 6s）是内核端口就绪等待，
 超时不足以区分「内核启动慢」和「配置被拒」，所以失败时会再用内核实测校验命令复核一次。
+实测复测收益只有 1.7%（3s 判失败的 117 个里 12s 下仅 2 个变可用），代价是吞吐腰斩，不值得。
 
 ### 协议一致性回归（protocol_check.py）
 

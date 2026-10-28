@@ -1,120 +1,62 @@
-# 定时任务 prompt（新版，待粘贴到自动化 a3d7bb22-948c-4326-b344-f4c5535ddcd0）
+# 定时任务口径（三个窗口）
 
-> 2026-10-25 整理。旧版 prompt 引用已删除的旧技能目录、`tools/publish_free_nodes.py`、
-> `--test-limit 200` 旧测试参数与 `free-nodes\known_issue.md` 旧文件名，已不适用。
-> **2026-10-26 按用户要求修订三点**：① 内核检查这一步就先自建代理，并与采集合并到同一进程
-> （`--check-kernels`），代理只建一次；② 推送不再探测本机已有代理端口，直接用已验证节点自建；
-> ③ 两个近似的 known-issues 文件合并为一个 `Docs/known-issues.md`。
-> 本会话无 automation_update 工具，无法直接改定时任务，请把下面全文粘贴到
-> 自动化「任务指令」里（覆盖旧版）。定时任务名：每日免费节点采集（v2ray/xray/clash/singbox）。
+> **权威来源是自动化里配置的任务指令本身**（id 与 rrule 见下），本文件只是
+> 口径摘要 + 变更理由，方便排查「为什么这么配」。两者冲突时以自动化配置为准。
+> 最近一次同步：2026-10-28（超时/并发/采集口径调整，见 `known-issues.md` 第 40 条）。
+> 旧版这里贴的是「请手动粘贴到自动化」的完整 prompt 全文，2026-10-28 起改为摘要——
+> 因为 `automation_update` 工具已可用，prompt 可以直接改，正文再抄一份必然会滞后。
 
----
+| 窗口 | automation id | 时间 | 职责 |
+|---|---|---|---|
+| 第一窗口（主） | `a3d7bb22-948c-4326-b344-f4c5535ddcd0` | 每天 22:00 | 内核检查 → 采集 → 验证 → 自检 → 修复 → 推送 |
+| 第二窗口 | `a4c4ae9d-9d70-4395-b78d-63a0a131e62d` | 每天 23:45 | 只在还有 `partial=true` 内核时续跑验证 → 自检 → 推送 |
+| 第三窗口 | `19f100fb-c01d-4d31-9a1e-76444fbf51ad` | 每天 01:30 | 同第二窗口（跨零点，`--date` 必须取 `Docs/summary.json` 的采集日） |
 
-按照 `C:\Users\bemin\WorkBuddy\Test\free-nodes\Skills\free-nodes-collector\SKILL.md` 的流程执行每日任务：内核检查 → 采集 → 验证 → 自检 → 按需修复 → 提交推送到 GitHub。发现可修的问题要自己修掉。
+## 关键命令
 
-【固定路径（一律用绝对路径，禁止相对路径）】
-- Python：`C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe`
-- 技能定义（流程说明）：`C:\Users\bemin\WorkBuddy\Test\free-nodes\Skills\free-nodes-collector\SKILL.md`
-- 脚本目录（全链路唯一事实来源）：`C:\Users\bemin\WorkBuddy\Test\free-nodes\src`
-- 文档目录：`C:\Users\bemin\WorkBuddy\Test\free-nodes\Docs`
-- 工作区（git 仓库）：`C:\Users\bemin\WorkBuddy\Test`
-- 输出根目录：`C:\Users\bemin\WorkBuddy\Test\free-nodes`
-  **三分层布局，不带日期**——根目录只留 `README.md` + `CHANGELOGS.md`；节点产物在 `nodes/`；全部文档与日志在 `Docs/`；脚本在 `src/`。每次运行覆盖更新。不要创建、也不要保留任何 YYYY-MM-DD 子目录（过期节点没有意义）。
-  日期只用于 md 日志的日期小节和提交信息，用 `date +%F` 取，不要自己推算。
-- GitHub token：已存放在 `C:\Users\bemin\.workbuddy\data\free-nodes-tools\github_token.txt`（权限 600，**不在 git 仓库内**）。脚本会自动读取（优先级 `--token` > `GITHUB_TOKEN` 环境变量 > 该文件），**不需要也不要在命令行里传 token，更不要把 token 内容写进任何文件或汇报里**。带 token 后核心配额 5000/时、搜索 30/分。
+```bash
+# 采集（第一窗口）
+python <root>/src/collect_nodes.py --out <root> --readme-only --max-repos 80 \
+  --search-pages 2 --search-days 3 --readme-date-tolerance 0 --drop-dead --check-kernels
 
-【1. 内核版本与能力检查（并入第 2 步，代理只建一次）】
-这一步要访问 `api.github.com` 查最新 release。本机直连不通时**必须先自建代理**，脚本已内置（`--uplink auto`）。
-但本机执行环境会在命令结束时回收内核子进程，**独立跑第 1 步建好的通道活不到第 2 步**，
-所以请用第 2 步命令里的 `--check-kernels` 把两步合并在同一进程里跑——通道只建一次，采集直接接管。
-
-仅诊断时才单独跑（结束会自动关闭通道，无残留）：
-```
-C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\check_kernels.py --root C:\Users\bemin\WorkBuddy\Test\free-nodes
-```
-- 对比四个内核（v2ray/xray/clash(mihomo)/singbox）本地版本与 GitHub 最新 release，并用「协议 × 传输层 × 加密方式」样本配置跑内核原生校验，比对 accepted 集合与 `src/kernel_state.json` 基线
-- **必须带 token**（脚本自动读取凭据文件）：走免费节点代理时出口 IP 与他人共享，匿名配额（60/时）几乎必然 403
-- 退出码 0 = 无变化；1 = 有新版本或能力变化；2 = 检查失败
-- 退出码 1 时：读输出的差异，判断是否影响节点处理逻辑（典型：Xray 移除 allowInsecure、v2fly 换校验命令、某内核新增/移除协议）。需要升级就 `--update` 重新跑一次；改了 `layout.CAPS` 或节点转换逻辑要写进根 `CHANGELOGS.md` 与 `Docs/protocol.md` §7 并在汇报里说明
-- 退出码 2 不阻断后续采集，记进汇报
-
-【2. 采集（先跑内核检查，再采集；不带内联测试）】
-```
-C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\collect_nodes.py --out C:\Users\bemin\WorkBuddy\Test\free-nodes --readme-only --max-repos 80 --search-pages 2 --search-days 3 --readme-date-tolerance 0 --check-kernels
-```
-`--check-kernels` 会在同一进程里先做第 1 步的内核检查，**共用同一条自建代理通道**：
-日志里 `[uplink] 通道就绪` 只应出现一次；出现两次说明没复用到，记进汇报。
-
-关键行为（脚本已内置，不要绕过）：
-- **上行通道（--uplink auto，默认）**：**搜索仓库地址与下载节点数据之前，先用「已验证可用的节点」自建本地代理内核**（先接管已登记的通道；接管不到才按 clash → singbox → xray → v2ray 轮换自建，同一节点每个内核都试，探测 `https://github.com/` 或 `https://api.github.com/rate_limit` 拿到 2xx 才算通）；四内核都起不来才走直连；代理与直连都不通则等 10 分钟重试（`--uplink-wait 600 --uplink-retries 2`）。通道是全局 opener，所以**搜索 API 与节点下载都走它**，不只是下载。
-  唯一的例外是「池与近期清单都为空」时无候选节点可起代理（首次运行/池被清空），此时会打印 `[uplink] 没有可用候选节点` 并降级直连——这不是故障，采集结束后会重新填池。
-- **采集完毕会先停掉这个代理内核**，再进入下一步验证——不要干预，也不要让代理进程残留（验证阶段要独占本地端口，且要测「节点本身」）
-- **README-only 模式（--readme-only）**：只跟随 README 里声明的订阅链接，不再扫描仓库目录
-- **README 按内核分类**：README 里常按内核分列订阅（「Clash 订阅」「sing-box 配置」「V2ray 订阅」），脚本会识别链接归属内核，日志里打印 `[info] <core>: N 条节点来自 README 声明的 <core> 订阅，豁免能力预筛`。这类节点保证进对应内核文件，不受 `layout.CAPS` 保守预筛影响
-- **README 按日期筛选（--readme-date-tolerance 0，即只取当天）**：日更仓库常按日期分列订阅，两种写法都认——链接自带日期（`.../2026-10-25/all.txt`）或有日期小标题（`### 2026-10-25` 下的链接）。只取当天；因日期不符被跳过的记 `-4` 状态（与「未声明订阅链接」区分）。整份 README 没提日期的按通用订阅全部保留。
-  若某天发现大量仓库报 `-4`（例如凌晨跑、仓库当天还没更新），把该参数改为 `--readme-date-tolerance 1` 再跑一次即可，不要改脚本里的判定逻辑
-- **四内核能力分流**：`nodes/v2ray_sub.txt` / `nodes/xray_sub.txt`（base64）、`nodes/clash_sub.yaml`、`nodes/singbox_sub.json`。v2ray 与 xray 共用同一份源订阅，带 REALITY / VLESS flow / xhttp 的节点只进 xray
-- **仓库池已扩大**：26 组关键词 × 2 页（每页 100 条）× 三级扩量，`src/seed_repos.json` 上限 300 个仓库
-- 三级采集扩量（目标 1000 条）、镜像自动探活 + 下载四级回退、TCP 延迟升序排序、按来源仓库统计可用率并回写 `src/seed_repos.json`
-
-【2b. 验证（独立一步，全量策略）】
-```
-C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\test_nodes.py --input C:\Users\bemin\WorkBuddy\Test\free-nodes --cores v2ray,xray,clash,singbox --full-below 3000 --max-test 1000
-```
-- **注意参数名**：`test_nodes.py` 用 `--full-below/--max-test`（不带 `--test-` 前缀）；`--test-full-below/--test-max-test` 是 `collect_nodes.py` 的透传参数名，传给 test_nodes.py 会直接报错退出
-- 全量策略：每内核候选 ≤3000 全部实测；超过只测排序前 3000 个（排序 = 协议交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序）。`--limit/--min-available` 在全量模式下不生效，别传
-- **时间预算（重要，2026-10-26 实测校准）**：单次自动化运行有 90 分钟硬上限，
-  采集约 30~45 分钟、自检+发布约 7 分钟。**实测吞吐只有约 3~5 个可用节点/分钟**，
-  1000/核约需 13~20 分钟（v2ray 13min→32 个、xray 13min→37 个、clash 15min→43 个、
-  singbox 17min→46 个），四核连跑合计 **50~60 分钟**；
-  而 3000/核实测需要 **3~5 小时**，绝对跑不完（2026-10-25 那次就是这么超时的）。
-  所以默认 `--max-test 1000`；若启动验证时距运行开始已超过 35 分钟，
-  再降到 `--max-test 600`——**优先保证发布成功，不要为多测而超时**
-  （超时=整晚白干，池会跨天累积，不差这一晚）
-- 每内核一个跨天可用节点池（`nodes/pool/`）+ 一份共享 `nodes/pool/pool_state.json`，验证结束自动更新
-
-【3. 自检】
-```
-C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\health_check.py --dir C:\Users\bemin\WorkBuddy\Test\free-nodes
-```
-读 `Docs/health_check.md`（结论 + 分级发现 + 待办清单）与 `Docs/health_check.json`。
-注意：README-only 模式下「README 无订阅链接跳过」与「链接日期不是当天跳过」都是既定策略，不计入产出率分母，不要当故障。
-
-【4. 有问题就修】
-若自检给出 critical 或 warn，按 SKILL.md「修复闭环」执行：
-- 对照 `Docs/known-issues.md` 找同类症状（第 9/9b/9c/9d 条是 README 采集缺失、延迟排序失效、仓库质量不落库、节点池不增长；第 10 条是验证时被节点劫持重定向；第 11 条是探测地址无区分度；第 12 条是 github.com 被重置与上行通道；第 13 条是 README-only 的取舍；第 14 条是可用数低于 10 时的自适应扩量；第 15 条是产物文件膨胀；第 16 条是内核升级导致「所有节点全死」；第 17 条是迁移脚本通配符与新命名撞车；第 18 条是自检统计函数读错格式；第 19 条是仓库质量分倒挂；第 20 条是 md 日志去重粒度；第 21 条是 README 按内核/按日期筛选的误判边界；第 28 条是目录布局三分层；第 29 条是全量测试策略；第 30 条是目录整合与 junction 兼容层；第 31 条是 90 分钟超时与测试量降级规则；第 32 条是目录重构漏改函数名导致写池崩溃；第 33 条是池目录被拼成 nodes/nodes/pool 的静默错位）
-- 抓 1 个失败样本（仓库 / URI / 内核）单独复现，不要凭猜测改代码
-- 改脚本后用该样本做单点回归，确认修复生效；重跑受影响环节（解析类→重跑采集，验证类→重跑 `src\test_nodes.py`）
-- 再跑一次 `health_check.py`，确认 finding 消失且未引入新问题
-- 记录：`Docs/known-issues.md` 上方知识库按编号追加条目（现象/根因/修复/教训）；自检结果由 `health_check.py` 自动写进**同一个文件末尾的「自检发现」区块**（不再是单独文件）；根 `CHANGELOGS.md` 按日期倒序写小节（按「日期+标题」去重，同一天不同主题并存；同一天同一标题重跑会替换）；采集执行情况写 `Docs/collection_logs.md`；观察项写 `Docs/review_logs.md`
-- 行为有变化同步更新 `free-nodes/Skills/free-nodes-collector/SKILL.md`。**不要打包技能**（`package_skill.py` 已删除，`src/` 即唯一事实来源，提交推送即分发）；`__pycache__` 已被 .gitignore 全局忽略，无需清理
-只改有证据支撑的地方；推测性问题记入 `Docs/review_logs.md` 观察，不要凭感觉调参数。
-注意：每内核可用数个位数到十几个是免费节点的正常水位（探测地址要求真出境且走 HTTPS），不要为了数字好看换回 www.gstatic.com 或明文 http。
-若自检报「某内核可用数 < 10 但候选已全部测完（exhausted=true）」，说明验证侧已尽力，属源池质量问题：不要靠继续加大测试量硬凑，也不要放宽探测地址；只在汇报里说明，必要时补充高 star 种子仓库。
-
-【5. 提交并推送到 GitHub】
-```
-C:\Users\bemin\.workbuddy\binaries\python\versions\3.13.12\python.exe C:\Users\bemin\WorkBuddy\Test\free-nodes\src\publish_free_nodes.py --proxy auto --date <当天日期>
+# 验证（第一窗口；第二/三窗口同参再加 --resume-tested）
+python <root>/src/test_nodes.py --input <root> --cores v2ray,xray,clash,singbox \
+  --full-below 2500 --max-test 2500 --workers 24 --test-timeout 3 --retry 0 \
+  --fair-budget --time-budget <5400 - 已用秒数 - 600>
 ```
 
-脚本行为：
-- `--proxy auto`：**不探测本机已有代理端口**，直接用已验证节点自建本地代理推送（先尝试接管前面登记在案的通道；推不动就换节点、换内核继续试，`--uplink-rounds 5`），全部失败最后才直连重试。只认 `https://github.com/` 通不通（`api.github.com` 通不代表能 push）
-- 清理 free-nodes 下历史遗留的日期目录（三分层布局下 `nodes/`、`Docs/`、`src/`、`Skills/`、`.workbuddy/` 永久保留）
-- **只暂存 free-nodes 目录，并跳过凭据文件**；绝不提交工作区里的其他改动。仓库里还有用户的 C++ 项目（`Test\`、`Test.sln` 等），**严禁 git add -A / git add . / git commit -a**，也不要 reset / checkout / stash 用户的改动
-- 提交信息：`chore(free-nodes): 更新 <当天日期> 免费节点订阅`
-- 推送到 origin/master；失败会写 `.git\free-nodes-pending-push.json`，下次运行自动补推
-- 退出码：0 = 成功（含"无变更"）/ 1 = push 失败但本地提交已保留 / 2 = git 操作出错
+## 口径与依据（2026-10-28 实测）
 
-处理规则：
-- 退出码 1：不要再手敲 git push 反复重试，也不要改 git 配置/remote；汇报里说明「已本地提交，待推送」并附失败原因首行
-- 若 collect_nodes.py 退出码 3（本次 0 条且保留旧结果），跳过提交推送，只说明配额/网络情况
+| 旋钮 | 取值 | 依据 |
+|---|---|---|
+| 采集是否留死节点 | **不留**（`--keep-dead` 可关） | 16620 条里仅 ~6800 条 TCP 可达；留着只撑大订阅、让验证白跑一半 |
+| 单节点验证超时 | **3s** | 昨天可用节点复测：p50 1.39s / p90 1.87s / max 2.24s；3s 误杀 2.5%（2/80，4~5s 慢节点）；12s 会让 95% 的失败节点白等 |
+| 失败复测 | **不复测**（`--retry 0`），超时类代码层面永不重试 | 3s 判失败的 117 个里放宽到 12s 只 2 个变可用（1.7%），代价是吞吐腰斩 |
+| 单内核并发 | **24** | 12 并发 1.3 节点/s、24 并发 4.9~5.7 节点/s；瓶颈是网络等待不是 CPU（4 核机器够用） |
+| TCP 预筛 | **256 并发 / 1.5s** | 64 并发跑 16620 个要 ~8 分钟，会把 `--time-budget` 整块吃光、四个内核全被跳过 |
+| 每内核验证量 | **2500** | 4 核 × 2500 ≈ 29 分钟；加上采集 36 分钟 + 自检发布 7 分钟 ≈ 73 分钟，90 分钟红线内有余量 |
 
-【6. 汇报】
-说明：内核检查结果（有无新版本 / 能力指纹是否变化）、上行通道用的哪个内核+节点（若有）/ 是否降级直连 / `[uplink] 通道就绪` 出现几次（应只有一次）、搜索战果（多少个关键词×几页、去重后多少仓库、最终扫描多少个）、唯一节点数、协议分布、四内核分流数（`nodes/` 下各 sub 文件各多少条）、执行到第几级采集扩量、TCP 可达率与延迟中位数、README 采集战果（多少仓库声明了订阅链接 / 提取多少节点 / 多少个因「README 无链接」跳过 / 多少个因「日期不是当天」跳过 / 各内核各多少条节点）、仓库可用率 Top3 与最差 1 个、各内核可用数（v2ray / xray / clash / singbox，并注明共测多少个、候选是否已测完 exhausted）、各内核池内节点数、自检结论（几 critical 几 warn）、产物路径（`C:\Users\bemin\WorkBuddy\Test\free-nodes\nodes\` 下的 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / singbox_sub.json、available_* 四件、pool\ 下四个池文件 + pool_state.json；`Docs\` 下 report.md / summary.md+json / health_check.md+json / known-issues.md（知识库 + 末尾自检区块）/ collection_logs.md；根目录 CHANGELOGS.md）。
-再加上 GitHub 发布结果：提交 hash、推送是否成功（origin/master）、用的哪个代理内核+节点、失败原因与补推状态。
-若做了修复，按「发现了什么 → 根因 → 改了什么 → 验证结果」说明；无需修复则明确写「本次自检未发现问题」。
-若因配额导致节点数不足，说明配额余量（token 已配置，正常应为 5000/时），不要反复重试。
+时间账（第一窗口）：采集 ~36min + 预筛 ~1min + 验证 ~29min + 自检发布 ~7min ≈ 73min。
 
-【附注】
-- 定时任务自己的记忆文件（系统自动读写）在 `C:\Users\bemin\WorkBuddy\Test\.workbuddy\memory\automations\a3d7bb22-948c-4326-b344-f4c5535ddcd0\memory.md`；该路径经 junction 实际落在 `free-nodes\.workbuddy\memory\` 下，会随每晚发布提交入库，属预期
-- `~/.workbuddy/skills/free-nodes-collector/` 是指向仓库的 junction 兼容层（scripts→src、references→Docs），旧路径引用不会炸，但真实内容只在仓库里
+## 不变量（改参数时别碰）
+
+- **`--max-test` 不按「怕超时」降级**：要给余量就调 `--time-budget` / `--fair-budget`，
+  不要退回 1000/600 那种拍脑袋数字（2026-10-27 用户明确要求）
+- **`--fair-budget` 必加**：内核顺序跑，不加会让第一个内核吃光预算、后面三个一个都不测
+- **探测地址保持裸域 HTTPS**（`https://gstatic.com/generate_204`）：换成 `www.` 或明文 http
+  会测出「假可用」
+- **第二/三窗口只用 `--resume-tested`**：`--date` 取 `Docs/summary.json` 的 `date`，
+  第三窗口跨零点时尤其不能 `date +%F`
+- 平台对单次运行有 **90 分钟硬上限**（`[CANCELLED] Run timed out`），任务内部改不掉；
+  靠 `--time-budget` 让脚本自己收尾 + 增量落盘，不要指望「跑久一点」
+- 三个窗口开工前都先 `taskkill` 残留内核（被强杀的窗口会留下 xray/v2ray/mihomo/sing-box 占端口）
+
+## 历史沿革（避免重走弯路）
+
+- 10-25：上限 30000 是笔误，当晚纠正为 3000
+- 10-26：把「内核检查 + 采集」合并到同一进程（代理只建一次）
+- 10-27：删掉「超 35 分钟就降 `--max-test 600`」的自我设限；加 `--time-budget` /
+  `--fair-budget` / `--resume-tested`，靠三窗口接力
+- 10-28：定位到真正的成本是「12s 超时 × 复测 × 12 并发」，改为 3s / 不复测 / 24 并发；
+  采集侧只发 TCP 可达节点；验证量 3000 → 2500。预期第一窗口即可跑完四内核，
+  第二/三窗口退化为兜底
