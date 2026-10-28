@@ -1143,7 +1143,64 @@ TCP 可达 2744 条（前一日 6859）。自检报 critical「14/51 个仓库�
 **注意**：本次（10-28）的采集日志产生于改动之前，没有原因标签，所以当天的 critical 仍按原逻辑报出。
 抽样 2 例均为 HTTP 404，机制生效从下一次采集开始。
 
+**2026-10-28 第三窗口更正**：这里把 404 全归给「上游路径失效」是**错的**。
+复现 4 个仓库、8 条链接逐个打印 README 原文后确认：至少 `SoliSpirit/v2ray-configs`、
+`free18/v2ray`、`whoahaow/rjsxrd`、`cbusifabcap/daily_free_vpn` 的 404 是**我们自己拼错了路径**
+（`raw.githubusercontent.com/.../refs/heads/main/...` 被解析成 `heads/main/...`），
+详见第 43 条。真正的上游 404 只占少数（如 `ts-sf/fly` 走第三方镜像 `mirror.v2gh.com`）。
+
 **教训**：把异常吞成 `None` 等于放弃了归因能力——失败必须带原因，否则自检只能报「有个东西坏了」。
+**顺带**：拿到 404 标签也别急着归因上游，先看那条 URL 是不是自己拼出来的。
+
+## 43. GitHub 的 `refs/heads` 链接被解析成 `heads/main/...`：404 是我们自己拼出来的（2026-10-28 第三窗口）
+
+**现象**：第 42 条那批「下载失败」的仓库，改成带原因标签后本该一目了然，可抽 4 个重跑仍然是 404。
+打印 README 原文才发现链接长这样：
+
+```
+https://raw.githubusercontent.com/SoliSpirit/v2ray-configs/refs/heads/main/Protocols/ss.txt
+```
+
+**根因**：`_repo_path_from_url()` 的 raw 分支只按「`parts[2]` 是分支、`parts[3:]` 是路径」拆。
+GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<path>`** 形态（2026-10 起很普遍），
+多出来的两段被吞进路径，于是解析结果是：
+
+```
+('SoliSpirit/v2ray-configs', 'heads/main/Protocols/ss.txt', 'refs')   # rel 与 ref 全错
+```
+
+随后 `fetch_repo_file_text()` 按这个 rel 拼 raw 地址，必然 404——**失败是我们自己制造的**。
+`github.com/<o>/<r>/blob/refs/heads/...` 分支当时已经处理过 `refs`，唯独 raw 分支（以及
+`raw.gitmirror.com` / `raw.githack.com` 这类同形状的镜像）漏了。
+
+**改动**：
+
+- `collect_nodes.py` 新增 `_split_raw_parts(parts)`：`parts[2] == "refs"` 且 `parts[3]` 是
+  `heads`/`tags` 时，ref 取 `parts[4]`、路径从 `parts[5:]` 起；否则维持旧规则。
+  三条 raw 形状分支（raw.githubusercontent / gitmirror+kgithub / githack）统一走它
+- 顺带修日志归因：仓库总节点为 0 但**部分链接下载失败**时，原来记成
+  「0 条（文件已下载但解析不到节点）」——把排查方向带到「格式覆盖」。
+  现在记成「0 条（3/10 个链接下载失败，其余已下载但解析不到节点）」，
+  `health_check` 把它单列成 `pfail` 桶，不再算进「解析不到节点」，
+  也就不会误触发「解析能力 critical」
+
+**验证**：
+
+- 单测 8 例：refs/heads、refs/tags、普通 main、镜像前缀包裹、githack、github blob refs、
+  `github.com/…/raw/main/…`、jsDelivr 全部解析正确
+- 端到端（同一批仓库，改前 0 条）：`SoliSpirit/v2ray-configs`
+  5 个文件共 **10980 条**（ss 1399 / trojan 689 / vless 5134 / vmess 3850 / all_configs 10980）、
+  `free18/v2ray` 350、`whoahaow/rjsxrd` 2293、`cbusifabcap/daily_free_vpn` 7674、
+  `crashgfw/free-airport-nodes` 150
+- 合成日志回归：`0 条（3/10 个链接下载失败…）` 被 `health_check` 读成 `pfail`（不再是 `zero`），
+  `下载失败（HTTP 404）` 仍是 `fail`
+
+**影响**：至少 5 个仓库、约 2 万条候选节点此前每天被静默丢掉（相当于当日全量采集量的 3 倍），
+而且自检还把它报成「上游失效」——**最贵的一类 bug：不报错、有告警、告警方向还是错的**。
+生效从下一次采集开始（本窗口不采集）。
+
+**教训**：看到 404 先怀疑自己拼的 URL。判断「上游是否真的失效」的最短路径是把 README 原文打出来，
+比对一下我们请求的地址与它写的地址——差一段 `refs/heads`，一目了然。
 
 ## 自检发现（health_check 自动维护，按日期倒序）
 
@@ -1158,12 +1215,14 @@ TCP 可达 2744 条（前一日 6859）。自检报 critical「14/51 个仓库�
 | warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 1050 条, 解析不到节点) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
 | warn | 验证 | v2ray 可用率异常低 1.3%（27/2118） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | singbox 可用率异常低 2.9%（72/2509） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 待观察（info）：
 - [性能] 采集耗时 43 分钟
 
 ### 2026-10-27 自检发现
+
+
 
 
 
@@ -1193,6 +1252,8 @@ TCP 可达 2744 条（前一日 6859）。自检报 critical「14/51 个仓库�
 
 
 
+
+
 **结论：无严重问题，1 个告警可优化**
 
 | 级别 | 领域 | 问题 | 建议动作 |
@@ -1203,6 +1264,8 @@ TCP 可达 2744 条（前一日 6859）。自检报 critical「14/51 个仓库�
 - [性能] 采集耗时 36 分钟
 
 ### 2026-10-25 自检发现
+
+
 
 
 

@@ -714,6 +714,18 @@ def _strip_url_tail(url):
     return url.rstrip(".,;:，。；、)]}>'\"`*|")
 
 
+def _split_raw_parts(parts):
+    """`owner/repo/<ref|refs/heads/<ref>>/<path>` → (rel_path, ref)。
+
+    `parts[2] == "refs"` 时把 `refs/heads/main` 整段当成引用、路径从 parts[5:] 起；
+    否则 parts[2] 就是引用本身。GitHub 页面「复制链接」给出的就是 refs 形态
+    （2026-10 起 README 里非常普遍），不认它就会拼出 `heads/main/xxx` 这种必 404 的路径。
+    """
+    if len(parts) >= 5 and parts[2] == "refs" and parts[3] in ("heads", "tags"):
+        return "/".join(parts[5:]), parts[4]
+    return "/".join(parts[3:]), parts[2]
+
+
 def _repo_path_from_url(url, repo_full):
     """判断链接是否指向某个 GitHub 仓库内的文件，返回 (repo, rel_path, branch) 或 None。"""
     # 这里必须用**全量候选池**而不是 get_mirror_prefixes()：
@@ -729,12 +741,15 @@ def _repo_path_from_url(url, repo_full):
     host = u.netloc.lower().split(":")[0]
     parts = [p for p in urllib.parse.unquote(u.path).split("/") if p]
     if host == "raw.githubusercontent.com" and len(parts) >= 3:
-        return "/".join(parts[:2]), "/".join(parts[3:]), parts[2]
+        rel, ref = _split_raw_parts(parts)
+        return "/".join(parts[:2]), rel, ref
     if host in ("raw.gitmirror.com", "raw.kgithub.com") and len(parts) >= 4:
-        return "/".join(parts[:2]), "/".join(parts[3:]), parts[2]
+        rel, ref = _split_raw_parts(parts)
+        return "/".join(parts[:2]), rel, ref
     # raw.githack.com / rawcdn.githack.com：README 里常见的另一层 CDN
     if host in ("raw.githack.com", "rawcdn.githack.com") and len(parts) >= 4:
-        return "/".join(parts[:2]), "/".join(parts[3:]), parts[2]
+        rel, ref = _split_raw_parts(parts)
+        return "/".join(parts[:2]), rel, ref
     if host in ("github.com", "www.github.com") and len(parts) >= 5 and parts[2] in ("raw", "blob"):
         repo = "/".join(parts[:2])
         rest = parts[3:]
@@ -3037,7 +3052,8 @@ def core_quota_remaining(token=None):
 def collect_from_repos(repo_list, token, records, processed, contrib, counters, date_str,
                        per_repo_files=3, phase_log=None, seed_data=None,
                        readme_stats=None, skip_bad=True, reorder=True, deadline=None,
-                       readme_only=False, date_tolerance=0, fail_reasons=None):
+                       readme_only=False, date_tolerance=0, fail_reasons=None,
+                       partial_fails=None):
     """对一批仓库执行「读 README → 列文件 → 下载 → 提取」。
 
     contrib 记录各仓库贡献的原始节点数；phase_log 记录 (仓库名, 节点数) 供采集日志使用
@@ -3045,6 +3061,8 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
      -4=README 有链接但日期不是当天而跳过）。
     fail_reasons 记录 -1 的失败原因标签（HTTP 404 / 超时 / 网络异常名），
     没有它自检只能看到「下载失败」，无法区分上游路径失效与通道故障。
+    partial_fails 记录 -1 之外、**部分链接下载失败**的仓库（"3/10 链接下载失败"）：
+    这类仓库总节点数为 0，但原因是下载而不是解析，日志里标成「解析不到节点」会把排查带偏。
     seed_data 提供仓库质量分：quality 高的仓库先采，历史 0 可用的直接跳过。
     readme_only=True 时只跟随 README 里声明的订阅链接，不再按文件名猜目录（命中率更集中，
     也避免在无效仓库上白耗配额）；README 里没有链接的仓库直接跳过。
@@ -3111,7 +3129,13 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
                     kind, why = -1, (f"README 声明的 {links} 个链接全部下载失败"
                                      + (f"（{tag}）" if tag else ""))
                 elif links:
-                    kind, why = 0, f"README 声明的 {links} 个链接已下载但解析不到节点"
+                    nfail = sum(1 for d in detail if "下载失败" in str(d))
+                    if nfail and partial_fails is not None:
+                        partial_fails[full] = f"{nfail}/{len(detail)} 个链接下载失败"
+                    kind, why = 0, (
+                        f"README 声明的 {links} 个链接部分下载失败（{nfail}/{len(detail)}），"
+                        f"其余已下载但解析不到节点" if nfail
+                        else f"README 声明的 {links} 个链接已下载但解析不到节点")
                 else:
                     kind, why = -3, "README 未声明订阅链接"
                 if phase_log is not None:
@@ -3169,7 +3193,8 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
 
 def append_collection_log(log_file, date_str, phases, raw_count, uniq, dropped,
                           scheme_cnt, out_dir, target_reached, note="", readme_stats=None,
-                          quality_hint=None, tcp_dead=0, fail_reasons=None):
+                          quality_hint=None, tcp_dead=0, fail_reasons=None,
+                          partial_fails=None):
     """追加一条采集日志：日期、执行阶段、仓库明细（名称+节点数）、结果汇总。
 
     readme_stats 记录各仓库 README 声明的订阅链接与从中拿到的节点数（README 是很多仓库
@@ -3201,7 +3226,9 @@ def append_collection_log(log_file, date_str, phases, raw_count, uniq, dropped,
             elif got == -4:
                 lines.append(f"  - {full}：README 的链接日期不是当天，按策略跳过")
             elif got == 0:
-                lines.append(f"  - {full}：0 条（文件已下载但解析不到节点）")
+                pf = (partial_fails or {}).get(full)
+                lines.append(f"  - {full}：0 条（{pf}，其余已下载但解析不到节点）" if pf
+                             else f"  - {full}：0 条（文件已下载但解析不到节点）")
             else:
                 lines.append(f"  - {full}：{got} 条")
     if readme_stats:
@@ -3388,6 +3415,7 @@ def main():
     report_repos = []
     phases = {}  # 阶段名 → [(仓库名, 节点数或 None)]，供采集日志使用
     fail_reasons = {}  # 仓库名 → 失败原因标签（HTTP 404 / 超时 / …），写进采集日志供自检归因
+    partial_fails = {}  # 仓库名 → "3/10 个链接下载失败"（总节点 0 但原因是下载，不是解析）
 
     def uniq_count():
         return len(dedupe(list(records))[0])
@@ -3406,7 +3434,7 @@ def main():
                            readme_stats=readme_stats, skip_bad=not args.keep_bad_repos,
                            deadline=deadline, readme_only=args.readme_only,
                            date_tolerance=args.readme_date_tolerance,
-                           fail_reasons=fail_reasons)
+                           fail_reasons=fail_reasons, partial_fails=partial_fails)
 
     # 质量快照（写入日志，便于追溯「为什么先采这个仓库」）
     scored = [r for r in seed_data.get("repos", []) if r.get("tested")]
@@ -3487,7 +3515,8 @@ def main():
             append_collection_log(log_file, date_str, phases, raw_count, 0, dropped,
                                   scheme_cnt, os.path.abspath(out_dir), False,
                                   note="本次 0 条，已保留原有输出未覆盖",
-                                  readme_stats=readme_stats, quality_hint=quality_hint)
+                                  readme_stats=readme_stats, quality_hint=quality_hint,
+                                  fail_reasons=fail_reasons, partial_fails=partial_fails)
             sys.exit(3)
 
     # ── TCP 延迟探测 + 升序排序（低延迟节点落在订阅最前面）──
@@ -3536,7 +3565,8 @@ def main():
     append_collection_log(log_file, date_str, phases, raw_count, len(uniq), dropped,
                           scheme_cnt, os.path.abspath(out_dir), len(uniq) >= args.target_nodes,
                           readme_stats=readme_stats, quality_hint=quality_hint,
-                          tcp_dead=dead_dropped, fail_reasons=fail_reasons)
+                          tcp_dead=dead_dropped, fail_reasons=fail_reasons,
+                          partial_fails=partial_fails)
     print(f"[info] 采集日志已追加：{log_file}")
     print(f"[done] 报告：{report}")
     if meta_path:

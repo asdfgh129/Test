@@ -2,6 +2,28 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-10-28 第三窗口：修掉「refs/heads 链接被解析坏」——每天白丢约 2 万条候选节点
+
+- **本窗口未跑验证**：`Docs/summary.json` 四内核 `partial=false`（v2ray 2118 / xray 2159 /
+  clash 2508 / singbox 2509 均已达排序前 2500 的取样上限），前两窗口已测试完，按规则跳过续跑，
+  只做自检与发布
+- **修 critical（真根因）**：自检 1 critical「14/51 个仓库下载失败（27%）」。
+  复现 4 个仓库 8 条链接全 404，打印 README 原文后确认**是我们自己拼错了 URL**：
+  GitHub 给出的 `raw.githubusercontent.com/<o>/<r>/refs/heads/main/<path>` 被解析成
+  `heads/main/<path>`（ref 还被记成 `refs`），拼出来的地址必然 404
+  - `collect_nodes.py`：新增 `_split_raw_parts()`，三条 raw 形状分支
+    （raw.githubusercontent / gitmirror+kgithub / githack）统一按 `refs/heads|tags` 拆 ref 与路径
+  - 端到端回归：`SoliSpirit/v2ray-configs` 0 → **10980 条**、`cbusifabcap/daily_free_vpn` 0 → 7674、
+    `whoahaow/rjsxrd` 0 → 2293、`free18/v2ray` 0 → 350、`crashgfw/free-airport-nodes` 0 → 150
+- **修归因（warn 方向错）**：仓库节点数为 0 但部分链接下载失败时，日志原来写
+  「0 条（文件已下载但解析不到节点）」，把排查引向「格式覆盖」。现写
+  「0 条（3/10 个链接下载失败，其余已下载但解析不到节点）」；
+  `health_check.py` 新增 `pfail` 桶，不再把这类算进「解析不到节点」，避免误触发「解析能力 critical」
+- **更正第 42 条结论**：上一窗口把这批 404 归因为「上游路径失效」，实际至少 5 个仓库是我们自己的
+  解析 bug，已在第 42 条末尾更正、并在第 43 条完整记录
+- **数据未变**：本窗口不采集，发布的仍是 22:00 那轮的 2744 条（修复从下一次采集生效）
+- 详见 `Docs/known-issues.md` 第 43 条
+
 ## 2026-10-28 第二窗口：下载失败带原因标签 + 404 快速失败 + 趋势改按采集总量比较
 
 - **本窗口未跑验证**：首窗口已把四内核全部测完（`partial=false` + 各内核 `sampled` 达上限），

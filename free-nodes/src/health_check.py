@@ -131,6 +131,10 @@ def parse_collection_log(path):
             if m.group(2) is not None:
                 got = int(m.group(2))
                 kind = "ok" if got > 0 else "zero"
+                # `0 条（3/10 个链接下载失败，其余已下载但解析不到节点）`：失败原因在下载，
+                # 不是解析能力，算进 zero 会把「解析能力」告警带偏
+                if kind == "zero" and "个链接下载失败" in line:
+                    kind = "pfail"
             elif m.group(3) == "下载失败":
                 got, kind = -1, "fail"
                 # `  - repo：下载失败（HTTP 404）` —— 原因标签用于区分上游路径失效与通道故障
@@ -281,11 +285,13 @@ def check_repo_yield(find, entries):
             cnt[kind] += 1
             total += 1
     ok, zero, fail, nofile = cnt["ok"], cnt["zero"], cnt["fail"], cnt["nofile"]
+    pfail = cnt["pfail"]            # 0 条，但部分链接下载失败 → 归因下载，不归因解析
     nolink = cnt["nolink"]          # readme-only 模式：README 没有订阅链接，主动跳过
     scanned = total - nolink
     rate = ok / scanned if scanned else 0
     detail = (f"扫描仓库 {total} 个：有产出 {ok}、解析不到节点 {zero}、"
               f"下载失败 {fail}、无候选文件 {nofile}"
+              + (f"、部分链接下载失败 {pfail}" if pfail else "")
               + (f"、README 无订阅链接跳过 {nolink}" if nolink else "")
               + f"（产出率 {rate:.0%}，按有尝试采集的 {scanned} 个计算）")
     if total < 5:
@@ -352,7 +358,7 @@ def check_seed_drop(find, entries, seed_file):
     if dropped:
         dropped.sort(key=lambda x: -x[1])
         reason = {"fail": "下载失败", "zero": "解析不到节点", "nofile": "无候选文件",
-                  "nolink": "README 无订阅链接"}
+                  "pfail": "部分链接下载失败", "nolink": "README 无订阅链接"}
         names = "、".join(f"{n}(历史 {v} 条, {reason.get(k, k)})" for n, v, k in dropped[:5])
         find("warn", "来源稳定性", f"{len(dropped)} 个高贡献仓库本次 0 条：{names}",
              "按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，"
