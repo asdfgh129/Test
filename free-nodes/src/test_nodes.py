@@ -1192,8 +1192,8 @@ def main():
                          "避免排在前面的内核吃满预算、后面的内核一个节点都没测，见 known-issues 第 38 条")
     ap.add_argument("--no-escalate", action="store_true", help="关闭自适应扩量，只测初始取样")
     ap.add_argument("--workers", type=int, default=24,
-                    help="单内核并发测试数（默认 24）。实测同一批节点：12 并发 1.3 节点/s、"
-                         "24 并发 6.2 节点/s——瓶颈是网络等待不是 CPU，4 核机器也吃得下")
+                    help="单内核并发测试数（默认 24）。实测 12 并发 1.3 节点/s、24 并发 4.9~6.2 节点/s"
+                         "（同样本纯测 6.2，跑完整流程 4.9）——瓶颈是网络等待不是 CPU，4 核机器也吃得下")
     ap.add_argument("--tcp-workers", type=int, default=256,
                     help="TCP 预筛并发数（默认 256）。这里是纯 TCP 握手、无进程开销，"
                          "实测 64 并发跑 16620 个节点要 8 分钟，直接把 --time-budget 吃光")
