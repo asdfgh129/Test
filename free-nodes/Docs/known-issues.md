@@ -1202,6 +1202,58 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 **教训**：看到 404 先怀疑自己拼的 URL。判断「上游是否真的失效」的最短路径是把 README 原文打出来，
 比对一下我们请求的地址与它写的地址——差一段 `refs/heads`，一目了然。
 
+## 44. 外部订阅链接一次失败就整仓归零：瞬时抖动吃掉历史千条的仓库（2026-10-29 第二窗口）
+
+**现象**：自检报「1 个高贡献仓库本次 0 条：`crashgfw/free-airport-nodes`（历史 1050 条，部分链接下载失败）」。
+采集日志：
+
+```
+README 声明 10 个订阅链接 → 0 条节点（2raya.net/categories/free-nodes/:0、
+1bf54d…:下载失败(URLError)、c8e0f2…:下载失败(URLError)、30645a…:下载失败(超时)）
+→ README 声明的 10 个链接部分下载失败（9/10）
+```
+
+**归因（不是解析问题，是下载问题）**：这个仓库的 9 条节点链接全在同一个订阅域名
+`ndxy.fn0821.xyz/nodes/<32hex>` 上。窗口内单点复现：同一批链接 **0.3~0.8s 全部 200、
+每条 8860 字节、能正常解出 30 个节点**（`extract_uris` 实测）；IPv6 走不通（curl -6 exit 6），
+IPv4 正常。所以既不是解析覆盖不足，也不是我们拼错 URL（第 43 条那种），
+而是采集当时该站对我们是瞬时不可达。当天 19 条下载失败的真实分布也印证这一点：
+`URLError` 6、`HTTP 429` 4、`HTTP 503` 3、`HTTP 404` 3、`HTTP 403` 2、`超时` 1
+——**13/19 属瞬时/可重试**，其中 `HTTP 404` 那 3 条才是真的上游路径失效。
+
+**根因**：`fetch_url_text()` 对外部链接固定 `retries=0`（当初为了不让慢站拖住整仓），
+于是**任何一次瞬时失败都等于永久失败**；而这个仓库 10 条链接共用一个域名，
+一次抖动就让整个仓库归零——一个千条级来源被单点故障抹掉。
+
+**改动**（`collect_nodes.py`）：新增 `RETRYABLE_HTTP = {408,425,429,500,502,503,504}` 与
+`_retryable_fetch_error(e)`，`fetch_url_text()` 把原逻辑收成内部 `once()` 后：
+瞬时类失败（连接重置/拒绝/DNS 抖动/429/5xx）**整条链再走一次，只重试一次**，
+429 尊重 `Retry-After` 但封顶 3s。
+
+两条明确的「不重试」边界，都是刻意留的：
+
+- **404/410 不重试**（第 42 条的成果不能退回去：死链走完镜像链 23~37s）
+- **超时不重试**：外部站点慢时再来一轮 15s 会把单仓 90s 预算翻倍，
+  宁可记失败等下一天（吞吐优先，同第 40 条口径）
+
+**验证**（单点回归 4 例 + 整仓回归）：
+
+| 用例 | 结果 | 耗时 | 说明 |
+|---|---|---|---|
+| 正常订阅（ndxy） | OK 8860B | 0.3~0.8s | 重试不影响正常路径 |
+| 连接重置（v2raya.net） | FAIL URLError，retryable=True | 2.50s | 确实再试了一次（+1s 退避） |
+| HTTP 404（api.github.com 假路径） | FAIL HTTP 404，retryable=False | 0.48s | 不重试，快失败保持 |
+| 超时（10.255.255.1，timeout=2） | FAIL 超时，retryable=False | 2.01s | 只等一次，预算不翻倍 |
+
+整仓回归：该仓库 10 条链接 **9 条 OK**（第 10 条是 `v2raya.net` 分类网页，本就不是订阅，
+超时 15.0s 且不重试——规则按预期生效）。
+
+**影响**：恢复一个千条级来源在瞬时抖动下的鲁棒性，代价是失败链接最多多花 1s 退避。
+本次不采集，**生效从下一次采集（2026-10-30 22:00）开始**。
+
+**教训**：`retries=0` 这种「为了不让慢站拖住整仓」的取舍是对的，但「慢」和「抖动」
+是两类失败——按错误类型区分重试，比一刀切 0 次或 N 次都准。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
 
 ### 2026-10-29 自检发现
@@ -1214,7 +1266,7 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 | warn | 验证 | v2ray 可用率异常低 1.2%（30/2502） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | clash 可用率异常低 2.9%（72/2506） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | singbox 可用率异常低 2.0%（50/2503） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 待观察（info）：
 - [性能] 采集耗时 32 分钟
@@ -1222,9 +1274,11 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 ### 2026-10-29 内核检查发现
 
 
+
 - xray 有新版本 26.10.29（本地 26.10.21），可用 --update 自动升级
 
 ### 2026-10-28 自检发现
+
 
 
 
@@ -1243,6 +1297,7 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 - [性能] 采集耗时 43 分钟
 
 ### 2026-10-27 自检发现
+
 
 
 
@@ -1280,6 +1335,7 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 
 
 
+
 **结论：无严重问题，1 个告警可优化**
 
 | 级别 | 领域 | 问题 | 建议动作 |
@@ -1290,6 +1346,7 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 - [性能] 采集耗时 36 分钟
 
 ### 2026-10-25 自检发现
+
 
 
 

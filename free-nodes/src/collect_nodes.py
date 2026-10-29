@@ -938,6 +938,30 @@ def err_tag(e):
     return type(e).__name__
 
 
+# 可重试的瞬时失败：限流与临时不可用。404/410 属上游路径失效，重试毫无意义。
+RETRYABLE_HTTP = {408, 425, 429, 500, 502, 503, 504}
+
+
+def _retryable_fetch_error(e):
+    """判断一次外部链接下载失败是否值得再试一次。
+
+    2026-10-29 实采归因：当天 19 条下载失败里 URLError 6、HTTP 429 4、HTTP 503 3，
+    共 13 条属瞬时类；单点复现证明同一批链接随后 0.3~0.8s 全部成功、内容也能正常解析，
+    说明失败发生在下载侧而不是解析侧。crashgfw/free-airport-nodes 的 10 条链接全在
+    同一个订阅域名上，一次抖动就让这个历史千条的仓库整仓归零。
+
+    **超时不重试**：外部订阅站点慢时再来一轮 15s 只会把单仓 90s 时间预算翻倍，
+    宁可记失败等下一天（吞吐优先，同 known-issues 第 40 条口径）。
+    """
+    if isinstance(e, urllib.error.HTTPError):
+        return e.code in RETRYABLE_HTTP
+    reason = getattr(e, "reason", None)
+    if isinstance(e, (TimeoutError, socket.timeout)) or \
+            isinstance(reason, (TimeoutError, socket.timeout)) or "timed out" in str(e):
+        return False
+    return True
+
+
 def fetch_url_text(url, timeout=15):
     """下载任意 URL 的文本；raw.githubusercontent 走镜像回退链。
 
@@ -946,22 +970,41 @@ def fetch_url_text(url, timeout=15):
 
     404/410 立刻放弃剩余镜像：镜像只是转发原站内容，原站 404 时其余镜像必然也是 404，
     逐个试完只是白等（实测一条死链走完镜像链要 23~37 秒，14 条就是 5 分钟以上）。
+
+    瞬时类失败（连接重置/拒绝/DNS 抖动/429/5xx）整条链再走一次，只重试一次，
+    429 时尊重 Retry-After 但封顶 3s。
     """
     attempts = [url]
     if "raw.githubusercontent.com/" in url:
         for m in get_mirror_prefixes():
             attempts.append(m + url)
-    last_err = None
-    for u in attempts:
-        try:
-            return http_get_text(u, retries=0, timeout=timeout)
-        except urllib.error.HTTPError as e:
-            last_err = e
-            if e.code in (404, 410):
-                break
-        except Exception as e:  # noqa: BLE001
-            last_err = e
-    raise last_err
+
+    def once():
+        last_err = None
+        for u in attempts:
+            try:
+                return http_get_text(u, retries=0, timeout=timeout)
+            except urllib.error.HTTPError as e:
+                last_err = e
+                if e.code in (404, 410):
+                    break
+            except Exception as e:  # noqa: BLE001
+                last_err = e
+        raise last_err
+
+    try:
+        return once()
+    except Exception as e:  # noqa: BLE001
+        if not _retryable_fetch_error(e):
+            raise
+        wait = 1.0
+        if isinstance(e, urllib.error.HTTPError):
+            try:
+                wait = min(float(e.headers.get("Retry-After") or 2.0), 3.0)
+            except (TypeError, ValueError, AttributeError):
+                wait = 2.0
+        time.sleep(wait)
+        return once()
 
 
 def collect_from_readme(repo_full, items, token, records, budget=90, workers=4,
