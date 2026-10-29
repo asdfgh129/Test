@@ -1204,7 +1204,29 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 
 ## 自检发现（health_check 自动维护，按日期倒序）
 
+### 2026-10-29 自检发现
+
+**结论：无严重问题，5 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 1050 条, 部分链接下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 1.2%（30/2502） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | clash 可用率异常低 2.9%（72/2506） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | singbox 可用率异常低 2.0%（50/2503） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+待观察（info）：
+- [性能] 采集耗时 32 分钟
+
+### 2026-10-29 内核检查发现
+
+
+- xray 有新版本 26.10.29（本地 26.10.21），可用 --update 自动升级
+
 ### 2026-10-28 自检发现
+
+
 
 **结论：发现 1 个严重问题、5 个告警，需要处理**
 
@@ -1221,6 +1243,8 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 - [性能] 采集耗时 43 分钟
 
 ### 2026-10-27 自检发现
+
+
 
 
 
@@ -1254,6 +1278,8 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 
 
 
+
+
 **结论：无严重问题，1 个告警可优化**
 
 | 级别 | 领域 | 问题 | 建议动作 |
@@ -1264,6 +1290,8 @@ GitHub 页面右上角「复制链接」给出的是 **`/refs/heads/<branch>/<pa
 - [性能] 采集耗时 36 分钟
 
 ### 2026-10-25 自检发现
+
+
 
 
 

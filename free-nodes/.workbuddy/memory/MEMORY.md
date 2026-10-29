@@ -146,3 +146,10 @@
   所以只有 free-nodes/.workbuddy 入库；`__pycache__/`、`*.pyc` 已全局忽略
 - 调试产物（hysteria2 回环测试的 `_san_*.pem`、`tmp_xray_hy2_*.py`）在
   `~/.workbuddy/data/free-nodes-tools/debug/`，**绝不入公开仓库**
+- **看到 404 先怀疑自己拼的 URL**（known-issues 第 43 条）：GitHub「复制链接」给的是
+  `raw.githubusercontent.com/<o>/<r>/refs/heads/main/<path>`，解析漏掉 `refs/heads`
+  就变成 `heads/main/...`、ref 记成 `refs`，拼出来的地址必然 404。
+  代价是每天白丢约 2 万条候选，还会被自检报成「上游路径失效」——判断上游是否真失效，
+  最短路径是把 README 原文打出来和我们的请求地址比对
+- 仓库「0 条」有两种归因，别混：`下载失败`/`部分链接下载失败` 是通道与路径问题，
+  只有「已下载但解析不到节点」才是格式覆盖问题（`health_check` 用 `pfail` 桶分开计）

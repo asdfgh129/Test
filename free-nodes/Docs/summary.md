@@ -2,6 +2,269 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
+## 2026-10-29 23:08
+
+- 预筛：TCP 连通 3859/3912 个节点
+- 测试地址：`https://gstatic.com/generate_204`，并发 24，超时 3.0s（超时即判失败，不再等）
+- 测试策略：全量——候选 ≤ 2500 个全部测试；超过则只测排序前 2500 个
+- 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；不复测（实测复测收益 1.7%）；「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）
+- 总耗时：31.6 分钟
+
+| 代理内核 | 测试数量 | 可用数量 | 可用率 | 不支持 | 配置错误 | 不可达 | 轮次 | 可用文件 |
+|---|---|---|---|---|---|---|---|---|
+| v2ray | 2502 | 30 | 1.2% | 4 | 38 | 2430 | 截断（上限 2500） | `nodes/available_v2ray.txt` |
+| xray | 2503 | 105 | 4.2% | 3 | 2 | 2393 | 截断（上限 2500） | `nodes/available_xray.txt` |
+| clash | 2506 | 72 | 2.9% | 0 | 31 | 2403 | 截断（上限 2500） | `nodes/available_clash.yaml` |
+| singbox | 2503 | 50 | 2.0% | 0 | 27 | 2426 | 截断（上限 2500） | `nodes/available_singbox.json` |
+
+### 失败原因分布
+
+「不支持 / 配置被拒绝」属于本机内核能力或参数问题，不是节点问题；只有 tls / auth / refused / reset / timeout 才是节点侧的失败证据。
+
+| 代理内核 | 原因 | 数量 |
+|---|---|---|
+| v2ray | 连接超时 | 1661 |
+| v2ray | TLS 握手失败（证书/协议不匹配） | 767 |
+| v2ray | 配置被内核拒绝（参数不符） | 38 |
+| v2ray | 该内核不支持（协议/传输/加密/插件） | 4 |
+| v2ray | 连接被重置 | 2 |
+| xray | 连接超时 | 1294 |
+| xray | TLS 握手失败（证书/协议不匹配） | 809 |
+| xray | 网络层失败 | 278 |
+| xray | 连接被重置 | 12 |
+| xray | 该内核不支持（协议/传输/加密/插件） | 3 |
+| xray | 配置被内核拒绝（参数不符） | 2 |
+| clash | 连接超时 | 1817 |
+| clash | TLS 握手失败（证书/协议不匹配） | 435 |
+| clash | 网络层失败 | 151 |
+| clash | 配置被内核拒绝（参数不符） | 31 |
+| singbox | 连接被重置 | 1860 |
+| singbox | TLS 握手失败（证书/协议不匹配） | 564 |
+| singbox | 配置被内核拒绝（参数不符） | 27 |
+| singbox | 认证失败（口令/UUID 不符） | 2 |
+
+
+### 可用节点池（跨天累积）
+
+每个内核一份池文件：实测通过的节点自动入池，池内节点次日继续复测，连续多天未通过则淘汰。
+
+| 内核 | 池内节点 | 今日新增 | 今日复测通过 | 池文件 |
+|---|---|---|---|---|
+| v2ray | 127 | 15 | 15 | `pool/pool_v2ray.txt` |
+| xray | 304 | 70 | 35 | `pool/pool_xray.txt` |
+| clash | 276 | 53 | 19 | `pool/pool_clash.yaml` |
+| singbox | 230 | 36 | 14 | `pool/pool_singbox.json` |
+
+池目录：`nodes/pool`（`pool_<core>.<ext>` 可直接导入客户端；`pool_state.json` 存首见/最近通过/通过次数/最佳延迟）
+
+
+### 仓库节点可用率（本次实测）
+
+可用率是仓库质量的硬指标：连续偏低会降低采集优先级，长期 0 可用会被跳过。
+
+| 仓库 | 实测 | 可用 | 可用率 | 平均延迟 | 质量分 |
+|---|---|---|---|---|---|
+| F0rc3Run/F0rc3Run | 3 | 3 | 100% | 1242ms | 92.5 |
+| hello-world-1989/cn-news | 10 | 9 | 90% | 856ms | 87.9 |
+| Pawdroid/Free-servers | 15 | 9 | 60% | 1990ms | 60.1 |
+| snakem982/proxypool | 15 | 8 | 53% | 943ms | 61.7 |
+| NiREvil/vless | 47 | 5 | 11% | 1402ms | 29.0 |
+| peasoft/NoMoreWalls | 388 | 31 | 8% | 1488ms | 26.7 |
+| whoahaow/rjsxrd | 1817 | 130 | 7% | 1802ms | 24.2 |
+| cbusifabcap/daily_free_vpn | 205 | 14 | 7% | 1754ms | 24.3 |
+| kooker/FreeSubsCheck | 18 | 1 | 6% | 804ms | 29.1 |
+| sakha1370/OpenRay | 1490 | 20 | 1% | 1797ms | 20.2 |
+| SoliSpirit/v2ray-configs | 5591 | 27 | 0% | 2155ms | 17.4 |
+| Barabama/FreeNodes | 182 | 0 | 0% | -ms | 0.0 |
+| DukeMehdi/FreeList-V2ray-Configs | 8 | 0 | 0% | -ms | 0.0 |
+| free18/v2ray | 62 | 0 | 0% | -ms | 0.0 |
+| gslege/CloudflareIP | 76 | 0 | 0% | -ms | 0.0 |
+| iboxz/free-v2ray-collector | 11 | 0 | 0% | -ms | 0.0 |
+| VPN-Subcription-Links/ClashX-V2Ray-TopFreeProxy | 8 | 0 | 0% | -ms | 0.0 |
+| barry-far/V2ray-Config | 3 | 0 | 0% | -ms | 0.0 |
+| 0xRadikal/Free-v2ray-Configs | 9 | 0 | 0% | -ms | 0.0 |
+| ovmvo/FreeSub | 45 | 0 | 0% | -ms | 0.0 |
+| shaoyouvip/free | 4 | 0 | 0% | -ms | 0.0 |
+| igareck/vpn-configs-for-russia | 5 | 0 | 0% | -ms | 0.0 |
+| nyeinkokoaung404/V2ray-Configs | 1 | 0 | 0% | -ms | 0.0 |
+| Danialsamadi/v2go | 1 | 0 | 0% | -ms | 0.0 |
+
+
+### 各内核可用节点详情
+
+#### v2ray（30 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `43.167.186.78:8443` | trojan | 338ms | snakem982/proxypool |
+| `125.227.86.45:443` | trojan | 466ms | cbusifabcap/daily_free_vpn |
+| `13.124.223.116:8443` | ss | 499ms | hello-world-1989/cn-news |
+| `216.152.147.79:443` | trojan | 997ms | whoahaow/rjsxrd |
+| `202.50.253.90:19999` | ss | 1017ms | peasoft/NoMoreWalls |
+| `169.197.140.171:443` | trojan | 1033ms | whoahaow/rjsxrd |
+| `202.50.253.72:19999` | ss | 1064ms | peasoft/NoMoreWalls |
+| `202.50.253.54:19999` | ss | 1116ms | Pawdroid/Free-servers |
+| `202.50.253.27:19999` | ss | 1149ms | peasoft/NoMoreWalls |
+| `202.50.253.99:19999` | ss | 1235ms | peasoft/NoMoreWalls |
+| `130.94.16.109:80` | vmess | 1294ms | whoahaow/rjsxrd |
+| `176.114.95.242:443` | trojan | 1295ms | whoahaow/rjsxrd |
+| `202.50.253.36:19999` | ss | 1415ms | peasoft/NoMoreWalls |
+| `103.148.73.167:8443` | vless | 1506ms | NiREvil/vless |
+| `31.76.102.130:41445` | trojan | 1536ms | NiREvil/vless |
+| `200.165.231.209:443` | vless | 1603ms | whoahaow/rjsxrd |
+| `jp032001.ssgreen.org:443` | vmess | 1641ms | whoahaow/rjsxrd |
+| `202.50.253.45:19999` | ss | 1658ms | peasoft/NoMoreWalls |
+| `202.50.253.63:19999` | ss | 1903ms | peasoft/NoMoreWalls |
+| `jp032011.ssgreen.org:443` | vmess | 1987ms | whoahaow/rjsxrd |
+| `www.windowsmsidownloads.com:443` | vmess | 1996ms | whoahaow/rjsxrd |
+| `130.94.16.109:443` | hysteria2 | 2145ms | snakem982/proxypool |
+| `47.250.84.25:443` | trojan | 2192ms | peasoft/NoMoreWalls |
+| `jp032006.ssgreen.org:443` | vmess | 2264ms | whoahaow/rjsxrd |
+| `202.50.253.81:19999` | ss | 2283ms | Pawdroid/Free-servers |
+| `us032017.ssgreen.org:443` | vmess | 2352ms | whoahaow/rjsxrd |
+| `starlink-ft.251313.xyz:443` | hysteria2 | 2628ms | cbusifabcap/daily_free_vpn |
+| `wstg.datasynctrue.online:443` | vless | 2996ms | whoahaow/rjsxrd |
+| `openai.com:443` | trojan | 3737ms | SoliSpirit/v2ray-configs |
+| `us003.421421.xyz:20230` | trojan | 5923ms | cbusifabcap/daily_free_vpn |
+
+#### xray（105 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `13.124.223.116:8443` | ss | 317ms | hello-world-1989/cn-news |
+| `jp.vpber.info:443` | vless | 491ms | sakha1370/OpenRay |
+| `13.124.223.116:443` | vless | 547ms | hello-world-1989/cn-news |
+| `47.128.242.197:443` | vless | 739ms | hello-world-1989/cn-news |
+| `94.249.186.139:43000` | vless | 980ms | whoahaow/rjsxrd |
+| `202.50.253.45:19999` | ss | 1011ms | peasoft/NoMoreWalls |
+| `202.50.253.90:19999` | ss | 1016ms | peasoft/NoMoreWalls |
+| `94.249.189.41:43000` | vless | 1033ms | whoahaow/rjsxrd |
+| `radio.blog-forme.ru:443` | vless | 1056ms | SoliSpirit/v2ray-configs |
+| `130.94.16.109:8388` | ss | 1069ms | F0rc3Run/F0rc3Run |
+| `89.46.38.58:443` | vless | 1081ms | whoahaow/rjsxrd |
+| `89.125.11.57:443` | vless | 1083ms | whoahaow/rjsxrd |
+| `185.81.115.198:443` | vless | 1089ms | whoahaow/rjsxrd |
+| `31.59.206.94:443` | vless | 1097ms | whoahaow/rjsxrd |
+| `176.65.149.194:8443` | vless | 1101ms | whoahaow/rjsxrd |
+| `89.125.37.193:41445` | vless | 1111ms | whoahaow/rjsxrd |
+| `163.245.42.157:443` | vless | 1115ms | sakha1370/OpenRay |
+| `89.125.11.50:443` | vless | 1129ms | SoliSpirit/v2ray-configs |
+| `216.152.147.79:443` | trojan | 1136ms | whoahaow/rjsxrd |
+| `85.31.148.74:443` | vless | 1141ms | whoahaow/rjsxrd |
+| `us032019.ssgreen.org:443` | vmess | 1148ms | whoahaow/rjsxrd |
+| `202.50.253.72:19999` | ss | 1151ms | peasoft/NoMoreWalls |
+| `cd0.bmi.ir.kolman.com.de:80` | vmess | 1154ms | SoliSpirit/v2ray-configs |
+| `169.197.140.171:443` | trojan | 1177ms | whoahaow/rjsxrd |
+| `144.31.62.224:443` | vless | 1191ms | NiREvil/vless |
+| `94.249.186.64:43000` | vless | 1193ms | whoahaow/rjsxrd |
+| `23.94.252.67:443` | vless | 1197ms | whoahaow/rjsxrd |
+| `201.58.183.99:443` | vless | 1216ms | whoahaow/rjsxrd |
+| `2.59.218.23:443` | vless | 1236ms | whoahaow/rjsxrd |
+| `202.50.253.81:19999` | ss | 1245ms | Pawdroid/Free-servers |
+| `130.49.177.193:443` | vless | 1274ms | whoahaow/rjsxrd |
+| `202.50.253.99:19999` | ss | 1292ms | peasoft/NoMoreWalls |
+| `185.32.6.26:443` | vless | 1309ms | whoahaow/rjsxrd |
+| `83.97.79.93:8443` | vless | 1362ms | whoahaow/rjsxrd |
+| `212.34.128.120:2083` | vless | 1368ms | SoliSpirit/v2ray-configs |
+| `176.114.95.242:443` | trojan | 1392ms | whoahaow/rjsxrd |
+| `94.249.189.87:43000` | vless | 1404ms | whoahaow/rjsxrd |
+| `185.168.208.190:47443` | vless | 1419ms | whoahaow/rjsxrd |
+| `2.59.216.239:8443` | vless | 1421ms | whoahaow/rjsxrd |
+| `podcasts.blog-forme.ru:2083` | vless | 1441ms | sakha1370/OpenRay |
+| … | 共 105 个 | | |
+
+#### clash（72 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `43.167.186.78:8443` | trojan | 339ms | snakem982/proxypool |
+| `13.124.223.116:8443` | ss | 422ms | hello-world-1989/cn-news |
+| `125.227.86.45:443` | trojan | 491ms | cbusifabcap/daily_free_vpn |
+| `13.124.223.116:443` | vless | 656ms | hello-world-1989/cn-news |
+| `jp.vpber.info:443` | vless | 657ms | sakha1370/OpenRay |
+| `104.18.1.1:2087` | vless | 804ms | kooker/FreeSubsCheck |
+| `mm.good2026.com:12961` | ss | 829ms | whoahaow/rjsxrd |
+| `94.249.195.31:43000` | vless | 915ms | whoahaow/rjsxrd |
+| `16.54.253.154:443` | ss | 917ms | cbusifabcap/daily_free_vpn |
+| `185.168.208.190:47443` | vless | 940ms | whoahaow/rjsxrd |
+| `94.249.189.87:43000` | vless | 976ms | whoahaow/rjsxrd |
+| `172.66.0.162:443` | vless | 995ms | peasoft/NoMoreWalls |
+| `202.50.253.72:19999` | ss | 1008ms | peasoft/NoMoreWalls |
+| `169.197.140.171:443` | trojan | 1021ms | whoahaow/rjsxrd |
+| `202.50.253.90:19999` | ss | 1059ms | peasoft/NoMoreWalls |
+| `202.50.253.45:19999` | ss | 1085ms | peasoft/NoMoreWalls |
+| `94.249.186.64:43000` | vless | 1087ms | whoahaow/rjsxrd |
+| `171.22.119.74:8446` | trojan | 1100ms | peasoft/NoMoreWalls |
+| `216.152.147.79:443` | trojan | 1106ms | whoahaow/rjsxrd |
+| `94.249.195.81:43000` | vless | 1123ms | whoahaow/rjsxrd |
+| `163.245.42.157:443` | vless | 1147ms | sakha1370/OpenRay |
+| `89.46.38.58:443` | vless | 1184ms | whoahaow/rjsxrd |
+| `201.58.183.99:443` | vless | 1210ms | whoahaow/rjsxrd |
+| `35.183.129.117:443` | ss | 1211ms | cbusifabcap/daily_free_vpn |
+| `176.114.95.242:443` | trojan | 1223ms | whoahaow/rjsxrd |
+| `202.50.253.99:19999` | ss | 1226ms | peasoft/NoMoreWalls |
+| `185.81.115.198:443` | vless | 1232ms | whoahaow/rjsxrd |
+| `us003.421421.xyz:20230` | trojan | 1255ms | cbusifabcap/daily_free_vpn |
+| `94.249.189.41:43000` | vless | 1265ms | whoahaow/rjsxrd |
+| `191.217.217.69:443` | vless | 1270ms | SoliSpirit/v2ray-configs |
+| `130.49.177.193:443` | vless | 1298ms | whoahaow/rjsxrd |
+| `202.50.253.63:19999` | ss | 1316ms | peasoft/NoMoreWalls |
+| `144.31.242.142:443` | vless | 1347ms | cbusifabcap/daily_free_vpn |
+| `883f1393.con.rasterparcel.tech:443` | vless | 1357ms | whoahaow/rjsxrd |
+| `31.76.102.130:41445` | trojan | 1407ms | NiREvil/vless |
+| `185.220.249.139:8443` | vless | 1407ms | whoahaow/rjsxrd |
+| `217.60.151.141:47443` | vless | 1407ms | whoahaow/rjsxrd |
+| `de-2.ffpn.pro:443` | vless | 1463ms | whoahaow/rjsxrd |
+| `200.165.231.209:443` | vless | 1464ms | whoahaow/rjsxrd |
+| `31.76.2.57:443` | vless | 1498ms | cbusifabcap/daily_free_vpn |
+| … | 共 72 个 | | |
+
+#### singbox（50 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `125.227.86.45:443` | trojan | 379ms | cbusifabcap/daily_free_vpn |
+| `43.167.186.78:8443` | trojan | 468ms | snakem982/proxypool |
+| `13.124.223.116:8443` | ss | 499ms | hello-world-1989/cn-news |
+| `54.83.84.17:443` | ss | 782ms | snakem982/proxypool |
+| `47.128.242.197:443` | vless | 806ms | hello-world-1989/cn-news |
+| `130.94.16.109:8388` | ss | 952ms | F0rc3Run/F0rc3Run |
+| `54.237.60.0:443` | ss | 997ms | snakem982/proxypool |
+| `202.50.253.63:19999` | ss | 1004ms | peasoft/NoMoreWalls |
+| `35.183.129.117:443` | ss | 1036ms | cbusifabcap/daily_free_vpn |
+| `169.197.140.171:443` | trojan | 1041ms | whoahaow/rjsxrd |
+| `202.50.253.36:19999` | ss | 1062ms | peasoft/NoMoreWalls |
+| `89.46.38.58:443` | vless | 1082ms | whoahaow/rjsxrd |
+| `94.249.195.81:43000` | vless | 1103ms | whoahaow/rjsxrd |
+| `94.249.186.64:43000` | vless | 1104ms | whoahaow/rjsxrd |
+| `94.249.195.31:43000` | vless | 1106ms | whoahaow/rjsxrd |
+| `216.152.147.79:443` | trojan | 1109ms | whoahaow/rjsxrd |
+| `201.58.183.99:443` | vless | 1150ms | whoahaow/rjsxrd |
+| `202.50.253.54:19999` | ss | 1175ms | Pawdroid/Free-servers |
+| `54.91.51.67:443` | ss | 1179ms | snakem982/proxypool |
+| `217.60.151.141:47443` | vless | 1180ms | whoahaow/rjsxrd |
+| `94.249.189.41:43000` | vless | 1204ms | whoahaow/rjsxrd |
+| `9.247.23.209:443` | vless | 1217ms | SoliSpirit/v2ray-configs |
+| `163.245.42.157:443` | vless | 1232ms | sakha1370/OpenRay |
+| `cd0.bmi.ir.kolman.com.de:80` | vmess | 1250ms | SoliSpirit/v2ray-configs |
+| `130.94.16.109:443` | hysteria2 | 1295ms | snakem982/proxypool |
+| `130.94.16.109:80` | vmess | 1360ms | whoahaow/rjsxrd |
+| `31.76.102.130:41445` | trojan | 1372ms | NiREvil/vless |
+| `94.249.186.139:43000` | vless | 1403ms | whoahaow/rjsxrd |
+| `202.50.253.81:19999` | ss | 1417ms | Pawdroid/Free-servers |
+| `72.56.241.230:443` | vless | 1455ms | whoahaow/rjsxrd |
+| `200.165.231.209:443` | vless | 1526ms | whoahaow/rjsxrd |
+| `202.50.253.45:19999` | ss | 1663ms | peasoft/NoMoreWalls |
+| `202.50.253.27:19999` | ss | 1756ms | peasoft/NoMoreWalls |
+| `202.50.253.99:19999` | ss | 1777ms | peasoft/NoMoreWalls |
+| `185.168.208.190:47443` | vless | 1841ms | whoahaow/rjsxrd |
+| `185.220.249.139:8443` | vless | 1899ms | whoahaow/rjsxrd |
+| `171.22.119.74:8446` | trojan | 1963ms | peasoft/NoMoreWalls |
+| `94.249.189.87:43000` | vless | 2193ms | whoahaow/rjsxrd |
+| `202.50.253.72:19999` | ss | 2442ms | peasoft/NoMoreWalls |
+| `starlink-ft.251313.xyz:443` | hysteria2 | 2476ms | cbusifabcap/daily_free_vpn |
+| … | 共 50 个 | | |
+
 ## 2026-10-28 23:15
 
 - 预筛：TCP 连通 2698/2744 个节点

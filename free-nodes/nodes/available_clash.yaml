@@ -5,7 +5,27 @@
  "log-level": "info",
  "proxies": [
   {
-   "name": "@DeltaKroneckerGithub",
+   "name": "🇯🇵 日本 | JPN",
+   "type": "trojan",
+   "server": "43.167.186.78",
+   "port": 8443,
+   "password": "9646699a-18b0-4ebc-9f53-453cc1c8e637",
+   "udp": true,
+   "tls": true,
+   "sni": "43.167.186.78",
+   "skip-cert-verify": true
+  },
+  {
+   "name": "end-gfw-kr64-SS",
+   "type": "ss",
+   "server": "13.124.223.116",
+   "port": 8443,
+   "cipher": "chacha20-ietf-poly1305",
+   "password": "7e68e32f-8015-4f37-9082-70e8b0b58043",
+   "udp": true
+  },
+  {
+   "name": "🇹🇼TW_39|313KB/s|R002-260618",
    "type": "trojan",
    "server": "125.227.86.45",
    "port": 443,
@@ -23,21 +43,41 @@
    }
   },
   {
-   "name": "HK",
+   "name": "end-gfw-kr64-VLESS",
    "type": "vless",
-   "server": "103.180.20.108",
-   "port": 8443,
-   "uuid": "c1c04450-bf71-4049-ad0c-9cf6d94d9f1f",
+   "server": "13.124.223.116",
+   "port": 443,
+   "uuid": "7e68e32f-8015-4f37-9082-70e8b0b58043",
    "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/81574b6b-c9d7-44a0-b83d-dad56e8cb530",
-    "headers": {
-     "Host": "ty986gfazs.cainiaohub.xyz"
-    }
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "webframe.io",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "DHOrfoin7TeRpnIoU3d6qT5Yrq3QPVFp49kApATA4iE",
+    "short-id": "e04a526b0b09c765"
+   }
+  },
+  {
+   "name": "[OpenRay] 🌐XX-1210",
+   "type": "vless",
+   "server": "jp.vpber.info",
+   "port": 443,
+   "uuid": "b85b119a-b8c8-43ea-8a35-7f2140366e39",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/api_v3/",
+    "mode": "auto",
+    "host": "jp.vpber.info"
    },
    "tls": true,
-   "servername": "ty986gfazs.cainiaohub.xyz"
+   "servername": "jp.vpber.info",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "opzTAV_yfzjz3zAWZEpFUoz6VPwvVAx78XvLX9V-ohc",
+    "short-id": "9be4130078ebed0a"
+   }
   },
   {
    "name": "🇺🇸US_2|576KB/s",
@@ -66,91 +106,181 @@
    "client-fingerprint": "ios"
   },
   {
-   "name": "Rose | 🇮🇹 IT | SS | 126",
+   "name": "🇺🇸 [SS] США #3564 | РосТуннель t.me/rjsxrd",
    "type": "ss",
-   "server": "202.50.253.99",
+   "server": "mm.good2026.com",
+   "port": 12961,
+   "cipher": "aes-128-gcm",
+   "password": "2f0c7e37-2534-48dc-9615-d85ae800c41f",
+   "udp": true
+  },
+  {
+   "name": "Бесплатный",
+   "type": "vless",
+   "server": "94.249.195.31",
+   "port": 43000,
+   "uuid": "1b3b5bc6-cbd4-4bd4-8b98-a4a742d2186b",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "zOu3OvSP0TQgIrk_2gFh4UKH5KSKHbmgY_w6R94v5Ew",
+    "short-id": "815e6c09"
+   }
+  },
+  {
+   "name": "🇨🇦CA_57|469KB/s|A004-260618",
+   "type": "ss",
+   "server": "16.54.253.154",
+   "port": 443,
+   "cipher": "aes-256-cfb",
+   "password": "amazonskr05",
+   "udp": true
+  },
+  {
+   "name": "🇺🇸",
+   "type": "vless",
+   "server": "185.168.208.190",
+   "port": 47443,
+   "uuid": "1fe01c8a-ab37-4e95-bbfc-95d4a608931e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "us-1.waspguard.ru",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "hz7rzdHvTAVwfy48pa6313yBF-sV7V0svvPVnl95bgY",
+    "short-id": "ae97246a8f799854"
+   }
+  },
+  {
+   "name": "Бесплатный #2",
+   "type": "vless",
+   "server": "94.249.189.87",
+   "port": 43000,
+   "uuid": "9a1acad0-081d-4a40-9541-f544865225bb",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "FX23FdMBb-cdr29rzlCrh4tAWgqwhjaV3zXm3kW3fX0",
+    "short-id": "561eb502"
+   }
+  },
+  {
+   "name": "🇸🇬[www.v2nodes.com] vless-SG #2",
+   "type": "vless",
+   "server": "172.66.0.162",
+   "port": 443,
+   "uuid": "d342d11e-d224-4463-b982-532309285094",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/fp=chrome",
+    "headers": {
+     "Host": "ccc.010304.xyz"
+    }
+   },
+   "tls": true,
+   "servername": "ccc.010304.xyz"
+  },
+  {
+   "name": "🇮🇹[www.v2nodes.com] ss-IT-1602... #2",
+   "type": "ss",
+   "server": "202.50.253.72",
    "port": 19999,
    "cipher": "aes-256-gcm",
    "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
    "udp": true
   },
   {
-   "name": "KR",
-   "type": "vless",
-   "server": "112.169.175.199",
-   "port": 31157,
-   "uuid": "bd2fb303-b4c7-49af-a8e3-5c6f11b005dd",
-   "udp": true
-  },
-  {
-   "name": "🇦🇺 澳洲 07",
-   "type": "ss",
-   "server": "195.58.49.167",
-   "port": 18443,
-   "cipher": "aes-256-gcm",
-   "password": "Lpq5UPVHtQYiuB9jEUNc2WkeIYCUH9DE",
-   "udp": true
-  },
-  {
-   "name": "Rose | 🇳🇱 NL | SS | 200",
-   "type": "ss",
-   "server": "dns8.m3hrzd.ir",
-   "port": 8044,
-   "cipher": "chacha20-ietf-poly1305",
-   "password": "U5Jk0BhRNKjb5wQBBOXx2wwkWZ_yWU0N",
-   "udp": true
-  },
-  {
-   "name": "NO",
-   "type": "vless",
-   "server": "31.76.5.144",
+   "name": "Бесплатный #3",
+   "type": "trojan",
+   "server": "169.197.140.171",
    "port": 443,
-   "uuid": "cd3bb7d9-7df3-4644-ac05-c260990ac277",
+   "password": "0ab6c98dae3b48e8b9c4a776b6c9c19a",
+   "udp": true,
+   "tls": true,
+   "sni": "cdn.discoverfreshgraduatejobsstartyourprofessionaljourney.com"
+  },
+  {
+   "name": "🇮🇹[www.v2nodes.com] ss-IT-1602... #7",
+   "type": "ss",
+   "server": "202.50.253.90",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
+   "udp": true
+  },
+  {
+   "name": "🇮🇹[www.v2nodes.com] ss-IT-1602... #5",
+   "type": "ss",
+   "server": "202.50.253.45",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
+   "udp": true
+  },
+  {
+   "name": "🇩🇪",
+   "type": "vless",
+   "server": "94.249.186.64",
+   "port": 43000,
+   "uuid": "4421e4d5-6869-4a45-a76b-5c822aac776d",
    "udp": true,
    "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "norw-1.failspace.top",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 1381",
-   "type": "vless",
-   "server": "217.216.218.139",
-   "port": 443,
-   "uuid": "eaa34d9f-662d-4378-8210-3508b5eee727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "savesafe.top",
    "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "B4gdMxfjdXtFuqg-Ek9CDKiJT6QQiKb-tV2VODt_ik0",
-    "short-id": "def9b800fb6a3ddb"
+    "public-key": "QaPoY-5W4Z7NA_LUG37yjYNy3JWg53Ru7eWLTzec-nE",
+    "short-id": "b62ac375"
    }
   },
   {
-   "name": "Rose | 🇷🇺 RU | VLESS | 1401",
+   "name": "🏳[www.v2nodes.com] trojan- #6",
+   "type": "trojan",
+   "server": "171.22.119.74",
+   "port": 8446,
+   "password": "Pass-Client-1",
+   "udp": true,
+   "tls": true,
+   "skip-cert-verify": true,
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "grpc-video-call"
+   }
+  },
+  {
+   "name": "Бесплатный #4",
+   "type": "trojan",
+   "server": "216.152.147.79",
+   "port": 443,
+   "password": "0ab6c98dae3b48e8b9c4a776b6c9c19a",
+   "udp": true,
+   "tls": true,
+   "sni": "blog.connectingpeoplewithgreatjobs.com"
+  },
+  {
+   "name": "🇸🇪",
    "type": "vless",
-   "server": "193.160.141.138",
-   "port": 8443,
-   "uuid": "b4a1200a-9765-4649-94f2-c26e0a37dffb",
+   "server": "94.249.195.81",
+   "port": 43000,
+   "uuid": "6ddd64ac-972b-4809-8399-9ada51b64837",
    "udp": true,
    "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "apple.com",
+   "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc"
-   },
-   "client-fingerprint": "chrome"
+    "public-key": "pR4VpawT5rTi2LKtKvRtAiaW5p1ZGRNiao6_5TAkawI",
+    "short-id": "c6552fdd"
+   }
   },
   {
-   "name": "Rose | 🇫🇷 FR | VLESS | 594",
+   "name": "p-0cb49b0c9c4a0712",
    "type": "vless",
-   "server": "9.247.23.209",
+   "server": "163.245.42.157",
    "port": 443,
    "uuid": "b9bfa54d-bc44-4592-a6d6-89a9665d286f",
    "udp": true,
@@ -163,45 +293,267 @@
    }
   },
   {
-   "name": "Rose | 🇩🇪 DE | VLESS | 1375",
+   "name": "🇺🇸 #2",
    "type": "vless",
-   "server": "217.216.218.151",
+   "server": "89.46.38.58",
    "port": 443,
-   "uuid": "eaa34d9f-662d-4378-8210-3508b5eee727",
+   "uuid": "8bab5583-04b1-4b83-96e8-4ed46062eeb7",
    "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/",
-    "mode": "auto"
-   },
+   "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "savesafe.top",
+   "servername": "us-a1.netfix.app",
    "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "B4gdMxfjdXtFuqg-Ek9CDKiJT6QQiKb-tV2VODt_ik0",
-    "short-id": "def9b800fb6a3ddb"
+    "public-key": "HNC4xdL0kgaIcgnPtMyc21hxY6dk0zl_vAclmQZHigw",
+    "short-id": "323da253"
    }
   },
   {
-   "name": "🇫🇷 法国 05",
+   "name": "🇩🇪 #2",
+   "type": "vless",
+   "server": "201.58.183.99",
+   "port": 443,
+   "uuid": "50a87e21-f0e2-4b53-a787-91adfe748f63",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "geminilanzerotte.live",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "_aURfmVUjvCRZipDI2eqMO0VQa64BJRGYFOdlBFi1XQ"
+   }
+  },
+  {
+   "name": "🇨🇦CA_59|1.5MB/s|A004-260618",
    "type": "ss",
-   "server": "46.17.41.61",
-   "port": 18443,
-   "cipher": "aes-256-gcm",
-   "password": "NTiHBg64fsY8u8DbGrtypD9gPGSL386p",
+   "server": "35.183.129.117",
+   "port": 443,
+   "cipher": "aes-256-cfb",
+   "password": "amazonskr05",
    "udp": true
   },
   {
-   "name": "Rose | 🇮🇹 IT | SS | 134",
+   "name": "🇱🇹 AetrisVPN t.me/rjsxrd",
+   "type": "trojan",
+   "server": "176.114.95.242",
+   "port": 443,
+   "password": "UAKWGor-h0woFsxKSWK92HptcM0g2k2h",
+   "udp": true,
+   "tls": true,
+   "sni": "lt-1.1984.love"
+  },
+  {
+   "name": "🇮🇹 意大利 | ITA #1",
    "type": "ss",
-   "server": "202.50.253.18",
+   "server": "202.50.253.99",
    "port": 19999,
    "cipher": "aes-256-gcm",
    "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
    "udp": true
   },
   {
-   "name": "31.76.2.57:443",
+   "name": "🇳🇱",
+   "type": "vless",
+   "server": "185.81.115.198",
+   "port": 443,
+   "uuid": "8bab5583-04b1-4b83-96e8-4ed46062eeb7",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "nl-a1.netfix.app",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "HNC4xdL0kgaIcgnPtMyc21hxY6dk0zl_vAclmQZHigw",
+    "short-id": "5108255f"
+   }
+  },
+  {
+   "name": "🇺🇸US_405|731KB/s|R002-260618",
+   "type": "trojan",
+   "server": "us003.421421.xyz",
+   "port": 20230,
+   "password": "e20fd145-65f1-4aa3-96be-da0524bbb16e",
+   "udp": true,
+   "tls": true,
+   "sni": "www.alibaba.com",
+   "skip-cert-verify": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/"
+   }
+  },
+  {
+   "name": "🇫🇮",
+   "type": "vless",
+   "server": "94.249.189.41",
+   "port": 43000,
+   "uuid": "cec0cf85-cf9f-44ce-9eb0-cb1f9b8d7ba1",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "YagqjrSaICX5_qhcRvWOfM_yatBa5FtJexO9IlZeIEo",
+    "short-id": "093e1846"
+   }
+  },
+  {
+   "name": "🔥Join+Telegram:@Farah_VPN🟣",
+   "type": "vless",
+   "server": "191.217.217.69",
+   "port": 443,
+   "uuid": "846cedee-2a52-0002-a0b9-11850ead6a8b",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "nl-central.v8x2b.lol",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "q3UXFUE5yYxNE4ugLUnYdpc9WRtR-sjsDTrKsiqzDHE"
+   }
+  },
+  {
+   "name": "🇩🇪 #3",
+   "type": "vless",
+   "server": "130.49.177.193",
+   "port": 443,
+   "uuid": "727a9178-d7f0-4142-8205-b0d19959ded0",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "de-2.ffpn.pro",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "DCpi9-1rSXxBnEIAQ9U3mTqHivk7vHJRV_T2pWw5vCc",
+    "short-id": "681fc2dd643bc2f3"
+   }
+  },
+  {
+   "name": "🇮🇹 意大利 | ITA #2",
+   "type": "ss",
+   "server": "202.50.253.63",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
+   "udp": true
+  },
+  {
+   "name": "🇩🇪DE_119|1.1MB/s|M003-260806",
+   "type": "vless",
+   "server": "144.31.242.142",
+   "port": 443,
+   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/conv4/stream/d34366ecdd31367d0fc76955c6b8d77c",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "883f1393.con.rasterparcel.tech",
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "🇦🇺 [VL] Австралия #2722 | РосТуннель t.me/rjsxrd",
+   "type": "vless",
+   "server": "883f1393.con.rasterparcel.tech",
+   "port": 443,
+   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/conv4/stream/d34366ecdd31367d0fc76955c6b8d77c",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "883f1393.con.rasterparcel.tech",
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "Rose | 🇫🇮 FI | TROJAN | 1392",
+   "type": "trojan",
+   "server": "31.76.102.130",
+   "port": 41445,
+   "password": "sBMuYgEz3jve2XtEBh8JPh9trNE-c9bH",
+   "udp": true,
+   "tls": true,
+   "sni": "d1-fl.cloud-cdn.xyz",
+   "alpn": [
+    "h2"
+   ],
+   "client-fingerprint": "firefox",
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "ajv"
+   }
+  },
+  {
+   "name": "🇺🇸 #3",
+   "type": "vless",
+   "server": "185.220.249.139",
+   "port": 8443,
+   "uuid": "2a66ad35-93ce-4fd2-831f-bcaa63cdac1e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "go-obsh-drun.keno.su",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "jXSlhZssbHqU4CVG3NQ3mjp7ST5BqPakP7wh1kjtLw4"
+   }
+  },
+  {
+   "name": "🇩🇪 #4",
+   "type": "vless",
+   "server": "217.60.151.141",
+   "port": 47443,
+   "uuid": "1fe01c8a-ab37-4e95-bbfc-95d4a608931e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "ge-1.waspguard.ru",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "zHU0WVJ6mMqTgBj6hEt_B0yRnegzdTGGLBydGyAPvlk",
+    "short-id": "ae97223a8f799001"
+   }
+  },
+  {
+   "name": "Бесплатный #5",
+   "type": "vless",
+   "server": "de-2.ffpn.pro",
+   "port": 443,
+   "uuid": "727a9178-d7f0-4142-8205-b0d19959ded0",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "de-2.ffpn.pro",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "DCpi9-1rSXxBnEIAQ9U3mTqHivk7vHJRV_T2pWw5vCc",
+    "short-id": "681fc2dd643bc2f3"
+   }
+  },
+  {
+   "name": "🇫🇮 AetrisVPN t.me/rjsxrd",
+   "type": "vless",
+   "server": "200.165.231.209",
+   "port": 443,
+   "uuid": "ff0b6ba8-bed0-4c4d-bbc9-23af47582615",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/api/connect",
+    "headers": {
+     "Host": "wstg.datasynctrue.online"
+    }
+   },
+   "tls": true,
+   "servername": "wstg.datasynctrue.online",
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "🇫🇮FI_30|134KB/s|M003-260806",
    "type": "vless",
    "server": "31.76.2.57",
    "port": 443,
@@ -214,203 +566,64 @@
    },
    "tls": true,
    "servername": "823bcb90.con.fernarchive.online",
-   "client-fingerprint": "firefox"
+   "client-fingerprint": "chrome"
   },
   {
-   "name": "Rose | 🇩🇪 DE | VLESS | 1379",
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #2",
    "type": "vless",
-   "server": "217.216.218.96",
-   "port": 443,
-   "uuid": "eaa34d9f-662d-4378-8210-3508b5eee727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "savesafe.top",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "B4gdMxfjdXtFuqg-Ek9CDKiJT6QQiKb-tV2VODt_ik0",
-    "short-id": "def9b800fb6a3ddb"
-   }
-  },
-  {
-   "name": "135.106.143.114:443",
-   "type": "vless",
-   "server": "135.106.143.114",
-   "port": 443,
-   "uuid": "9c5ad05d-d807-002f-bf48-cfad48af6dec",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/static",
-    "mode": "packet-up"
-   },
-   "tls": true,
-   "servername": "goroskop365.ru",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "YHPoUNxsml4z6pYt-7djOb1lqnBjxCk4-2mk84pveyc",
-    "short-id": "3b5b38669a1a51c0"
-   }
-  },
-  {
-   "name": "Rose | 🇫🇷 FR | VLESS | 598",
-   "type": "vless",
-   "server": "edge.bookmai.com",
-   "port": 443,
-   "uuid": "b9bfa54d-bc44-4592-a6d6-89a9665d286f",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "mother-earth.fyi",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc"
-   }
-  },
-  {
-   "name": "31.76.7.233:443",
-   "type": "vless",
-   "server": "31.76.7.233",
+   "server": "144.31.217.28",
    "port": 443,
    "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
    "udp": true,
    "network": "xhttp",
    "xhttp-opts": {
-    "path": "/conv4/stream/d34366ecdd31367d0fc76955c6b8d77c",
+    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
     "mode": "auto"
    },
    "tls": true,
-   "servername": "e2865c20.con.rasterparcel.tech",
-   "client-fingerprint": "firefox"
+   "servername": "9187bd6f.con.fernarchive.online",
+   "client-fingerprint": "chrome"
   },
   {
-   "name": "Rose | 🇫🇮 FI | VLESS | 813",
+   "name": "🇫🇮 #2",
    "type": "vless",
-   "server": "77.42.12.225",
+   "server": "185.188.30.203",
    "port": 443,
-   "uuid": "056405e8-de9f-4d0d-8145-956f13cc34da",
+   "uuid": "8bab5583-04b1-4b83-96e8-4ed46062eeb7",
    "udp": true,
-   "network": "grpc",
-   "grpc-opts": {
-    "grpc-service-name": "f345a414c040"
-   },
+   "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "8fc752g.fi3.h1clayd.click",
+   "servername": "fi-f1.netfix.app",
    "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "GJzag9Wrvz_bO9AQaA-Oq0P1kV9btmxxAdzPV-uQB18",
-    "short-id": "09d0a94a1c6fc9d5"
+    "public-key": "c7optVlBfMEFMJXWwouWqvGWNRkqj4BWIs2laDdXTEg",
+    "short-id": "e1016da3"
    }
   },
   {
-   "name": "NO #2",
-   "type": "vless",
-   "server": "31.76.5.42",
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #3",
+   "type": "trojan",
+   "server": "199.232.78.120",
    "port": 443,
-   "uuid": "cd3bb7d9-7df3-4644-ac05-c260990ac277",
+   "password": "MiTiVPN",
    "udp": true,
-   "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "norw-2.failspace.top",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "TW",
-   "type": "vless",
-   "server": "59.125.69.22",
-   "port": 443,
-   "uuid": "c1c04450-bf71-4049-ad0c-9cf6d94d9f1f",
-   "udp": true,
+   "sni": "firefox.com",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "chrome",
    "network": "ws",
    "ws-opts": {
-    "path": "/81574b6b-c9d7-44a0-b83d-dad56e8cb530",
+    "path": "/",
     "headers": {
-     "Host": "tse1.mm.bing.net"
+     "Host": "mitivpn--mitivpn.ac.ir"
     }
-   },
-   "tls": true,
-   "servername": "tse1.mm.bing.net",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 803",
-   "type": "vless",
-   "server": "fl3.nexfile.net",
-   "port": 4443,
-   "uuid": "10be1dad-9952-4c5e-aa30-db435f69b727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/api/v1/sync/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "fl3.nexfile.net",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "NO #3",
-   "type": "vless",
-   "server": "norw-2.failspace.top",
-   "port": 443,
-   "uuid": "cd3bb7d9-7df3-4644-ac05-c260990ac277",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "norw-2.failspace.top",
-   "alpn": [
-    "h2"
-   ],
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "NO #4",
-   "type": "vless",
-   "server": "norw-1.failspace.top",
-   "port": 443,
-   "uuid": "cd3bb7d9-7df3-4644-ac05-c260990ac277",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "norw-1.failspace.top",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "NO #5",
-   "type": "vless",
-   "server": "viper-23.moriarty-web.com",
-   "port": 443,
-   "uuid": "cd3bb7d9-7df3-4644-ac05-c260990ac277",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "viper-23.moriarty-web.com"
-  },
-  {
-   "name": "Rose | 🇹🇷 TR | VLESS | 791",
-   "type": "vless",
-   "server": "62.133.63.45",
-   "port": 8444,
-   "uuid": "a346c521-7a7f-452b-9356-a4893feb5982",
-   "udp": true,
-   "network": "grpc",
-   "grpc-opts": {
-    "grpc-service-name": "GunService"
-   },
-   "tls": true,
-   "servername": "github.com",
-   "client-fingerprint": "safari",
-   "reality-opts": {
-    "public-key": "FWitre1jinQR7qz5HQ0q2Q4Gg9xA9B0SyizCziN7Ch0",
-    "short-id": "457fab2ac885dbe0"
    }
   },
   {
-   "name": "Rose | 🇪🇸 ES | VLESS | 805",
+   "name": "[OpenRay] 🇳🇱NL-602",
    "type": "vless",
    "server": "84.32.184.218",
    "port": 443,
@@ -426,104 +639,48 @@
    "client-fingerprint": "firefox"
   },
   {
-   "name": "Rose | 🇫🇮 FI | VLESS | 896",
+   "name": "[OpenRay] 🇺🇸US-1897",
    "type": "vless",
-   "server": "196.196.204.174",
+   "server": "72.56.4.84",
    "port": 443,
-   "uuid": "056405e8-de9f-4d0d-8145-956f13cc34da",
-   "udp": true,
-   "network": "grpc",
-   "grpc-opts": {
-    "grpc-service-name": "f345a414c040"
-   },
-   "tls": true,
-   "servername": "8fc752g.fi3.h1clayd.click",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "GJzag9Wrvz_bO9AQaA-Oq0P1kV9btmxxAdzPV-uQB18",
-    "short-id": "09d0a94a1c6fc9d5"
-   }
-  },
-  {
-   "name": "Rose | 🇫🇷 FR | VLESS | 1262",
-   "type": "vless",
-   "server": "213.152.180.104",
-   "port": 2092,
-   "uuid": "4d8cc1c2-2605-43c4-8e17-dcafa86d9757",
+   "uuid": "Fluffy_VPN-zKZUa4Ie",
    "udp": true,
    "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "www.apple.com",
+   "servername": "absolute-disaster.org",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "Im1i3eUtm7uDxUOA0rNWef9bILxsBvK_ElfejZTpQW0"
+   }
+  },
+  {
+   "name": "🇮🇹[www.v2nodes.com] ss-IT-1602... #8",
+   "type": "ss",
+   "server": "202.50.253.27",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
+   "udp": true
+  },
+  {
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #4",
+   "type": "vless",
+   "server": "9.247.23.209",
+   "port": 443,
+   "uuid": "b9bfa54d-bc44-4592-a6d6-89a9665d286f",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "mother-earth.fyi",
    "client-fingerprint": "chrome",
    "reality-opts": {
-    "public-key": "zeyIqmHylDrPbbtdG9BleBt0-fqKCHpZ0OZ9OY2_WUI",
-    "short-id": "716b7eba38125f3a"
+    "public-key": "SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc"
    }
   },
   {
-   "name": "RU",
-   "type": "vless",
-   "server": "193.233.221.86",
-   "port": 443,
-   "uuid": "37ca5f34-2531-4fda-a781-20f3845fea88",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "capableconjuretarnish.clarionconsult.info",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "2iedjEliJfyf7VYxQjSHRiY0RY9ylwj-GtO4MCfuQhg",
-    "short-id": "a50534e181896415"
-   }
-  },
-  {
-   "name": "@DeltaKroneckerGithub #2",
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #5",
    "type": "trojan",
-   "server": "185.220.100.168",
-   "port": 443,
-   "password": "humanity",
-   "udp": true,
-   "tls": true,
-   "sni": "www.calmlunch.com",
-   "network": "ws",
-   "ws-opts": {
-    "path": "/assignment",
-    "headers": {
-     "Host": "www.calmlunch.com"
-    }
-   }
-  },
-  {
-   "name": "NO #6",
-   "type": "vless",
-   "server": "31.76.5.124",
-   "port": 443,
-   "uuid": "cd3bb7d9-7df3-4644-ac05-c260990ac277",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "norway-2.failspace.top",
-   "client-fingerprint": "firefox",
-   "skip-cert-verify": true
-  },
-  {
-   "name": "Rose | 🇰🇿 KZ | VLESS | 629",
-   "type": "vless",
-   "server": "46.8.43.125",
-   "port": 443,
-   "uuid": "846cedee-2a52-4a62-a0b9-11850ead6a8b",
-   "udp": true,
-   "tls": true,
-   "servername": "kz-central.v8x2b.lol",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "ER-T5En54-sn6IXy7jU8vQVcBbOiWvznnezf3qZ273w"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | TROJAN | 1355",
-   "type": "trojan",
-   "server": "199.232.78.120",
+   "server": "167.82.64.120",
    "port": 443,
    "password": "MiTiVPN",
    "udp": true,
@@ -536,802 +693,23 @@
    "client-fingerprint": "chrome",
    "network": "ws",
    "ws-opts": {
-    "path": "/---@MiTiVPN---@MiTiVPN/---@MiTiVPN---@MiTiVPN/---@MiTiVPN---@MiTiVPN/NLSus---@MiTiVPN---@MiTiVPN/---@MiTiVPN---@MiTiVPN/---@MiTiVPN---@MiTiVPN",
+    "path": "/?Telegram---PLANB_NET---PLANB_NET---PLANB_NET---PLANB_NET",
     "headers": {
      "Host": "mitivpn--mitivpn.ac.ir"
     }
    }
   },
   {
-   "name": "@DeltaKroneckerGithub #3",
-   "type": "trojan",
-   "server": "de-bots4.h1cloud.net",
-   "port": 25267,
-   "password": "happybirthdaydaniel",
-   "udp": true,
-   "tls": true,
-   "sni": "t.me/FuckTheWall",
-   "skip-cert-verify": true
-  },
-  {
-   "name": "Rose | 🇰🇿 KZ | VLESS | 796",
-   "type": "vless",
-   "server": "kz-central.v8x2b.lol",
-   "port": 443,
-   "uuid": "846cedee-2a52-4a62-a0b9-11850ead6a8b",
-   "udp": true,
-   "tls": true,
-   "servername": "kz-central.v8x2b.lol",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "ER-T5En54-sn6IXy7jU8vQVcBbOiWvznnezf3qZ273w"
-   }
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 963",
-   "type": "vless",
-   "server": "144.31.217.28",
-   "port": 443,
-   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "9187bd6f.con.fernarchive.online",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "Rose | 🇫🇷 FR | VLESS | 1258",
-   "type": "vless",
-   "server": "213.152.180.55",
-   "port": 2092,
-   "uuid": "4d8cc1c2-2605-43c4-8e17-dcafa86d9757",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "zeyIqmHylDrPbbtdG9BleBt0-fqKCHpZ0OZ9OY2_WUI",
-    "short-id": "716b7eba38125f3a"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 468",
-   "type": "vless",
-   "server": "177.7.51.29",
-   "port": 8443,
-   "uuid": "c6b1b2d0-ed5e-48ce-99e6-112ff330030d",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "laG5BxoSbdRozpauATNFBPPTwhuDuu0JFl_SCP2ZQlU",
-    "short-id": "14fbf992"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 620",
-   "type": "vless",
-   "server": "31.76.70.90",
-   "port": 443,
-   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "597dad6b.con.fernarchive.online",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 16",
-   "type": "vless",
-   "server": "146.75.59.186",
-   "port": 443,
-   "uuid": "46cb8a26-0712-4e85-89bf-2538a2788652",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/",
-    "headers": {
-     "Host": "copy_az_channel_NUFiLTER_6i.global.ssl.fastly.net."
-    }
-   },
-   "tls": true,
-   "servername": "firefox.com",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 1266",
-   "type": "vless",
-   "server": "79.182.39.235",
-   "port": 25172,
-   "uuid": "5a519754-a673-4462-83f6-5eb25d2af141",
-   "udp": true,
-   "tls": true,
-   "servername": "www.cloudflare.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "Xr55Hig_JTeUluiGfSnma6zMHG2Uv5Xu30ZODGF5xGA",
-    "short-id": "f09ac427e1abd14b"
-   }
-  },
-  {
-   "name": "Rose | 🇬🇧 GB | VLESS | 1314",
-   "type": "vless",
-   "server": "92.113.107.120",
-   "port": 443,
-   "uuid": "dbda40e2-25b5-416c-8d35-56d07e8dcdbc",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/ws"
-   },
-   "tls": true,
-   "servername": "indigostar.click",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "Rose | 🇨🇦 CA | VLESS | 1277",
-   "type": "vless",
-   "server": "213.152.180.104",
-   "port": 2093,
-   "uuid": "19456d94-8f54-4f82-ae9c-0e19afb5c29c",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "C_GA8wVjeLmyqLK6em5OHn4WPlsbndA-RyvyNU1aGFM",
-    "short-id": "8a9725533854a7e8"
-   }
-  },
-  {
-   "name": "Rose | 🇮🇹 IT | SS | 110",
+   "name": "https://t.me/ForceRunVPN-🇺🇸-Washington-147ms-Light Node Limited",
    "type": "ss",
-   "server": "202.50.253.36",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
+   "server": "130.94.16.109",
+   "port": 8388,
+   "cipher": "2022-blake3-aes-128-gcm",
+   "password": "CNongHrmKObCxalqw4w0Hw==",
    "udp": true
   },
   {
-   "name": "Rose | 🇩🇪 DE | VLESS | 1416",
-   "type": "vless",
-   "server": "areal3.greewebservices.ir",
-   "port": 4445,
-   "uuid": "a7e9fc98-25a2-4801-961c-7a6ed9d69328",
-   "udp": true,
-   "tls": true,
-   "servername": "amp-api-edge.apps.apple.com",
-   "client-fingerprint": "edge",
-   "reality-opts": {
-    "public-key": "xQnXh5EfPDhcEBB7rRiLca33GYrMEeUa35domLL_yA8",
-    "short-id": "e3085d4fc679ba12"
-   }
-  },
-  {
-   "name": "Rose | 🇨🇦 CA | VLESS | 1308",
-   "type": "vless",
-   "server": "213.152.180.55",
-   "port": 2093,
-   "uuid": "7e5c47fb-69a5-4d9e-af57-1d80db594e88",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "C_GA8wVjeLmyqLK6em5OHn4WPlsbndA-RyvyNU1aGFM",
-    "short-id": "8a9725533854a7e8"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 1078",
-   "type": "vless",
-   "server": "swo3.nexfile.net",
-   "port": 4443,
-   "uuid": "10be1dad-9952-4c5e-aa30-db435f69b727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/api/v1/sync/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "swo3.nexfile.net",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "DE",
-   "type": "vless",
-   "server": "lvi.su",
-   "port": 443,
-   "uuid": "7b91b2c3-8af3-449b-a555-00c9460989f4",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/vpn-relay?token=27fede42482b3c29d4c1c9640876c250&pool=whitelist2",
-    "headers": {
-     "Host": "lvi.su"
-    }
-   },
-   "tls": true,
-   "servername": "lvi.su",
-   "alpn": [
-    "http",
-    "1.1"
-   ],
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇫🇮 FI | VLESS | 1408",
-   "type": "vless",
-   "server": "p2real22.greewebservices.ir",
-   "port": 1320,
-   "uuid": "a7e9fc98-25a2-4801-961c-7a6ed9d69328",
-   "udp": true,
-   "tls": true,
-   "servername": "play.googleapis.com",
-   "client-fingerprint": "ios",
-   "reality-opts": {
-    "public-key": "xQnXh5EfPDhcEBB7rRiLca33GYrMEeUa35domLL_yA8",
-    "short-id": "9b60d3"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 18",
-   "type": "vless",
-   "server": "199.232.78.160",
-   "port": 443,
-   "uuid": "46cb8a26-0712-4e85-89bf-2538a2788652",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/",
-    "headers": {
-     "Host": "copy_az_channel_NUFiLTER_10i.global.ssl.fastly.net."
-    }
-   },
-   "tls": true,
-   "servername": "firefox.com",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 658",
-   "type": "vless",
-   "server": "823bcb90.con.fernarchive.online",
-   "port": 443,
-   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "823bcb90.con.fernarchive.online",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 819",
-   "type": "vless",
-   "server": "9187bd6f.con.fernarchive.online",
-   "port": 443,
-   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "9187bd6f.con.fernarchive.online",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 886",
-   "type": "vless",
-   "server": "191.217.217.69",
-   "port": 443,
-   "uuid": "846cedee-2a52-0002-a0b9-11850ead6a8b",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "nl-central.v8x2b.lol",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "q3UXFUE5yYxNE4ugLUnYdpc9WRtR-sjsDTrKsiqzDHE"
-   }
-  },
-  {
-   "name": "Rose | 🇬🇧 GB | VLESS | 788",
-   "type": "vless",
-   "server": "13.143.180.104",
-   "port": 443,
-   "uuid": "a0fa7e19-70ec-41e0-b0cc-bcc984d4201a",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "s12.bsh-net.ru",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "QvT-t_h_AF2EAT4Ggh_a6pcCK3StY8G9WCXn6-dJbxk",
-    "short-id": "51079f144d661484"
-   }
-  },
-  {
-   "name": "🇮🇹[www.v2nodes.com] ss-IT-1602... #1",
-   "type": "ss",
-   "server": "202.50.253.54",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "43.155.199.22:80",
-   "type": "vmess",
-   "server": "43.155.199.22",
-   "port": 80,
-   "uuid": "3722ad16-f3e1-4406-b04a-929b529d8e0d",
-   "alterId": 0,
-   "cipher": "auto",
-   "udp": true,
-   "network": "http",
-   "http-opts": {
-    "path": [
-     "/"
-    ],
-    "method": "GET"
-   }
-  },
-  {
-   "name": "Rose | 🇫🇷 FR | VLESS | 852",
-   "type": "vless",
-   "server": "w.geogame.ir",
-   "port": 2053,
-   "uuid": "fbda2834-b1e7-4148-afb9-deda31036a30",
-   "udp": true,
-   "tls": true,
-   "servername": "w.geogame.ir",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 1272",
-   "type": "vless",
-   "server": "213.152.180.55",
-   "port": 2088,
-   "uuid": "0ac16dd6-2f00-4e35-9a4d-479fd2755475",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "bvG7GBU_gOKuBuAagnC07EbQZ_2tJ8OhBNSVGkHSugo",
-    "short-id": "66d62ef550107695"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 1239",
-   "type": "vless",
-   "server": "213.152.180.104",
-   "port": 2095,
-   "uuid": "16107a06-1b5e-4060-8b48-e13a04b15e56",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "OKksVHWL5JepTv7if7Ta_L_7vn8OxW0INwV71HJM1jI",
-    "short-id": "3869d49a9a79e06a"
-   }
-  },
-  {
-   "name": "Rose | 🇭🇰 HK | VLESS | 1340",
-   "type": "vless",
-   "server": "213.152.180.104",
-   "port": 2091,
-   "uuid": "ce17d29c-3587-4d8c-b09d-e03437df8bbd",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "1N6AW5YuEwBoYcZK5KuugDzBHsa0NKZMT8QI-EmyL0k",
-    "short-id": "08a4b1f473932632"
-   }
-  },
-  {
-   "name": "US",
-   "type": "vless",
-   "server": "nl-central.v8x2b.lol",
-   "port": 443,
-   "uuid": "846cedee-2a52-0002-a0b9-11850ead6a8b",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "nl-central.v8x2b.lol",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "q3UXFUE5yYxNE4ugLUnYdpc9WRtR-sjsDTrKsiqzDHE"
-   }
-  },
-  {
-   "name": "Rose | 🇳🇱 NL | VLESS | 1257",
-   "type": "vless",
-   "server": "164.37.224.228",
-   "port": 25445,
-   "uuid": "5a519754-a673-4462-83f6-5eb25d2af141",
-   "udp": true,
-   "tls": true,
-   "servername": "www.cloudflare.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "wkpC2kKl2gNMM6uOP-K1__k70YUKS8c5t7aFW_PF7UM",
-    "short-id": "e891838a8cb32dbf"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 1393",
-   "type": "vless",
-   "server": "31.76.3.248",
-   "port": 4443,
-   "uuid": "10be1dad-9952-4c5e-aa30-db435f69b727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/api/v1/sync/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "swo3.nexfile.net",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "135.106.142.209:443",
-   "type": "vless",
-   "server": "135.106.142.209",
-   "port": 443,
-   "uuid": "9c5ad05d-d807-0031-bf48-cfad48af6dec",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/assets",
-    "mode": "packet-up"
-   },
-   "tls": true,
-   "servername": "alfastat.ru",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "fz_xpZfQks3oa9c_d1OSokmTgmJuGbvFMkyK0Qt8w3I",
-    "short-id": "0066a7326f06d426"
-   }
-  },
-  {
-   "name": "Rose | 🇫🇷 FR | VLESS | 1140",
-   "type": "vless",
-   "server": "199.232.78.170",
-   "port": 443,
-   "uuid": "XpnTeam-59",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/",
-    "headers": {
-     "Host": "Appxdn.global.ssl.fastly.net"
-    }
-   },
-   "tls": true,
-   "servername": "cdn.akamai.steamstatic.com"
-  },
-  {
-   "name": "Rose | 🇫🇮 FI | VLESS | 1116",
-   "type": "vless",
-   "server": "3f8efdt.fi1.h1clayd.click",
-   "port": 443,
-   "uuid": "9a0e84f8-4b58-477f-99da-5fac5a2e58e8",
-   "udp": true,
-   "tls": true,
-   "servername": "3f8efdt.fi1.h1clayd.click",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "1D_o1pqfVoReg9zLPKNy1wCL7aGWytbmbYPbbJGaozY",
-    "short-id": "023a1e6ffc32be10"
-   }
-  },
-  {
-   "name": "Rose | 🇷🇺 RU | VLESS | 1177",
-   "type": "vless",
-   "server": "xsru1.ddnsfree.com",
-   "port": 443,
-   "uuid": "c90395e6-2140-47ad-a54d-9b166729d3ef",
-   "udp": true,
-   "network": "grpc",
-   "grpc-opts": {
-    "grpc-service-name": "grpc-ru"
-   },
-   "tls": true,
-   "servername": "xsru1.ddnsfree.com",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 986",
-   "type": "vless",
-   "server": "e2865c20.con.rasterparcel.tech",
-   "port": 443,
-   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/conv4/stream/d34366ecdd31367d0fc76955c6b8d77c",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "e2865c20.con.rasterparcel.tech",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 1243",
-   "type": "vless",
-   "server": "213.152.180.104",
-   "port": 2094,
-   "uuid": "372af4ce-2153-4061-822c-b657172308f6",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "jHtC6ayzhkd_GVNF5TIGPu9iVpqUltBAQj1dpGJHwxs",
-    "short-id": "55986a94e2228791"
-   }
-  },
-  {
-   "name": "161.104.38.98:443",
-   "type": "vless",
-   "server": "161.104.38.98",
-   "port": 443,
-   "uuid": "9c5ad05d-d807-0024-bf48-cfad48af6dec",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/assets",
-    "mode": "packet-up"
-   },
-   "tls": true,
-   "servername": "mm.melbicom.net",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "kYwdZueXQt_DEKPrWTw8yoj6G4AWqupg8UrWjAgWbkE",
-    "short-id": "8ba6e72ee60667f6"
-   }
-  },
-  {
-   "name": "Rose | 🇫🇮 FI | VLESS | 1410",
-   "type": "vless",
-   "server": "p2real33.greewebservices.ir",
-   "port": 1330,
-   "uuid": "a7e9fc98-25a2-4801-961c-7a6ed9d69328",
-   "udp": true,
-   "tls": true,
-   "servername": "play.googleapis.com",
-   "client-fingerprint": "ios",
-   "reality-opts": {
-    "public-key": "xQnXh5EfPDhcEBB7rRiLca33GYrMEeUa35domLL_yA8",
-    "short-id": "9b60d3"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 350",
-   "type": "vless",
-   "server": "200.165.231.209",
-   "port": 443,
-   "uuid": "ff0b6ba8-bed0-4c4d-bbc9-23af47582615",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/api/connect",
-    "headers": {
-     "Host": "wstg.datasynctrue.online"
-    }
-   },
-   "tls": true,
-   "servername": "wstg.datasynctrue.online"
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 1368",
-   "type": "vless",
-   "server": "217.216.218.108",
-   "port": 443,
-   "uuid": "eaa34d9f-662d-4378-8210-3508b5eee727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "savesafe.top",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "B4gdMxfjdXtFuqg-Ek9CDKiJT6QQiKb-tV2VODt_ik0",
-    "short-id": "def9b800fb6a3ddb"
-   }
-  },
-  {
-   "name": "Rose | 🇷🇺 RU | VLESS | 1037",
-   "type": "vless",
-   "server": "pl5.h1cloud.net",
-   "port": 25548,
-   "uuid": "5a519754-a673-4462-83f6-5eb25d2af141",
-   "udp": true,
-   "tls": true,
-   "servername": "www.cloudflare.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "lceynvFy326oU4ew9OPR7079m-L5ZcFELgCl0sqxU2M",
-    "short-id": "bceb5b2197b76818"
-   }
-  },
-  {
-   "name": "🇬🇧 | @WhiteDNS | GB117|5.9MB/s|DNSOK|GPT⁺-GB",
-   "type": "vless",
-   "server": "ru2.radiolumens.uk",
-   "port": 9444,
-   "uuid": "36cf792c-f07d-4500-97ea-a395e5178deb",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/beru-uk",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "ru2.radiolumens.uk",
-   "alpn": [
-    "h2",
-    "http",
-    "1.1"
-   ],
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "Rose | 🇳🇱 NL | VLESS | 952",
-   "type": "vless",
-   "server": "78.17.53.142",
-   "port": 8443,
-   "uuid": "6b566898-8416-4ac3-8b8f-66db059c462b",
-   "udp": true,
-   "tls": true,
-   "servername": "www.ru.nl",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "drwJd-KiNSQHhp1yHQBknycbzWEzR2K9_R9ZdfPra3U"
-   }
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 845",
-   "type": "vless",
-   "server": "597dad6b.con.fernarchive.online",
-   "port": 443,
-   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "597dad6b.con.fernarchive.online",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "Rose | 🇮🇹 IT | SS | 111",
-   "type": "ss",
-   "server": "202.50.253.27",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "Rose | 🇭🇰 HK | VLESS | 1324",
-   "type": "vless",
-   "server": "213.152.165.198",
-   "port": 2091,
-   "uuid": "6a26029d-5639-473a-9234-3e80d0633d7d",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "1N6AW5YuEwBoYcZK5KuugDzBHsa0NKZMT8QI-EmyL0k",
-    "short-id": "08a4b1f473932632"
-   }
-  },
-  {
-   "name": "Rose | 🇳🇱 NL | VLESS | 1267",
-   "type": "vless",
-   "server": "79.182.39.45",
-   "port": 25172,
-   "uuid": "5a519754-a673-4462-83f6-5eb25d2af141",
-   "udp": true,
-   "tls": true,
-   "servername": "www.cloudflare.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "Xr55Hig_JTeUluiGfSnma6zMHG2Uv5Xu30ZODGF5xGA",
-    "short-id": "f09ac427e1abd14b"
-   }
-  },
-  {
-   "name": "Rose | 🇩🇪 DE | VLESS | 932",
-   "type": "vless",
-   "server": "217.216.218.162",
-   "port": 443,
-   "uuid": "eaa34d9f-662d-4378-8210-3508b5eee727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "savesafe.top",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "B4gdMxfjdXtFuqg-Ek9CDKiJT6QQiKb-tV2VODt_ik0",
-    "short-id": "def9b800fb6a3ddb"
-   }
-  },
-  {
-   "name": "Rose | 🇮🇹 IT | SS | 280",
-   "type": "ss",
-   "server": "202.50.253.90",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "Rose | 🇮🇹 IT | SS | 122",
-   "type": "ss",
-   "server": "202.50.253.72",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "Rose | 🇷🇺 RU | VLESS | 1178",
-   "type": "vless",
-   "server": "xssite.webredirect.org",
-   "port": 443,
-   "uuid": "c90395e6-2140-47ad-a54d-9b166729d3ef",
-   "udp": true,
-   "network": "grpc",
-   "grpc-opts": {
-    "grpc-service-name": "grpc-ru"
-   },
-   "tls": true,
-   "servername": "xssite.webredirect.org",
-   "client-fingerprint": "random"
-  },
-  {
-   "name": "DE #2",
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #6",
    "type": "vless",
    "server": "155.212.240.10",
    "port": 443,
@@ -1349,92 +727,377 @@
    "client-fingerprint": "firefox"
   },
   {
-   "name": "RU #2",
-   "type": "vless",
-   "server": "194.55.239.89",
+   "name": "🇳🇱 #2",
+   "type": "trojan",
+   "server": "172.66.40.99",
    "port": 443,
-   "uuid": "073b7df7-5527-45a2-ba29-183b85c39071",
+   "password": "humanity",
+   "udp": true,
+   "tls": true,
+   "sni": "www.trusteeforward.com",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "firefox",
+   "network": "ws",
+   "ws-opts": {
+    "path": "/assignment",
+    "headers": {
+     "Host": "www.trusteeforward.com"
+    }
+   }
+  },
+  {
+   "name": "🇩🇪 DE | VLESS t.me/rjsxrd",
+   "type": "vless",
+   "server": "9187bd6f.con.fernarchive.online",
+   "port": 443,
+   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "9187bd6f.con.fernarchive.online",
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "🇺🇸 US | VLESS | 133ms t.me/rjsxrd",
+   "type": "vless",
+   "server": "597dad6b.con.fernarchive.online",
+   "port": 443,
+   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "597dad6b.con.fernarchive.online",
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "[OpenRay] 🇺🇸US-1089",
+   "type": "vless",
+   "server": "151.101.67.6",
+   "port": 443,
+   "uuid": "bdf38176-48e9-40f1-9d1c-d501c333b464",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/crownnet",
+    "mode": "auto",
+    "host": "kkbr.tm"
+   },
+   "tls": true,
+   "servername": "amp-api-edge.apps.apple.com",
+   "alpn": [
+    "h3"
+   ],
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "Бесплатный #6",
+   "type": "vless",
+   "server": "etpl6.servertest.cc",
+   "port": 443,
+   "uuid": "3f044365-9592-4301-8291-f2d93fcc2570",
    "udp": true,
    "network": "ws",
    "ws-opts": {
-    "path": "/live.stream.v1.Broadcast/"
+    "path": "/gateway/v1/ws/e17e55a42ca2cb6bc3c98ab20ff16f9c"
    },
    "tls": true,
-   "servername": "broadcast.liveflow.space",
-   "client-fingerprint": "android"
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 899",
-   "type": "vless",
-   "server": "13.143.188.142",
-   "port": 4443,
-   "uuid": "10be1dad-9952-4c5e-aa30-db435f69b727",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/api/v1/sync/",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "bl1.nexfile.net",
+   "servername": "etpl6.servertest.cc",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
    "client-fingerprint": "firefox"
   },
   {
-   "name": "Rose | 🇯🇵 JP | VLESS | 1337",
+   "name": "🇩🇪 #5",
    "type": "vless",
-   "server": "213.152.180.55",
-   "port": 2090,
-   "uuid": "9a92729a-7b89-475b-a651-cfd246524403",
+   "server": "217.60.151.187",
+   "port": 47443,
+   "uuid": "1fe01c8a-ab37-4e95-bbfc-95d4a608931e",
    "udp": true,
    "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "www.apple.com",
-   "client-fingerprint": "chrome",
+   "servername": "ge-3.waspguard.ru",
+   "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "qBobe6KSNkFLqTPCffcJo0nXgxy-3JKru9WRqY9rkjk",
-    "short-id": "bb472a184677af64"
+    "public-key": "MnW49sASUaQ1Sm8SbCWlU8eKfNR8x1O03YSZdj5vM3Y",
+    "short-id": "ae97223a8f799003"
    }
   },
   {
-   "name": "Rose | 🇺🇸 US | VLESS | 1004",
+   "name": "Бесплатный #7",
    "type": "vless",
-   "server": "144.31.242.142",
+   "server": "ee-2e06d85dc0.shamanapp.online",
+   "port": 34451,
+   "uuid": "5d9fb46f-c4bc-4d6e-9a26-a4d5f51abd28",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/ShamanXHTTP2026",
+    "mode": "stream-up",
+    "host": "ee-2e06d85dc0.shamanapp.online"
+   },
+   "tls": true,
+   "servername": "ee-2e06d85dc0.shamanapp.online",
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "美国+佛罗里达州迈阿密市",
+   "type": "vless",
+   "server": "72.56.38.83",
    "port": 443,
-   "uuid": "f8bdf363-ff05-4fe6-a013-a5605266657e",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/conv4/stream/d34366ecdd31367d0fc76955c6b8d77c",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "883f1393.con.rasterparcel.tech",
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "Rose | 🇺🇸 US | VLESS | 1270",
-   "type": "vless",
-   "server": "213.152.180.104",
-   "port": 2088,
-   "uuid": "0ac16dd6-2f00-4e35-9a4d-479fd2755475",
+   "uuid": "1e2b9c0c-4f9b-56f5-a062-1c4f2d2aa200",
    "udp": true,
    "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "www.apple.com",
+   "servername": "absolute-disaster.org",
    "client-fingerprint": "chrome",
    "reality-opts": {
-    "public-key": "bvG7GBU_gOKuBuAagnC07EbQZ_2tJ8OhBNSVGkHSugo",
-    "short-id": "66d62ef550107695"
+    "public-key": "ZzIetLcQtENjIXQ9XZqFo8p3J81p8Emj0wi51Uy07n8"
    }
   },
   {
-   "name": "Rose | 🇮🇹 IT | SS | 119",
-   "type": "ss",
-   "server": "202.50.253.63",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
+   "name": "🇫🇮 #3",
+   "type": "vless",
+   "server": "78.40.209.1",
+   "port": 41446,
+   "uuid": "5ae138db-e66a-46a9-bb53-686e72987a0f",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "fi16.swcdn.xyz",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "ho6_tFN20lP1ie8ETPSKyZPCl3K9d5Atf7FB2qO7VFM",
+    "short-id": "d7d7c023621e8fd1"
+   }
+  },
+  {
+   "name": "[OpenRay] 🇺🇸US-602",
+   "type": "vless",
+   "server": "151.101.3.6",
+   "port": 443,
+   "uuid": "cd6a469c-01ca-49a0-b521-755d7dfdfb9f",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/fastly",
+    "mode": "packet-up",
+    "host": "cloudrix.global.ssl.fastly.net"
+   },
+   "tls": true,
+   "servername": "apps.apple.com",
+   "alpn": [
+    "h3"
+   ],
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #7",
+   "type": "vless",
+   "server": "38.76.180.144",
+   "port": 1443,
+   "uuid": "d98b67d4-024a-4bba-91e2-e6ebece6df11",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/vless-ws",
+    "headers": {
+     "Host": "38.76.180.144"
+    }
+   }
+  },
+  {
+   "name": "🇩🇪 #6",
+   "type": "vless",
+   "server": "201.58.183.42",
+   "port": 443,
+   "uuid": "50a87e21-f0e2-4b53-a787-91adfe748f63",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "13oktober.live",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "y0wgEdmPNIKlAMJHeC0teOW_fBnX8tmRE8n1CwOZSwU"
+   }
+  },
+  {
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #8",
+   "type": "vless",
+   "server": "144.31.213.229",
+   "port": 443,
+   "uuid": "abca037b-bee5-41cc-a888-0668e4c66176",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/conv4/stream/77dd2aeeb94331fbff325bb48850392b",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "6d160a52.con.fernarchive.online",
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #9",
+   "type": "vless",
+   "server": "132.243.231.14",
+   "port": 33744,
+   "uuid": "5d9fb46f-c4bc-4d6e-9a26-a4d5f51abd28",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/ShamanXHTTP2026",
+    "mode": "stream-up",
+    "host": "se-5060f39afb.shamanapp.online"
+   },
+   "tls": true,
+   "servername": "se-5060f39afb.shamanapp.online",
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "🇩🇪 #7",
+   "type": "vless",
+   "server": "193.168.200.67",
+   "port": 443,
+   "uuid": "64c05afc-ce81-4ba0-b697-afa04da1427e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "yunohost.org",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "ba3xYhPfXzT1HOHrbCka-pGaBIJGDouCg1MbdlRzklE",
+    "short-id": "5a7c3dab8d267f"
+   }
+  },
+  {
+   "name": "end-gfw-sg89-VLESS",
+   "type": "vless",
+   "server": "47.128.242.197",
+   "port": 443,
+   "uuid": "7e68e32f-8015-4f37-9082-70e8b0b58043",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "one-admin.staging.primelectric.ph",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "x8aCD8cJtkDvAjcRrcMG05MNiwh11LaKg70KIRvfN0g",
+    "short-id": "819a87bf1651bf44"
+   }
+  },
+  {
+   "name": "sg-transit-3.nebulacloud.win:31414",
+   "type": "vmess",
+   "server": "sg-transit-3.nebulacloud.win",
+   "port": 31414,
+   "uuid": "dfa9f875-3805-49d9-8636-46b6899be24e",
+   "alterId": 0,
+   "cipher": "auto",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/getData/us",
+    "headers": {
+     "Host": "sg-transit-3.nebulacloud.win"
+    }
+   },
+   "tls": true,
+   "servername": "sg-transit-3.nebulacloud.win"
+  },
+  {
+   "name": "🌐 Anycast-IP | 🇦🇪 🇺🇸 | [*CIDR] t.me/rjsxrd",
+   "type": "vless",
+   "server": "213.165.60.187",
+   "port": 443,
+   "uuid": "1fe01c8a-ab37-4e95-bbfc-95d4a608931e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "xpc2.waspnest.space",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "3yddqUiJeYh6absBxMNR6OSMRjvi_-wVXy1GGS5K-y0",
+    "short-id": "ae97223a8f799872"
+   }
+  },
+  {
+   "name": "🇺🇸 [VL] США #433 | РосТуннель t.me/rjsxrd",
+   "type": "vless",
+   "server": "pl1.h1cloud.net",
+   "port": 27591,
+   "uuid": "056405e8-de9f-4d0d-8145-956f13cc34da",
+   "udp": true,
+   "tls": true,
+   "servername": "www.samsung.com",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "LY0H47MWx87_L_JBzxFAuTzKZB53U7MrZQK8-dNnMxM",
+    "short-id": "6c5c7900406a1ae7"
+   }
+  },
+  {
+   "name": "🇵🇱",
+   "type": "vless",
+   "server": "31.59.143.147",
+   "port": 443,
+   "uuid": "1fe01c8a-ab37-4e95-bbfc-95d4a608931e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "pl2.waspnest.space",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "Liu35gmIQJtbul5AeCrceJTjsmln4RaqxX6joKlaBjk",
+    "short-id": "ae97223a8f799889"
+   }
+  },
+  {
+   "name": "🇳🇱 #3",
+   "type": "vless",
+   "server": "31.58.234.135",
+   "port": 47443,
+   "uuid": "1fe01c8a-ab37-4e95-bbfc-95d4a608931e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "nl-1.waspguard.ru",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "r69Y55UMNEcuk345EEMQtVvpK8cNccqo3y9WjY-ugDc",
+    "short-id": "ae97223a8f799871"
+   }
+  },
+  {
+   "name": "🔥Join+Telegram:@Farah_VPN🟣 #10",
+   "type": "vmess",
+   "server": "sg-transit-3.nebulacloud.win",
+   "port": 30330,
+   "uuid": "dfa9f875-3805-49d9-8636-46b6899be24e",
+   "alterId": 0,
+   "cipher": "auto",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/ca/getData",
+    "headers": {
+     "Host": "sg-transit-3.nebulacloud.win"
+    }
+   },
+   "tls": true,
+   "servername": "sg-transit-3.nebulacloud.win"
   }
  ],
  "proxy-groups": [
@@ -1442,99 +1105,78 @@
    "name": "PROXY",
    "type": "select",
    "proxies": [
-    "@DeltaKroneckerGithub",
-    "HK",
+    "🇯🇵 日本 | JPN",
+    "end-gfw-kr64-SS",
+    "🇹🇼TW_39|313KB/s|R002-260618",
+    "end-gfw-kr64-VLESS",
+    "[OpenRay] 🌐XX-1210",
     "🇺🇸US_2|576KB/s",
-    "Rose | 🇮🇹 IT | SS | 126",
-    "KR",
-    "🇦🇺 澳洲 07",
-    "Rose | 🇳🇱 NL | SS | 200",
-    "NO",
-    "Rose | 🇩🇪 DE | VLESS | 1381",
-    "Rose | 🇷🇺 RU | VLESS | 1401",
-    "Rose | 🇫🇷 FR | VLESS | 594",
-    "Rose | 🇩🇪 DE | VLESS | 1375",
-    "🇫🇷 法国 05",
-    "Rose | 🇮🇹 IT | SS | 134",
-    "31.76.2.57:443",
-    "Rose | 🇩🇪 DE | VLESS | 1379",
-    "135.106.143.114:443",
-    "Rose | 🇫🇷 FR | VLESS | 598",
-    "31.76.7.233:443",
-    "Rose | 🇫🇮 FI | VLESS | 813",
-    "NO #2",
-    "TW",
-    "Rose | 🇺🇸 US | VLESS | 803",
-    "NO #3",
-    "NO #4",
-    "NO #5",
-    "Rose | 🇹🇷 TR | VLESS | 791",
-    "Rose | 🇪🇸 ES | VLESS | 805",
-    "Rose | 🇫🇮 FI | VLESS | 896",
-    "Rose | 🇫🇷 FR | VLESS | 1262",
-    "RU",
-    "@DeltaKroneckerGithub #2",
-    "NO #6",
-    "Rose | 🇰🇿 KZ | VLESS | 629",
-    "Rose | 🇺🇸 US | TROJAN | 1355",
-    "@DeltaKroneckerGithub #3",
-    "Rose | 🇰🇿 KZ | VLESS | 796",
-    "Rose | 🇩🇪 DE | VLESS | 963",
-    "Rose | 🇫🇷 FR | VLESS | 1258",
-    "Rose | 🇺🇸 US | VLESS | 468",
-    "Rose | 🇺🇸 US | VLESS | 620",
-    "Rose | 🇺🇸 US | VLESS | 16",
-    "Rose | 🇩🇪 DE | VLESS | 1266",
-    "Rose | 🇬🇧 GB | VLESS | 1314",
-    "Rose | 🇨🇦 CA | VLESS | 1277",
-    "Rose | 🇮🇹 IT | SS | 110",
-    "Rose | 🇩🇪 DE | VLESS | 1416",
-    "Rose | 🇨🇦 CA | VLESS | 1308",
-    "Rose | 🇺🇸 US | VLESS | 1078",
-    "DE",
-    "Rose | 🇫🇮 FI | VLESS | 1408",
-    "Rose | 🇺🇸 US | VLESS | 18",
-    "Rose | 🇺🇸 US | VLESS | 658",
-    "Rose | 🇩🇪 DE | VLESS | 819",
-    "Rose | 🇩🇪 DE | VLESS | 886",
-    "Rose | 🇬🇧 GB | VLESS | 788",
-    "🇮🇹[www.v2nodes.com] ss-IT-1602... #1",
-    "43.155.199.22:80",
-    "Rose | 🇫🇷 FR | VLESS | 852",
-    "Rose | 🇺🇸 US | VLESS | 1272",
-    "Rose | 🇺🇸 US | VLESS | 1239",
-    "Rose | 🇭🇰 HK | VLESS | 1340",
-    "US",
-    "Rose | 🇳🇱 NL | VLESS | 1257",
-    "Rose | 🇺🇸 US | VLESS | 1393",
-    "135.106.142.209:443",
-    "Rose | 🇫🇷 FR | VLESS | 1140",
-    "Rose | 🇫🇮 FI | VLESS | 1116",
-    "Rose | 🇷🇺 RU | VLESS | 1177",
-    "Rose | 🇺🇸 US | VLESS | 986",
-    "Rose | 🇩🇪 DE | VLESS | 1243",
-    "161.104.38.98:443",
-    "Rose | 🇫🇮 FI | VLESS | 1410",
-    "Rose | 🇺🇸 US | VLESS | 350",
-    "Rose | 🇩🇪 DE | VLESS | 1368",
-    "Rose | 🇷🇺 RU | VLESS | 1037",
-    "🇬🇧 | @WhiteDNS | GB117|5.9MB/s|DNSOK|GPT⁺-GB",
-    "Rose | 🇳🇱 NL | VLESS | 952",
-    "Rose | 🇺🇸 US | VLESS | 845",
-    "Rose | 🇮🇹 IT | SS | 111",
-    "Rose | 🇭🇰 HK | VLESS | 1324",
-    "Rose | 🇳🇱 NL | VLESS | 1267",
-    "Rose | 🇩🇪 DE | VLESS | 932",
-    "Rose | 🇮🇹 IT | SS | 280",
-    "Rose | 🇮🇹 IT | SS | 122",
-    "Rose | 🇷🇺 RU | VLESS | 1178",
-    "DE #2",
-    "RU #2",
-    "Rose | 🇺🇸 US | VLESS | 899",
-    "Rose | 🇯🇵 JP | VLESS | 1337",
-    "Rose | 🇺🇸 US | VLESS | 1004",
-    "Rose | 🇺🇸 US | VLESS | 1270",
-    "Rose | 🇮🇹 IT | SS | 119",
+    "🇺🇸 [SS] США #3564 | РосТуннель t.me/rjsxrd",
+    "Бесплатный",
+    "🇨🇦CA_57|469KB/s|A004-260618",
+    "🇺🇸",
+    "Бесплатный #2",
+    "🇸🇬[www.v2nodes.com] vless-SG #2",
+    "🇮🇹[www.v2nodes.com] ss-IT-1602... #2",
+    "Бесплатный #3",
+    "🇮🇹[www.v2nodes.com] ss-IT-1602... #7",
+    "🇮🇹[www.v2nodes.com] ss-IT-1602... #5",
+    "🇩🇪",
+    "🏳[www.v2nodes.com] trojan- #6",
+    "Бесплатный #4",
+    "🇸🇪",
+    "p-0cb49b0c9c4a0712",
+    "🇺🇸 #2",
+    "🇩🇪 #2",
+    "🇨🇦CA_59|1.5MB/s|A004-260618",
+    "🇱🇹 AetrisVPN t.me/rjsxrd",
+    "🇮🇹 意大利 | ITA #1",
+    "🇳🇱",
+    "🇺🇸US_405|731KB/s|R002-260618",
+    "🇫🇮",
+    "🔥Join+Telegram:@Farah_VPN🟣",
+    "🇩🇪 #3",
+    "🇮🇹 意大利 | ITA #2",
+    "🇩🇪DE_119|1.1MB/s|M003-260806",
+    "🇦🇺 [VL] Австралия #2722 | РосТуннель t.me/rjsxrd",
+    "Rose | 🇫🇮 FI | TROJAN | 1392",
+    "🇺🇸 #3",
+    "🇩🇪 #4",
+    "Бесплатный #5",
+    "🇫🇮 AetrisVPN t.me/rjsxrd",
+    "🇫🇮FI_30|134KB/s|M003-260806",
+    "🔥Join+Telegram:@Farah_VPN🟣 #2",
+    "🇫🇮 #2",
+    "🔥Join+Telegram:@Farah_VPN🟣 #3",
+    "[OpenRay] 🇳🇱NL-602",
+    "[OpenRay] 🇺🇸US-1897",
+    "🇮🇹[www.v2nodes.com] ss-IT-1602... #8",
+    "🔥Join+Telegram:@Farah_VPN🟣 #4",
+    "🔥Join+Telegram:@Farah_VPN🟣 #5",
+    "https://t.me/ForceRunVPN-🇺🇸-Washington-147ms-Light Node Limited",
+    "🔥Join+Telegram:@Farah_VPN🟣 #6",
+    "🇳🇱 #2",
+    "🇩🇪 DE | VLESS t.me/rjsxrd",
+    "🇺🇸 US | VLESS | 133ms t.me/rjsxrd",
+    "[OpenRay] 🇺🇸US-1089",
+    "Бесплатный #6",
+    "🇩🇪 #5",
+    "Бесплатный #7",
+    "美国+佛罗里达州迈阿密市",
+    "🇫🇮 #3",
+    "[OpenRay] 🇺🇸US-602",
+    "🔥Join+Telegram:@Farah_VPN🟣 #7",
+    "🇩🇪 #6",
+    "🔥Join+Telegram:@Farah_VPN🟣 #8",
+    "🔥Join+Telegram:@Farah_VPN🟣 #9",
+    "🇩🇪 #7",
+    "end-gfw-sg89-VLESS",
+    "sg-transit-3.nebulacloud.win:31414",
+    "🌐 Anycast-IP | 🇦🇪 🇺🇸 | [*CIDR] t.me/rjsxrd",
+    "🇺🇸 [VL] США #433 | РосТуннель t.me/rjsxrd",
+    "🇵🇱",
+    "🇳🇱 #3",
+    "🔥Join+Telegram:@Farah_VPN🟣 #10",
     "DIRECT"
    ]
   }
