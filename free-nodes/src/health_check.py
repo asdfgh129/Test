@@ -510,19 +510,43 @@ def check_mirrors(find):
 
 
 def check_quota(find):
+    """查询 GitHub 配额——必须用与采集完全相同的身份。
+
+    2026-10-29 修：此前只判断 `GITHUB_TOKEN` 环境变量、且查询时不带 token，导致
+    ① 采集明明走了凭据文件里的 token，报告却每天写「匿名」；
+    ② 报出来的是匿名桶 60/60，被当成真实配额（带 token 实际 5000/5000）。
+    现在统一走 `collect_nodes.load_github_token()` 的查找链（--token > 环境变量 > 凭据文件），
+    并把 token 传给 rate_limit，数字才对得上「采集到底能用多少额度」。
+    """
+    token = c.load_github_token()
+    who = f"已配置 token {c.token_desc(token)}" if token else "匿名"
     try:
-        d = c.github_api("/rate_limit")
-        core = d["resources"]["core"]
-        search = d["resources"]["search"]
-        token = bool(os.environ.get("GITHUB_TOKEN"))
-        msg = (f"GitHub 配额剩余 core {core['remaining']}/{core['limit']}、"
-               f"search {search['remaining']}/{search['limit']}（{'已配置 token' if token else '匿名'}）")
-        if not token and core["remaining"] < 20:
-            find("warn", "配额", msg, "匿名配额紧张，采集可能被截断；建议给自动化配置 GITHUB_TOKEN")
-        else:
-            find("info", "配额", msg, "" if core["remaining"] >= 20 else "配额偏低，注意阶段 2/3 可能被跳过")
+        d = c.github_api("/rate_limit", token)
     except Exception as e:  # noqa: BLE001
-        find("warn", "配额", f"无法查询 GitHub 配额：{str(e)[:80]}", "检查网络；配额查询失败也意味着 API 调用可能不稳")
+        # 带 token 查询失败往往意味着 token 已过期/被吊销，这时退回匿名查一次：
+        # 既能区分「网络问题」与「凭据问题」，也能把「这份配额数字不可信」讲清楚
+        if token:
+            try:
+                c.github_api("/rate_limit")
+                find("warn", "配额",
+                     f"token（{c.token_desc(token)}）鉴权查询失败，已回退匿名查询：{str(e)[:60]}",
+                     "token 可能过期或被吊销：本条的配额是匿名桶（60/时），不代表采集实际可用额度；"
+                     "换新 token 后重跑自检确认")
+                return
+            except Exception:  # noqa: BLE001
+                pass
+        find("warn", "配额", f"无法查询 GitHub 配额：{str(e)[:80]}",
+             "检查网络；配额查询失败也意味着 API 调用可能不稳")
+        return
+
+    core = d["resources"]["core"]
+    search = d["resources"]["search"]
+    msg = (f"GitHub 配额剩余 core {core['remaining']}/{core['limit']}、"
+           f"search {search['remaining']}/{search['limit']}（{who}）")
+    if not token and core["remaining"] < 20:
+        find("warn", "配额", msg, "匿名配额紧张，采集可能被截断；建议给自动化配置 GITHUB_TOKEN")
+    else:
+        find("info", "配额", msg, "" if core["remaining"] >= 20 else "配额偏低，注意阶段 2/3 可能被跳过")
 
 
 def collected_of(entry):

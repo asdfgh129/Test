@@ -83,6 +83,12 @@ python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的�
 2. 提示用户：免费节点时效极短，当天导入当天用；只要低延迟精品直接导入 `nodes/pool/pool_<core>.<ext>`
 3. 结果为 0 条时查网络与 GitHub 限额（匿名搜索 10 次/分、核心 60 次/时），建议配 token 重试
 
+**配额一行的读法**：`health_check` 的「GitHub 配额剩余」现在带身份标注——
+`（已配置 token ghp_…x6hY）` 表示走的是凭据文件里的 token（核心 5000/时），
+`（匿名）` 表示没有任何凭据（60/时）。**`limit` 字段就是身份的指纹**：60 = 匿名桶、5000 = token 桶，
+两者混杂说明取数身份和干活身份不一致（第 45 条就是这么被抓到的）。
+身份判断一律调 `collect_nodes.load_github_token()`，不要在别处再写 `os.environ.get("GITHUB_TOKEN")`。
+
 ## 故障排查（修复闭环）
 
 1. 读 `Docs/health_check.md` 的待办清单，取最靠前的 critical

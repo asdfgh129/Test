@@ -2,7 +2,7 @@
 
 > 按日期倒序累积，最新一次运行在最上面
 
-## 2026-10-29 23:46
+## 2026-10-29 01:32
 
 **结论：无严重问题，5 个告警可优化**
 
@@ -74,7 +74,7 @@
 #### 🔵 [下载通道] jsDelivr 可用 3/4：fastly.jsdelivr.net、gcore.jsdelivr.net、testingcf.jsdelivr.net（不可达：cdn.jsdelivr.net）
 
 
-#### 🔵 [配额] GitHub 配额剩余 core 60/60、search 10/10（匿名）
+#### 🔵 [配额] GitHub 配额剩余 core 5000/5000、search 30/30（已配置 token ghp_…x6hY）
 
 
 ### 待办清单（需人工或自动修复）
