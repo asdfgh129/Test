@@ -1,5 +1,19 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-10-29 采集日（2026-10-30 01:30 运行）
+
+- `Docs/summary.json` 的 `date` = 2026-10-29；四内核 `partial=false`、`sampled` 已到 2500 上限
+  （2502/2503/2506/2503），`exhausted=false` 属取样上限稳态 → 跳过续跑，未重测任何节点
+- 自检 0 critical / 5 warn（1.2%/4.2%/2.9%/2.0% 可用率、镜像失效 10/13、crashgfw 0 条）
+- **本窗口修复（info 错报，跨窗口留用）**：自检连续三天报「配额 core 60/60（匿名）」。
+  `check_quota()` 只看环境变量、且 `rate_limit` 不带 token → 报的是匿名桶；
+  真实身份是凭据文件里的 token（5000/5000）。修法：统一 `load_github_token()` + token 传入 +
+  `token_desc()` 打码 + 「带 token 失败回退匿名」分支。known-issues 第 45 条
+- 判据口诀：**`limit` 字段就是身份指纹**（60=匿名、5000=token），两个桶数字混用不会报错，只会骗人
+- 提交 `1262d51` 推送成功（v2ray @ 202.50.253.81:19999）
+- 遗留：`free-nodes/.workbuddy/memory/2026-10-29.md` 里「提交 hash」是发布后补写的，未提交，
+  下次发布自动带上（沿用既有约定）
+
 ## 2026-10-28 采集日（2026-10-29 01:30 运行）
 
 - `Docs/summary.json` 的 `date` = 2026-10-28；四内核 `partial=false`（v2ray 2118 / xray 2159 /

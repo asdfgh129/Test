@@ -1297,9 +1297,104 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 不要自己再写一遍 `os.environ.get()`——两套判断迟早分叉，而且分叉的表现是
 「数字看着正常、其实测的是另一个桶」，不会报错。
 
+## 46. 仓库质量闸门按「可用率 < 2%」一刀切，一天砍掉 18% 的可用节点（2026-10-30 第一窗口）
+
+**现象**：采集日志里 6 个仓库被判「历史质量过低（实测 N 个、可用 0 个），跳过以省配额」，
+其中 `sakha1370/OpenRay`（实测 1490、**可用 20**）、`SoliSpirit/v2ray-configs`（实测 5591、**可用 27**）、
+`Delta-Kronecker/V2ray-Config`（实测 1531、**可用 7**）——日志说「可用 0 个」，实际显然不是 0。
+同日采集原始提取 70149 条（10-29 是 117984）、唯一 8935（10-29 是 10177）。
+
+**根因**（`collect_nodes.py::is_known_bad_repo`）：函数里塞了**两条**判据，第二条是
+`tested >= 50 and ok / tested < 0.02`。这条从 fc40e08（目录三层重构）起就在，但
+`known-issues` 第 149 行与 docstring 的名义口径都只写「实测 ≥20 且可用 **0** 个」——
+即代码比文档多了一条从没被数据验证过的规则。而**大仓库的可用率天生就低**：
+两万条量级的聚合仓库可用率只有 0.5%~1.3%，但绝对值有 20~27 个可用节点，
+按可用率一刀切等于把最有价值的量源全砍掉。日志里「可用 0 个」是硬编码字符串，把问题盖住了。
+
+**量化影响**（10-29 已验证结果反查）：当日四核可用合计 257 条（按内核计），
+其中 47 条（18.3%）来自今天被跳过的仓库（SoliSpirit 27、OpenRay 20）。
+
+**修复**：判据收敛回「实测 ≥20 且可用 **0** 个」一条；日志改成打印真实的 `ok` 值。
+
+**回归**（拿真实 `seed_repos.json` 单点）：
+
+| 仓库 | tested/ok | 修复前 | 修复后 | 期望 |
+|---|---|---|---|---|
+| sakha1370/OpenRay | 1490/20 | 跳过 | 采集 | 采集 ✓ |
+| SoliSpirit/v2ray-configs | 5591/27 | 跳过 | 采集 | 采集 ✓ |
+| Delta-Kronecker/V2ray-Config | 1531/7 | 跳过 | 采集 | 采集 ✓ |
+| Barabama/FreeNodes | 182/0 | 跳过 | 跳过 | 跳过 ✓ |
+| MatinGhanbari/v2ray-configs | 164/0 | 跳过 | 跳过 | 跳过 ✓ |
+| gslege/CloudflareIP | 76/0 | 跳过 | 跳过 | 跳过 ✓ |
+| snakem982/proxypool | 15/8 | 采集 | 采集 | 采集 ✓ |
+| barry-far/V2ray-Config | 3/0 | 采集 | 采集 | 采集 ✓（样本 <20 不跳） |
+| 清单外新仓库 | — | 采集 | 采集 | 采集 ✓ |
+
+**教训**：**闸门要按「绝对值」判，不要按「率」判**——率对小样本敏感、对大样本失真，
+而这两种情况恰好都在同一张表里。另外，日志里凡是写死的结论性文字（「可用 0 个」）
+都可能变成谎报，能打印真实字段就打印真实字段。
+
+## 47. 订阅头 `#profile-title` 挡在 JSON 前面，9 个链接 319 个节点全丢（2026-10-30 第一窗口）
+
+**现象**：`sinavm/SVM` 连续两天「README 声明的 9 个链接已下载但解析不到节点」，
+10-29 还因此单仓吃掉 9 分钟采集时间（当时误判成「大文件超时」，API 查出最大文件仅 0.03MB，猜测被否定）。
+今天自检仍把 `free-nodes/clashfree` 之类列进「解析不到节点」。
+
+**根因**（`collect_nodes.py::extract_text_into`）：这类订阅站点把 sing-box 配置当订阅分发，
+文件名叫 `*.json`、正文确实是合法 sing-box 配置，**但开头插了一段 `#` 订阅头**：
+
+```
+#profile-title: base64:QFNpTkFWTSB8IHZsZXNz
+#subscription-userinfo: upload=0; download=0; total=...
+#announce: nodes=25 updated=2026-10-30T09:23:41Z
+
+{ "log": {...}, "outbounds": [...] }
+```
+
+`json.loads()` 碰到第一行 `#` 必失败 → 落到「按纯文本抽分享链接」的兜底 → 正文是 JSON 不是 URI 列表
+→ 0 条。`sniff_ext()` 也会因为正文里有 `"outbounds"` 把它认成 `.json`，但真正卡住的是 `json.loads`。
+
+**修复**：新增 `_strip_leading_comments()`，只剥「首个非注释非空行之前」的那段 `#` 行再交给
+`json.loads`（正文里的 `#` 是 v2ray 分享链接备注，绝不全局删；文件本身以 `{`/`[` 开头时原样返回）。
+
+**回归**（真样本 + 本地既有产物，确认不误伤正常格式）：
+
+| 样本 | 修复前 | 修复后 |
+|---|---|---|
+| `sinavm/SVM` singbox/vless.json（带 `#` 头） | 0 | **26** |
+| `sinavm/SVM` singbox/mix.json（带 `#` 头） | 0 | **147** |
+| 该仓库 9 个链接合计 | 0 | **319**（tuic/hy2 上游本身就是空壳 selector，0 属正常） |
+| `lite/.../alive-fast`（`#` 头 + URI 列表） | 25 | 25（不变） |
+| `nodes/singbox_sub.json`（我们自己的产物） | 3238 | 3238（不变） |
+| `nodes/clash_sub.yaml` | 3390 | 3390（不变） |
+| `nodes/v2ray_sub.txt`（base64） | 3124 | 3124（不变） |
+
+**教训**：**「下载成功但 0 条」优先怀疑格式前置噪声，不要先怀疑文件太大或网络慢**。
+`json.loads` 失败时的兜底是「当文本抽链接」，这条兜底对「JSON 正文」完全无效，
+所以真正的信号是「有 `#` 头 + 正文是 `{`」——两者同时出现就该先剥头。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
 
+### 2026-10-30 自检发现
+
+**结论：无严重问题，5 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 2 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 1050 条, 部分链接下载失败)、free-nodes/clashfree(历史 324 条, 解析不到节点) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 1.4%（35/2502） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | clash 可用率异常低 2.0%（49/2507） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | singbox 可用率异常低 1.4%（35/2506） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+### 2026-10-30 内核检查发现
+
+
+- xray 有新版本 26.10.29（本地 26.10.21），可用 --update 自动升级
+
 ### 2026-10-29 自检发现
+
+
 
 **结论：无严重问题，5 个告警可优化**
 
@@ -1320,9 +1415,13 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 
 
 
+
+
 - xray 有新版本 26.10.29（本地 26.10.21），可用 --update 自动升级
 
 ### 2026-10-28 自检发现
+
+
 
 
 
@@ -1344,6 +1443,8 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 - [性能] 采集耗时 43 分钟
 
 ### 2026-10-27 自检发现
+
+
 
 
 
@@ -1387,6 +1488,8 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 
 
 
+
+
 **结论：无严重问题，1 个告警可优化**
 
 | 级别 | 领域 | 问题 | 建议动作 |
@@ -1397,6 +1500,8 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 - [性能] 采集耗时 36 分钟
 
 ### 2026-10-25 自检发现
+
+
 
 
 

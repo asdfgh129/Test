@@ -2039,6 +2039,28 @@ def sniff_ext(text):
     return ""
 
 
+def _strip_leading_comments(text):
+    """剥掉 JSON 配置顶部那层 `#` 订阅头注释，否则 json.loads 必然失败。
+
+    现在很多订阅站点（sinavm/SVM 等）把 sing-box 配置当成订阅分发，文件开头会塞
+    `#profile-title` / `#subscription-userinfo` / `#announce` 这类头。文件名还叫 .json，
+    正文确实是合法 sing-box 配置，但第一行起就是注释 → 解析器走文本兜底 → 0 条
+    （2026-10-30 实测：9 个链接、700+ 节点全丢，known-issues 第 47 条）。
+
+    只剥「首个非注释非空行之前」的那一段：正文里的 `#` 是 v2ray 分享链接的备注，
+    也可能出现在 shell 片段里，不能全局删。
+    """
+    if not text or text.lstrip().startswith(("{", "[")):
+        return text
+    lines = text.splitlines()
+    i = 0
+    while i < len(lines) and (not lines[i].strip() or lines[i].lstrip().startswith("#")):
+        i += 1
+    if 0 < i < len(lines):
+        return "\n".join(lines[i:])
+    return text
+
+
 def extract_text_into(text, source, repo, records, ext="", kernel=None):
     """把一段文本按格式解析成节点记录，并给新记录打上来源仓库/内核标记。
 
@@ -2054,8 +2076,10 @@ def extract_text_into(text, source, repo, records, ext="", kernel=None):
         if sniffed:
             ext = sniffed
     if ext == ".json":
+        # 订阅头注释（#profile-title …）挡在正文前面时 json.loads 必失败，先剥掉再解析
+        body = _strip_leading_comments(text)
         try:
-            obj = json.loads(text)
+            obj = json.loads(body)
             if not extract_from_json_obj(obj, source, records):
                 extract_from_text(text, source, records)
         except (ValueError, json.JSONDecodeError):
@@ -3033,20 +3057,21 @@ def repo_sort_key(seed_data, repo_full):
 
 
 def is_known_bad_repo(seed_data, repo_full, min_tests=20):
-    """历史实测明显无效的仓库，今天不必再浪费配额。
+    """历史实测「一个可用都没有」的仓库，今天不必再浪费配额。
 
-    两条判据（都要求达到最小样本量，避免误杀新仓库）：
-      - 实测 ≥20 个、可用 0 个
-      - 实测 ≥50 个、可用率 < 2%（大量样本仍几乎全死）
+    唯一判据：实测 ≥20 个、可用 0 个（样本太少不跳，避免误杀新仓库）。
+
+    刻意**不看可用率**：大仓库（OpenRay 2.2 万条、SoliSpirit 2.2 万条）的可用率
+    天然只有 0.5%~1.3%，但绝对值有 20~27 个可用节点——按「可用率 < 2%」一刀切会把
+    每天 18% 的可用节点（2026-10-29 实测 47/257）直接砍掉。可用率低不等于没价值，
+    只有「绝对 0 个」才是真的白花配额（known-issues 第 46 条）。
     """
     entry = find_seed_entry(seed_data, repo_full)
     if not entry:
         return False
     tested = int(entry.get("tested") or 0)
     ok = int(entry.get("ok") or 0)
-    if tested >= min_tests and ok == 0:
-        return True
-    return tested >= 50 and ok / tested < 0.02
+    return tested >= min_tests and ok == 0
 
 
 def update_repo_quality(seed_file, per_repo, date_str, stars_map=None):
@@ -3125,7 +3150,7 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
         if skip_bad and seed_data and is_known_bad_repo(seed_data, full):
             entry = find_seed_entry(seed_data, full) or {}
             print(f"[info] ({i}/{len(ordered)}) {full} → 历史质量过低（实测 {entry.get('tested')} 个、"
-                  f"可用 0 个），跳过以省配额")
+                  f"可用 {entry.get('ok') or 0} 个），跳过以省配额")
             if phase_log is not None:
                 phase_log.append((full, -2))
             processed.add(full)
