@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-30T23:46:37+08:00",
+ "generated_at": "2026-10-31T01:36:55+08:00",
  "date": "2026-10-30",
  "verdict": "无严重问题，5 个告警可优化",
  "metrics": {
@@ -47,7 +47,7 @@
   {
    "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
+   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   },
   {
@@ -107,7 +107,7 @@
   {
    "level": "info",
    "area": "配额",
-   "title": "GitHub 配额剩余 core 5000/5000、search 30/30（已配置 token ghp_…x6hY）",
+   "title": "GitHub 配额剩余 core 4980/5000、search 30/30（已配置 token ghp_…x6hY）",
    "action": ""
   }
  ],
@@ -139,7 +139,7 @@
   {
    "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
+   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   }
  ]

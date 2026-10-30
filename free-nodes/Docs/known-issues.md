@@ -1438,6 +1438,45 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 - 逐通道探测（每个 URL 单独打 状态码/长度/耗时）比"整体重跑一次看看"快得多，
   也比读代码猜快得多
 
+## 49. README 里的「分类页/博客页」被当成订阅链接，占掉 10 个配额中的 1 个（2026-10-30 第三窗口）
+
+**现象**：`crashgfw/free-airport-nodes` 的采集日志常年是「10 条链接，9 条下载失败」，
+但其中那条"成功"的链接 `https://v2raya.net/categories/free-nodes/` 解析出 0 条节点；
+`shaoyouvip/free` 的明细里也有 `s://blog.zrf.me/p/GUI-for-Clash/:0`。
+
+**根因**：`classify_readme_link()` 对无扩展名的外链要求命中
+`SUB_URL_STRONG_HINT = (sub|clash|v2ray|sing-box|node)`，而这两个地址分别是
+V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` / `GUI-for-Clash`
+恰好命中 `node` / `clash`，于是被当成订阅文件放行。后果有两层：
+
+1. **占配额**：`MAX_README_LINKS = 10`，分类页吃掉 1 个名额，
+   同仓库第 11 条真实订阅（`c184ad1a…`，30 条节点）反而被截掉
+2. **污染归因**：下载回来是 HTML，解析 0 条，日志记成「1/10 链接下载成功」，
+   自检把「9 条真链接全失败」稀释成「部分失败」，看起来像解析格式覆盖不全
+
+**修复**（`collect_nodes.py::classify_readme_link`）：
+外链路径以 `/` 结尾直接判为非订阅文件跳过。订阅接口（`/api/v1/client/sub?token=…`、
+`/sub`、`…/list.txt`）都不会以 `/` 收尾，所以这条规则不误伤；
+仓库内路径本来就已有 `rel.endswith("/")` 的同款判断，这次只是把外链补齐。
+
+**回归**（2026-10-30 采集日当天的 README，全部走真实网络）：
+
+| 用例 | 修复前 | 修复后 |
+|---|---|---|
+| `crashgfw/free-airport-nodes` 提取链接 | 10 条（含分类页），9 条下载失败 | **10 条全是订阅**，10/10 成功、每条 8860B / 30 节点（300 条候选） |
+| `shaoyouvip/free` 提取链接 | 4 条（含博客页） | **3 条**，全是 all.yaml/base64.txt/mihomo.yaml |
+| `NiREvil` / `peasoft` / `snakem982` / `F0rc3Run` / `Pawdroid` / `zhuhaiuk` | — | kept 数量不变（10/1/3/7/2/3），末段全是 .txt/.yaml/.json |
+
+**教训**：
+- 「有没有下载成功」不等于「拿到的是不是订阅」——HTML 页面也是 200 + 非空正文。
+  以 `/` 结尾是最省事的判别特征，比维护域名黑名单可靠
+- 日志里的 `<名字>:0` 要能一眼区分三种 0：**空文件**、**HTML 网页**、**格式未覆盖**。
+  本次只修了前者的入口（网页不再被当链接），后两种仍靠 `err_tag` / `sniff_ext` 兜
+- 顺带核实（同窗口，一次 API 调用）：`free-nodes/clashfree` 的 `clash20261030.yml`
+  在上游 git tree 里 **`size=0`**（`clash20261027.yml` 也是 0，`1026/1028/1029` 都是 688KB 级），
+  提交历史 `683e7d01`（2026-10-30T06:26Z）把它改成了空文件。所以「0 条」是上游真空，
+  不是解析缺陷；上一窗口记的「该文件 688KB / 81 条」应来自 CDN 边缘的陈旧副本
+
 ## 自检发现（health_check 自动维护，按日期倒序）
 
 ### 2026-10-30 自检发现
@@ -1450,15 +1489,19 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 | warn | 验证 | v2ray 可用率异常低 1.4%（35/2502） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | clash 可用率异常低 2.0%（49/2507） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | singbox 可用率异常低 1.4%（35/2506） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ### 2026-10-30 内核检查发现
+
+
 
 
 
 - xray 有新版本 26.10.29（本地 26.10.21），可用 --update 自动升级
 
 ### 2026-10-29 自检发现
+
+
 
 
 
@@ -1485,9 +1528,13 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 
 
 
+
+
 - xray 有新版本 26.10.29（本地 26.10.21），可用 --update 自动升级
 
 ### 2026-10-28 自检发现
+
+
 
 
 
@@ -1512,6 +1559,8 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 - [性能] 采集耗时 43 分钟
 
 ### 2026-10-27 自检发现
+
+
 
 
 
@@ -1561,6 +1610,8 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 
 
 
+
+
 **结论：无严重问题，1 个告警可优化**
 
 | 级别 | 领域 | 问题 | 建议动作 |
@@ -1571,6 +1622,8 @@ token = bool(os.environ.get("GITHUB_TOKEN"))  # ② 只看环境变量，漏了�
 - [性能] 采集耗时 36 分钟
 
 ### 2026-10-25 自检发现
+
+
 
 
 

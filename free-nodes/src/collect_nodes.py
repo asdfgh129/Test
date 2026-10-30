@@ -873,6 +873,14 @@ def classify_readme_link(url, repo_full, link_text=""):
     path = urllib.parse.unquote(u.path or "")
     if not path or path == "/":
         return None
+    # 以 "/" 结尾 = 目录/分类/文章页，不可能是订阅文件本体。
+    # 2026-10-31 归因：crashgfw/free-airport-nodes 的 `v2raya.net/categories/free-nodes/`
+    # 靠 SUB_URL_STRONG_HINT 里的 "node" 混进了链接清单，占了 MAX_README_LINKS 的 1 个名额，
+    # 下载回来是 HTML（解析 0 条），日志里却记成「1/10 链接下载成功」；
+    # shaoyouvip/free 的 `blog.zrf.me/p/GUI-for-Clash/` 同理。
+    # 订阅接口（/api/v1/client/sub?token=…）不会以 "/" 收尾，所以这条规则不会误伤真实订阅。
+    if path.endswith("/"):
+        return None
     ext = os.path.splitext(path)[1].lower()
     kernel = (detect_kernel_hint(path) or url_kernel or detect_kernel_hint(link_text)
               or detect_kernel_hint(u.netloc))

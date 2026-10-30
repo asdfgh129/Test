@@ -2,6 +2,28 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-10-30 第三窗口：README 网页链接不再占用订阅配额（并订正 clashfree「空文件」归因）
+
+- **本窗口未跑验证**：`Docs/summary.json` 四内核 `partial=false`、`sampled` 均已到 2500 上限
+  （2502/2505/2507/2506），第一窗口 23:00 已测完 → 跳过续跑，未重测任何节点
+- **复核上一窗口的修复（本窗口第一件事）**：`crashgfw/free-airport-nodes` 用当天的 README
+  实跑 10 条链接，**10/10 成功**（每条 8860B / 30 节点，合计 300 条候选），
+  证明第 48 条的「外链直连优先」确实修好了；上一窗口留的 9/10 是因为分类页还在占位
+- **修 warn（第 49 条）**：`classify_readme_link()` 把以 `/` 结尾的外链判为非订阅文件跳过。
+  `v2raya.net/categories/free-nodes/`（V2RayA 分类页）、`blog.zrf.me/p/GUI-for-Clash/`（博客文章）
+  靠路径里的 `free-nodes`/`clash` 命中 `SUB_URL_STRONG_HINT` 混进了链接清单，
+  既占掉 `MAX_README_LINKS=10` 的 1 个名额（同仓库第 11 条真实订阅被截掉），
+  又让日志记成「1/10 链接下载成功」把真失败稀释掉
+- **回归**：crashgfw 10 条全成功（修复前 9 条失败）；shaoyouvip 4→3 条（丢掉博客页）；
+  NiREvil/peasoft/snakem982/F0rc3Run/Pawdroid/zhuhaiuk 的 kept 数量与末段文件名均不变
+- **文档纠错（两处）**：① `SKILL.md` 的 `--max-test` 还写着 3000（实际 `layout.py`
+  是 `FULL_BELOW = MAX_TEST = 2500`，10-28 已下调），命令示例与口径说明一并改回 2500；
+  ② 上一窗口记的「clashfree `clash20261030.yml` 真实 688KB / 81 条」不成立——
+  上游 git tree 里该文件 `size=0`（`1027` 也是 0，`1026/1028/1029` 才是 688KB 级），
+  提交 `683e7d01`(10-30T06:26Z) 把它改成空文件，所以「0 条」是上游真空，不是解析缺陷
+- **自检 0 critical / 5 warn**：三核可用率 1.4%/2.0%/1.4%（同水位）、镜像失效 11/13（环境）、
+  两个高贡献仓库 0 条（crashgfw 已定位并修好，下次采集生效；clashfree 属上游空文件）
+
 ## 2026-10-30 第二窗口：修「空正文当成功」+ 外链不再默认走上行通道（并订正第一窗口的错误结论）
 
 - **本窗口未跑验证**：`Docs/summary.json` 四内核 `partial=false`、`sampled` 均已到 2500 上限

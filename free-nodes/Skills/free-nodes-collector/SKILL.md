@@ -23,7 +23,7 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only -
 
 # 2b. 四内核可用性验证（全量策略；--time-budget 见下方「硬约束」）
 python <free-nodes>/src/test_nodes.py --input <输出根目录> --cores v2ray,xray,clash,singbox \
-  --full-below 3000 --max-test 3000 --time-budget <剩余秒数>
+  --full-below 2500 --max-test 2500 --time-budget <剩余秒数> --workers 24 --test-timeout 3 --retry 0
 
 # 3. 自检：只诊断、不改动，输出待修复清单
 python <free-nodes>/src/health_check.py --dir <输出根目录>
@@ -48,7 +48,7 @@ python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的�
 | 内核顺序跑，首个内核吃光预算 | 实测首窗口 v2ray 吃满 2321s，其余三内核零数据 | 第二/第三窗口加 `--fair-budget` 均分墙钟 |
 | 增量落盘 | 每内核测完立即写 available / summary / 池 | 被强杀只丢当前内核，不会新旧混排 |
 
-**测试量不设人为上限**：`--max-test` 一律给 3000（全量策略上限）。不要因为「怕超时」自行降到 1000 或 600——那些数字是拍脑袋估的，与实测吞吐对不上，压了反而白少测一批。
+**测试量不设人为上限**：`--max-test` 一律给 2500，与 `layout.py` 的 `FULL_BELOW = MAX_TEST = 2500` 保持一致（10-28 从 3000 下调，理由见 known-issues 第 40 条）。不要因为「怕超时」自行降到 1000 或 600——那些数字是拍脑袋估的，与实测吞吐对不上，压了反而白少测一批；也不要自己抬回 3000，那是另外两条口径（3s 超时 / 24 并发）定下来之前的旧值。
 
 ## 关键口径（结论，理由见参考文件）
 
@@ -58,6 +58,7 @@ python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的�
 - **Cloudflare 前置节点整体降权**：握手 10-40ms 但回源多是死的，排在真实可达节点之后、不可达之前（否则采样 200 个只通 0-3 个）。
 - **验证不跟随重定向**：3xx 直接判不可用，只认 2xx。跟着跳等于替节点访问陌生域名，既暴露本机 IP 也可能触发网络拦截弹窗。
 - **每内核可用数个位数到十几个是免费节点的正常水位**，不要为数字好看换回 `www.gstatic.com` 或明文 HTTP。
+- **README 链接只跟订阅文件，不跟网页**：以 `/` 结尾的地址（分类页 `v2raya.net/categories/free-nodes/`、博客文章 `blog.zrf.me/p/GUI-for-Clash/`）一律跳过——它们会占掉 `MAX_README_LINKS=10` 的名额，下载回来是 HTML、解析 0 条，还让日志误报「有链接下载成功」（known-issues 第 49 条）。
 
 ## 产物
 
