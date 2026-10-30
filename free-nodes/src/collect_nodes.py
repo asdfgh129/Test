@@ -75,6 +75,26 @@ _SSL_CTX = _build_ssl_context()
 _NOVERIFY_CTX = ssl._create_unverified_context()
 _SSL_WARNED = [False]
 
+
+class EmptyBody(Exception):
+    """HTTP 200 但正文 0 字节。
+
+    2026-10-30 实测：gh-proxy 镜像与 jsDelivr 的 fastly/gcore 边缘对
+    `free-nodes/clashfree/clash20261030.yml`（688KB，真实存在）都返回 200 + 0 字节，
+    而 testingcf 边缘能给出完整内容。旧代码把空正文当成功，于是整仓「下载成功但
+    解析不到节点」——历史 324 条的仓库连续归零，日志里还看不出是通道问题。
+    """
+
+
+def _build_direct_opener(ctx):
+    """强制直连的 opener（显式空 ProxyHandler，忽略 HTTP(S)_PROXY 环境变量）。"""
+    return urllib.request.build_opener(urllib.request.ProxyHandler({}),
+                                       urllib.request.HTTPSHandler(context=ctx))
+
+
+_DIRECT_OPENER = _build_direct_opener(_SSL_CTX)
+_DIRECT_OPENER_NOVERIFY = _build_direct_opener(_NOVERIFY_CTX)
+
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) free-nodes-collector/1.0"
 API_BASE = "https://api.github.com"
 RAW_BASE = "https://raw.githubusercontent.com"
@@ -467,15 +487,30 @@ B64_CHUNK_RE = re.compile(r"[A-Za-z0-9+/=_\-]{100,}")
 
 # ---------------------------------------------------------------- HTTP
 
-def http_get(url, token=None, timeout=20, retries=2):
+def _urlopen(req, timeout, ctx, direct):
+    """统一的 open：direct=True 走不带代理的 opener，False 尊重环境里的代理设置。"""
+    if direct:
+        opener = _DIRECT_OPENER if ctx is _SSL_CTX else _DIRECT_OPENER_NOVERIFY
+        return opener.open(req, timeout=timeout)
+    return urllib.request.urlopen(req, timeout=timeout, context=ctx)
+
+
+def http_get(url, token=None, timeout=20, retries=2, direct=False):
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
     if token and "api.github.com" in url:
         req.add_header("Authorization", "Bearer " + token)
     last_err = None
     for i in range(retries + 1):
         try:
-            with urllib.request.urlopen(req, timeout=timeout, context=_SSL_CTX) as resp:
-                return resp.read()
+            with _urlopen(req, timeout, _SSL_CTX, direct) as resp:
+                body = resp.read()
+            # 200 但 0 字节：镜像/CDN 边缘缓存未命中时的典型表现，必须当失败处理，
+            # 否则上层会以为「文件下载成功、只是没有节点」，链条后面的好通道再也不会被尝试
+            if not body:
+                raise EmptyBody(f"200 空响应（{len(url)}B url …{url[-40:]}）")
+            return body
+        except EmptyBody as e:
+            last_err = e
         except urllib.error.URLError as e:
             # 证书链无法校验（常见于沙箱/代理环境）：降级为不校验后重试一次
             if isinstance(getattr(e, "reason", None), ssl.SSLCertVerificationError) or \
@@ -483,8 +518,11 @@ def http_get(url, token=None, timeout=20, retries=2):
                 if not _SSL_WARNED[0]:
                     print("[warn] HTTPS 证书校验失败，已降级为不校验（沙箱/代理环境常见）", file=sys.stderr)
                     _SSL_WARNED[0] = True
-                with urllib.request.urlopen(req, timeout=timeout, context=_NOVERIFY_CTX) as resp:
-                    return resp.read()
+                with _urlopen(req, timeout, _NOVERIFY_CTX, direct) as resp:
+                    body = resp.read()
+                if not body:
+                    raise EmptyBody(f"200 空响应（url …{url[-40:]}）")
+                return body
             last_err = e
         except Exception as e:  # noqa: BLE001
             last_err = e
@@ -493,8 +531,9 @@ def http_get(url, token=None, timeout=20, retries=2):
     raise last_err
 
 
-def http_get_text(url, token=None, timeout=20, retries=2):
-    return http_get(url, token, timeout, retries=retries).decode("utf-8", errors="replace")
+def http_get_text(url, token=None, timeout=20, retries=2, direct=False):
+    return http_get(url, token, timeout, retries=retries,
+                    direct=direct).decode("utf-8", errors="replace")
 
 
 def _quote_api_path(path):
@@ -929,6 +968,8 @@ def err_tag(e):
     实采一次抽样复现（2026-10-28）证明多数是 README 声明的路径已 404，
     与镜像/通道无关，属上游改动。
     """
+    if isinstance(e, EmptyBody):
+        return "空响应"
     if isinstance(e, urllib.error.HTTPError):
         return f"HTTP {e.code}"
     reason = getattr(e, "reason", None)
@@ -941,6 +982,18 @@ def err_tag(e):
 # 可重试的瞬时失败：限流与临时不可用。404/410 属上游路径失效，重试毫无意义。
 RETRYABLE_HTTP = {408, 425, 429, 500, 502, 503, 504}
 
+# 外链走哪条路：非 GitHub 域名直连优先（通道只为 github 而建，见 fetch_url_text 说明）
+GITHUB_HOSTS = {"github.com", "api.github.com", "raw.githubusercontent.com",
+                "codeload.github.com", "objects.githubusercontent.com"}
+DIRECT_TIMEOUT = 8            # 外部站点直连的超时上限：先快速失败，再交给通道
+_HOST_DIRECT_BAD = set()      # 直连试过并失败的 host，本进程内不再走直连（省 8s/条）
+
+
+def _is_github_url(url):
+    host = (urllib.parse.urlparse(url).hostname or "").lower()
+    return host in GITHUB_HOSTS or host.endswith(".githubusercontent.com") \
+        or host.endswith(".github.com")
+
 
 def _retryable_fetch_error(e):
     """判断一次外部链接下载失败是否值得再试一次。
@@ -952,7 +1005,10 @@ def _retryable_fetch_error(e):
 
     **超时不重试**：外部订阅站点慢时再来一轮 15s 只会把单仓 90s 时间预算翻倍，
     宁可记失败等下一天（吞吐优先，同 known-issues 第 40 条口径）。
+    **空响应不重试**：所有通道都已经试过一轮，再走一遍只是把每条链接的耗时翻倍。
     """
+    if isinstance(e, EmptyBody):
+        return False
     if isinstance(e, urllib.error.HTTPError):
         return e.code in RETRYABLE_HTTP
     reason = getattr(e, "reason", None)
@@ -973,23 +1029,46 @@ def fetch_url_text(url, timeout=15):
 
     瞬时类失败（连接重置/拒绝/DNS 抖动/429/5xx）整条链再走一次，只重试一次，
     429 时尊重 Retry-After 但封顶 3s。
+
+    **外部站点直连优先、通道兜底**（2026-10-30 修复）：上行通道只为翻 github 那堵墙而建，
+    把它当成所有外链的默认出口是个错误假设。实测同一个免费订阅站
+    `ndxy.fn0821.xyz`（crashgfw/free-airport-nodes 的 9 条链接全在这个域）：
+    直连 5/5 成功 0.3~2.7s，经通道 5/5 失败（SSL: UNEXPECTED_EOF，10~15s），
+    该仓库连续两晚整仓归零（历史 1050 条）。
+    现在改为：非 GitHub 域名先直连（超时压到 DIRECT_TIMEOUT），失败再走通道；
+    并按域名记住哪条路通（同域链接往往一批，避免逐条重复试错）。
     """
     attempts = [url]
     if "raw.githubusercontent.com/" in url:
         for m in get_mirror_prefixes():
             attempts.append(m + url)
 
+    host = (urllib.parse.urlparse(url).hostname or "").lower()
+    external = bool(host) and not _is_github_url(url)
+    direct_legs = [(u, True, min(DIRECT_TIMEOUT, timeout)) for u in attempts]
+    proxy_legs = [(u, False, timeout) for u in attempts]
+    if not external:
+        plan = proxy_legs
+    elif host in _HOST_DIRECT_BAD:
+        plan = proxy_legs + direct_legs
+    else:
+        plan = direct_legs + proxy_legs
+
     def once():
         last_err = None
-        for u in attempts:
+        for u, direct, tmo in plan:
             try:
-                return http_get_text(u, retries=0, timeout=timeout)
+                return http_get_text(u, retries=0, timeout=tmo, direct=direct)
             except urllib.error.HTTPError as e:
                 last_err = e
                 if e.code in (404, 410):
                     break
             except Exception as e:  # noqa: BLE001
                 last_err = e
+                if direct:
+                    # 直连失败的主机不再走直连：同域链接往往十几条，
+                    # 每条都白等一个 DIRECT_TIMEOUT 会把单仓 90s 预算吃光
+                    _HOST_DIRECT_BAD.add(host)
         raise last_err
 
     try:
@@ -1982,6 +2061,14 @@ def fetch_repo_file_text(repo_full, path, token, size=0):
 
     大文件（>2MB）经镜像代理极易被截断（实测 3-5MB 文件几乎必挂），
     这类文件优先走 jsDelivr 分块 CDN，超时也放宽。
+
+    **镜像与 CDN 走直连、不走上行通道**（2026-10-30 修复）：
+    这两条腿存在的意义就是绕过 raw 被墙，它们本身是公网 CDN，直连即可；
+    经通道反而多一跳，且行为取决于那个免费节点。实测 `free-nodes/clashfree`
+    的 688KB 订阅：直连 testingcf 边缘 4s 拿到完整内容，而经通道时
+    gh-proxy/jsDelivr 四个边缘**全部返回 200+0 字节**（旧代码把空正文当成功，
+    仓库因此「下载成功但解析不到节点」整仓归零，历史 324 条）。
+    raw 与 contents API 仍走通道——它们确实需要翻墙。
     """
     q = urllib.parse.quote(path)
     raw_url = f"{RAW_BASE}/{repo_full}/HEAD/{q}"
@@ -1991,19 +2078,20 @@ def fetch_repo_file_text(repo_full, path, token, size=0):
     cdn = [f"https://{h}/gh/{repo_full}@{b}/{q}"
            for h in get_cdn_hosts() for b in ("main", "master")]
     large = size > LARGE_FILE_BYTES
-    attempts = cdn + mirrors if large else mirrors + cdn
+    direct_legs = cdn + mirrors if large else mirrors + cdn
+    attempts = [(u, True) for u in direct_legs]
     # raw 直连已知不通时放到最后：每个文件先撞一次 TLS 失败纯属浪费
     if raw_alive() is not False:
-        attempts.insert(0, raw_url)
+        attempts.insert(0, (raw_url, False))
     else:
-        attempts.append(raw_url)
+        attempts.append((raw_url, False))
     timeout = 90 if large else 20
     last_err = None
-    for url in attempts:
+    for url, direct in attempts:
         try:
             # 镜像/CDN 通道快速失败（不做重试），只有 contents API 保留重试
             return http_get_text(url, token, retries=0 if "api.github.com" not in url else 2,
-                                 timeout=timeout)
+                                 timeout=timeout, direct=direct)
         except Exception as e:  # noqa: BLE001
             last_err = e
     # 最后回退：contents API（消耗核心配额，返回 base64）
