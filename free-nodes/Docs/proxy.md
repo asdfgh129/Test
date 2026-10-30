@@ -168,7 +168,7 @@
 ```bash
 python scripts/collect_nodes.py \
   --out free-nodes --readme-only --test \
-  --test-full-below 3000 --test-max-test 3000 \
+  --test-full-below 2500 --test-max-test 2500 \
   --max-repos 80 --search-pages 2 --search-days 3 \
   --readme-date-tolerance 0
 ```
@@ -179,9 +179,12 @@ python scripts/collect_nodes.py \
 python scripts/test_nodes.py \
   --input free-nodes --out free-nodes \
   --cores v2ray,xray,clash,singbox \
-  --full-below 3000 --max-test 3000 --workers 12 \
-  --test-url https://gstatic.com/generate_204 --test-timeout 12
+  --full-below 2500 --max-test 2500 --workers 24 \
+  --test-url https://gstatic.com/generate_204 --test-timeout 3 --retry 0
 ```
+
+> 验证口径以 `Docs/known-issues.md` 第 40 条为准：2500 取样上限 / 3s 超时 / 24 并发 / `--retry 0`
+> （10-28 由 3000 与 12s、12 并发下调，实测依据在该条里）。
 
 回到旧的限量取样 + 自适应扩量模式：
 

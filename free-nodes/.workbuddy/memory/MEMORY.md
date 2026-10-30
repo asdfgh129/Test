@@ -125,6 +125,13 @@
 
 ## 仓库约定
 
+- **README 链接判别（第 49 条）**：以 `/` 结尾的地址 = 分类页/博客页，`classify_readme_link`
+  直接跳过（否则占掉 `MAX_README_LINKS=10` 的配额，还让日志记成「链接下载成功」）；
+  日志里 `<名字>:0` 有三种含义——空文件 / HTML 网页 / 格式未覆盖，别一律说「解析不到节点」
+- **判「上游为空」先查 `git/trees/HEAD?recursive=1` 的 `size`**，别只看下载回来的正文长度
+  （0 字节能同时是「上游真空」和「边缘缓存未命中」；clashfree 的 1027/1030 两个文件确实 0 字节）
+- **改口径常量要同步文档**：`layout.FULL_BELOW/MAX_TEST`（现 2500）改完 grep 一遍
+  `Skills/`、`Docs/`、`automation-prompt.md` 的旧数字（SKILL.md 曾长期留着 3000）
 - git 身份：`bemin <xiaoxuefeng@msn.com>`（仓库级配置）
 - 仓库里同时有用户的 C++ 项目（`Test/`、`Test.sln`），自动化只允许路径限定的 add
 - `free-nodes/.gitattributes` 用 `* -text` 防止 autocrlf 改写订阅文件
