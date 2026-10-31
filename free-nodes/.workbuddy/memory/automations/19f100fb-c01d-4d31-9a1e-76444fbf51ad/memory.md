@@ -1,5 +1,16 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-10-31 采集日（2026-11-01 01:30 运行）
+
+- 闸门退出码 0：四内核全部「已测满单轮上限」（2506/2505/2507/2503，cap 2500），GATE: done
+- **本窗口未跑验证、未重跑自检**（按 gate 规则）；本日可用数 v2ray 54 / xray 122 / clash 60 / singbox 55
+- 中间窗口（`a4c4ae9d`）已在 23:45 判过 done 并补推 `4fd578e`；本窗口只剩它发布后写入的记忆文件一个尾巴 →
+  publish 收干净 `b7a09a9` → origin/master（v2ray @ 202.50.253.81:19999，通道第 1 次命中）
+- 自检沿用第一窗口结果：0 critical / 5 warn（三内核可用率 2.2~2.4% 低水位 + clashfree 下载失败 0 条）
+- **判据留用**：GATE: done 时必须同时看三处才算「无需补推」——`pending-push.json`、
+  `git status --short -- free-nodes`、`git rev-list --left-right --count origin/master...HEAD`（0/0 才算对齐）。
+  记忆文件（automation memory / 当日 log）发布后才写，必然产生同样的尾巴，属正常，别当故障反复排查
+
 ## 2026-10-30 采集日（2026-10-31 01:30 运行）
 
 - 四内核 `partial=false`、`sampled` 到 2500 上限 → 跳过续跑，未重测任何节点
