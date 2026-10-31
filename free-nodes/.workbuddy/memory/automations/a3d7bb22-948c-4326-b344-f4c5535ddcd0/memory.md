@@ -1,5 +1,26 @@
 # 每日免费节点采集 —— 自动化执行记录
 
+## 2026-10-31 22:00 运行（第一窗口 / 主窗口）
+
+**结论：CI 首次「上线」失败被当场查清并修复；兜底采集自愈，四内核全部测完；GATE: done**
+
+- **CI 从未运行（本次核心发现，known-issues 第 52 条）**：`--sync-only` 一次成功、已与 origin/master 对齐，
+  但 `nodes_meta.date` 仍是 10-30。30 秒取证定案：`git ls-files .github/` 为空 + 远端 `contents`
+  404 + `actions/runs` 的 `total_count=0` ⇒ 工作流只在工作区（当天 20:45 才创建），从未入库，
+  **不存在「CI 正在跑」**，等 15 分钟纯属白等 → 直接转兜底采集。发布时随 `c06335c` 入库，
+  远端 `actions/workflows` 已可见 `free-nodes-collect` / `active`；**明晚 21:05 才是 CI 首次真正运行**
+- 兜底采集 23min（`--time-budget 1500 --check-kernels --drop-dead`）：80/80 仓库 → 原始 140863 /
+  唯一 18259 → TCP 可达 7818（42.8%，中位 216ms）→ 分流 6296/6891/7776/7300
+- 探测 50s：7811 → 7760（丢 51 条抖动），CF 前置 2765
+- 验证 35min（`--time-budget 2972`，四核全测完未截断）：v2ray 54/2506、xray 122/2505、
+  clash 60/2507、singbox 55/2503；池 181/452/350/285
+- 内核检查：xray 上游 26.10.31（本地 26.10.21），指纹 13/0 无变化 → 不升级
+- 自检 0 critical / 5 warn / 10 info（clashfree 0 条、三核可用率 2.2~2.4% 均属正常水位，镜像 10/13 失效）
+- 推送：`c06335c`（37 文件，含 `.github/workflows`）→ origin/master 成功（自建 v2ray @ 202.50.253.81）
+- **下轮先做**：① 核实 21:05 的 CI run 是否 success（secrets / push 权限）；② review_logs 记了
+  「report 记 80 仓库 vs health_check 记 67」的口径差异，若要统一需让采集显式落盘每个仓库状态
+- 顺带：MEMORY.md 已从 16.8KB 压缩重写（此前注入被截断）
+
 ## 2026-10-30 22:00 运行（第一窗口 / 主窗口）
 
 **结论：80/80 仓库扫完 + 四内核全部测完；自检 0 critical / 5 warn；修了两个「静默减产」缺陷**
