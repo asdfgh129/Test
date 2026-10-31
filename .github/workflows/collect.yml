@@ -1,0 +1,98 @@
+name: free-nodes-collect
+
+# 每日「采集」搬到 GitHub Actions（2026-10-31 起）。
+# 为什么搬：本机访问 github.com 长期被阻断，采集要靠池里节点自建上行代理 + 镜像回退，
+# 通道是最脆的一环（镜像失效、raw 404、匿名配额 403）。runner 直连 GitHub，
+# 不用代理、不用镜像、配额从匿名 60/时变成 token 5000/时。
+#
+# 为什么只做「采集」不在这里验证：免费节点的可达高度依赖出口位置。runner 出口是
+# Azure 数据中心 IP，大量节点会封数据中心 ASN，在这里判「不可达」是系统性假阴性。
+# 所以这里用 --no-latency-sort 只做「下载 → 解析 → 去重 → 落盘」，
+# 产物与本地跑逐条相同；TCP 可达探测与四内核实测留在本地第一窗口（collect_nodes.py --probe-only）。
+
+on:
+  schedule:
+    # UTC 13:05 = 北京 21:05。必须早于本地第一窗口（22:00），
+    # 且避开整点（Actions 定时任务整点排队最狠，延迟可能到 20~30 分钟）
+    - cron: "5 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: free-nodes-collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      # 让报告里 set 的遍历顺序稳定（如 max(set(tags), key=tags.count) 遇并列时），
+      # 保证同一份输入在 CI 与本地产出同一份节点集合
+      PYTHONHASHSEED: "0"
+      # 日期口径跟本地一致；--date 仍显式传入，双保险
+      TZ: Asia/Shanghai
+      # 优先用配置的 PAT（5000/时、搜索 30/分）；没配就退回 Actions 内置 token（1000/时）
+      GH_COLLECT_TOKEN: ${{ secrets.FREE_NODES_TOKEN || github.token }}
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 准备 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 采集（下载 / 解析 / 去重，不做 TCP 探测）
+        run: |
+          set -euo pipefail
+          DATE=$(TZ=Asia/Shanghai date +%F)
+          echo "采集日：$DATE"
+          python free-nodes/src/collect_nodes.py \
+            --out free-nodes \
+            --readme-only \
+            --no-latency-sort \
+            --uplink direct \
+            --token "$GH_COLLECT_TOKEN" \
+            --max-repos 80 --search-pages 2 --search-days 3 \
+            --readme-date-tolerance 0 \
+            --time-budget 1500 \
+            --date "$DATE"
+
+      - name: 提交采集产物
+        # 只提交「下游要用的那几样」：候选清单 + 元数据 + 采集日志 + 仓库质量。
+        # 不提交 v2ray/xray/clash/singbox 订阅文件——它们此刻还含 TCP 不可达节点，
+        # 由本地第一窗口的 --probe-only 探测后重写再提交，避免公网订阅出现死节点。
+        run: |
+          set -euo pipefail
+          git config user.name  "free-nodes-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A -- \
+            free-nodes/nodes/nodes_uris.txt \
+            free-nodes/nodes/nodes_meta.json \
+            free-nodes/Docs \
+            free-nodes/src/seed_repos.json \
+            free-nodes/src/repo_quality.json \
+            free-nodes/CHANGELOGS.md
+          if git diff --cached --quiet; then
+            echo "本次采集无变化，跳过提交"
+          else
+            git commit -m "chore(free-nodes): CI 采集 $(TZ=Asia/Shanghai date +%F)"
+            git push
+          fi
+
+      - name: 摘要
+        if: always()
+        run: |
+          echo "### 采集结果" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f free-nodes/nodes/nodes_uris.txt ]; then
+            echo "- 候选清单：$(grep -c '://' free-nodes/nodes/nodes_uris.txt || true) 条 URI" \
+              >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- 候选清单缺失（采集未产出）" >> "$GITHUB_STEP_SUMMARY"
+          fi

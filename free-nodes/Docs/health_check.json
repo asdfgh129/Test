@@ -1,47 +1,47 @@
 {
- "generated_at": "2026-10-31T01:36:55+08:00",
- "date": "2026-10-30",
+ "generated_at": "2026-10-31T23:01:47+08:00",
+ "date": "2026-10-31",
  "verdict": "无严重问题，5 个告警可优化",
  "metrics": {
   "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
   "目标节点": 1000,
-  "去重后节点": 3439,
-  "采集总量(过滤前)": 8935,
-  "各内核订阅": "v2ray 3124、xray 3025、clash 3390、singbox 3238",
-  "协议分布": "hysteria2 7 / ss 55 / ssr 7 / trojan 193 / vless 2067 / vmess 1110",
-  "TCP 可达": "3439/3439（中位数 214ms）",
+  "去重后节点": 7760,
+  "采集总量(过滤前)": 18259,
+  "各内核订阅": "v2ray 5855、xray 6846、clash 7718、singbox 7252",
+  "协议分布": "hysteria2 10 / ss 150 / ssr 1 / trojan 772 / vless 6064 / vmess 763",
+  "TCP 可达": "7760/7760（中位数 216ms）",
   "验证已执行": "是",
   "各内核可用": {
-   "v2ray": "35/2502",
-   "xray": "95/2505",
-   "clash": "49/2507",
-   "singbox": "35/2506"
+   "v2ray": "54/2506",
+   "xray": "122/2505",
+   "clash": "60/2507",
+   "singbox": "55/2503"
   },
-  "可用节点池": "v2ray 147、xray 367、clash 307、singbox 251"
+  "可用节点池": "v2ray 181、xray 452、clash 350、singbox 285"
  },
  "findings": [
   {
    "level": "warn",
    "area": "来源稳定性",
-   "title": "2 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 1050 条, 部分链接下载失败)、free-nodes/clashfree(历史 324 条, 解析不到节点)",
+   "title": "1 个高贡献仓库本次 0 条：free-nodes/clashfree(历史 324 条, 下载失败)",
    "action": "按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 1.4%（35/2502）",
+   "title": "v2ray 可用率异常低 2.2%（54/2506）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "clash 可用率异常低 2.0%（49/2507）",
+   "title": "clash 可用率异常低 2.4%（60/2507）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "singbox 可用率异常低 1.4%（35/2506）",
+   "title": "singbox 可用率异常低 2.2%（55/2503）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
@@ -53,49 +53,49 @@
   {
    "level": "info",
    "area": "产物",
-   "title": "主清单 3439 条；各内核订阅：v2ray 3124、xray 3025、clash 3390、singbox 3238",
+   "title": "主清单 7760 条；各内核订阅：v2ray 5855、xray 6846、clash 7718、singbox 7252",
    "action": ""
   },
   {
    "level": "info",
    "area": "规模",
-   "title": "节点数 3439 达到目标 1000",
+   "title": "节点数 7760 达到目标 1000",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库效率",
-   "title": "扫描仓库 68 个：有产出 23、解析不到节点 17、下载失败 4、无候选文件 0、部分链接下载失败 5、README 无订阅链接跳过 19（产出率 47%，按有尝试采集的 49 个计算）",
+   "title": "扫描仓库 67 个：有产出 28、解析不到节点 13、下载失败 6、无候选文件 0、部分链接下载失败 3、README 无订阅链接跳过 17（产出率 56%，按有尝试采集的 50 个计算）",
    "action": ""
   },
   {
    "level": "info",
    "area": "README 采集",
-   "title": "49 个仓库的 README 声明了订阅链接，提取 70149 条节点",
+   "title": "50 个仓库的 README 声明了订阅链接，提取 140863 条节点",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "3439/3439 个服务器 TCP 可达（100%），延迟中位数 214ms，<100ms 共 392 条",
+   "title": "7760/7760 个服务器 TCP 可达（100%），延迟中位数 216ms，<100ms 共 691 条",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "1195/3439 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
+   "title": "2765/7760 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库质量",
-   "title": "已评分 39 个仓库，可用率 >=10% 的 3 个，长期 0 可用 12 个（下次采集会自动跳过）",
+   "title": "已评分 43 个仓库，可用率 >=10% 的 6 个，长期 0 可用 15 个（下次采集会自动跳过）",
    "action": ""
   },
   {
    "level": "info",
    "area": "节点池",
-   "title": "池内节点：v2ray 147、xray 367、clash 307、singbox 251",
+   "title": "池内节点：v2ray 181、xray 452、clash 350、singbox 285",
    "action": ""
   },
   {
@@ -107,7 +107,7 @@
   {
    "level": "info",
    "area": "配额",
-   "title": "GitHub 配额剩余 core 4980/5000、search 30/30（已配置 token ghp_…x6hY）",
+   "title": "GitHub 配额剩余 core 5000/5000、search 30/30（已配置 token ghp_…x6hY）",
    "action": ""
   }
  ],
@@ -115,25 +115,25 @@
   {
    "level": "warn",
    "area": "来源稳定性",
-   "title": "2 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 1050 条, 部分链接下载失败)、free-nodes/clashfree(历史 324 条, 解析不到节点)",
+   "title": "1 个高贡献仓库本次 0 条：free-nodes/clashfree(历史 324 条, 下载失败)",
    "action": "按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 1.4%（35/2502）",
+   "title": "v2ray 可用率异常低 2.2%（54/2506）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "clash 可用率异常低 2.0%（49/2507）",
+   "title": "clash 可用率异常低 2.4%（60/2507）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "singbox 可用率异常低 1.4%（35/2506）",
+   "title": "singbox 可用率异常低 2.2%（55/2503）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {

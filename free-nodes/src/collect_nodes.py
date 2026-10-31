@@ -2906,6 +2906,81 @@ def write_nodes_meta(out_dir, records, date_str, tcp_stats=None):
     return path, meta
 
 
+def run_probe_only(out_dir, date_str, args):
+    """--probe-only：在「已采集」的候选清单上，只做本地 TCP 可达探测。
+
+    为什么要有这个模式（2026-10-31）：采集搬到了 GitHub Actions（runner 直连 GitHub，
+    不用自建上行代理、不依赖镜像、配额从匿名 60/时变成 token 5000/时），但**可达性必须
+    回到本地网络判断**——免费节点的可达高度依赖出口位置，从 Azure 数据中心出口测出来的
+    「可达/不可达」和你家宽带不是一回事（数据中心 IP 被大量节点封锁，会造成假阴性）。
+
+    所以 CI 端用 --no-latency-sort 只做「下载 → 解析 → 去重 → 落盘」，产物与本地逐条相同；
+    本地第一窗口先跑本模式：读 nodes/nodes_uris.txt → 探测 → 按 (不可达, CF 前置, 延迟) 排序
+    → 只留可达 → 重写主清单 / 四份订阅 / 节点元数据。后续 test_nodes.py 原样接着跑。
+
+    复用既有探测与写出函数，不复制格式转换逻辑；仓库/来源字段从上一步写下的元数据继承。
+    """
+    uris = lay.read_uris_file(lay.uris_path(out_dir))
+    if not uris:
+        print(f"[error] 未找到候选清单：{lay.uris_path(out_dir)}"
+              f"（CI 采集是否已完成？）", file=sys.stderr)
+        return 3
+
+    # 上一段（CI）写下的元数据：仓库/来源在这里继承，探测结果用本地这份覆盖
+    prev = {}
+    meta_file = lay.meta_path(out_dir)
+    if os.path.exists(meta_file):
+        try:
+            with open(meta_file, "r", encoding="utf-8") as f:
+                for n in (json.load(f).get("nodes") or []):
+                    if n.get("host") and n.get("port"):
+                        prev[f"{n['host']}:{n['port']}"] = n
+        except (OSError, ValueError) as e:
+            print(f"[warn] 旧元数据读取失败，仓库字段将留空：{str(e)[:80]}")
+
+    records, skipped = [], 0
+    for u in uris:
+        parsed = parse_uri_hostport(u)
+        if not parsed:
+            skipped += 1
+            continue
+        old = prev.get(f"{parsed[1]}:{parsed[2]}") or {}
+        records.append({"kind": "uri", "uri": u, "parsed": parsed,
+                        "repo": old.get("repo", ""), "source": old.get("source", "")})
+    if not records:
+        print("[error] 候选清单里没有可解析 host:port 的条目", file=sys.stderr)
+        return 3
+    print(f"[info] 候选清单 {len(uris)} 条，可解析 {len(records)} 条"
+          + (f"（{skipped} 条解析不出 host:port，跳过）" if skipped else ""))
+
+    reachable, probed = probe_latencies(records, args.latency_workers, args.latency_timeout)
+    tcp_stats = {"workers": args.latency_workers, "timeout": args.latency_timeout,
+                 "probed": probed, "reachable": reachable, "mode": "probe-only"}
+    records.sort(key=lambda r: (r.get("tcp_latency") is None, record_is_cf(r),
+                                r.get("tcp_latency") or 0))
+
+    kept = records
+    if not args.keep_dead:
+        alive = [r for r in records if r.get("tcp_latency") is not None]
+        if alive:
+            print(f"[info] 只保留 TCP 可达节点：{len(records)} → {len(alive)} 条"
+                  f"（丢弃不可达 {len(records) - len(alive)} 条）")
+            kept = alive
+        else:
+            print("[warn] 本地探测全部不可达（本机网络异常？），保留全部候选写入，"
+                  "避免本轮产物为空", file=sys.stderr)
+    if args.keep_nodes and len(kept) > args.keep_nodes:
+        print(f"[info] 按延迟截断：{len(kept)} → {args.keep_nodes} 条")
+        kept = kept[:args.keep_nodes]
+
+    out = write_outputs(kept, out_dir, date_str)
+    write_nodes_meta(out_dir, kept, date_str, tcp_stats)
+    cf_n = sum(1 for r in kept if record_is_cf(r))
+    print(f"[done] 探测后产物已重写：主清单 {out.get('uris')} 条 URI（其中 CF 前置 {cf_n} 条已排末尾）"
+          + "；" + "、".join(f"{k} {v['count']}" for k, v in out.items() if k != "uris"))
+    return 0
+
+
 def load_nodes_meta(input_dir):
     """读取 nodes/nodes_meta.json，返回 {"key": {...}}；缺失时返回空字典。"""
     path = lay.meta_path(input_dir)
@@ -3483,6 +3558,10 @@ def main():
                     help="（兼容保留；丢弃 TCP 不可达节点已是默认行为，传了也不报错）")
     ap.add_argument("--keep-nodes", type=int, default=0,
                     help="按延迟排序后只保留前 N 条（0 = 不截断）")
+    ap.add_argument("--probe-only", action="store_true",
+                    help="只对已有候选清单做本地 TCP 可达探测（采集已搬到 GitHub Actions 时用）："
+                         "读 nodes/nodes_uris.txt → 探测 → 按延迟排序 → 只留 TCP 可达 → "
+                         "重写主清单/四份订阅/节点元数据，后续 test_nodes.py 原样接着跑")
     ap.add_argument("--keep-bad-repos", action="store_true",
                     help="不跳过历史可用率为 0 的仓库（默认跳过以省配额）")
     ap.add_argument("--time-budget", type=int, default=2400,
@@ -3520,6 +3599,10 @@ def main():
     yesterday_iso = (now - timedelta(days=1)).strftime("%Y-%m-%d")
     out_dir = os.path.abspath(args.out or "free-nodes")   # 扁平根目录，不再按日期建子目录
     seed_file = args.seed_file or lay.seed_file_path(out_dir)
+
+    # ── 只做本地 TCP 可达探测（采集已在 CI 完成）：不碰网络下载、不建上行通道 ──
+    if args.probe_only:
+        sys.exit(run_probe_only(out_dir, date_str, args))
 
     # ── 可选：把内核检查跑在同一进程里，与采集共用一条上行通道 ──
     #    分步执行时，第 1 步起的代理子进程会随父进程退出被回收（本机 job 限制），

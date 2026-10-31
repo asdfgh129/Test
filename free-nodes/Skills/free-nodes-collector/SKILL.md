@@ -12,31 +12,62 @@ agent_created: true
 
 ## 核心工作流
 
-**三步：采集 → 验证 → 自检。**
+**采集在 GitHub Actions，本机做三件事：本地探测 → 验证 → 自检。**
 
-内核检查必须和采集**在同一进程里跑**（`--check-kernels`）：内核检查要连 `api.github.com`，直连不通时得先自建代理，而内核子进程会随父进程退出被回收（本机 job 限制），**分步执行时前一步建的通道活不到下一步**。合并成一条命令后通道只建一次，日志里 `[uplink] 通道就绪` 只应出现一次；出现两次说明没复用，记进汇报。分步执行仍可用，每步会先尝试接管已登记通道，接管不到才自建（约 10~30 秒）。
+2026-10-31 起「采集」这一步搬到了 CI（仓库根 `.github/workflows/collect.yml`，每天北京 21:05 / UTC 13:05）。原因是本机到 `github.com` 长期被阻断，采集要靠池内节点自建上行代理 + 镜像回退，通道是全链路最脆的一环；runner 直连 GitHub，不用代理、不用镜像、配额 5000/时。
+
+**但 CI 只做「下载 → 解析 → 去重 → 落盘」，不做 TCP 探测**（`--no-latency-sort`）。免费节点的可达性高度依赖出口位置：runner 出口是 Azure 数据中心 IP，大量节点封数据中心 ASN，在那里判「不可达」是系统性假阴性；反过来「海外通、国内不通」的节点又会被误判为可用。所以探测留在本机 `--probe-only`：
 
 ```bash
-# 1+2. 内核检查 + 采集（一条命令，代理只建一次；不加 --test，验证单独跑）
-python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only --check-kernels \
-  --max-repos 80 --search-pages 2 --search-days 3 --readme-date-tolerance 0
+# 0. 先把 CI 提交的采集产物拉到本地（不拉就探的是昨天的清单）——顺带复用推送那套自建通道
+#    实测 52 秒：直连 fetch 必然先失败 → 自建通道（候选第 1 个就命中）→ 成功，先失败是常态不是故障
+#    退出码 1：原样重试一次；仍失败直接兜底采集，不要空等（本地文件不会自己变新）
+#    硬约束只是「早于第 2 步」；放到内核检查之后并不能复用它的通道，见 Docs/known-issues.md 第 50 条
+python <free-nodes>/src/publish_free_nodes.py --sync-only --proxy auto
 
-# 2b. 四内核可用性验证（全量策略；--time-budget 见下方「硬约束」）
+# 1. 内核检查（独立跑即可；采集搬走后不再需要和采集共用一条代理通道）
+# 1. 内核检查：默认走直连（实测 api.github.com 直连 0.43s 可用，四个内核查完 22 秒）
+#    加 --uplink off 就不会为了查版本白建一条代理（建通道 15~20 秒且可能失败）
+#    出现连接类错误（退出码 2）才换 --uplink auto 重跑；--update 下载安装包时必须用 auto（走 github.com）
+python <free-nodes>/src/check_kernels.py --root <输出根目录> --uplink off
+
+# 2. 本地 TCP 可达探测（取代原来的采集步骤）：读 CI 的候选清单 → 探测 → 只留可达 → 重写订阅与元数据
+python <free-nodes>/src/collect_nodes.py --out <输出根目录> --probe-only \
+  --latency-workers 128 --latency-timeout 1.5
+
+# 3. 四内核可用性验证（全量策略；--time-budget 见下方「硬约束」）
 python <free-nodes>/src/test_nodes.py --input <输出根目录> --cores v2ray,xray,clash,singbox \
   --full-below 2500 --max-test 2500 --time-budget <剩余秒数> --workers 24 --test-timeout 3 --retry 0
 
-# 3. 自检：只诊断、不改动，输出待修复清单
+# 4. 自检：只诊断、不改动，输出待修复清单
 python <free-nodes>/src/health_check.py --dir <输出根目录>
 
-# 5. 发布（只暂存 free-nodes，不碰仓库里其他项目）
+# 5. 发布（暂存 free-nodes + .github/workflows，不碰仓库里其他项目）
 python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的输出>
+
+# 6. 收尾闸门：判定今晚还要不要跑下一个窗口（done=不用跑，continue=交给下一窗口）
+python <free-nodes>/src/window_gate.py --input <输出根目录>
 ```
+
+**兜底**：CI 产物 15 分钟内没到位（`nodes_meta.json` 的 `date` 不是今天）→ 退回本地采集，不能让整晚空转：
+
+```bash
+python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
+  --max-repos 80 --search-pages 2 --search-days 3 --readme-date-tolerance 0 \
+  --drop-dead --check-kernels
+```
+
+这条老命令自带上行代理与内核检查，跑通后 `--probe-only` 仍可再筛一次（无害）。
+
+**口径差异是有意的**：`Docs/report.md`、`Docs/collection_logs.md` 记的是 CI 采集口径（探测前，含 TCP 不可达）；`nodes/nodes_uris.txt` 与 `nodes/nodes_meta.json` 是本地探测口径（只含可达）。两处数字不同不是故障。
+
+**`--probe-only` 的实现要点**：复用 `probe_latencies` / `write_outputs` / `write_nodes_meta`，不复制格式转换；合成记录必须带 `parsed`（`record_hostport()` 先读 `parsed`，缺失会返回 None，探测目标数直接归零）；仓库/来源字段从 CI 写下的 `nodes_meta.json` 按 host:port 继承。
 
 **参数名陷阱（踩过）**：`test_nodes.py` 用 `--full-below` / `--max-test` / `--time-budget`（**不带** `--test-` 前缀）；`--test-full-below` / `--test-max-test` 是 `collect_nodes.py` 的透传名，传给 `test_nodes.py` 会直接报错退出。
 
-**退出码**：`health_check.py` 0 健康 / 1 有告警 / 2 有严重问题。`collect_nodes.py` 0 正常 / 3 本次采到 0 条但**保留旧结果**（不写空文件，查配额与网络后重跑）。`test_nodes.py` 非 0 不要整轮重跑，先看日志——已测结果通常已落盘。
+**退出码**：`health_check.py` 0 健康 / 1 有告警 / 2 有严重问题。`collect_nodes.py` 0 正常 / 3 本次没产出且**保留旧结果**（采集模式=0 条；`--probe-only` 模式=没有候选清单）。`window_gate.py` 0 = 今晚已跑完、不用下一个窗口 / 1 = 需要继续。`test_nodes.py` 非 0 不要整轮重跑，先看日志——已测结果通常已落盘。
 
-**纯 Python 标准库实现，无需安装任何依赖。**
+**纯 Python 标准库实现，无需安装任何依赖**（CI 侧也只需要 `setup-python`，无 pip 安装步骤）。
 
 ## 硬约束（平台行为，任务内部改不掉）
 
@@ -44,7 +75,8 @@ python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的�
 |---|---|---|
 | 单次运行墙钟上限 | **90 分钟**（超时报 `[CANCELLED] Run timed out`） | 传 `--time-budget` 主动收尾，不要压缩测试量 |
 | `--time-budget` 取值 | `5400 - 已用秒数 - 600`（给自检+发布留 10 分钟） | 先 `date +%s` 记开始时刻再算 |
-| 多窗口续跑 | 22:00 采集+验证 / 23:45 续跑 / 01:30 再续跑 | 后续窗口加 `--resume-tested`，**首窗口绝对不能加** |
+| 多窗口续跑 | 22:00 探测+验证 / 23:45 续跑 / 01:30 再续跑 | 后续窗口加 `--resume-tested`，**首窗口绝对不能加** |
+| 后两个窗口空转 | 第一窗口通常已测满四内核 | 每个窗口收尾跑 `window_gate.py`：`GATE: done` 就跳过，别再白跑 90 分钟 |
 | 内核顺序跑，首个内核吃光预算 | 实测首窗口 v2ray 吃满 2321s，其余三内核零数据 | 第二/第三窗口加 `--fair-budget` 均分墙钟 |
 | 增量落盘 | 每内核测完立即写 available / summary / 池 | 被强杀只丢当前内核，不会新旧混排 |
 

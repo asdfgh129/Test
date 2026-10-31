@@ -115,6 +115,45 @@ def remove_legacy_dirs(out_root: Path) -> list[str]:
     return removed
 
 
+def do_sync(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
+    """把远端最新提交快进来（CI 每天 21:05 会提交采集产物）。
+
+    为什么必须单独有这一步：本地 22:00 才探测，而采集产物在远端。不先拉，探测的就是
+    **昨天的清单**——CI 白跑，本地也白测。拉取同样要翻墙，所以复用推送那套自建通道。
+
+    只用 `--ff-only`：绝不 rebase、绝不 reset、绝不 stash（工作区还有用户的 C++ 改动）。
+    快进不了就放弃，本轮按本地已有清单继续，由调用方决定是否告警。
+    """
+    global GIT_PROXY
+
+    code, out = git(workspace, "fetch", "origin", args.branch, timeout=180)
+    if code != 0 and up_mod is not None:
+        log("[sync] 直连拉取失败，改用已验证节点自建通道再试 …")
+        up = up_mod.start(root=out_root, max_candidates=args.uplink_candidates,
+                          probes=["https://github.com/"], register=False)
+        if up is not None:
+            GIT_PROXY = up.url
+            try:
+                code, out = git(workspace, "fetch", "origin", args.branch, timeout=180)
+            finally:
+                GIT_PROXY = ""
+            up_mod.stop(up)
+            if code == 0:
+                log(f"[sync] 经自建通道拉取成功（{up.describe()}）")
+    if code != 0:
+        tail = out.strip().splitlines()[-1] if out.strip() else "fetch 失败"
+        return False, tail
+
+    code, out = git(workspace, "merge", "--ff-only", f"origin/{args.branch}", timeout=120)
+    if code != 0:
+        lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
+        tail = next((ln for ln in lines
+                     if "error" in ln.lower() or "fatal" in ln.lower() or "致命" in ln),
+                    lines[0] if lines else "无法快进合并")
+        return False, tail
+    return True, out.strip()
+
+
 def push_with_retry(workspace: Path, branch: str, retries: int, wait: int) -> tuple[bool, str]:
     last_err = ""
     for attempt in range(1, retries + 1):
@@ -212,6 +251,9 @@ def main() -> int:
     ap.add_argument("--retries", type=int, default=3, help="直连 push 重试次数，默认 3")
     ap.add_argument("--retry-wait", type=int, default=20, help="重试间隔秒数，默认 20")
     ap.add_argument("--no-push", action="store_true", help="只提交不推送")
+    ap.add_argument("--sync-only", action="store_true",
+                    help="只把远端最新提交快进来（fetch + merge --ff-only）然后退出，"
+                         "不提交、不推送。本地探测前必须先跑，否则探的是昨天的采集清单")
     ap.add_argument("--proxy", default=os.environ.get("GIT_PROXY", ""),
                     help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890；"
                          "auto=不探测本机端口，直接用已验证节点自建本地代理"
@@ -251,6 +293,24 @@ def main() -> int:
         log(f"[error] 产物目录不存在：{out_root}")
         return 2
 
+    # 0a. 只同步模式（--sync-only）：快进到远端就退出，不提交不推送。
+    #     本地第一窗口探测前必须先跑这个，否则探的是昨天的采集清单（CI 21:05 才提交）
+    if args.sync_only:
+        ok, note = do_sync(workspace, args, up_mod, str(out_root))
+        if ok:
+            log(f"[sync] 已与 origin/{args.branch} 对齐")
+            return 0
+        log(f"[sync] 同步失败：{note}（本轮将按本地已有清单继续）")
+        return 1
+
+    # 0b. 正常发布前也先对齐远端：CI 每天也会提交一次采集产物，
+    #     不先合会被拒（非快进）。失败不阻断，交给 push 与 pending 机制
+    ok, note = do_sync(workspace, args, up_mod, str(out_root))
+    if ok:
+        log(f"[sync] 已与 origin/{args.branch} 对齐")
+    else:
+        log(f"[sync] 未能与远端对齐：{note}（继续；push 若被拒会写 pending 下次补推）")
+
     # 0. 上次没推成功的提交：不单独推，最后统一推送（一次 push 会带上所有未推送提交）
     pend = read_pending(workspace)
     if pend and not args.no_push:
@@ -261,19 +321,26 @@ def main() -> int:
     if removed:
         log(f"[prune] 移除历史日期目录：{', '.join(removed)}")
 
-    # 2. 路径限定地暂存（只动 free-nodes；脚本本身就在 src/ 里，无需同步）
-    code, out = git(workspace, "add", "--all", "--", args.dir)
+    # 2. 路径限定地暂存（只动 free-nodes；另外固定带上 CI 工作流目录）
+    #    .github/workflows/ 是采集流水线定义（2026-10-31 起采集搬上 GitHub Actions）。
+    #    它不在 free-nodes 目录里，如果这里不一起提交，工作流永远上不了 GitHub，CI 就永远不跑。
+    #    仍然只用路径限定，绝不 git add -A —— 仓库里还有用户的 C++ 项目。
+    stage_paths = [args.dir]
+    ci_dir = ".github/workflows"
+    if (workspace / ci_dir).is_dir():
+        stage_paths.append(ci_dir)
+    code, out = git(workspace, "add", "--all", "--", *stage_paths)
     if code != 0:
         log(f"[error] git add 失败：{out.strip()}")
         return 2
 
-    code, out = git(workspace, "diff", "--cached", "--name-only", "--", args.dir)
+    code, out = git(workspace, "diff", "--cached", "--name-only", "--", *stage_paths)
     staged = [line for line in out.splitlines() if line.strip()]
     commit_hash = ""
     if staged:
         log(f"[stage] 待提交文件 {len(staged)} 个")
         msg = f"chore(free-nodes): 更新 {args.date} 免费节点订阅"
-        code, out = git(workspace, "commit", "-m", msg, "--", args.dir)
+        code, out = git(workspace, "commit", "-m", msg, "--", *stage_paths)
         if code != 0:
             log(f"[error] git commit 失败：{out.strip()}")
             return 2
@@ -281,7 +348,7 @@ def main() -> int:
         commit_hash = commit_hash.strip()
         log(f"[commit] {commit_hash} {msg}")
     else:
-        log("[stage] free-nodes 无变更，跳过提交")
+        log("[stage] 无变更，跳过提交")
 
     if args.no_push:
         log("[push] 已指定 --no-push，跳过推送")

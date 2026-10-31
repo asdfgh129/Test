@@ -323,8 +323,12 @@ def run_check(root, tools=None, update=False, skip_network=False, date_str=None,
 
     # ── 上行通道：查版本与下载升级包都要访问 GitHub，这一步就把代理建好 ──
     #    close_uplink=False 时留给调用方继续用（采集复用同一条通道）
+    #    off / direct 都表示「只用直连」，必须在这里一起排除：
+    #    否则会走到下面的 else 分支，把字面量 "direct" 当成代理地址写进 HTTP_PROXY
+    #    （与 known-issues 第 34 条 GIT_PROXY=auto 同一类坑）。日常查版本用 off 即可，
+    #    因为 api.github.com 可直连；只有 --update 下载安装包才需要真通道。
     up_mod, up_handle = None, None
-    if not skip_network and uplink_arg != "off":
+    if not skip_network and uplink_arg not in ("off", "direct"):
         try:
             import uplink as up_mod  # noqa: PLC0415 — 延迟导入，避免 uplink 反向依赖本模块
         except Exception as e:  # noqa: BLE001
@@ -450,8 +454,9 @@ def main():
     ap.add_argument("--update", action="store_true", help="有新版本就自动下载替换")
     ap.add_argument("--skip-network", action="store_true", help="不查上游版本（只做本地能力指纹）")
     ap.add_argument("--uplink", default="auto",
-                    help="GitHub 访问通道：auto=先复用/自建本地代理（查 api.github.com 需要它），"
-                         "不通再直连；off=只用直连；也可直接给代理地址（如 http://127.0.0.1:7890）")
+                    help="GitHub 访问通道：off/direct=只用直连（日常查版本推荐，api.github.com 可直连，"
+                         "实测 0.43s；四内核查完 22 秒）；auto=先复用/自建本地代理，不通再直连"
+                         "（--update 下载安装包时必须用它）；也可直接给代理地址（如 http://127.0.0.1:7890）")
     ap.add_argument("--keep-uplink", action="store_true",
                     help="检查结束后保留自建代理通道（默认关闭；采集脚本 --check-kernels "
                          "会在同一进程里直接接管通道，无需此开关）")

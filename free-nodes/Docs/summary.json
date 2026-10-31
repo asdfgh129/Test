@@ -1,292 +1,424 @@
 {
- "date": "2026-10-30",
- "generated_at": "2026-10-30 23:00:34",
+ "date": "2026-10-31",
+ "generated_at": "2026-10-31 23:01:18",
  "cores": {
   "v2ray": {
-   "tested": 2502,
-   "ok": 35,
+   "tested": 2506,
+   "ok": 54,
    "unsupported": 4,
-   "config_error": 36,
+   "config_error": 37,
    "reasons": {
     "unsupported": 4,
-    "tls": 702,
-    "timeout": 1718,
-    "config": 36,
-    "startup": 5,
-    "reset": 2
+    "tls": 1048,
+    "timeout": 1362,
+    "config": 37,
+    "network": 1
    },
    "rounds": 1,
    "min_available": 10,
-   "cand": 2699,
+   "cand": 5801,
    "exhausted": false,
    "cap": 2500,
-   "sampled": 2502,
+   "sampled": 2506,
    "partial": false,
    "policy": "full",
    "file": "available_v2ray.txt",
    "nodes": [
     {
-     "host": "80.243.228.61",
-     "port": 2085,
-     "proto": "vless",
-     "latency": 916,
+     "host": "13.143.175.202",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 725,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "jp-1.bnc-gt.co.uk",
-     "port": 443,
-     "proto": "vless",
-     "latency": 957,
+     "host": "177.3.215.199",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 870,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "141.98.7.19",
+     "port": 1114,
+     "proto": "vmess",
+     "latency": 932,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "153.52.92.224",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 939,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "93.157.138.137",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 976,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "para.kiavoosh.online",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 1018,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1035,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "202.50.253.81",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1043,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1046,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "hik160.pacemakere.com",
+     "port": 20014,
+     "proto": "trojan",
+     "latency": 1084,
      "repo": "NiREvil/vless"
     },
     {
      "host": "179.253.179.109",
      "port": 50083,
      "proto": "vless",
-     "latency": 988,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1073,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "185.22.155.121",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1110,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "130.78.190.21",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1271,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "189.74.114.93",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1289,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "dns22.m3hrzd.ir",
-     "port": 1346,
-     "proto": "ss",
-     "latency": 1303,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "176.114.95.242",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 1305,
+     "latency": 1253,
      "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "179.253.179.109",
-     "port": 54443,
+     "port": 63053,
      "proto": "vless",
-     "latency": 1313,
-     "repo": "whoahaow/rjsxrd"
+     "latency": 1254,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "niroo.kiavoosh.online",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 1362,
+     "repo": "NiREvil/vless"
     },
     {
      "host": "202.50.253.27",
      "port": 19999,
      "proto": "ss",
-     "latency": 1336,
-     "repo": "F0rc3Run/F0rc3Run"
+     "latency": 1423,
+     "repo": "sinavm/SVM"
     },
     {
-     "host": "13.143.176.83",
-     "port": 443,
+     "host": "194.26.229.214",
+     "port": 2200,
      "proto": "vless",
-     "latency": 1338,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "59.125.69.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1367,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "46.17.46.27",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1432,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 62083,
-     "proto": "vless",
-     "latency": 1438,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "194.87.143.165",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1472,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "200.165.231.209",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1599,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "104.16.34.14",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 1611,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "wstg.datasynctrue.online",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1682,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "146.75.59.186",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1782,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "132.243.66.98",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1812,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "199.232.78.160",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1829,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1893,
-     "repo": "peasoft/NoMoreWalls"
-    },
-    {
-     "host": "api.mediaklenov.cc",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1900,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "104.21.102.36",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 1918,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "104.17.70.206",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1974,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "146.75.57.238",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2009,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2028,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2029,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 57443,
-     "proto": "vless",
-     "latency": 2059,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2195,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "turk.bettercallakbar.ir",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2274,
+     "latency": 1428,
      "repo": "NiREvil/vless"
     },
     {
      "host": "201.24.121.243",
      "port": 443,
      "proto": "vless",
-     "latency": 2466,
-     "repo": "NiREvil/vless"
+     "latency": 1433,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "132.243.67.109",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1526,
+     "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "202.50.253.72",
      "port": 19999,
      "proto": "ss",
-     "latency": 2656,
+     "latency": 1537,
      "repo": "F0rc3Run/F0rc3Run"
     },
     {
-     "host": "202.50.253.54",
+     "host": "200.165.231.209",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1555,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "95.81.102.121",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1570,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "141.133.174.88",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1578,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "88.216.195.188",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1670,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "cf.0sm.com",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 1707,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "176.114.95.242",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1726,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "202.50.253.63",
      "port": 19999,
      "proto": "ss",
-     "latency": 2762,
+     "latency": 1756,
      "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "194.87.143.165",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1779,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "199.232.78.160",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1815,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "202.50.253.36",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1830,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "146.75.57.238",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1846,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "ph001.zestapp778.com",
+     "port": 46298,
+     "proto": "trojan",
+     "latency": 1912,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "wwww.qarvian.ir",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1949,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "202.50.253.45",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1952,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "8.211.1.139",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 1982,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 63080,
+     "proto": "vless",
+     "latency": 2100,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "bzqhefrtvpqyiuqb.v.3dns.vip",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 2171,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 57043,
+     "proto": "vless",
+     "latency": 2201,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "83.147.254.59",
+     "port": 2053,
+     "proto": "trojan",
+     "latency": 2350,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "91.250.248.151",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2407,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 62083,
+     "proto": "vless",
+     "latency": 2442,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 30443,
+     "proto": "vless",
+     "latency": 2472,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "104.27.0.1",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 2539,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "207.57.132.189",
+     "port": 8443,
+     "proto": "trojan",
+     "latency": 2547,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "46.174.142.238",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2552,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "185.234.114.165",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2563,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.90",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2606,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "104.17.70.206",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 2621,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "31.76.81.137",
+     "port": 1114,
+     "proto": "vmess",
+     "latency": 2695,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "87.76.190.244",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2806,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "172.66.128.146",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2932,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "185.114.72.31",
+     "port": 2053,
+     "proto": "trojan",
+     "latency": 2998,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "45.128.76.242",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3361,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "185.146.234.242",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3578,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "168.144.41.69",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3849,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "202.50.253.99",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 5357,
+     "repo": "shabane/kamaji"
     }
    ]
   },
   "xray": {
    "tested": 2505,
-   "ok": 95,
+   "ok": 122,
    "unsupported": 1,
    "config_error": 0,
    "reasons": {
-    "tls": 784,
-    "network": 259,
-    "timeout": 1355,
+    "tls": 659,
+    "network": 322,
+    "timeout": 1389,
     "unsupported": 1,
-    "reset": 11
+    "reset": 12
    },
    "rounds": 1,
    "min_available": 10,
-   "cand": 2994,
+   "cand": 6770,
    "exhausted": false,
    "cap": 2500,
    "sampled": 2505,
@@ -295,685 +427,875 @@
    "file": "available_xray.txt",
    "nodes": [
     {
-     "host": "31.76.91.238",
+     "host": "141.98.7.19",
+     "port": 1114,
+     "proto": "vmess",
+     "latency": 766,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "177.3.215.199",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 854,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "163.245.42.120",
      "port": 443,
      "proto": "vless",
-     "latency": 363,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "9.247.23.209",
-     "port": 443,
-     "proto": "vless",
-     "latency": 923,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 955,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "163.245.42.132",
-     "port": 443,
-     "proto": "vless",
-     "latency": 961,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "163.245.42.157",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1041,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "85.31.148.74",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1054,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "144.31.62.224",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1063,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "212.34.128.120",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1076,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "sw.neuroniko.com",
-     "port": 2083,
-     "proto": "vless",
-     "latency": 1080,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 57443,
-     "proto": "vless",
-     "latency": 1098,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 63080,
-     "proto": "vless",
-     "latency": 1104,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1108,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "201.58.181.132",
-     "port": 2027,
-     "proto": "vless",
-     "latency": 1113,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "edge.bookmai.com",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1127,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "89.125.11.50",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1185,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "89.125.11.57",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1216,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "79.182.39.37",
-     "port": 27591,
-     "proto": "vless",
-     "latency": 1277,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "150.251.143.86",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1283,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "netherlands.biznes.lol",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1284,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "radio.blog-forme.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1299,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1316,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "5.129.249.65",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1325,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "150.251.143.86",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1332,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "62.233.33.51",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1333,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "185.22.155.121",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1334,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "147.45.164.160",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1340,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "201.24.121.243",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1360,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 57043,
-     "proto": "vless",
-     "latency": 1390,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "177.1.192.67",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1402,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "212.34.128.120",
-     "port": 2083,
-     "proto": "vless",
-     "latency": 1406,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "130.78.190.21",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1422,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.129.222.175",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1425,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 54443,
-     "proto": "vless",
-     "latency": 1428,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "201.24.49.49",
-     "port": 2027,
-     "proto": "vless",
-     "latency": 1445,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.129.202.74",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1446,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "s12.bsh-net.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1452,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "148.113.5.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1464,
+     "latency": 925,
      "repo": "NiREvil/vless"
     },
     {
      "host": "202.50.253.90",
      "port": 19999,
      "proto": "ss",
-     "latency": 1476,
+     "latency": 929,
      "repo": "F0rc3Run/F0rc3Run"
     },
     {
-     "host": "84.32.184.218",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1482,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 62083,
-     "proto": "vless",
-     "latency": 1529,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "lectures.blog-forme.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1531,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "podcasts.blog-forme.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1540,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "179.253.179.109",
-     "port": 54083,
-     "proto": "vless",
-     "latency": 1555,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "45.152.202.55",
-     "port": 10345,
-     "proto": "vless",
-     "latency": 1564,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "189.74.114.93",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1568,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "176.114.95.242",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 1579,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "angelvpn.angelmh.cv",
-     "port": 1633,
-     "proto": "trojan",
-     "latency": 1591,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "us.bsh-net.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1625,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "185.232.205.13",
-     "port": 2027,
-     "proto": "vless",
-     "latency": 1643,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "130.17.18.204",
+     "host": "62.233.33.178",
      "port": 8443,
      "proto": "vless",
-     "latency": 1676,
-     "repo": "NiREvil/vless"
+     "latency": 981,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "194.87.143.165",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1684,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "72.56.241.230",
+     "host": "195.189.98.197",
      "port": 443,
      "proto": "vless",
-     "latency": 1712,
-     "repo": "NiREvil/vless"
+     "latency": 1010,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "200.165.231.209",
+     "host": "88.216.70.39",
      "port": 443,
      "proto": "vless",
-     "latency": 1713,
+     "latency": 1037,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "shorts.blog-forme.ru",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1050,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "92.42.203.240",
-     "port": 2052,
+     "host": "31.76.81.137",
+     "port": 1114,
      "proto": "vmess",
-     "latency": 1746,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "185.186.78.170",
-     "port": 2083,
-     "proto": "vless",
-     "latency": 1782,
+     "latency": 1051,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "72.56.11.115",
+     "host": "84.32.101.102",
      "port": 443,
      "proto": "vless",
-     "latency": 1789,
+     "latency": 1072,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "89.125.11.151",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1072,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "13.143.175.202",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 1073,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1799,
-     "repo": "F0rc3Run/F0rc3Run"
+     "host": "88.216.195.188",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1077,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "195.63.139.79",
+     "host": "163.245.42.132",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1102,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "89.125.11.149",
      "port": 8443,
      "proto": "vless",
-     "latency": 1805,
-     "repo": "NiREvil/vless"
+     "latency": 1106,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "201.51.29.153",
+     "host": "89.125.11.155",
      "port": 443,
      "proto": "vless",
-     "latency": 1807,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "188.130.209.185",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1849,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "201.51.4.89",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1904,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "104.17.70.206",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1925,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "104.16.34.14",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 1952,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "72.56.4.84",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2010,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "201.58.183.170",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2056,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "177.1.192.90",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2179,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "201.34.158.224",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2196,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "179.198.49.218",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2227,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "177.1.192.117",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2251,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "sports.blog-forme.ru",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2268,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "podcasts.blog-forme.ru",
-     "port": 2083,
-     "proto": "vless",
-     "latency": 2413,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "turk.bettercallakbar.ir",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2496,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "138.124.39.251",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2513,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "13.143.165.126",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2546,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2571,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "87.199.207.116",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2579,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "177.1.192.38",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2579,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "pl.reus.lol",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2797,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2839,
-     "repo": "Pawdroid/Free-servers"
+     "latency": 1107,
+     "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "202.50.253.63",
      "port": 19999,
      "proto": "ss",
-     "latency": 2891,
+     "latency": 1130,
      "repo": "F0rc3Run/F0rc3Run"
     },
     {
-     "host": "179.254.92.134",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2891,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "186.246.9.101",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2893,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "157.22.241.244",
+     "host": "89.125.11.187",
      "port": 8443,
      "proto": "vless",
-     "latency": 2898,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2928,
-     "repo": "peasoft/NoMoreWalls"
-    },
-    {
-     "host": "jp-1.bnc-gt.co.uk",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2986,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "190.93.247.169",
-     "port": 443,
-     "proto": "vmess",
-     "latency": 3019,
+     "latency": 1142,
      "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "109.206.243.38",
+     "host": "89.125.11.148",
      "port": 8443,
      "proto": "vless",
-     "latency": 3160,
+     "latency": 1146,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "62.233.33.126",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1152,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "62.233.33.127",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1156,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "104.19.187.33",
+     "host": "2.26.6.244",
      "port": 443,
      "proto": "vless",
-     "latency": 3228,
+     "latency": 1186,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "898305t.es4.h1clayd.click",
+     "host": "185.186.78.170",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1191,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "207.148.80.199",
      "port": 443,
      "proto": "vless",
-     "latency": 3250,
+     "latency": 1205,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "23.94.252.67",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1240,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "144.31.62.224",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1242,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "212.34.128.120",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1259,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "144.31.4.234",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1262,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "niroo.kiavoosh.online",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 1266,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "132.243.67.109",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1310,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "89.125.11.147",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1319,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "217.60.151.222",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1349,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "84.32.177.63",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1365,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1382,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "89.125.11.153",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1398,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "132.243.230.251",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1406,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "212.34.128.120",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1437,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "62.233.33.124",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1438,
      "repo": "NiREvil/vless"
     },
     {
      "host": "2.26.6.244",
      "port": 8443,
      "proto": "vless",
-     "latency": 3257,
+     "latency": 1448,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "23.94.252.67",
+     "host": "200.165.231.209",
      "port": 443,
      "proto": "vless",
-     "latency": 3341,
-     "repo": "NiREvil/vless"
+     "latency": 1502,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "104.19.247.110",
+     "host": "104.171.135.229",
      "port": 443,
      "proto": "vless",
-     "latency": 3402,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "185.154.155.142",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3511,
+     "latency": 1528,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "186.246.0.11",
+     "host": "147.45.245.177",
      "port": 443,
      "proto": "vless",
-     "latency": 3753,
+     "latency": 1539,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "92.243.74.224",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1540,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "45.198.0.88",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1542,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 50083,
+     "proto": "vless",
+     "latency": 1559,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "podcasts.blog-forme.ru",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1568,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "13.143.176.83",
+     "host": "podcasts.blog-forme.ru",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1579,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "144.31.190.230",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1586,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 57043,
+     "proto": "vless",
+     "latency": 1643,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "217.60.73.56",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1662,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 63080,
+     "proto": "vless",
+     "latency": 1678,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "176.124.223.254",
+     "port": 5555,
+     "proto": "vless",
+     "latency": 1686,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "201.24.121.243",
      "port": 443,
      "proto": "vless",
-     "latency": 3976,
+     "latency": 1691,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "202.50.253.36",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1709,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "151.101.67.6",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1709,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "194.87.143.165",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1717,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "179.255.185.193",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1756,
      "repo": "NiREvil/vless"
+    },
+    {
+     "host": "185.112.249.201",
+     "port": 8443,
+     "proto": "trojan",
+     "latency": 1786,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "2.56.207.68",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1796,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "13.143.180.50",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1805,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "177.202.70.247",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1817,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "de1.kartamira.cc",
+     "port": 5555,
+     "proto": "vless",
+     "latency": 1821,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "3.36.61.213",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1830,
+     "repo": "hello-world-1989/cn-news"
+    },
+    {
+     "host": "72.56.241.230",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1854,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.72",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1859,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "13.143.166.114",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1866,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "forshynewh.duckdns.org",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1877,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "43.164.132.109",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1877,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "yoy-api.bachidze.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1897,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "para.kiavoosh.online",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 1921,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "xnod13x.artemida.live",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1956,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "ph001.zestapp778.com",
+     "port": 46298,
+     "proto": "trojan",
+     "latency": 1958,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "201.51.29.153",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1961,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "176.124.223.254",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1989,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "lv.peregrine-sub.net",
+     "port": 1443,
+     "proto": "vless",
+     "latency": 1991,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2001,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "de8.vpngold.ru",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 2019,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "217.198.6.206",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2057,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.45",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2062,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "104.19.187.33",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2062,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 57443,
+     "proto": "vless",
+     "latency": 2090,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "promo3.goonars.com",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 2099,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "179.255.136.189",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2102,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "147.45.148.6",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2152,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "172.66.0.162",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2214,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "201.24.57.254",
+     "port": 2053,
+     "proto": "trojan",
+     "latency": 2249,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "31.76.68.160",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2251,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "152.70.86.199",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2273,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "179.254.92.190",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2280,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "radio.blog-forme.ru",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2360,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "147.45.184.91",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2365,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "72.56.235.137",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2374,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "de1.kartamira.cc",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 2415,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "31.57.92.210",
+     "port": 1443,
+     "proto": "vless",
+     "latency": 2475,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "93.157.138.137",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 2487,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "201.51.5.181",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2569,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "43.161.233.40",
+     "port": 8443,
+     "proto": "trojan",
+     "latency": 2615,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "179.254.92.134",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2616,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "103.224.84.7",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2623,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "125.7.24.251",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2649,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "8.211.1.139",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 2672,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "147.45.161.4",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2686,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.27",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2782,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "132.243.207.154",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2813,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "176.124.208.36",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2928,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "fr.bsh-net.ru",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2953,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "147.45.164.160",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3005,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "p11real2.greewebservices.ir",
+     "port": 1040,
+     "proto": "vless",
+     "latency": 3036,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "62.233.33.122",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 3104,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.81",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 3134,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "213.165.34.40",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3183,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "195.133.92.71",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3194,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "85.193.85.231",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3214,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "13.143.166.114",
+     "port": 1443,
+     "proto": "vless",
+     "latency": 3223,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "195.63.139.79",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 3271,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "sw.neuroniko.com",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 3277,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "netherlands.biznes.lol",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3300,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "195.141.65.98",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3703,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "5.129.202.80",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3746,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 30443,
+     "proto": "vless",
+     "latency": 3857,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "tau1.freerunet.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3990,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "83.171.241.199",
+     "port": 443,
+     "proto": "vless",
+     "latency": 4612,
+     "repo": "whoahaow/rjsxrd"
     }
    ]
   },
   "clash": {
    "tested": 2507,
-   "ok": 49,
+   "ok": 60,
    "unsupported": 0,
-   "config_error": 0,
+   "config_error": 15,
    "reasons": {
-    "network": 360,
-    "tls": 397,
-    "timeout": 1701
+    "network": 701,
+    "timeout": 1304,
+    "tls": 427,
+    "config": 15
    },
    "rounds": 1,
    "min_available": 10,
-   "cand": 3269,
+   "cand": 7547,
    "exhausted": false,
    "cap": 2500,
    "sampled": 2507,
@@ -982,615 +1304,833 @@
    "file": "available_clash.yaml",
    "nodes": [
     {
-     "host": "31.76.91.238",
+     "host": "edge.bookmai.com",
      "port": 443,
      "proto": "vless",
-     "latency": 506,
-     "repo": "NiREvil/vless"
+     "latency": 962,
+     "repo": "shabane/kamaji"
     },
     {
-     "host": "80.243.228.61",
-     "port": 2085,
-     "proto": "vless",
-     "latency": 833,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "130.78.190.21",
+     "host": "9.247.23.209",
      "port": 443,
      "proto": "vless",
-     "latency": 959,
-     "repo": "NiREvil/vless"
+     "latency": 978,
+     "repo": "shabane/kamaji"
     },
     {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1009,
-     "repo": "F0rc3Run/F0rc3Run"
+     "host": "153.52.92.224",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 1044,
+     "repo": "NiREvil/vless"
     },
     {
      "host": "163.245.42.157",
      "port": 443,
      "proto": "vless",
-     "latency": 1039,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "163.245.42.132",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1078,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1088,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "185.22.155.121",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1101,
-     "repo": "F0rc3Run/F0rc3Run"
+     "latency": 1048,
+     "repo": "shabane/kamaji"
     },
     {
      "host": "202.50.253.18",
      "port": 19999,
      "proto": "ss",
-     "latency": 1115,
+     "latency": 1081,
      "repo": "F0rc3Run/F0rc3Run"
     },
     {
-     "host": "171.22.119.74",
-     "port": 8446,
-     "proto": "trojan",
-     "latency": 1219,
-     "repo": "peasoft/NoMoreWalls"
-    },
-    {
-     "host": "185.232.205.13",
-     "port": 2027,
-     "proto": "vless",
-     "latency": 1271,
+     "host": "177.3.215.199",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 1084,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "177.1.192.38",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1292,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.54",
+     "host": "202.50.253.36",
      "port": 19999,
      "proto": "ss",
-     "latency": 1326,
+     "latency": 1156,
      "repo": "F0rc3Run/F0rc3Run"
     },
     {
-     "host": "130.17.18.204",
+     "host": "de8.vpngold.ru",
      "port": 8443,
      "proto": "vless",
-     "latency": 1383,
+     "latency": 1168,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "hik160.pacemakere.com",
+     "port": 20014,
+     "proto": "trojan",
+     "latency": 1211,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "201.24.49.49",
-     "port": 2027,
-     "proto": "vless",
-     "latency": 1396,
+     "host": "niroo.kiavoosh.online",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 1223,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "189.74.114.93",
+     "host": "132.243.67.109",
      "port": 443,
      "proto": "vless",
-     "latency": 1404,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "72.56.241.230",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1467,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "194.87.143.165",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1508,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "72.56.4.84",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1651,
-     "repo": "snakem982/proxypool"
+     "latency": 1244,
+     "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "84.32.184.218",
      "port": 443,
      "proto": "vless",
-     "latency": 1658,
+     "latency": 1286,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "edge.bookmai.com",
+     "host": "72.56.235.137",
      "port": 443,
      "proto": "vless",
-     "latency": 1664,
-     "repo": "F0rc3Run/F0rc3Run"
+     "latency": 1374,
+     "repo": "snakem982/proxypool"
     },
     {
-     "host": "172.66.0.162",
+     "host": "promo3.goonars.com",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1380,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "88.216.195.188",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1433,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "206.1.97.108",
+     "port": 25021,
+     "proto": "vless",
+     "latency": 1527,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "185.229.9.135",
      "port": 443,
      "proto": "vless",
-     "latency": 1671,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "177.1.192.90",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1697,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "140.248.185.253",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1743,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "146.75.59.186",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1773,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1848,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "xnod13x.artemida.live",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1856,
-     "repo": "NiREvil/vless"
+     "latency": 1560,
+     "repo": "snakem982/proxypool"
     },
     {
      "host": "200.165.231.209",
      "port": 443,
      "proto": "vless",
-     "latency": 1868,
+     "latency": 1591,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "8.211.1.139",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 1597,
      "repo": "NiREvil/vless"
+    },
+    {
+     "host": "201.24.121.243",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1603,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "109.104.153.43",
+     "port": 33336,
+     "proto": "ssr",
+     "latency": 1635,
+     "repo": "nyeinkokoaung404/V2ray-Configs"
+    },
+    {
+     "host": "146.75.57.238",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1661,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "138.68.104.9",
+     "port": 30161,
+     "proto": "vless",
+     "latency": 1725,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.81",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1777,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 54083,
+     "proto": "vless",
+     "latency": 1790,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "194.87.143.165",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1828,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "para.kiavoosh.online",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 1850,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1889,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "199.232.239.239",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1971,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 62083,
+     "proto": "vless",
+     "latency": 1973,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "109.248.170.245",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2023,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "202.50.55.76",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2038,
+     "repo": "danmaifu/mianfeijiedian"
     },
     {
      "host": "hydra.yokkastars.com",
      "port": 2443,
      "proto": "vless",
-     "latency": 2011,
-     "repo": "NiREvil/vless"
+     "latency": 2186,
+     "repo": "danmaifu/mianfeijiedian"
     },
     {
-     "host": "72.56.38.83",
+     "host": "217.60.73.56",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 2290,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "109.234.211.232",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2336,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "46.174.142.238",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2355,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "176.114.95.242",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2369,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "wwww.qarvian.ir",
      "port": 443,
      "proto": "vless",
-     "latency": 2110,
-     "repo": "NiREvil/vless"
+     "latency": 2408,
+     "repo": "danmaifu/mianfeijiedian"
     },
     {
-     "host": "www.windowsmsidownloads.com",
+     "host": "193.17.183.48",
      "port": 443,
+     "proto": "trojan",
+     "latency": 2476,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "93.157.138.137",
+     "port": 1125,
      "proto": "vmess",
-     "latency": 2126,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "turk.bettercallakbar.ir",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2453,
+     "latency": 2532,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "171.25.158.163",
+     "host": "169.58.44.174",
      "port": 443,
-     "proto": "vless",
-     "latency": 2462,
-     "repo": "NiREvil/vless"
+     "proto": "trojan",
+     "latency": 2583,
+     "repo": "Delta-Kronecker/V2ray-Config"
     },
     {
-     "host": "177.3.214.133",
+     "host": "54.116.249.102",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2606,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "forshynewh.duckdns.org",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 2671,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "201.24.57.254",
+     "port": 2053,
+     "proto": "trojan",
+     "latency": 2704,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "141.133.174.88",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2726,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "avr.rlrlco.ir",
      "port": 443,
      "proto": "vless",
-     "latency": 2600,
+     "latency": 2784,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "212.192.221.107",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2785,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "152.70.86.199",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2808,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "76.13.188.13",
+     "port": 8443,
+     "proto": "trojan",
+     "latency": 2824,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "207.148.80.199",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2940,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "91.250.248.151",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2953,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "87.120.126.131",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3042,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "213.165.34.40",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3101,
      "repo": "NiREvil/vless"
     },
     {
      "host": "tunell2027.crackerbinam.org",
      "port": 48312,
      "proto": "vless",
-     "latency": 2654,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "starlink-ft.251313.xyz",
-     "port": 443,
-     "proto": "hysteria2",
-     "latency": 2864,
+     "latency": 3313,
      "repo": "kooker/FreeSubsCheck"
     },
     {
-     "host": "177.1.192.117",
-     "port": 443,
+     "host": "92.243.74.224",
+     "port": 8443,
      "proto": "vless",
-     "latency": 2902,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "en001.zestapp778.com",
-     "port": 29813,
-     "proto": "trojan",
-     "latency": 2931,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "13.143.176.83",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3013,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "172.64.231.133",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 3115,
+     "latency": 3323,
      "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "150.251.143.86",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3123,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "177.1.192.67",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3152,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 3275,
-     "repo": "peasoft/NoMoreWalls"
-    },
-    {
-     "host": "92.42.203.240",
-     "port": 2052,
-     "proto": "vmess",
-     "latency": 3285,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "185.154.155.142",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3291,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "79.182.39.37",
-     "port": 27591,
-     "proto": "vless",
-     "latency": 3795,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 4071,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "54.169.179.101",
-     "port": 443,
-     "proto": "vless",
-     "latency": 4141,
-     "repo": "hello-world-1989/cn-news"
-    },
-    {
-     "host": "151.101.67.6",
-     "port": 443,
-     "proto": "vless",
-     "latency": 5517,
-     "repo": "NiREvil/vless"
-    }
-   ]
-  },
-  "singbox": {
-   "tested": 2506,
-   "ok": 35,
-   "unsupported": 0,
-   "config_error": 1,
-   "reasons": {
-    "reset": 1952,
-    "auth": 1,
-    "tls": 517,
-    "config": 1
-   },
-   "rounds": 1,
-   "min_available": 10,
-   "cand": 3115,
-   "exhausted": false,
-   "cap": 2500,
-   "sampled": 2506,
-   "partial": false,
-   "policy": "full",
-   "file": "available_singbox.json",
-   "nodes": [
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1093,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1102,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1117,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "api.mediaklenov.cc",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1117,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "jp-1.bnc-gt.co.uk",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1127,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "80.243.228.61",
-     "port": 2085,
-     "proto": "vless",
-     "latency": 1153,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "13.143.176.83",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1161,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "150.251.143.86",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1162,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "150.251.143.86",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1203,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "171.22.119.74",
-     "port": 8446,
-     "proto": "trojan",
-     "latency": 1271,
-     "repo": "peasoft/NoMoreWalls"
-    },
-    {
-     "host": "177.1.192.117",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1287,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "177.1.192.38",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1361,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1371,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "s12.bsh-net.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1437,
-     "repo": "NiREvil/vless"
     },
     {
      "host": "202.50.253.27",
      "port": 19999,
      "proto": "ss",
-     "latency": 1459,
-     "repo": "F0rc3Run/F0rc3Run"
+     "latency": 3339,
+     "repo": "sinavm/SVM"
     },
     {
-     "host": "194.87.143.165",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1521,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "130.17.18.204",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1535,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1562,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "201.24.49.49",
-     "port": 2027,
-     "proto": "vless",
-     "latency": 1569,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "104.16.34.14",
+     "host": "138.124.231.159",
      "port": 443,
      "proto": "trojan",
-     "latency": 1604,
+     "latency": 3697,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "185.22.155.121",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1619,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "hydra.yokkastars.com",
-     "port": 2443,
-     "proto": "vless",
-     "latency": 1792,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1829,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "46.17.46.27",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1849,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "wstg.datasynctrue.online",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1882,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "190.93.245.148",
+     "host": "179.255.127.82",
      "port": 443,
      "proto": "trojan",
-     "latency": 1887,
-     "repo": "whoahaow/rjsxrd"
+     "latency": 3816,
+     "repo": "danmaifu/mianfeijiedian"
     },
     {
-     "host": "104.17.70.206",
-     "port": 8443,
+     "host": "207.57.123.77",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3819,
+     "repo": "Delta-Kronecker/V2ray-Config"
+    },
+    {
+     "host": "app-mi-26.spbstudentlife.com",
+     "port": 443,
      "proto": "vless",
-     "latency": 1897,
+     "latency": 4150,
+     "repo": "shabane/kamaji"
+    }
+   ]
+  },
+  "singbox": {
+   "tested": 2503,
+   "ok": 55,
+   "unsupported": 0,
+   "config_error": 17,
+   "reasons": {
+    "reset": 1828,
+    "auth": 1,
+    "tls": 601,
+    "config": 17,
+    "refused": 1
+   },
+   "rounds": 1,
+   "min_available": 10,
+   "cand": 7090,
+   "exhausted": false,
+   "cap": 2500,
+   "sampled": 2503,
+   "partial": false,
+   "policy": "full",
+   "file": "available_singbox.json",
+   "nodes": [
+    {
+     "host": "141.98.7.19",
+     "port": 1114,
+     "proto": "vmess",
+     "latency": 772,
      "repo": "NiREvil/vless"
     },
     {
-     "host": "177.1.192.67",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1965,
+     "host": "13.143.175.202",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 896,
      "repo": "NiREvil/vless"
     },
     {
      "host": "202.50.253.90",
      "port": 19999,
      "proto": "ss",
-     "latency": 2261,
+     "latency": 979,
      "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "163.245.42.157",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1001,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "153.52.92.224",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 1054,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "177.3.215.199",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 1160,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "163.245.42.132",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1227,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 57043,
+     "proto": "vless",
+     "latency": 1268,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "promo3.goonars.com",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1319,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1361,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "edge.bookmai.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1381,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "9.247.23.209",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1405,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "104.171.135.229",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1464,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "ph001.zestapp778.com",
+     "port": 46298,
+     "proto": "trojan",
+     "latency": 1476,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "132.243.67.109",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1514,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1590,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "95.81.102.121",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1647,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "194.87.143.165",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1655,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 63080,
+     "proto": "vless",
+     "latency": 1657,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "179.253.179.109",
+     "port": 54083,
+     "proto": "vless",
+     "latency": 1663,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "201.24.121.243",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1684,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "207.148.80.199",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1729,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "199.232.78.160",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1733,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "190.93.245.148",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1744,
+     "repo": "shabane/kamaji"
+    },
+    {
+     "host": "104.16.34.14",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1746,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "3.36.61.213",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1751,
+     "repo": "hello-world-1989/cn-news"
+    },
+    {
+     "host": "para.kiavoosh.online",
+     "port": 116,
+     "proto": "vmess",
+     "latency": 1779,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "niroo.kiavoosh.online",
+     "port": 1125,
+     "proto": "vmess",
+     "latency": 1794,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "146.75.57.238",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1815,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "144.31.190.230",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1857,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "31.76.0.15",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1878,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "207.57.132.189",
+     "port": 8443,
+     "proto": "trojan",
+     "latency": 1929,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "72.56.241.230",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1945,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "wwww.qarvian.ir",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1972,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "217.60.73.56",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1980,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "72.56.235.137",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2054,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "31.76.81.137",
+     "port": 1114,
+     "proto": "vmess",
+     "latency": 2231,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "185.146.234.242",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2288,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2323,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "200.165.231.209",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2403,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "109.234.211.232",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2484,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "forshynewh.duckdns.org",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 2532,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "202.50.253.27",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2695,
+     "repo": "sinavm/SVM"
+    },
+    {
+     "host": "202.50.253.45",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2749,
+     "repo": "sinavm/SVM"
     },
     {
      "host": "202.50.253.36",
      "port": 19999,
      "proto": "ss",
-     "latency": 2390,
-     "repo": "peasoft/NoMoreWalls"
-    },
-    {
-     "host": "79.182.39.37",
-     "port": 27591,
-     "proto": "vless",
-     "latency": 2618,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "172.66.0.1",
-     "port": 443,
-     "proto": "vmess",
-     "latency": 2853,
+     "latency": 2758,
      "repo": "F0rc3Run/F0rc3Run"
     },
     {
-     "host": "104.21.0.87",
+     "host": "141.133.174.88",
      "port": 443,
-     "proto": "vless",
-     "latency": 3538,
-     "repo": "NiREvil/vless"
+     "proto": "trojan",
+     "latency": 2838,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "168.144.41.69",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 2881,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "202.50.253.72",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2939,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "185.234.114.165",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3066,
+     "repo": "peasoft/NoMoreWalls"
     },
     {
      "host": "202.50.253.81",
      "port": 19999,
      "proto": "ss",
-     "latency": 3797,
-     "repo": "F0rc3Run/F0rc3Run"
+     "latency": 3087,
+     "repo": "shabane/kamaji"
     },
     {
-     "host": "92.42.203.240",
-     "port": 2052,
-     "proto": "vmess",
-     "latency": 5198,
-     "repo": "F0rc3Run/F0rc3Run"
+     "host": "179.253.179.109",
+     "port": 62083,
+     "proto": "vless",
+     "latency": 3094,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "88.216.195.188",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 3237,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "starlink-ft.251313.xyz",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 3367,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "91.250.248.151",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 3967,
+     "repo": "peasoft/NoMoreWalls"
+    },
+    {
+     "host": "172.66.0.162",
+     "port": 443,
+     "proto": "vless",
+     "latency": 5164,
+     "repo": "danmaifu/mianfeijiedian"
     }
    ]
   }

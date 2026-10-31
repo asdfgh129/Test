@@ -1,162 +1,113 @@
 # 项目长期记忆
 
-## 免费节点每日采集（自动化 a3d7bb22-948c-4326-b344-f4c5535ddcd0，每天 22:00）
+## 免费节点每日采集（主窗口自动化 a3d7bb22-948c-4326-b344-f4c5535ddcd0，每天 22:00）
 
-- 产出目录：`C:\Users\bemin\WorkBuddy\Test\free-nodes\` —— **三分层布局，不分日期**
-  （根目录只留 `README.md` + `CHANGELOGS.md`；`nodes/` 订阅+available+nodes_uris/nodes_meta+pool/；
-  `Docs/` 全部文档与报告（protocol/proxy/sources/tools-setup + `known-issues.md` **单文件**：
-  上方踩坑知识库 + 末尾「自检发现」区块；collection_logs/review_logs 复数日志 +
-  report/summary/health_check）；
-  `src/` **采集/验证/发布全链路脚本的唯一事实来源**（12 文件：9 脚本 + publish_free_nodes.py
-  + seed_repos/repo_quality/kernel_state json）；`Skills/free-nodes-collector/SKILL.md` 技能定义；
-  `.workbuddy/memory/` 项目记忆（已纳入 git 跟踪）。过期节点没有意义，禁止再建 YYYY-MM-DD 子目录）
-- 发布脚本：`free-nodes/src/publish_free_nodes.py`（只暂存 free-nodes，绝不 `git add -A`；
-  `--workspace` 默认脚本上溯三级（src → free-nodes → 仓库根）；`--skill-scripts` 默认即自身所在目录；
-  push 失败写 `.git/free-nodes-pending-push.json`，下次补推）
-- 技能 junction 兼容层（2026-10-25 建）：`~/.workbuddy/skills/free-nodes-collector/` 的
-  `scripts` 是指向 `free-nodes/src` 的目录 junction、`references` 指向 `free-nodes/Docs`，
-  SKILL.md 是仓库版副本。**真实内容只在仓库里，改完即生效，零同步**；
-  该目录仅为仍引用旧路径的定时任务 prompt 提供路径兼容，技能列表已不再发现它（代价可接受）
-- 内核在 `~/.workbuddy/data/free-nodes-tools/bin`（查找顺序：环境变量 → 该目录 → 已失效的 legacy 路径）
-- 采集策略：`--readme-only`（只跟随 README 声明的订阅链接，不扫仓库目录）
-- **README 订阅链接按内核 + 按日期取数**（用户明确要求）：
-  - 识别链接归属内核（v2ray/xray/clash/singbox），命中后该链接节点保证进对应内核文件
-  - README 按日期分列订阅时**只取当天**（`--readme-date-tolerance 0`）；
-    整份 README 没提日期的按通用订阅全部保留
-- **采集只发 TCP 可达节点（2026-10-28 用户要求，已设为默认）**：采集末尾 TCP 握手探测，
-  `tcp_latency` 为 null 的整条丢弃（`--keep-dead` 可关闭，`--drop-dead` 降为兼容参数）。
-  实测 16620 条里仅 ~6800 条可达，订阅从 5~6MB 降到 2MB；探测全不可达时回退保留全部，不写空
-- 验证策略（2026-10-28 起）：**每内核候选 ≤2500 全部实测，>2500 只测排序前 2500 个**
-  （`--full-below 2500 --max-test 2500`，常量 FULL_BELOW/MAX_TEST 集中在 layout.py，两值相同；
-  曾为 3000，2026-10-28 下调，理由见下条吞吐实测）；
-  排序 = 协议交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序；
-  summary 里 `exhausted=true` 表示候选已全部测完，此时不要再加测试量、也不要放宽探测地址。
-  旧模式（`--no-full-test` 回退「可用数 <10 沿序追加，上限 limit×5、预算 1800s」）仅供对比
-- **验证侧三个口径（2026-10-28 实测定位后定死，别凭感觉改回去）**：
-  `--test-timeout 3`（可用节点 HTTP 耗时 p50 1.39s/p90 1.87s/max 2.24s，3s 只误杀 2.5%）、
-  `--retry 0`（3s 判失败的 117 个里放宽到 12s 仅 2 个变可用 = 1.7%，代价是吞吐腰斩；
-  且 `reason=="timeout"` 在代码层面永不重试）、`--workers 24`（12 并发 1.3 节点/s、
-  24 并发 4.9~5.7，瓶颈是网络等待不是 CPU）；TCP 预筛 256 并发 / 1.5s
-  （64 并发跑 16620 个要 8 分钟，会把 `--time-budget` 吃光、四个内核全被跳过）
-- **时间限制的真相（2026-10-27 用户追问后核实）**：
-  - 平台对单次自动化运行有 **90 分钟强制取消**（`[CANCELLED] Run timed out`，
-    10-25 22:00 起跑、23:30 被砍）——**不是我们定的，任务内部改不掉，automation 也没有超时字段**
-  - 曾经写在 prompt 里的「超过 35 分钟就 `--max-test 600`」是**我们自己拍的数字**，
-    2026-10-27 已删除。用户明确要求「不要设限」：`--max-test` 一律给当前全量上限（现为 2500），
-    不按固定测试量降级
-  - 正确做法：**测试量不设人为上限**，靠 `test_nodes.py --time-budget N`（默认 0=不限）
-    在平台强杀前主动收尾——到期停止提交新节点、跳过未开始的内核，已测结果立即落盘，
-    `summary.md` 标「本轮未跑完（主动收尾，不是失败）」，`summary.json` 有 `sampled/partial`
-  - **增量落盘**：每内核测完立即写 `available_*`/`Docs/summary.*`/仓库质量/`pool_state.json`，
-    被强杀最多丢当前内核（此前只在四核全跑完后才写，被砍等于整晚白干）
-- **一夜三窗口接力（2026-10-27 用户拍板「90 分钟跑不完就跑第 2 个、第 3 个」）**：
-  - 22:00 主任务（采集+验证）→ 23:45 第二窗口 → 01:30 第三窗口，后两个**只续跑验证、不采集**
-  - 自动化 id：主 `a3d7bb22-…` / 第二 `a4c4ae9d-9d70-4395-b78d-63a0a131e62d` /
-    第三 `19f100fb-c01d-4d31-9a1e-76444fbf51ad`
-  - **进度记录默认开**：`test_nodes.py` 无条件写 `nodes/tested_state.json`
-    （`{date, cores:{core:[host:port]}}`，路径助手 `layout.tested_state_path()`），
-    日期不符视为空。所以主窗口不用加任何参数，后两窗口才加 `--resume-tested`
-  - **`--resume-tested` 三件事**：跳过本日已测的 `host:port`（否则第二窗口从排序头部重测，
-    90 分钟全打水漂）；把每窗口已测写回；**把前面窗口已验证可用的节点并回** available 与汇总
-    （不并回会被冲掉——实测第二轮测 96 个全不可用，第一轮 20 个可用清零）
-  - 汇总累积：`Docs/summary.*` 会合并同一天前序窗口的内核结果，换 `--cores` 不会抹掉别的内核；
-    `tested` 记**本日累计**、`partial` 只针对**本窗口**，「本轮未跑完」只列本窗口真跑过的内核
-  - 第三窗口跨零点，`--date` 必须取 `Docs/summary.json` 的 `date`（采集日），不能用 `date +%F`
-  - 三窗口都要在验证前 `taskkill` 残留内核（前窗口被强杀会留 xray/v2ray/mihomo/sing-box 占端口）
-- 仓库池：26 组关键词 × 2 页（100 条/页）× 三级扩量，`src/seed_repos.json` 上限 300 个
-- **自动化 prompt 已可自助更新**（2026-10-27 起 `automation_update` 工具可用，
-  id `a3d7bb22-948c-4326-b344-f4c5535ddcd0`）：已把 35 分钟/600 那条换成 `--time-budget` 规则，
-  并把 known-issues 第 34/35/36 条写进第 4 步
-- **`test_nodes.py` 两个易踩的坑**：① `ThreadPoolExecutor.map` 会一次性吃空迭代器，
-  写在生成器里的时间检查形同虚设，必须按块提交；② 模块顶层有 `as c`/`as lay` 别名，
-  函数内禁止用 `c`、`lay` 当循环变量（会把 `c.quality_score` 变成字符串属性错误）
+### 架构：采集在 CI，探测/验证在本地（2026-10-31 起）
+- CI：仓库根 `.github/workflows/collect.yml`，北京 21:05（UTC `5 13 * * *`），只跑
+  `--readme-only --no-latency-sort --uplink direct --time-budget 1500`（下载/解析/去重/落盘，不探测），
+  提交 `nodes_uris` / `nodes_meta` / `Docs/` / `seed_repos` / `repo_quality` / `CHANGELOGS.md`，
+  **不提交四份订阅文件**（那一刻含 TCP 死节点）。
+- **探测必须本地**：runner 是 Azure 数据中心出口，封 ASN 的节点判死（假阴性）、海外通国内不通的判活
+  （假阳性）。口径差异是有意的：`Docs/report.md`/`collection_logs.md` 是 CI 口径（含死节点），
+  `nodes_uris.txt`/`nodes_meta.json` 是本地口径（只含可达）——数字不同不是 bug（known-issues 50）。
+- 本地第一窗口顺序：`--sync-only` → `--probe-only` → `test_nodes.py` → health_check → publish → window_gate。
+- **`--sync-only --proxy auto` 必须在 `--probe-only` 之前**（否则探昨天的清单）。只做 `fetch + merge --ff-only`，
+  **绝不 rebase/reset/stash**（工作区有用户 C++ 改动）。失败重试要加 `--uplink-candidates 120`
+  （默认 candidates 是确定性排序，原样重试等于同一批节点）。退出码 1 别空等，直接走兜底采集。
+- 兜底采集（CI 未产出/同步失败）：`collect_nodes.py --readme-only --max-repos 80 --search-pages 2
+  --search-days 3 --readme-date-tolerance 0 --drop-dead --check-kernels --time-budget 1500`；
+  带 `--check-kernels` 就跳过独立内核检查步骤。
+- **窗口闸门** `src/window_gate.py` 读 `Docs/summary.json` 四分支判定（partial / exhausted /
+  tested≥min(cand,cap) / 内核漏跑），输出 `GATE: done|continue`（rc 0/1）。第二三窗口开工先跑，done 就结束。
+  **第三窗口必须 `--date <采集日>`**（summary.date 是昨天，用 `date +%F` 会天天白跑）。
 
-## 四内核协议能力（2026-10-25 实测校准，详见 Docs/protocol.md）
+### 时间账与窗口接力
+- 平台对单次运行有 **90 分钟强制取消**（`[CANCELLED] Run timed out`），任务内部改不掉。
+  靠 `test_nodes.py --time-budget N` 主动收尾（到期不再提交新节点、跳过未开始内核、已测立即落盘，
+  summary 标「本轮未跑完（主动收尾）」），**测试量不设人为上限**（`--max-test` 一律 2500）。
+- 三窗口：22:00 主（探测+验证）→ 23:45 第二 → 01:30 第三；后两窗口先跑 gate，只续验证并加 `--resume-tested`
+  （主窗口**不加**）。第三窗口跨零点必须取 summary 的采集日。
+- `--resume-tested` 三件事：跳过本日已测 `host:port`；写回本窗口已测；**把前序窗口可用节点并回**
+  available 与汇总（不并回会被冲掉，实测第二窗口把第一轮 20 个可用清零）。
+- 进度记录默认开：`test_nodes.py` 无条件写 `nodes/tested_state.json`（`{date, cores:{core:[host:port]}}`）。
+- 三窗口验证前都要 `taskkill` 残留内核（被强杀会留 xray/v2ray/mihomo/sing-box 占端口）。
+- 时间账（全量 4×2500）：同步 ~1min + 内核检查 22s + 探测 ~3min + 验证 ~29min + 自检发布 ~7min ≈ 40min。
 
-- 能力矩阵 `layout.CAPS` 是唯一事实来源（test_nodes 分流与 uplink 的 `_cores_for` 都读它）
-- **能力判定三原则**（用户两次质疑后沉淀）：① grep 二进制**文件本身**
-  （`xray.exe | grep` 扫的是进程 stdout，必漏检，必须 `grep -a` 文件）；
-  ② 协议名不能按字面猜（Xray 的 Hysteria2 叫 `hysteria` + `version:2`，名字里没有 "2"）；
-  ③ config check 过 ≠ 装填对 ≠ 支持，必须 E2E 实测兜底
-- hysteria2 四内核均支持（v2fly 5.x 全系、Xray ≥ v26.1.23）：v2ray 用
-  `protocol:hysteria2` + 传输层 `hy2Settings.password`；xray 用 `protocol:hysteria`
-  + `settings.version:2`（address/port 平铺）+ 传输层 `hysteriaSettings.auth`；
-  xray 另支持 salamander 混淆与 udphop 端口跳跃
-- xray hysteria2 回环 E2E 未过（回环服务端 SNI 选证书怪象），**真实节点未端到端验证**：
-  线上若仅 xray 失败而其他内核可用，优先怀疑 xray 侧配置/兼容，别急着判节点不可达
-- 变更协议能力时的固定同步链：layout.CAPS → test_nodes 转换器 → protocol_check 用例 →
-  protocol.md（仅 `Docs/protocol.md` 一份，仓库内即唯一副本）→ `Skills/free-nodes-collector/SKILL.md` → known-issues
+### 采集口径
+- `--readme-only`：只跟随 README 声明的订阅链接，不扫仓库目录；链接按内核归属（v2ray/xray/clash/singbox），
+  命中后保证进对应内核文件；README 按日期分列时只取当天（`--readme-date-tolerance 0`），没提日期按通用订阅保留。
+- 只发 TCP 可达节点：`tcp_latency` 为 null 整条丢弃（`--keep-dead` 可关）；探测全不可达时回退保留全部并 warn
+  （先查网络，别当「今天没节点」）。
+- 仓库池：26 组关键词 × 2 页 × 三级扩量，`src/seed_repos.json` 上限 300。
 
-## GitHub token（凭据，勿泄露）
+### 验证口径（2026-10-28 实测定死，别凭感觉改）
+- 每内核候选 ≤2500 全测，>2500 只测排序前 2500（`layout.FULL_BELOW/MAX_TEST`=2500，只能改 layout.py）。
+  排序 = 协议交错 + 仓库质量优先 + CF 前置排最后 + TCP 延迟升序。`--limit/--min-available` 全量模式不生效。
+- 参数名：`test_nodes.py --full-below/--max-test/--time-budget/--workers/--test-timeout/--retry`
+  （`--test-full-below` 是 collect 的透传名，传给 test_nodes 直接报错）。
+- `--test-timeout 3`（可用节点 p50 1.39s/p90 1.87s/max 2.24s，3s 仅误杀 2.5%）、`--retry 0`
+  （117 个超时里放宽到 12s 只 2 个变可用=1.7%，吞吐腰斩；`reason=="timeout"` 代码层永不重试）、
+  `--workers 24`（12 并发 1.3/s vs 24 并发 4.9~5.7/s，瓶颈是网络等待）；TCP 预筛 256 并发/1.5s。
+- `--fair-budget` 必须加（内核顺序跑，不加第一个吃光预算，其余全跳过，known-issues 38）。
+- 每内核可用数个位数到十几个是正常水位（探测要真出境+HTTPS）；不要为数字好看换 www.gstatic.com 或明文 http。
+- `exhausted=true` = 候选已全测完，此时别加测试量、别放宽探测地址；可用数仍 <10 属源池质量问题。
+- `test_nodes.py` 两个坑：① `ThreadPoolExecutor.map` 会吃空生成器，时间检查形同虚设，必须按块提交；
+  ② 模块顶层有 `as c`/`as lay` 别名，函数内禁用 `c`/`lay` 当循环变量。
 
-- 存放：`C:\Users\bemin\.workbuddy\data\free-nodes-tools\github_token.txt`（权限 600，
-  **不在 git 仓库内**；`.gitignore` 已加 `github_token.txt` 兜底）
-- 查找链：`--token` → `GITHUB_TOKEN`/`GH_TOKEN` 环境变量 → 上述文件
-- 配额：带 token 核心 5000/时、搜索 30/分；匿名只有 60/时、10/分
-- **日志与汇报只允许打印打码形式（前 4…后 4），任何情况下不得输出完整 token**
+## 四内核协议能力（详见 Docs/protocol.md）
+- `layout.CAPS` 是唯一事实来源（test_nodes 分流与 uplink `_cores_for` 都读它）。
+- 判定三原则：① `grep -a` 二进制**文件本身**（`xray.exe | grep` 扫的是 stdout，必漏）；
+  ② 协议名不能按字面猜（Xray 的 Hysteria2 = `hysteria` + `version:2`）；③ config check 过 ≠ 支持，必须 E2E 兜底。
+- hysteria2 四内核均支持：v2ray `protocol:hysteria2` + `hy2Settings.password`；xray `protocol:hysteria`
+  + `settings.version:2`（address/port 平铺）+ `hysteriaSettings.auth`，另支持 salamander 混淆与 udphop。
+  xray hy2 回环 E2E 未过（真实节点未端到端验证）：线上仅 xray 失败先怀疑 xray 侧配置。
+- 改协议能力的同步链：layout.CAPS → test_nodes 转换器 → protocol_check 用例 → Docs/protocol.md §7 →
+  Skills/free-nodes-collector/SKILL.md → known-issues → 根 CHANGELOGS.md。
 
-## 网络环境事实（重要）
-
-- `github.com:443` 曾长期被阻断（连接重置）；`api.github.com`、`codeload.github.com` 可直连；
-  `raw.githubusercontent.com` 不可直连，靠镜像（gh-proxy.com / gh-proxy.org / gh.monlor.com 等，失效率高）
-- 因此 GitHub 采集与 push 都走 **自建代理**：`scripts/uplink.py` 用池内已验证节点起内核
-  （clash→singbox→xray→v2ray 轮换），探测 `https://github.com/` 或
-  `https://api.github.com/rate_limit` 拿 2xx 才算通；四内核全不通才直连
-- 通道是全局 opener，所以**搜索 API 与节点下载都走它**，不只是下载
-- 池为空时无候选节点可起代理（首次运行），会降级直连 —— 属物理限制，不是故障
-- 推送探测只认 `https://github.com/`（api 通不代表能 push）
-
-## 上行通道生命周期（2026-10-26 用户三点要求落地）
-
-- **第 1 步就建代理**：`check_kernels.py` 查 `api.github.com` 前先自建通道（`--uplink auto`），
-  否则直连不通时版本检查必然失败。走免费节点代理时出口 IP 与他人共享，
-  **匿名配额 60/时 几乎必然 403，查版本必须带 token**（`latest_release` 已加 Authorization）
-- **代理只建一次 = 同进程合并**：`collect_nodes.py --check-kernels` 内部调
-  `check_kernels.run_check()`，把返回的通道 handle 直接交给采集。
-  **不能依赖「子进程活过父进程」**：本机 job 在命令结束时回收 detached 子进程，
-  `CREATE_BREAKAWAY_FROM_JOB` 被拒 WinError 5（详见 known-issues 第 34 条）；
-  `runtime/uplink_session.json` + pid/探活只是尽力而为的交接
-- **推送**：`publish_free_nodes.py --proxy auto` **不探测本机代理端口**（用户明确要求），
-  直接自建；`--proxy <url>` 才用指定代理。注意 `auto` 必须先清空 GIT_PROXY，
-  否则 git 会把字面量 "auto" 当代理地址（踩过：`Could not resolve proxy: auto`）
-- **known-issues 只有一个文件**：`Docs/known-issues.md`。知识库条目用 `## N.`，
-  自检条目用 `### 日期 标题` 且只在末尾「自检发现」区块内增删——
-  绝不能让 `upsert_section` 那套「插顶部 + 截断 30 条」作用在知识库上（会挤掉旧条目）
+## 凭据与网络
+- GitHub token：`C:\Users\bemin\.workbuddy\data\free-nodes-tools\github_token.txt`（600，不在仓库）；
+  查找链 `--token` → `GITHUB_TOKEN`/`GH_TOKEN` → 该文件。配额 5000/时、搜索 30/分（匿名仅 60/时）。
+  **任何日志/汇报只允许打码（前4…后4）**。CI 用仓库 Secrets 的 `FREE_NODES_TOKEN`（另一处配置）。
+- `github.com:443` 被阻断；`api.github.com`、`codeload.github.com` 直连可；`raw.githubusercontent.com` 只能走镜像。
+  → 采集下载与 push 都走自建通道；**只查 release 版本可用 `--uplink off` 直连**（实测 22s 跑完四内核）；
+  `--update` 下载安装包必须 `--uplink auto`。
+- 通道：`scripts/uplink.py` 用池内已验证节点起内核（clash→singbox→xray→v2ray 轮换），探 `https://github.com/`
+  2xx 才算通；是全局 opener，搜索 API 与下载都走它；池空降级直连（物理限制）。
+- **通道活不过父进程**：本机 job 结束即回收 detached 子进程（`CREATE_BREAKAWAY_FROM_JOB` WinError 5），
+  所以「代理只建一次」只能靠同进程合并（`collect_nodes.py --check-kernels` 把 handle 传给采集）。
+  换步骤顺序、合并进程都换不来通道复用（known-issues 34/51）。
+- 推送 `--proxy auto` 不探测本机端口、直接自建；`auto` 前必须清空 GIT_PROXY（否则 git 把 "auto" 当代理地址）。
+- 内核在 `~/.workbuddy/data/free-nodes-tools/bin`（环境变量 → 该目录 → legacy）。
 
 ## 仓库约定
+- 布局：`free-nodes/` 三分层不分日期（根只留 README.md + CHANGELOGS.md；`nodes/` 订阅+available+nodes_uris/
+  nodes_meta+pool/；`Docs/` 文档报告日志（`known-issues.md` 单文件：上方知识库 `## N.` + 末尾「自检发现」区块）；
+  `src/` 全链路脚本唯一事实来源；`Skills/`；`.workbuddy/`）。**禁止建 YYYY-MM-DD 子目录**。
+- 发布 `src/publish_free_nodes.py`：路径限定暂存 `free-nodes` + `.github/workflows`（CI 工作流不在 free-nodes 里，
+  不带就永远上不了 GitHub），**绝不 `git add -A`**（仓库有用户 C++ 项目 Test/、Test.sln）；
+  提交信息 `chore(free-nodes): 更新 <日期> 免费节点订阅`；push 失败写 `.git/free-nodes-pending-push.json` 下次补推。
+- **路径单一事实来源 `src/layout.py`**（sub_path/avail_path/pool_path/uris_path/meta_path/... 助手，全脚本禁硬编码）；
+  改布局只改 layout.py + `migrate_legacy_flat()`；**助手返回值不许二次加工**（`dirname(pool_dir)` 曾拼出 nodes/nodes/pool）。
+  改布局后固定自检：`grep -rn "_dir_of\|_path_of\|dirname(lay\." src/` + 长任务收工比对「产物路径+mtime+计数」
+  （静默错位不报错、退出码照样 0）。
+- 补救错写数据用合并（`pool.merge` 按 host:port 去重、累加 ok_count），别直接覆盖。
+- 日志去重：`Docs/report|summary|health_check` 按日期替换；`CHANGELOGS.md`/`known-issues` 自检区按「日期+标题」。
+- `free-nodes/.gitattributes` = `* -text`；根 `.workbuddy` 是 junction 指向 `free-nodes/.workbuddy`
+  （`.gitignore` 用根锚定 `/.workbuddy/`，只有 free-nodes 那份入库）；`__pycache__/`、`*.pyc` 全局忽略。
+- 技能兼容层 `~/.workbuddy/skills/free-nodes-collector/`：scripts→`free-nodes/src`、references→`Docs` 的 junction，
+  真实内容只在仓库，改完即生效，零同步。
+- `known-issues.md` 只有一个文件：知识库条目 `## N.`，自检条目 `### 日期 标题` 只在末尾区块增删——
+  绝不能让 `upsert_section`（插顶部+截断 30 条）作用在知识库上。
+- 调试产物（`_san_*.pem`、`tmp_xray_hy2_*.py`）放 `~/.workbuddy/data/free-nodes-tools/debug/`，绝不入公开仓库。
+- git 身份：`bemin <xiaoxuefeng@msn.com>`（仓库级）。
 
-- **README 链接判别（第 49 条）**：以 `/` 结尾的地址 = 分类页/博客页，`classify_readme_link`
-  直接跳过（否则占掉 `MAX_README_LINKS=10` 的配额，还让日志记成「链接下载成功」）；
-  日志里 `<名字>:0` 有三种含义——空文件 / HTML 网页 / 格式未覆盖，别一律说「解析不到节点」
-- **判「上游为空」先查 `git/trees/HEAD?recursive=1` 的 `size`**，别只看下载回来的正文长度
-  （0 字节能同时是「上游真空」和「边缘缓存未命中」；clashfree 的 1027/1030 两个文件确实 0 字节）
-- **改口径常量要同步文档**：`layout.FULL_BELOW/MAX_TEST`（现 2500）改完 grep 一遍
-  `Skills/`、`Docs/`、`automation-prompt.md` 的旧数字（SKILL.md 曾长期留着 3000）
-- git 身份：`bemin <xiaoxuefeng@msn.com>`（仓库级配置）
-- 仓库里同时有用户的 C++ 项目（`Test/`、`Test.sln`），自动化只允许路径限定的 add
-- `free-nodes/.gitattributes` 用 `* -text` 防止 autocrlf 改写订阅文件
-- **路径单一事实来源 = `free-nodes/src/layout.py`**（sub_path/avail_path/pool_path/uris_path/
-  meta_path/report_path/summary_path/health_path/issue_path/seed_file_path 等助手），
-  全脚本禁止硬编码 join；改目录布局只改 layout.py + `migrate_legacy_flat()`
-- **路径助手的返回值不许二次加工**（known-issues 第 32/33 条的血泪）：
-  `dirname(lay.pool_dir(root))` 在旧平铺布局下是对的，三分层后拼出 `nodes/nodes/pool`；
-  调用方要么直接传 `root`、要么直接用助手给的最终路径，禁止「助手路径 + 自己再取父目录/再拼一层」
-- 改布局后的固定自检两条：① `grep -rn "_dir_of\|_path_of\|dirname(lay\." src/` 扫旧标识符与二次加工；
-  ② 长任务收工后抽查「产物路径 + mtime + 关键计数」——静默错位不报错、退出码照样 0，
-  只有比对时间戳和节点数才看得出来
-- 补救错写的数据用**合并**（`pool.merge` 按 `host:port` 去重、累加 `ok_count`），
-  别图省事直接覆盖，否则历史累积节点就没了
-- md 日志去重粒度：`Docs/report`/`Docs/summary`/`Docs/health_check` 按**日期**替换；
-  根 `CHANGELOGS.md`/`Docs/known_issues.md` 按**日期+标题**替换（一天多事件并存）
-- 仓库根 `.workbuddy` 是指向 `free-nodes/.workbuddy` 的 junction（宿主 memory 系统固定读
-  `Test/.workbuddy/memory/`，靠它不断链）；`.gitignore` 用根锚定 `/.workbuddy/`，
-  所以只有 free-nodes/.workbuddy 入库；`__pycache__/`、`*.pyc` 已全局忽略
-- 调试产物（hysteria2 回环测试的 `_san_*.pem`、`tmp_xray_hy2_*.py`）在
-  `~/.workbuddy/data/free-nodes-tools/debug/`，**绝不入公开仓库**
-- **看到 404 先怀疑自己拼的 URL**（known-issues 第 43 条）：GitHub「复制链接」给的是
-  `raw.githubusercontent.com/<o>/<r>/refs/heads/main/<path>`，解析漏掉 `refs/heads`
-  就变成 `heads/main/...`、ref 记成 `refs`，拼出来的地址必然 404。
-  代价是每天白丢约 2 万条候选，还会被自检报成「上游路径失效」——判断上游是否真失效，
-  最短路径是把 README 原文打出来和我们的请求地址比对
-- 仓库「0 条」有两种归因，别混：`下载失败`/`部分链接下载失败` 是通道与路径问题，
-  只有「已下载但解析不到节点」才是格式覆盖问题（`health_check` 用 `pfail` 桶分开计）
+## 高频踩坑（详见 Docs/known-issues.md）
+- **404 先怀疑自己拼的 URL**（43）：README 给的是 `/refs/heads/main/<path>`，漏掉 `refs/heads` 就 404，
+  每天白丢约 2 万条。判上游是否真失效：打印 README 原文与请求地址比对。
+- README 链接以 `/` 结尾 = 分类页/博客页，直接跳过（49），否则占掉 `MAX_README_LINKS=10` 配额。
+  日志 `<名字>:0` 三义（空文件/HTML/格式未覆盖），别一律说「解析不到节点」。
+- 判「上游为空」先查 `git/trees/HEAD?recursive=1` 的 `size`，别只看正文长度（0 字节可能是边缘缓存未命中）。
+- 仓库「0 条」两归因：`下载失败`/`部分链接下载失败` = 通道/路径问题；只有「已下载但解析不到」才是格式问题。
+- 静默减产类缺陷要盯：`is_known_bad_repo` 的次要判据曾把量源全跳过（46）、
+  sing-box 配置顶部 `#profile-title` 让 `json.loads` 失败（47，已加 `_strip_leading_comments()`）、
+  `update_repo_quality()` 用当日小样本覆盖历史大样本会把量源踢到队尾（待落地）。
