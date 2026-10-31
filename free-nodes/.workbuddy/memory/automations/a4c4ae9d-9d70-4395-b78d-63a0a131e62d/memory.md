@@ -75,3 +75,14 @@
   - `--out` 指向全新目录时 `write_nodes_meta` 会因缺 `nodes/` 子目录报 FileNotFoundError
     （冒烟时撞到，生产路径不受影响，未改）
 
+## 2026-10-31（第五晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」（2506/2505/2507/2503，cap 2500），首窗口 23:01 已跑完
+- 本窗口未占用验证资源、未重跑自检；只做尾巴清理
+- 尾巴：`free-nodes/.workbuddy/memory/` 两个文件是第一窗口发布后写入的（无 pending-push.json、
+  无 ahead 提交）→ 补一次 publish 收干净，commit `4fd578e` → origin/master 成功
+  （v2ray @ 202.50.253.81:19999，通道第 1 次命中）
+- 本日可用数：v2ray 54 / xray 122 / clash 60 / singbox 55（属正常水位）
+- **给后续窗口的要点**：GATE: done 时先看 pending-push 与 `git status --short` 里 free-nodes 有无改动；
+  本窗口写自动化 memory 又会产生同样的小尾巴，属正常，下次发布自动带上，不必反复补推
+
