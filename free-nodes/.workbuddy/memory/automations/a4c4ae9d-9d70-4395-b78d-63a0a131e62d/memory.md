@@ -86,3 +86,13 @@
 - **给后续窗口的要点**：GATE: done 时先看 pending-push 与 `git status --short` 里 free-nodes 有无改动；
   本窗口写自动化 memory 又会产生同样的小尾巴，属正常，下次发布自动带上，不必反复补推
 
+## 2026-11-01（第六晚：GATE: done，未跑验证，也没补推）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」2509/2506/2509/2506（cap 2500），summary 生成于 23:35
+- 尾巴检查：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` 无输出；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 无补推动作，本窗口零 git 操作
+- 本日可用数：v2ray 48 / xray 120 / clash 56 / singbox 63（正常水位）
+- 结论：今晚首窗口一次跑完，第二窗口纯兜底空转，未占用验证资源
+- **给后续窗口的要点**：`rev-list --left-right --count origin/master...HEAD` 比 git status 更能确认「已推送」，
+  两处都干净就真的什么都不用做；本次没写 free-nodes 内任何文件（只写了本文件），下次发布才会带上这个尾巴
+
