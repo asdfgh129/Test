@@ -1,5 +1,34 @@
 # 每日免费节点采集 —— 自动化执行记录
 
+## 2026-11-01 22:00 运行（第一窗口 / 主窗口）
+
+**结论：CI 定时任务从未派发（0 次运行）→ 兜底采集自愈，四内核全测完；修掉「量源被小样本永久封杀」；GATE: done**
+
+- **CI 依旧没跑（known-issues 54）**：`--sync-only` 一次成功（几秒，与 origin/master 对齐），
+  但 `nodes_meta.date` 仍是 10-31。1 分钟取证定案：工作流 blob sha 与本地 HEAD 一致、`default_branch=master`、
+  `fork=false`、`actions/permissions enabled/allowed=all`、`state=active`，而 `actions/runs` 与
+  按 workflow 查的 runs **两条都 `total_count=0`**（历史零运行）⇒ 调度侧没派发，不是 YAML/分支/权限/配额。
+  按调度延迟处理，**没有空等 15 分钟**，直接走兜底；也**没有**用 workflow_dispatch 验证（会抢文件把发布卡死）
+- 兜底采集 21min（`--time-budget 1500 --check-kernels --drop-dead`）：80/80 仓库 → 原始 54006 / 唯一 8479
+  → TCP 可达 3727（44%）→ 分流 3363/2981/3688/3575；失败构成：无链接 21、质量过低 15、解析不到 14、
+  下载失败 6、日期不符 3、部分失败 3（贡献节点仓库 23 个）
+- 探测 15s：3727 → 3698（丢 29），CF 前置 1164，中位 214ms
+- 验证 32min（`--time-budget 3100`，四核全测完未截断）：v2ray 48/2509、xray 120/2506、clash 56/2509、
+  singbox 63/2506；池 214/520/389/329
+- **修复（known-issues 53，本窗口核心）**：15 个仓库被「历史质量过低」跳过，昨日三大量源全在里面
+  （OpenRay 60/0、SoliSpirit 416/0、Barabama 179/0），原始量 54006 vs 前日 140863。
+  根因两层：`update_repo_quality()` 用单次样本覆盖历史 + 闸门命中后不再采样（单向门）。
+  改法：`QUALITY_WINDOW=5`（按日期去重、样本求和）、闸门加 `max_age_days=7` 有效期、日志口径、
+  health_check 措辞；迁移 seed_repos.json（22 个仓库重算，仍被跳 15→11）。回归 11/11 PASS；
+  OpenRay 1554/19、SoliSpirit 6007/28 已恢复入池
+- 自检 0 critical / 5 warn（clashfree 0 条、三核可用率 1.9~2.5%、镜像 10/13 失效）
+- 推送：`77a4345`（31 文件）+ `8de6891`（行尾归一）→ origin/master 成功（自建 xray @ 202.50.253.81）
+- **踩坑（新，值得记）**：用 Python 脚本整文件重写 `collect_nodes.py` 时忘了 `newline=''`，
+  CRLF/LF 被整体翻转，一次提交里 3917 行全变（实质改动只有 59 行）。**改脚本一律用 Edit 工具，
+  或显式 `newline=""` 读写；提交前先看 `git diff --stat` 行数是否与预期同量级**
+- **下轮先做**：① 复核 `actions/runs?event=schedule` 是否仍为 0（连续两晚为 0 就改外部 dispatch 兜底）；
+  ② 看 OpenRay/SoliSpirit/Barabama 重采后唯一节点数是否回到 1.2 万~1.8 万量级
+
 ## 2026-10-31 22:00 运行（第一窗口 / 主窗口）
 
 **结论：CI 首次「上线」失败被当场查清并修复；兜底采集自愈，四内核全部测完；GATE: done**
