@@ -706,7 +706,7 @@ def check_repo_quality(find, seed_file):
     bad = [r for r in scored if (r.get("ok") or 0) == 0 and (r.get("tested") or 0) >= 20]
     good = [r for r in scored if (r.get("avail_rate") or 0) >= 0.1]
     detail = (f"已评分 {len(scored)} 个仓库，可用率 >=10% 的 {len(good)} 个，"
-              f"长期 0 可用 {len(bad)} 个（下次采集会自动跳过）")
+              f"零可用 {len(bad)} 个（7 天内跳过、过期自动重采，known-issues 53）")
     if bad and len(bad) / len(scored) > 0.5:
         find("warn", "仓库质量", detail,
              "过半仓库实测 0 可用：多为纯聚合转发站或已死源，建议提高 min-stars 或只用高质量清单仓库")

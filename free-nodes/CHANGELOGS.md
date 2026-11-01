@@ -2,6 +2,38 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-11-01 第一窗口：CI 调度没派发（0 次运行）→ 兜底采集自愈；修掉「量源被小样本永久封杀」
+
+- **CI 状态**：`--sync-only` 一次成功（与 `origin/master` 对齐，耗时几秒），但 `nodes_meta.date`
+  仍是 `2026-10-31`。取证：工作流 blob sha 与本地 HEAD 一致、`default_branch=master`、
+  `fork=false`、`actions/permissions: enabled/allowed_actions=all`、工作流 `state=active`，
+  而 `actions/runs` 与 `workflows/collect.yml/runs` **两条都是 `total_count=0`** —— 从未跑过任何一次。
+  判定为**调度侧未派发**（非 YAML/分支/权限/配额问题），按调度延迟处理：不空等 15 分钟，直接本地兜底（第 54 条）
+- **有意没做**：本窗口不用 `workflow_dispatch` 手动触发 CI。它跑完会提交 `nodes_uris.txt` /
+  `nodes_meta.json`，与本窗口的探测/验证抢同一批文件，`--sync-only` 的 `merge --ff-only`
+  会因工作区已修改而失败，把当晚产物卡死
+- **兜底采集**（`--check-kernels --drop-dead --time-budget 1500`，21 分钟）：80/80 仓库 →
+  原始 54006 / 唯一 8479 → TCP 可达 3727（44.0%，中位未记，CF 前置 1188）→ 分流
+  v2ray 3363 / xray 2981 / clash 3688 / singbox 3575
+- **本地探测**（`--probe-only`，15s）：3727 → 3698 条（丢弃 29 条抖动），CF 前置 1164 条排末尾 →
+  分流 v2ray 2950 / xray 2957 / clash 3659 / singbox 3547
+- **验证**（`--time-budget 3100`，四核全部测完、未截断，32 分钟）：v2ray 48/2509、xray 120/2506、
+  clash 56/2509、singbox 63/2506；可用池 214 / 520 / 389 / 329
+- **修复（第 53 条，本次核心）**：`Docs/collection_logs.md` 显示 15 个仓库被「历史质量过低」跳过，
+  昨天贡献最大的三个量源全在名单（OpenRay 60/0、SoliSpirit 416/0、Barabama 179/0）→ 今日原始量
+  54006 vs 前一日 140863。根因是 **`update_repo_quality()` 用单次实测覆盖历史聚合** + **闸门命中后
+  不再采样（单向门）**。改动：滚动窗口 `QUALITY_WINDOW=5`（按日期去重、样本求和）、闸门加
+  `max_age_days=7` 有效期（过期自动重采）、日志改口径、`health_check` 措辞
+  （`src/collect_nodes.py`、`src/health_check.py`）；并迁移 `src/seed_repos.json`（22 个仓库聚合重算，
+  仍被跳过 15 → 11 个）
+- **单点回归**：`debug/test_repo_quality_gate.py` 11/11 PASS；迁移后 OpenRay 1554/19（1.2%）、
+  SoliSpirit 6007/28（0.5%）恢复入池，明日起重新采样
+- **内核检查**：直连 22s 跑完四内核；xray 上游 26.10.31（本地 26.10.21），能力指纹 13/0 与基线一致
+  → 不影响节点逻辑，本窗口不升级
+- **自检 0 critical / 5 warn / 10 info**：clashfree 0 条（下载失败，第 48 条归因）、
+  v2ray 1.9% / clash 2.2% / singbox 2.5% 可用率偏低（源池缩小 + 正常水位）、镜像失效 10/13
+- **GATE: done** —— 四内核均已测满单轮上限，23:45 与 01:30 两个窗口会自行跳过
+
 ## 2026-10-31 第一窗口：CI 首次「上线」失败 → 兜底采集自愈，四内核仍全部测完
 
 - **本窗口的关键发现（第 52 条）**：`--sync-only` 一次成功、与 `origin/master` 已对齐，但

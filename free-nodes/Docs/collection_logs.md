@@ -2,6 +2,140 @@
 
 > 每次运行一条，含执行阶段、仓库明细与结果；按日期倒序
 
+## 2026-11-01 23:02
+
+- 执行阶段：阶段1·当天更新
+- 仓库优先级（质量分从高到低）：nyeinkokoaung404/V2ray-Configs(可用率100%/质量90.2)、hello-world-1989/cn-news(可用率33%/质量42.6)、F0rc3Run/F0rc3Run(可用率31%/质量41.7)、peasoft/NoMoreWalls(可用率12%/质量21.9)、sinavm/SVM(可用率11%/质量23.1)、snakem982/proxypool(可用率10%/质量26.2)、shabane/kamaji(可用率6%/质量19.8)、whoahaow/rjsxrd(可用率5%/质量22.2)
+- 阶段1·当天更新 仓库明细（80 个）：
+  - nyeinkokoaung404/V2ray-Configs：7090 条
+  - hello-world-1989/cn-news：6 条
+  - F0rc3Run/F0rc3Run：583 条
+  - xyfqzy/free-nodes：4 条
+  - wenxig/dongtai-sub：2 条
+  - 2dust/v2rayN：0 条（文件已下载但解析不到节点）
+  - mack-a/v2ray-agent：README 未声明订阅链接，跳过（readme-only）
+  - free-nodes/v2rayfree：README 未声明订阅链接，跳过（readme-only）
+  - ermaozi/get_subscribe：0 条（文件已下载但解析不到节点）
+  - Gozargah/Marzban：README 未声明订阅链接，跳过（readme-only）
+  - nguyenphutrong/quotio：README 未声明订阅链接，跳过（readme-only）
+  - Alvin9999-newpac/fanqiang：README 未声明订阅链接，跳过（readme-only）
+  - crossxx-labs/free-proxy：0 条（文件已下载但解析不到节点）
+  - surgioproject/surgio：README 未声明订阅链接，跳过（readme-only）
+  - LancelotRar/best-cf-ips：README 的链接日期不是当天，按策略跳过
+  - Leon406/SubCrawler：0 条（3/5 个链接下载失败，其余已下载但解析不到节点）
+  - everett7623/airport-recommendations-2026：README 未声明订阅链接，跳过（readme-only）
+  - jdnei/JiChangTuiJian：README 未声明订阅链接，跳过（readme-only）
+  - cfal/shoes：README 未声明订阅链接，跳过（readme-only）
+  - bq2015/FreeProxies：0 条（文件已下载但解析不到节点）
+  - deezertidal/freevpn：0 条（文件已下载但解析不到节点）
+  - YuanDevTeam/OneXray：0 条（文件已下载但解析不到节点）
+  - sylearn/AIUsage：README 未声明订阅链接，跳过（readme-only）
+  - ts-sf/fly：下载失败（HTTP 404）
+  - Leadaxe/LxBox：README 未声明订阅链接，跳过（readme-only）
+  - hello-yunshu/Xray_bash_onekey：README 未声明订阅链接，跳过（readme-only）
+  - OpenNetCN/clash：0 条（文件已下载但解析不到节点）
+  - kort0881/vpn-vless-configs-russia：0 条（2/3 个链接下载失败，其余已下载但解析不到节点）
+  - jichangtuijian-cheap/cheap-airports：README 未声明订阅链接，跳过（readme-only）
+  - sunmiao4458/free-proxy-airport：README 未声明订阅链接，跳过（readme-only）
+  - CCSH/IPTV：0 条（文件已下载但解析不到节点）
+  - tolinkshare2/tolinkshare2.github.io：README 未声明订阅链接，跳过（readme-only）
+  - getmeridian/meridian：0 条（文件已下载但解析不到节点）
+  - itsyebekhe/PSG：0 条（2/6 个链接下载失败，其余已下载但解析不到节点）
+  - DevDock-AI/claude-unlimited：README 未声明订阅链接，跳过（readme-only）
+  - MhdiTaheri/V2rayCollector：0 条（文件已下载但解析不到节点）
+  - clashv2ray-hub/clashv2ray-hub.github.io：0 条（文件已下载但解析不到节点）
+  - clashv2ray-hub/clashfree：下载失败（空响应）
+  - clashv2ray-hub/v2rayfree：下载失败（HTTP 403）
+  - Surfboardv2ray/TGParse：README 未声明订阅链接，跳过（readme-only）
+  - yanisplugg/yptun：README 未声明订阅链接，跳过（readme-only）
+  - tglaoshiji/nodeshare：下载失败（URLError）
+  - mheidari98/.proxy：README 未声明订阅链接，跳过（readme-only）
+  - xOS/Config：README 未声明订阅链接，跳过（readme-only）
+  - HakurouKen/free-node：下载失败（URLError）
+  - V2RayRoot/V2RayConfig：README 未声明订阅链接，跳过（readme-only）
+  - peasoft/NoMoreWalls：459 条
+  - sinavm/SVM：202 条
+  - snakem982/proxypool：177 条
+  - shabane/kamaji：13202 条
+  - whoahaow/rjsxrd：3557 条
+  - kooker/FreeSubsCheck：701 条
+  - NiREvil/vless：13200 条
+  - Delta-Kronecker/V2ray-Config：9299 条
+  - barry-far/V2ray-Config：质量过低跳过
+  - 0xRadikal/Free-v2ray-Configs：质量过低跳过
+  - sakha1370/OpenRay：质量过低跳过
+  - SoliSpirit/v2ray-configs：质量过低跳过
+  - Barabama/FreeNodes：质量过低跳过
+  - cbusifabcap/daily_free_vpn：质量过低跳过
+  - DukeMehdi/FreeList-V2ray-Configs：2890 条
+  - MatinGhanbari/v2ray-configs：质量过低跳过
+  - VPN-Subcription-Links/ClashX-V2Ray-TopFreeProxy：质量过低跳过
+  - igareck/vpn-configs-for-russia：1762 条
+  - iboxz/free-v2ray-collector：质量过低跳过
+  - chengaopan/AutoMergePublicNodes：463 条
+  - dongchengjie/airport：质量过低跳过
+  - crashgfw/free-airport-nodes：300 条
+  - xrayfree/free-ssr-ss-v2ray-vpn-clash：34 条
+  - Hidashimora/free-vpn-anti-rkn：质量过低跳过
+  - ShatakVPN/ConfigForge-V2Ray：质量过低跳过
+  - free-nodes/clashfree：下载失败（HTTP 404）
+  - free18/v2ray：质量过低跳过
+  - ovmvo/FreeSub：质量过低跳过
+  - ermaozi01/free_clash_vpn：20 条
+  - Pawdroid/Free-servers：13 条
+  - zhuhaiuk/free-nodes：12 条
+  - shaoyouvip/free：24 条
+  - gslege/CloudflareIP：质量过低跳过
+  - WLget/V2Ray_configs_64：6 条
+- README 订阅链接（43 个仓库声明了链接）：
+  - shabane/kamaji：声明 10 个 → 提取 13202 条
+  - NiREvil/vless：声明 10 个 → 提取 13200 条
+  - Delta-Kronecker/V2ray-Config：声明 10 个 → 提取 9299 条
+  - nyeinkokoaung404/V2ray-Configs：声明 10 个 → 提取 7090 条
+  - whoahaow/rjsxrd：声明 10 个 → 提取 3557 条
+  - DukeMehdi/FreeList-V2ray-Configs：声明 8 个 → 提取 2890 条
+  - igareck/vpn-configs-for-russia：声明 10 个 → 提取 1762 条
+  - kooker/FreeSubsCheck：声明 5 个 → 提取 701 条
+  - F0rc3Run/F0rc3Run：声明 7 个 → 提取 583 条
+  - chengaopan/AutoMergePublicNodes：声明 2 个 → 提取 463 条
+  - peasoft/NoMoreWalls：声明 1 个 → 提取 459 条
+  - crashgfw/free-airport-nodes：声明 10 个 → 提取 300 条
+  - sinavm/SVM：声明 9 个 → 提取 202 条
+  - snakem982/proxypool：声明 3 个 → 提取 177 条
+  - xrayfree/free-ssr-ss-v2ray-vpn-clash：声明 2 个 → 提取 34 条
+  - shaoyouvip/free：声明 3 个 → 提取 24 条
+  - ermaozi01/free_clash_vpn：声明 2 个 → 提取 20 条
+  - Pawdroid/Free-servers：声明 2 个 → 提取 13 条
+  - zhuhaiuk/free-nodes：声明 3 个 → 提取 12 条
+  - hello-world-1989/cn-news：声明 1 个 → 提取 6 条
+  - WLget/V2Ray_configs_64：声明 7 个 → 提取 6 条
+  - xyfqzy/free-nodes：声明 4 个 → 提取 4 条
+  - wenxig/dongtai-sub：声明 2 个 → 提取 2 条
+  - 2dust/v2rayN：声明 1 个 → 提取 0 条
+  - ermaozi/get_subscribe：声明 1 个 → 提取 0 条
+  - crossxx-labs/free-proxy：声明 1 个 → 提取 0 条
+  - Leon406/SubCrawler：声明 5 个 → 提取 0 条
+  - bq2015/FreeProxies：声明 2 个 → 提取 0 条
+  - deezertidal/freevpn：声明 1 个 → 提取 0 条
+  - YuanDevTeam/OneXray：声明 1 个 → 提取 0 条
+  - ts-sf/fly：声明 1 个 → 提取 0 条
+  - OpenNetCN/clash：声明 6 个 → 提取 0 条
+  - kort0881/vpn-vless-configs-russia：声明 3 个 → 提取 0 条
+  - CCSH/IPTV：声明 3 个 → 提取 0 条
+  - getmeridian/meridian：声明 1 个 → 提取 0 条
+  - itsyebekhe/PSG：声明 6 个 → 提取 0 条
+  - MhdiTaheri/V2rayCollector：声明 1 个 → 提取 0 条
+  - clashv2ray-hub/clashv2ray-hub.github.io：声明 1 个 → 提取 0 条
+  - clashv2ray-hub/clashfree：声明 1 个 → 提取 0 条
+  - clashv2ray-hub/v2rayfree：声明 2 个 → 提取 0 条
+  - tglaoshiji/nodeshare：声明 1 个 → 提取 0 条
+  - HakurouKen/free-node：声明 1 个 → 提取 0 条
+  - free-nodes/clashfree：声明 1 个 → 提取 0 条
+- 结果：原始 54006 条 → 两级去重后 3727 条（剔除 45527）
+- TCP 过滤：丢弃不可达 4752 条（采集总量 8479 条），保留 3727 条
+- 协议分布：vless 4488 / vmess 2187 / trojan 1133 / ss 506 / hysteria2 164 / ssr 1
+- 输出目录：`C:\Users\bemin\WorkBuddy\Test\free-nodes`（nodes/ 下 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / singbox_sub.json / nodes_uris.txt；Docs/ 下 report.md）
+
 ## 2026-10-31 22:24
 
 - 执行阶段：阶段1·当天更新

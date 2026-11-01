@@ -3182,6 +3182,7 @@ def upsert_seed_stats(seed_data, repo_full, stars, contributed, date_str):
 
 UNKNOWN_QUALITY = 50.0   # 未实测过的仓库给中等先验，避免被实测过的仓库完全压死
 RATE_PRIOR = 0.25        # 未实测仓库在「采集/取样优先级」里的中性可用率
+QUALITY_WINDOW = 5       # 仓库质量口径 = 最近 N 个不同日期的实测滚动汇总（known-issues 第 53 条）
 
 
 def quality_score(avail_rate, avg_latency):
@@ -3227,29 +3228,51 @@ def repo_sort_key(seed_data, repo_full):
             int(entry.get("stars", 0) or 0))
 
 
-def is_known_bad_repo(seed_data, repo_full, min_tests=20):
+def is_known_bad_repo(seed_data, repo_full, min_tests=20, max_age_days=7):
     """历史实测「一个可用都没有」的仓库，今天不必再浪费配额。
 
-    唯一判据：实测 ≥20 个、可用 0 个（样本太少不跳，避免误杀新仓库）。
+    判据：实测 ≥20 个、可用 0 个（样本太少不跳，避免误杀新仓库），
+    **且这个 0 可用结论是最近 max_age_days 天内实测出来的**。
 
     刻意**不看可用率**：大仓库（OpenRay 2.2 万条、SoliSpirit 2.2 万条）的可用率
     天然只有 0.5%~1.3%，但绝对值有 20~27 个可用节点——按「可用率 < 2%」一刀切会把
     每天 18% 的可用节点（2026-10-29 实测 47/257）直接砍掉。可用率低不等于没价值，
     只有「绝对 0 个」才是真的白花配额（known-issues 第 46 条）。
+
+    **为什么必须有有效期（known-issues 第 53 条）**：跳过 = 不再实测 = `tested/ok`
+    永远不刷新，这是一道单向门。上游仓库会换订阅、会补新节点，而一旦被跳过就再没有
+    机会被重新采样，永久出局。2026-11-01 实测：OpenRay(60/0)、Barabama(179/0)、
+    SoliSpirit(416/0) 三个量源被旧结论长期封杀，当天唯一节点数较前一日掉 54%。
+    给结论加上有效期（默认 7 天）后，被封杀的仓库每周会被重新采样一次：真死了继续跳，
+    复活了自动回池。重新采样一次的成本只有几十个节点。
     """
     entry = find_seed_entry(seed_data, repo_full)
     if not entry:
         return False
     tested = int(entry.get("tested") or 0)
     ok = int(entry.get("ok") or 0)
-    return tested >= min_tests and ok == 0
+    if tested < min_tests or ok != 0:
+        return False
+    # 没有可信日期就不用陈旧结论封杀（宁可多花一点配额，也不要永久误杀）
+    try:
+        last = date.fromisoformat(str(entry.get("last_tested") or "")[:10])
+    except ValueError:
+        return False
+    return (date.today() - last).days <= max_age_days
 
 
-def update_repo_quality(seed_file, per_repo, date_str, stars_map=None):
+def update_repo_quality(seed_file, per_repo, date_str, stars_map=None,
+                        window=QUALITY_WINDOW):
     """把验证结果按仓库汇总写入清单：可用率、平均延迟、质量分、历史走势。
 
     per_repo: {repo: {"tested": n, "ok": m, "latency_sum": ms, "latency_n": k}}
     由 test_nodes.py 在四内核实测后调用——这是仓库质量的唯一真实依据。
+
+    **口径是最近 window 次实测的滚动汇总，不是「本次结果直接覆盖」**（known-issues 第 53 条）：
+    单次实测的样本量差得很远（大仓库某天只测到 60 个，某天能测到 1500 个），
+    用当日小样本直接覆盖历史，会让「1490 测/20 可用」的量源一天之间变成「2 测/0 可用」，
+    随即被质量闸门封杀并踢到队尾（2026-10-30 已记为待办，今天补上）。
+    汇总用 sum(tested)/sum(ok) 而不是可用率平均，样本多的那次自然权重大。
     """
     if not per_repo:
         return None
@@ -3265,16 +3288,38 @@ def update_repo_quality(seed_file, per_repo, date_str, stars_map=None):
         if not tested:
             continue
         avg_lat = round(st["latency_sum"] / st["latency_n"]) if st.get("latency_n") else None
-        entry["tested"] = tested
-        entry["ok"] = ok
-        entry["avail_rate"] = round(ok / tested, 3)
+        hist = list(entry.get("quality_history") or [])
+        sample = {"date": date_str, "tested": tested, "ok": ok,
+                  "rate": round(ok / tested, 3), "latency": avg_lat}
+        if hist and hist[-1].get("date") == date_str:
+            # 同一天四内核各写一次（repo_stats 是累积的），后者覆盖前者，
+            # 否则「最近 3 次」会被同一天的重复条目占满，窗口失去意义
+            hist[-1] = sample
+        else:
+            hist.append(sample)
+        hist = hist[-window:]
+        tot_tested = 0
+        tot_ok = 0
+        for h in hist:
+            h_tested = int(h.get("tested") or 0)
+            # 旧条目只存了 rate 没存 ok：按 rate 反推，避免升级后历史直接归零
+            if "ok" in h:
+                h_ok = int(h.get("ok") or 0)
+            else:
+                h_ok = int(round(float(h.get("rate") or 0) * h_tested))
+            tot_tested += h_tested
+            tot_ok += h_ok
+        if not tot_tested:
+            continue
+        entry["tested"] = tot_tested
+        entry["ok"] = tot_ok
+        entry["avail_rate"] = round(tot_ok / tot_tested, 3)
         entry["avg_latency"] = avg_lat
         entry["quality"] = quality_score(entry["avail_rate"], avg_lat)
         entry["last_tested"] = date_str
-        hist = entry.get("quality_history") or []
-        hist.append({"date": date_str, "rate": entry["avail_rate"],
-                     "quality": entry["quality"], "tested": tested})
-        entry["quality_history"] = hist[-7:]
+        # quality_history 存的是「每次实测的原始样本」，不写窗口汇总值：
+        # 否则下次把它当样本反推 ok 时会重复计算
+        entry["quality_history"] = hist
     save_seed_list(seed_file, seed_data, date_str)
     return seed_data
 
@@ -3320,8 +3365,9 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
             break
         if skip_bad and seed_data and is_known_bad_repo(seed_data, full):
             entry = find_seed_entry(seed_data, full) or {}
-            print(f"[info] ({i}/{len(ordered)}) {full} → 历史质量过低（实测 {entry.get('tested')} 个、"
-                  f"可用 {entry.get('ok') or 0} 个），跳过以省配额")
+            print(f"[info] ({i}/{len(ordered)}) {full} → 历史质量过低（近 {QUALITY_WINDOW} 次实测 "
+                  f"{entry.get('tested')} 个、可用 {entry.get('ok') or 0} 个，"
+                  f"最后实测 {entry.get('last_tested') or '未知'}），跳过以省配额")
             if phase_log is not None:
                 phase_log.append((full, -2))
             processed.add(full)
