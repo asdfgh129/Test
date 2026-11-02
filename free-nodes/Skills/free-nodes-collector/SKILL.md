@@ -14,7 +14,9 @@ agent_created: true
 
 **采集在 GitHub Actions，本机做三件事：本地探测 → 验证 → 自检。**
 
-2026-10-31 起「采集」这一步搬到了 CI（仓库根 `.github/workflows/collect.yml`，每天北京 21:05 / UTC 13:05）。原因是本机到 `github.com` 长期被阻断，采集要靠池内节点自建上行代理 + 镜像回退，通道是全链路最脆的一环；runner 直连 GitHub，不用代理、不用镜像、配额 5000/时。
+2026-10-31 起「采集」这一步搬到了 CI（仓库根 `.github/workflows/collect.yml`，每天两条 cron：北京 20:20 与 21:05，互为备份）。原因是本机到 `github.com` 长期被阻断，采集要靠池内节点自建上行代理 + 镜像回退，通道是全链路最脆的一环；runner 直连 GitHub，不用代理、不用镜像、配额 5000/时。
+
+**为什么要两条 cron**：`schedule` 会迟到甚至漏派发。2026-11-01 北京 21:05 那次迟了 **5 小时 16 分**，跑到次日 02:20 才启动（known-issues 54），当晚只能本地兜底。两条 cron 先到先采，后到的那条由 workflow 内的「跳过判定」自动跳过（判据与本地共用 `--ci-status`），不重复采集。
 
 **但 CI 只做「下载 → 解析 → 去重 → 落盘」，不做 TCP 探测**（`--no-latency-sort`）。免费节点的可达性高度依赖出口位置：runner 出口是 Azure 数据中心 IP，大量节点封数据中心 ASN，在那里判「不可达」是系统性假阴性；反过来「海外通、国内不通」的节点又会被误判为可用。所以探测留在本机 `--probe-only`：
 
@@ -22,6 +24,7 @@ agent_created: true
 # 0. 先把 CI 提交的采集产物拉到本地（不拉就探的是昨天的清单）——顺带复用推送那套自建通道
 #    实测 52 秒：直连 fetch 必然先失败 → 自建通道（候选第 1 个就命中）→ 成功，先失败是常态不是故障
 #    退出码 1：原样重试一次；仍失败直接兜底采集，不要空等（本地文件不会自己变新）
+#    同步成功后它会自动打印 CI_READY=1|0，等价于再跑一次 --ci-status（判据见下方「兜底」）
 #    硬约束只是「早于第 2 步」；放到内核检查之后并不能复用它的通道，见 Docs/known-issues.md 第 50 条
 python <free-nodes>/src/publish_free_nodes.py --sync-only --proxy auto
 
@@ -49,7 +52,21 @@ python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的�
 python <free-nodes>/src/window_gate.py --input <输出根目录>
 ```
 
-**兜底**：CI 产物 15 分钟内没到位（`nodes_meta.json` 的 `date` 不是今天）→ 退回本地采集，不能让整晚空转：
+**兜底**：先判「今天的 CI 产物到位没有」——判据只有一处实现，别自己数 `date`：
+
+```bash
+python <free-nodes>/src/publish_free_nodes.py --ci-status   # 0=就绪 / 1=未就绪，并打印 CI_READY=1|0
+```
+
+就绪 = `nodes_meta.date` 是今天 **且** `generated_at` 不早于今天 20:00。**只看 `date` 会被跨零点补跑骗**：
+调度器迟到时 runner 的 `date +%F` 已经是「明天」，10-31→11-01 那次就迟了 5 小时 16 分
+（Docs/known-issues.md 第 54、56 条）。不就绪时按顺序处理：
+
+1. **主动触发 CI**（最省时间，一次采集约 11 分钟）：`python <free-nodes>/src/ci_dispatch.py`，
+   然后每 60 秒重跑一次 `--sync-only`，最多等 15 分钟；
+2. 仍未就绪但 `nodes_meta` **有货**（`total > 0`）→ **用现有批次开工**并在汇报里写明它的生成时刻，
+   不要为「更新一点」花 1 小时重采（窗口只有 90 分钟）；
+3. `nodes_meta` 缺失或 `total = 0`（真的没产物）→ 退回本地采集：
 
 ```bash
 python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
@@ -65,7 +82,7 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
 
 **参数名陷阱（踩过）**：`test_nodes.py` 用 `--full-below` / `--max-test` / `--time-budget`（**不带** `--test-` 前缀）；`--test-full-below` / `--test-max-test` 是 `collect_nodes.py` 的透传名，传给 `test_nodes.py` 会直接报错退出。
 
-**退出码**：`health_check.py` 0 健康 / 1 有告警 / 2 有严重问题。`collect_nodes.py` 0 正常 / 3 本次没产出且**保留旧结果**（采集模式=0 条；`--probe-only` 模式=没有候选清单）。`window_gate.py` 0 = 今晚已跑完、不用下一个窗口 / 1 = 需要继续。`test_nodes.py` 非 0 不要整轮重跑，先看日志——已测结果通常已落盘。
+**退出码**：`health_check.py` 0 健康 / 1 有告警 / 2 有严重问题。`collect_nodes.py` 0 正常 / 3 本次没产出且**保留旧结果**（采集模式=0 条；`--probe-only` 模式=没有候选清单）。`window_gate.py` 0 = 今晚已跑完、不用下一个窗口 / 1 = 需要继续。`publish_free_nodes.py --ci-status` 0 = 今天的产物就绪 / 1 = 未就绪。`ci_dispatch.py` 0 = 已触发（或已在跑）/ 1 = 触发失败 / 2 = 凭据或仓库信息缺失。`test_nodes.py` 非 0 不要整轮重跑，先看日志——已测结果通常已落盘。
 
 **纯 Python 标准库实现，无需安装任何依赖**（CI 侧也只需要 `setup-python`，无 pip 安装步骤）。
 

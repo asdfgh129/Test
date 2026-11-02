@@ -12,8 +12,14 @@ name: free-nodes-collect
 
 on:
   schedule:
-    # UTC 13:05 = 北京 21:05。必须早于本地第一窗口（22:00），
-    # 且避开整点（Actions 定时任务整点排队最狠，延迟可能到 20~30 分钟）
+    # UTC 12:20 = 北京 20:20，UTC 13:05 = 北京 21:05。**两条 cron 互为备份**：
+    # GitHub 调度器会迟到甚至漏派发——2026-11-01 的 13:05 那次迟了 5 小时 16 分，
+    # 跑到次日 02:20 才启动，`date +%F` 已经是「明天」，当晚本地窗口一无所得
+    # （Docs/known-issues.md 第 54/56 条）。两条都触发时先到先采，
+    # 后到的那条由下面的「跳过判定」自动跳过，不会重复采集。
+    # 两个时刻都避开整点（Actions 整点排队最狠，延迟可能到 20~30 分钟），
+    # 且都早于本地第一窗口（22:00）。
+    - cron: "20 12 * * *"
     - cron: "5 13 * * *"
   workflow_dispatch:
 
@@ -48,7 +54,22 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: 跳过判定（当天 20:00 后已有产物就不再采）
+        id: guard
+        # 两条 cron + 手动/兜底 dispatch 都可能撞在一起。判据与本地完全一致：
+        # nodes_meta.date 是今天 **且** generated_at 不早于今天 20:00
+        # （只看 date 会把跨零点补跑的产物当成当晚的，见 known-issues 56）。
+        # 判定逻辑只写在 src/publish_free_nodes.py 的 ci_ready_status 里，这里不重复实现。
+        run: |
+          if python free-nodes/src/publish_free_nodes.py --ci-status; then
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+            echo "今天 20:00 后已有采集产物，跳过本次采集"
+          else
+            echo "skip=0" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: 采集（下载 / 解析 / 去重，不做 TCP 探测）
+        if: steps.guard.outputs.skip != '1'
         run: |
           set -euo pipefail
           DATE=$(TZ=Asia/Shanghai date +%F)

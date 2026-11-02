@@ -2,6 +2,25 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-11-02 排查：11-01 的 CI 定时任务其实派发了，只是迟了 5 小时 16 分（跨零点后被标成「明天」）
+
+- **结论订正**：`actions/runs` 现在只有一条 `event=schedule`，created `2026-11-01T18:20:49Z`
+  = 北京 **11-02 02:20:49**，比应派发的 `13:05Z` 迟了 **5h15m49s**，执行本身 success。
+  GitHub 状态页 11-01 无 Actions 事件 ⇒ 不是平台宕机，是调度器排队/低优先级（known-issues 第 54 条复核）
+- **真正的坑不是「没跑」而是「跑错日期」**：runner 里 `TZ=Asia/Shanghai date +%F` 在 02:20 取到次日，
+  于是这次补跑采的是 11-02 的数据（`CI 采集 2026-11-02`、`total=93793`），11-01 那天的 CI 采集永久缺失；
+  而且日志里「阶段1 发现 0 个候选」，说明凌晨上游当天的日文件还没生成，只能靠放宽 3 天凑候选
+- **就绪判据修正（known-issues 第 56 条）**：`nodes_meta.date == 今天` 不够，加了
+  `generated_at >= 今天 20:00`；实现收敛到 `src/publish_free_nodes.py: ci_ready_status()`，
+  新增 `--ci-status`（只读 JSON，退出码 0/1，打印 `CI_READY=1|0`），`--sync-only` 成功后也顺手打一次
+- **采集冗余**：`collect.yml` 增加第二条 cron（`20 12 * * *` = 北京 20:20），并在 setup-python 后插入
+  「跳过判定」step（调 `--ci-status`，就绪则 `skip=1` 让采集步骤不跑），两条 cron 先到先采、不重复采集
+- **兜底触发**：新增 `src/ci_dispatch.py`（`workflow_dispatch`，api.github.com 直连、复用采集脚本的 token
+  查找链、10 分钟内不重复触发、`--wait` 可轮询到结束）。`--check` 用不存在的 ref 换 422，
+  只验凭据/路径/权限而不真的排一次采集（已验证：422，端点与权限都通）
+- 口径同步：`Skills/free-nodes-collector/SKILL.md`（两条 cron、`--ci-status` 三档处置）、
+  `Docs/automation-prompt.md`（表格、关键命令、不变量、沿革）、`Docs/known-issues.md`（54 复核 + 56）
+
 ## 2026-11-01 第三窗口：闸门 done 空转；订正 clashfree 归因（上游 0 字节空壳，不是 URL bug）
 
 - **闸门**：`window_gate.py --date 2026-11-01` 退出码 0，四内核均「已测满单轮上限」

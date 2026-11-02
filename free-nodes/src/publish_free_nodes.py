@@ -12,6 +12,8 @@
   下次运行会先补推上一次没推上去的提交。
 
 退出码：0 成功（含"无变更"）/ 1 push 失败但本地提交已保留 / 2 git 操作出错
+       `--sync-only`：0 已与远端对齐 / 1 同步失败
+       `--ci-status`：0 今天的 CI 采集产物已就绪 / 1 未就绪（判据见 ci_ready_status）
 """
 
 from __future__ import annotations
@@ -27,6 +29,14 @@ import time
 from pathlib import Path
 
 DATE_DIR_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+# 「CI 采集产物就绪」的时刻下限（北京时间，只比到 HH:MM）。
+# 为什么不能只看 nodes_meta.date 是不是今天：2026-11-01 北京 21:05 那次定时任务被 GitHub
+# 调度器延迟了 5 小时 16 分，直到次日 02:20 才启动；runner 里 `date +%F` 已经是「明天」，
+# 于是把**明天的日期提前**写进了 nodes_meta。只看 date 的旧判据会把这种「跨零点补跑」
+# 当成今晚的产物，本地就去探一批不含当天新更仓库的旧清单（known-issues 54 / 56）。
+# 20:00 早于两条 cron（北京 20:20 与 21:05），又晚于任何跨零点补跑，两边都不误伤。
+CI_READY_AFTER = "20:00"
 # 这些条目不属于"每日快照"，清理时永远保留（新布局：nodes/Docs/src/Skills 三分层）
 KEEP_NAMES = {"nodes", "Docs", "src", "Skills", "README.md", "CHANGELOGS.md",
               ".gitattributes", ".workbuddy"}
@@ -154,6 +164,42 @@ def do_sync(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
     return True, out.strip()
 
 
+def ci_ready_status(out_root: Path, after: str = CI_READY_AFTER) -> tuple[bool, str]:
+    """判定「今天这一轮 CI 采集产物」是否就绪，返回 (就绪?, 一行结论)。
+
+    只看 `nodes/nodes_meta.json` 的两个字段，不碰网络、不碰 git：
+    `date == 今天` **且** `generated_at >= 今天 <after>`。
+
+    机器可读行固定为 `CI_READY=1` / `CI_READY=0`，供 CI 的跳过判定与定时任务第 0.2 步 grep；
+    人读行说明「为什么不就绪」，避免下次又把跨零点补跑的产物当成当晚的。
+    """
+    today = dt.date.today().isoformat()
+    deadline = f"{today} {after}"
+    meta_path = out_root / "nodes" / "nodes_meta.json"
+    try:
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        log(f"[ci] 读不到采集产物 {meta_path}（{exc.__class__.__name__}: {exc}）")
+        log("CI_READY=0")
+        return False, "产物缺失"
+
+    date = str(meta.get("date") or "")
+    gen = str(meta.get("generated_at") or "")
+    total = meta.get("total", "-")
+    log(f"[ci] 采集产物：date={date or '-'} generated_at={gen or '-'} total={total}")
+    log(f"[ci] 就绪判据：date == {today} 且 generated_at >= {deadline}")
+
+    if date == today and gen[:16] >= deadline:
+        log("CI_READY=1")
+        return True, f"就绪（{gen}）"
+    if date != today:
+        log(f"CI_READY=0 —— 日期是 {date or '空'}，不是今天（CI 没跑完 / 没派发）")
+        return False, f"日期 {date or '空'} 不是今天"
+    log(f"CI_READY=0 —— 日期对但生成于 {gen}，早于 {deadline}"
+        "（跨零点补跑或昨日残留，不算今晚的产物）")
+    return False, f"生成于 {gen}，早于 {deadline}"
+
+
 def push_with_retry(workspace: Path, branch: str, retries: int, wait: int) -> tuple[bool, str]:
     last_err = ""
     for attempt in range(1, retries + 1):
@@ -254,6 +300,12 @@ def main() -> int:
     ap.add_argument("--sync-only", action="store_true",
                     help="只把远端最新提交快进来（fetch + merge --ff-only）然后退出，"
                          "不提交、不推送。本地探测前必须先跑，否则探的是昨天的采集清单")
+    ap.add_argument("--ci-status", action="store_true",
+                    help="只判定「今天的 CI 采集产物是否就绪」然后退出（不碰 git、不碰网络）。"
+                         "退出码 0=就绪 / 1=未就绪；同时打印机器可读的 CI_READY=1|0")
+    ap.add_argument("--ci-ready-after", default=CI_READY_AFTER,
+                    help=f"就绪判据里的时刻下限（北京 HH:MM），默认 {CI_READY_AFTER}。"
+                         "早于它生成的产物视为跨零点补跑/昨日残留")
     ap.add_argument("--proxy", default=os.environ.get("GIT_PROXY", ""),
                     help="推送时使用的 HTTP 代理，如 http://127.0.0.1:7890；"
                          "auto=不探测本机端口，直接用已验证节点自建本地代理"
@@ -284,11 +336,17 @@ def main() -> int:
         log(f"[proxy] 推送走代理 {GIT_PROXY}")
 
     workspace = Path(args.workspace).resolve()
+    out_root = workspace / args.dir
+
+    # 0. 只判定 CI 产物是否就绪（--ci-status）：不碰 git、不碰网络，适合放进 CI 的跳过判定
+    if args.ci_status:
+        ready, _ = ci_ready_status(out_root, args.ci_ready_after)
+        return 0 if ready else 1
+
     if not (workspace / ".git").exists():
         log(f"[error] {workspace} 不是 git 仓库")
         return 2
 
-    out_root = workspace / args.dir
     if not out_root.is_dir():
         log(f"[error] 产物目录不存在：{out_root}")
         return 2
@@ -297,11 +355,14 @@ def main() -> int:
     #     本地第一窗口探测前必须先跑这个，否则探的是昨天的采集清单（CI 21:05 才提交）
     if args.sync_only:
         ok, note = do_sync(workspace, args, up_mod, str(out_root))
-        if ok:
-            log(f"[sync] 已与 origin/{args.branch} 对齐")
-            return 0
-        log(f"[sync] 同步失败：{note}（本轮将按本地已有清单继续）")
-        return 1
+        if not ok:
+            log(f"[sync] 同步失败：{note}（本轮将按本地已有清单继续）")
+            return 1
+        log(f"[sync] 已与 origin/{args.branch} 对齐")
+        # 同步成功后顺手报一次「今晚的 CI 产物到位没有」，省掉定时任务里再手敲一命令。
+        # 退出码仍是同步语义（0），就绪与否看 CI_READY= 那一行
+        ci_ready_status(out_root, args.ci_ready_after)
+        return 0
 
     # 0b. 正常发布前也先对齐远端：CI 每天也会提交一次采集产物，
     #     不先合会被拒（非快进）。失败不阻断，交给 push 与 pending 机制
