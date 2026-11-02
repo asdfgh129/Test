@@ -96,3 +96,15 @@
 - **给后续窗口的要点**：`rev-list --left-right --count origin/master...HEAD` 比 git status 更能确认「已推送」，
   两处都干净就真的什么都不用做；本次没写 free-nodes 内任何文件（只写了本文件），下次发布才会带上这个尾巴
 
+## 2026-11-02（第七晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」2507/2509/2508/2507（cap 2500），summary 生成于 22:47:27
+- 本日可用（ok）：v2ray 26 / xray 53 / clash 47 / singbox 50；四内核 `partial=false`、`exhausted=false`
+  （候选 4068/4088/4854/4685 远大于 2500，属「达 cap」而非「测完池子」，与既往一致）
+- 尾巴检查：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` 无输出；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD 停在 b03ee67）
+- 本窗口零验证、零自检、零修复；只写了本 memory 文件（它在 free-nodes/.workbuddy 下且**被 git 跟踪**），
+  为免第三窗口看到脏工作区误判为「待补推」，主动 publish 一次收干净
+- **给后续窗口的要点**：`free-nodes/.workbuddy/**` 是入库的（只有根 `/.workbuddy/` 被忽略），
+  所以本自动化每次写 memory 都会产生一个真实改动；要么当次 publish 收掉，要么明确知道下次会带上
+
