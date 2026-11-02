@@ -3,17 +3,25 @@
 ## 免费节点每日采集（主窗口自动化 a3d7bb22-948c-4326-b344-f4c5535ddcd0，每天 22:00）
 
 ### 架构：采集在 CI，探测/验证在本地（2026-10-31 起）
-- CI：仓库根 `.github/workflows/collect.yml`，北京 21:05（UTC `5 13 * * *`），只跑
+- CI：仓库根 `.github/workflows/collect.yml`，**两条 cron 互为备份**：北京 21:05（UTC `5 13 * * *`，主）
+  与 21:20（UTC `20 13 * * *`，备份），先到先采，后到的由 workflow 内「跳过判定」step 自动跳过。
+  **备份必须晚于主 cron**：备份若更早成功，主 cron 每天被跳过 ⇒ 每晚固定用偏旧的数据（known-issues 56 教训二）。只跑
   `--readme-only --no-latency-sort --uplink direct --time-budget 1500`（下载/解析/去重/落盘，不探测），
   提交 `nodes_uris` / `nodes_meta` / `Docs/` / `seed_repos` / `repo_quality` / `CHANGELOGS.md`，
   **不提交四份订阅文件**（那一刻含 TCP 死节点）。
+- **`schedule` 会迟到甚至漏派发**：2026-11-01 北京 21:05 那次迟了 **5h16m**，跑到次日 02:20 才启动，
+  runner 的 `date +%F` 已是「明天」→ 产物被标成明天的日期，当晚一无所得（known-issues 54）。
+  所以**判就绪只认 `publish_free_nodes.py --ci-status`**（`date` 是今天 **且** `generated_at` ≥ 今天 20:00，
+  常量 `CI_READY_AFTER`；打印 `CI_READY=1|0`），**绝不自己数 date 字段**（known-issues 56）。
+  不就绪的处置顺序：① `src/ci_dispatch.py` 主动 `workflow_dispatch`（api.github.com 直连、不用建通道）
+  + 等 15 分钟 → ② `total > 0` 就用现有批次开工（别花 1 小时重采）→ ③ 真没产物才本地兜底。
 - **探测必须本地**：runner 是 Azure 数据中心出口，封 ASN 的节点判死（假阴性）、海外通国内不通的判活
   （假阳性）。口径差异是有意的：`Docs/report.md`/`collection_logs.md` 是 CI 口径（含死节点），
   `nodes_uris.txt`/`nodes_meta.json` 是本地口径（只含可达）——数字不同不是 bug（known-issues 50）。
 - 本地第一窗口顺序：`--sync-only` → `--probe-only` → `test_nodes.py` → health_check → publish → window_gate。
 - **`--sync-only --proxy auto` 必须在 `--probe-only` 之前**（否则探昨天的清单）。只做 `fetch + merge --ff-only`，
   **绝不 rebase/reset/stash**（工作区有用户 C++ 改动）。失败重试要加 `--uplink-candidates 120`
-  （默认 candidates 是确定性排序，原样重试等于同一批节点）。退出码 1 别空等，直接走兜底采集。
+  （默认 candidates 是确定性排序，原样重试等于同一批节点）。退出码 1 别空等，直接按三档处置。
 - 兜底采集（CI 未产出/同步失败）：`collect_nodes.py --readme-only --max-repos 80 --search-pages 2
   --search-days 3 --readme-date-tolerance 0 --drop-dead --check-kernels --time-budget 1500`；
   带 `--check-kernels` 就跳过独立内核检查步骤。

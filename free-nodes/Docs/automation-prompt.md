@@ -9,7 +9,7 @@
 
 | 窗口 | automation id | 时间 | 职责 |
 |---|---|---|---|
-| CI（采集） | `.github/workflows/collect.yml` | 每天北京 **20:20 与 21:05** 两条 cron（UTC 12:20 / 13:05） | 只采集：下载 → 解析 → 去重 → 落盘，**不探测** |
+| CI（采集） | `.github/workflows/collect.yml` | 每天北京 **21:05 与 21:20** 两条 cron（UTC 13:05 / 13:20） | 只采集：下载 → 解析 → 去重 → 落盘，**不探测** |
 | 第一窗口（主） | `a3d7bb22-948c-4326-b344-f4c5535ddcd0` | 每天 22:00 | 等 CI 产物 → 内核检查 → 本地 TCP 探测 → 验证 → 自检 → 修复 → 推送 → 闸门 |
 | 第二窗口 | `a4c4ae9d-9d70-4395-b78d-63a0a131e62d` | 每天 23:45 | 闸门判定 →（需要时）续跑验证 → 自检 → 推送 |
 | 第三窗口 | `19f100fb-c01d-4d31-9a1e-76444fbf51ad` | 每天 01:30 | 同第二窗口（跨零点，`--date` 必须取 `Docs/summary.json` 的采集日） |
@@ -26,7 +26,7 @@
 ## 关键命令
 
 ```bash
-# 采集（CI，每天北京 20:20 与 21:05 两条 cron；本地只在 CI 没产出时兜底跑老命令）
+# 采集（CI，每天北京 21:05 与 21:20 两条 cron；本地只在 CI 没产出时兜底跑老命令）
 python free-nodes/src/collect_nodes.py --out free-nodes --readme-only --no-latency-sort \
   --uplink direct --time-budget 1500 --date $(TZ=Asia/Shanghai date +%F)
 
@@ -124,6 +124,6 @@ python <root>/src/window_gate.py --input <root>
   新增 `window_gate.py`：第一窗口跑完后两窗口先判定，跑满就跳过，不再空跑 90 分钟。
   第一窗口的时间账从 73min 降到 ~39min
 - 11-02：11-01 那次定时任务被 GitHub 调度器迟了 5h16m（跑到次日 02:20，产物被标成明天的日期，
-  当晚白等）。修法三条：CI 加第二条 cron（北京 20:20）互为备份 + workflow 内「跳过判定」；
+  当晚白等）。修法三条：CI 加第二条 cron（北京 21:20，必须晚于主 cron 否则每晚都会用到偏旧的数据）互为备份 + workflow 内「跳过判定」；
   「产物就绪」判据收敛到 `publish_free_nodes.py --ci-status`（date 是今天 **且** generated_at ≥ 20:00）；
   新增 `ci_dispatch.py` 走 `workflow_dispatch` 做确定性兜底（`--check` 用不存在的 ref 换 422 验证权限）

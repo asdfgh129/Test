@@ -13,7 +13,9 @@
 - **就绪判据修正（known-issues 第 56 条）**：`nodes_meta.date == 今天` 不够，加了
   `generated_at >= 今天 20:00`；实现收敛到 `src/publish_free_nodes.py: ci_ready_status()`，
   新增 `--ci-status`（只读 JSON，退出码 0/1，打印 `CI_READY=1|0`），`--sync-only` 成功后也顺手打一次
-- **采集冗余**：`collect.yml` 增加第二条 cron（`20 12 * * *` = 北京 20:20），并在 setup-python 后插入
+- **采集冗余**：`collect.yml` 增加第二条 cron（`20 13 * * *` = 北京 21:20，**必须晚于主 cron**：
+  守卫是「先到先采」，备份若更早成功，主 cron 每天都会被跳过，等于每晚固定用偏 45 分钟的数据），
+  并在 setup-python 后插入
   「跳过判定」step（调 `--ci-status`，就绪则 `skip=1` 让采集步骤不跑），两条 cron 先到先采、不重复采集
 - **兜底触发**：新增 `src/ci_dispatch.py`（`workflow_dispatch`，api.github.com 直连、复用采集脚本的 token
   查找链、10 分钟内不重复触发、`--wait` 可轮询到结束）。`--check` 用不存在的 ref 换 422，
