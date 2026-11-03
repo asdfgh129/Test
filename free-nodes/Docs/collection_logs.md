@@ -2,6 +2,259 @@
 
 > 每次运行一条，含执行阶段、仓库明细与结果；按日期倒序
 
+## 2026-11-04 04:15
+
+- 执行阶段：阶段1·当天更新 → 阶段2·放宽至前3天
+- 仓库优先级（质量分从高到低）：ermaozi01/free_clash_vpn(可用率54%/质量57.5)、hello-world-1989/cn-news(可用率45%/质量54.9)、F0rc3Run/F0rc3Run(可用率30%/质量37.8)、xyfqzy/free-nodes(可用率25%/质量40.6)、0xRadikal/Free-v2ray-Configs(可用率21%/质量33.9)、Pawdroid/Free-servers(可用率19%/质量13.4)、zhuhaiuk/free-nodes(可用率11%/质量7.8)、snakem982/proxypool(可用率11%/质量7.7)
+- 阶段2·放宽至前3天 仓库明细（160 个）：
+  - ermaozi01/free_clash_vpn：52 条
+  - hello-world-1989/cn-news：6 条
+  - F0rc3Run/F0rc3Run：599 条
+  - rtwo2/FastNodes：712354 条
+  - MustafaBaqer/VestraNet-Nodes：18514 条
+  - hamedcode/port-based-v2ray-configs：16655 条
+  - MahanKenway/Freedom-V2Ray：7524 条
+  - Stintik-123/StintikVPN：5758 条
+  - MohammadBahemmat/V2ray-Collector：2779 条
+  - AzadNetCH/Clash：931 条
+  - jichangx/free-nodes：556 条
+  - FLAT447/v2ray-lists：291 条
+  - SnapdragonLee/SystemProxy：210 条
+  - anaer/Sub：2 条
+  - Mahdi0024/ProxyCollector：4 条
+  - xyfqzy/free-nodes：3 条
+  - wenxig/dongtai-sub：2 条
+  - WLget/V2ray_free：5 条
+  - 2dust/v2rayN：0 条（文件已下载但解析不到节点）
+  - mack-a/v2ray-agent：README 未声明订阅链接，跳过（readme-only）
+  - DiningFactory/panda-vpn-pro：0 条（文件已下载但解析不到节点）
+  - free-nodes/v2rayfree：README 未声明订阅链接，跳过（readme-only）
+  - alireza0/s-ui：0 条（文件已下载但解析不到节点）
+  - ermaozi/get_subscribe：0 条（文件已下载但解析不到节点）
+  - eooce/nodejs-argo：0 条（2/3 个链接下载失败，其余已下载但解析不到节点）
+  - Gozargah/Marzban：README 未声明订阅链接，跳过（readme-only）
+  - nguyenphutrong/quotio：README 未声明订阅链接，跳过（readme-only）
+  - Alvin9999-newpac/fanqiang：README 未声明订阅链接，跳过（readme-only）
+  - ripaojiedian/freenode：下载失败（URLError）
+  - KaWaIDeSuNe/dijiajichang：README 未声明订阅链接，跳过（readme-only）
+  - qusong0627/QuantMind：README 未声明订阅链接，跳过（readme-only）
+  - crossxx-labs/free-proxy：0 条（文件已下载但解析不到节点）
+  - surgioproject/surgio：README 未声明订阅链接，跳过（readme-only）
+  - ZeroDeng01/sublinkPro：下载失败（HTTP 526）
+  - LancelotRar/best-cf-ips：README 的链接日期不是当天，按策略跳过
+  - Leon406/SubCrawler：0 条（3/5 个链接下载失败，其余已下载但解析不到节点）
+  - jdnei/JiChangTuiJian：README 未声明订阅链接，跳过（readme-only）
+  - everett7623/airport-recommendations-2026：README 未声明订阅链接，跳过（readme-only）
+  - Abao130/jichangtizi-tuijian：README 未声明订阅链接，跳过（readme-only）
+  - cfal/shoes：README 未声明订阅链接，跳过（readme-only）
+  - bq2015/FreeProxies：0 条（文件已下载但解析不到节点）
+  - deezertidal/freevpn：下载失败（HTTP 403）
+  - YuanDevTeam/OneXray：0 条（文件已下载但解析不到节点）
+  - sylearn/AIUsage：README 未声明订阅链接，跳过（readme-only）
+  - ts-sf/fly：下载失败（HTTP 404）
+  - Leadaxe/LxBox：README 未声明订阅链接，跳过（readme-only）
+  - hello-yunshu/Xray_bash_onekey：README 未声明订阅链接，跳过（readme-only）
+  - OpenNetCN/clash：0 条（文件已下载但解析不到节点）
+  - kort0881/vpn-vless-configs-russia：0 条（2/3 个链接下载失败，其余已下载但解析不到节点）
+  - jichangtuijian-cheap/cheap-airports：README 未声明订阅链接，跳过（readme-only）
+  - jichangzhu/JichangTuijian：README 未声明订阅链接，跳过（readme-only）
+  - sunmiao4458/free-proxy-airport：README 未声明订阅链接，跳过（readme-only）
+  - Huibq/TrojanLinks：README 未声明订阅链接，跳过（readme-only）
+  - CCSH/IPTV：0 条（文件已下载但解析不到节点）
+  - tolinkshare2/tolinkshare2.github.io：README 未声明订阅链接，跳过（readme-only）
+  - getmeridian/meridian：0 条（文件已下载但解析不到节点）
+  - VpnNetwork01/vpn-net：README 未声明订阅链接，跳过（readme-only）
+  - ssrlive/proxypool：0 条（1/3 个链接下载失败，其余已下载但解析不到节点）
+  - itsyebekhe/PSG：0 条（2/6 个链接下载失败，其余已下载但解析不到节点）
+  - DevDock-AI/claude-unlimited：README 未声明订阅链接，跳过（readme-only）
+  - clashv2ray-hub/clashv2ray-hub.github.io：0 条（文件已下载但解析不到节点）
+  - MhdiTaheri/V2rayCollector：0 条（文件已下载但解析不到节点）
+  - clashv2ray-hub/clashfree：下载失败（空响应）
+  - clashv2ray-hub/v2rayfree：下载失败（空响应）
+  - ghuntley/underclass：README 未声明订阅链接，跳过（readme-only）
+  - Surfboardv2ray/TGParse：README 未声明订阅链接，跳过（readme-only）
+  - shenaba/2s-ui：0 条（文件已下载但解析不到节点）
+  - DanielLavrushin/asuswrt-merlin-xrayui：README 未声明订阅链接，跳过（readme-only）
+  - 5VNetwork/VX：README 未声明订阅链接，跳过（readme-only）
+  - yanisplugg/yptun：README 未声明订阅链接，跳过（readme-only）
+  - Mistgate/mistgate：README 未声明订阅链接，跳过（readme-only）
+  - tglaoshiji/nodeshare：下载失败（HTTP 403）
+  - mheidari98/.proxy：README 未声明订阅链接，跳过（readme-only）
+  - kazeyukiro/3m-ui：0 条（2/3 个链接下载失败，其余已下载但解析不到节点）
+  - xOS/Config：README 未声明订阅链接，跳过（readme-only）
+  - HakurouKen/free-node：下载失败（URLError）
+  - V2RayRoot/V2RayConfig：README 未声明订阅链接，跳过（readme-only）
+  - Iman/caspian：README 未声明订阅链接，跳过（readme-only）
+  - bestnite/sub2sing-box：README 未声明订阅链接，跳过（readme-only）
+  - clashnodev2ray/clashnodev2ray.github.io：0 条（文件已下载但解析不到节点）
+  - junjun266/FreeProxyGo：README 未声明订阅链接，跳过（readme-only）
+  - enriquephl/QuantumultX_config：0 条（文件已下载但解析不到节点）
+  - 029danio/jichangfree：README 未声明订阅链接，跳过（readme-only）
+  - thsrite/configflow：README 未声明订阅链接，跳过（readme-only）
+  - mhmdxahmd/mafly：README 未声明订阅链接，跳过（readme-only）
+  - licheng527/Free-servers：0 条（1/2 个链接下载失败，其余已下载但解析不到节点）
+  - Medium1992/mihomo-proxy-ros：下载失败（URLError）
+  - jctaoo/ClashConfig：0 条（1/2 个链接下载失败，其余已下载但解析不到节点）
+  - Q7DF1/XrayFA：README 未声明订阅链接，跳过（readme-only）
+  - LancelotRar/free-subs：README 未声明订阅链接，跳过（readme-only）
+  - deezertidal/fee-based：README 未声明订阅链接，跳过（readme-only）
+  - JohnWatsoon/WatTunnel：README 未声明订阅链接，跳过（readme-only）
+  - nikships/droidproxy：README 未声明订阅链接，跳过（readme-only）
+  - Re0XIAOPA/AutoScrapeFreeNodes：下载失败（HTTP 404）
+  - xianer235/115-media-hub：README 未声明订阅链接，跳过（readme-only）
+  - nodesfree/v2raynode：README 未声明订阅链接，跳过（readme-only）
+  - Lemonochka/keqdroid：README 未声明订阅链接，跳过（readme-only）
+  - 4n0nymou3/multi-proxy-config-fetcher：下载失败（HTTP 404）
+  - kure29/flyx：README 未声明订阅链接，跳过（readme-only）
+  - VoroninaYanina/free-nodes：下载失败（URLError）
+  - mohamadfg-dev/telegram-v2ray-configs-collector：README 未声明订阅链接，跳过（readme-only）
+  - Romaxa55/MegaV_Public：README 未声明订阅链接，跳过（readme-only）
+  - bin1site1/V2rayFree：README 的链接日期不是当天，按策略跳过
+  - bbq-051116/TG-iamdt009：README 未声明订阅链接，跳过（readme-only）
+  - zzmy1917-svg/cheap-vpn-airport：README 未声明订阅链接，跳过（readme-only）
+  - NanoCloud-Release/NanoCloud：0 条（文件已下载但解析不到节点）
+  - TG-NAV/nodeshare：README 的链接日期不是当天，按策略跳过
+  - nodesfree/clashnode：README 未声明订阅链接，跳过（readme-only）
+  - fafnirov/KaproTUN：README 未声明订阅链接，跳过（readme-only）
+  - xiaoli8571/TunBox：README 未声明订阅链接，跳过（readme-only）
+  - toml66l/fanqiang：README 未声明订阅链接，跳过（readme-only）
+  - hysteria350/free-jichang：下载失败（URLError）
+  - v2raynnodes/v2rayfree：README 的链接日期不是当天，按策略跳过
+  - farvater-app/farvater：0 条（文件已下载但解析不到节点）
+  - inferno1978/Chimera-Project：README 未声明订阅链接，跳过（readme-only）
+  - Shayanthn/V2ray-Tester-Pro：README 未声明订阅链接，跳过（readme-only）
+  - jctz123/jichang-tuijian：README 未声明订阅链接，跳过（readme-only）
+  - lufficc/clash-traffic：README 未声明订阅链接，跳过（readme-only）
+  - crackbest/V2ray-Config：538 条
+  - fodmod-one/jichangtuijian：README 未声明订阅链接，跳过（readme-only）
+  - penhandev/AutoAiVPN：README 未声明订阅链接，跳过（readme-only）
+  - pog7x/vpn-configs：138138 条
+  - 0xRadikal/Free-v2ray-Configs：8433 条
+  - Pawdroid/Free-servers：15 条
+  - zhuhaiuk/free-nodes：3 条
+  - snakem982/proxypool：175 条
+  - Danialsamadi/v2go：1539 条
+  - sinavm/SVM：89 条
+  - shabane/kamaji：13202 条
+  - peasoft/NoMoreWalls：480 条
+  - whoahaow/rjsxrd：3270 条
+  - igareck/vpn-configs-for-russia：604 条
+  - danmaifu/mianfeijiedian：README 的链接日期不是当天，按策略跳过
+  - cbusifabcap/daily_free_vpn：11673 条
+  - kooker/FreeSubsCheck：672 条
+  - NiREvil/vless：11573 条
+  - nyeinkokoaung404/V2ray-Configs：7065 条
+  - SoliSpirit/v2ray-configs：23060 条
+  - Delta-Kronecker/V2ray-Config：6747 条
+  - PuddinCat/BestClash：3870 条
+  - barry-far/V2ray-Config：22057 条
+  - sakha1370/OpenRay：质量过低跳过
+  - Barabama/FreeNodes：质量过低跳过
+  - MatinGhanbari/v2ray-configs：质量过低跳过
+  - DukeMehdi/FreeList-V2ray-Configs：质量过低跳过
+  - VPN-Subcription-Links/ClashX-V2Ray-TopFreeProxy：质量过低跳过
+  - dongchengjie/airport：质量过低跳过
+  - chengaopan/AutoMergePublicNodes：471 条
+  - iboxz/free-v2ray-collector：质量过低跳过
+  - Firmfox/Proxify：973 条
+  - ShatakVPN/ConfigForge-V2Ray：质量过低跳过
+  - crashgfw/free-airport-nodes：下载失败（URLError）
+  - xrayfree/free-ssr-ss-v2ray-vpn-clash：52 条
+  - Hidashimora/free-vpn-anti-rkn：1093 条
+  - free-nodes/clashfree：109 条
+  - free18/v2ray：质量过低跳过
+  - ovmvo/FreeSub：质量过低跳过
+  - shaoyouvip/free：0 条（文件已下载但解析不到节点）
+  - WLget/V2Ray_configs_64：README 的链接日期不是当天，按策略跳过
+  - gslege/CloudflareIP：质量过低跳过
+- README 订阅链接（83 个仓库声明了链接）：
+  - rtwo2/FastNodes：声明 10 个 → 提取 712354 条
+  - pog7x/vpn-configs：声明 10 个 → 提取 138138 条
+  - SoliSpirit/v2ray-configs：声明 5 个 → 提取 23060 条
+  - barry-far/V2ray-Config：声明 10 个 → 提取 22057 条
+  - MustafaBaqer/VestraNet-Nodes：声明 6 个 → 提取 18514 条
+  - hamedcode/port-based-v2ray-configs：声明 10 个 → 提取 16655 条
+  - shabane/kamaji：声明 10 个 → 提取 13202 条
+  - cbusifabcap/daily_free_vpn：声明 10 个 → 提取 11673 条
+  - NiREvil/vless：声明 10 个 → 提取 11573 条
+  - 0xRadikal/Free-v2ray-Configs：声明 10 个 → 提取 8433 条
+  - MahanKenway/Freedom-V2Ray：声明 10 个 → 提取 7524 条
+  - nyeinkokoaung404/V2ray-Configs：声明 10 个 → 提取 7065 条
+  - Delta-Kronecker/V2ray-Config：声明 10 个 → 提取 6747 条
+  - Stintik-123/StintikVPN：声明 9 个 → 提取 5758 条
+  - PuddinCat/BestClash：声明 10 个 → 提取 3870 条
+  - whoahaow/rjsxrd：声明 10 个 → 提取 3270 条
+  - MohammadBahemmat/V2ray-Collector：声明 10 个 → 提取 2779 条
+  - Danialsamadi/v2go：声明 10 个 → 提取 1539 条
+  - Hidashimora/free-vpn-anti-rkn：声明 10 个 → 提取 1093 条
+  - Firmfox/Proxify：声明 10 个 → 提取 973 条
+  - AzadNetCH/Clash：声明 2 个 → 提取 931 条
+  - kooker/FreeSubsCheck：声明 5 个 → 提取 672 条
+  - igareck/vpn-configs-for-russia：声明 10 个 → 提取 604 条
+  - F0rc3Run/F0rc3Run：声明 7 个 → 提取 599 条
+  - jichangx/free-nodes：声明 2 个 → 提取 556 条
+  - crackbest/V2ray-Config：声明 1 个 → 提取 538 条
+  - peasoft/NoMoreWalls：声明 1 个 → 提取 480 条
+  - chengaopan/AutoMergePublicNodes：声明 2 个 → 提取 471 条
+  - FLAT447/v2ray-lists：声明 6 个 → 提取 291 条
+  - SnapdragonLee/SystemProxy：声明 3 个 → 提取 210 条
+  - snakem982/proxypool：声明 3 个 → 提取 175 条
+  - free-nodes/clashfree：声明 1 个 → 提取 109 条
+  - sinavm/SVM：声明 9 个 → 提取 89 条
+  - ermaozi01/free_clash_vpn：声明 2 个 → 提取 52 条
+  - xrayfree/free-ssr-ss-v2ray-vpn-clash：声明 2 个 → 提取 52 条
+  - Pawdroid/Free-servers：声明 2 个 → 提取 15 条
+  - hello-world-1989/cn-news：声明 1 个 → 提取 6 条
+  - WLget/V2ray_free：声明 7 个 → 提取 5 条
+  - Mahdi0024/ProxyCollector：声明 2 个 → 提取 4 条
+  - xyfqzy/free-nodes：声明 4 个 → 提取 3 条
+  - zhuhaiuk/free-nodes：声明 3 个 → 提取 3 条
+  - anaer/Sub：声明 2 个 → 提取 2 条
+  - wenxig/dongtai-sub：声明 2 个 → 提取 2 条
+  - 2dust/v2rayN：声明 1 个 → 提取 0 条
+  - DiningFactory/panda-vpn-pro：声明 1 个 → 提取 0 条
+  - alireza0/s-ui：声明 1 个 → 提取 0 条
+  - ermaozi/get_subscribe：声明 1 个 → 提取 0 条
+  - eooce/nodejs-argo：声明 3 个 → 提取 0 条
+  - ripaojiedian/freenode：声明 4 个 → 提取 0 条
+  - crossxx-labs/free-proxy：声明 1 个 → 提取 0 条
+  - ZeroDeng01/sublinkPro：声明 1 个 → 提取 0 条
+  - Leon406/SubCrawler：声明 5 个 → 提取 0 条
+  - bq2015/FreeProxies：声明 2 个 → 提取 0 条
+  - deezertidal/freevpn：声明 1 个 → 提取 0 条
+  - YuanDevTeam/OneXray：声明 1 个 → 提取 0 条
+  - ts-sf/fly：声明 1 个 → 提取 0 条
+  - OpenNetCN/clash：声明 6 个 → 提取 0 条
+  - kort0881/vpn-vless-configs-russia：声明 3 个 → 提取 0 条
+  - CCSH/IPTV：声明 3 个 → 提取 0 条
+  - getmeridian/meridian：声明 1 个 → 提取 0 条
+  - ssrlive/proxypool：声明 3 个 → 提取 0 条
+  - itsyebekhe/PSG：声明 6 个 → 提取 0 条
+  - clashv2ray-hub/clashv2ray-hub.github.io：声明 1 个 → 提取 0 条
+  - MhdiTaheri/V2rayCollector：声明 1 个 → 提取 0 条
+  - clashv2ray-hub/clashfree：声明 1 个 → 提取 0 条
+  - clashv2ray-hub/v2rayfree：声明 2 个 → 提取 0 条
+  - shenaba/2s-ui：声明 1 个 → 提取 0 条
+  - tglaoshiji/nodeshare：声明 1 个 → 提取 0 条
+  - kazeyukiro/3m-ui：声明 3 个 → 提取 0 条
+  - HakurouKen/free-node：声明 1 个 → 提取 0 条
+  - clashnodev2ray/clashnodev2ray.github.io：声明 1 个 → 提取 0 条
+  - enriquephl/QuantumultX_config：声明 6 个 → 提取 0 条
+  - licheng527/Free-servers：声明 2 个 → 提取 0 条
+  - Medium1992/mihomo-proxy-ros：声明 2 个 → 提取 0 条
+  - jctaoo/ClashConfig：声明 2 个 → 提取 0 条
+  - Re0XIAOPA/AutoScrapeFreeNodes：声明 2 个 → 提取 0 条
+  - 4n0nymou3/multi-proxy-config-fetcher：声明 1 个 → 提取 0 条
+  - VoroninaYanina/free-nodes：声明 10 个 → 提取 0 条
+  - NanoCloud-Release/NanoCloud：声明 2 个 → 提取 0 条
+  - hysteria350/free-jichang：声明 10 个 → 提取 0 条
+  - farvater-app/farvater：声明 1 个 → 提取 0 条
+  - crashgfw/free-airport-nodes：声明 10 个 → 提取 0 条
+  - shaoyouvip/free：声明 3 个 → 提取 0 条
+- 结果：原始 1022146 条 → 两级去重后 106555 条（剔除 915591）
+- 协议分布：vless 75420 / ss 10312 / vmess 9840 / trojan 8116 / hysteria2 2257 / ssr 293 / tuic 250 / hysteria 67
+- 输出目录：`/home/runner/work/Test/Test/free-nodes`（nodes/ 下 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / singbox_sub.json / nodes_uris.txt；Docs/ 下 report.md）
+
 ## 2026-11-03 22:11
 
 - 执行阶段：阶段1·当天更新
