@@ -109,3 +109,16 @@
 - **给后续窗口的要点**：`free-nodes/.workbuddy/**` 是入库的（只有根 `/.workbuddy/` 被忽略），
   所以本自动化每次写 memory 都会产生一个真实改动；要么当次 publish 收掉，要么明确知道下次会带上
 
+## 2026-11-03（第八晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」（2507/2509/2507/2506，cap 2500），summary 生成于 22:45:44
+- 本日可用（ok）：v2ray 30 / xray 74 / clash 51 / singbox 46（正常水位）；四内核 `partial=false`、`exhausted=false`
+  （候选 4049/4034/4814/4677 远大于 2500，属「达 cap」而非「测完池子」）
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD a33db82）；
+  但 `git status --short -- free-nodes .github` 有两项：第一窗口 automation memory（M）+ `free-nodes/.workbuddy/memory/2026-11-03.md`（??）
+- 按 11-02 的做法：先写本文件、再一次 publish 收干净（只暂存 free-nodes/.github，不碰用户 C++ 项目）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）
+- **给后续窗口的要点**：闸门 done 时 `git status` 里出现 `.workbuddy/memory/**` 一般就是自动化自己写的尾巴，
+  属预期；确认 `rev-list` 是 0/0 即可放心 publish，不会带出验证数据
+
