@@ -32,6 +32,8 @@ python free-nodes/src/collect_nodes.py --out free-nodes --readme-only --no-laten
 
 # 判「今天的 CI 产物到位没有」（唯一判据实现；不碰 git/网络，退出码 0=就绪 / 1=未就绪）
 # 就绪 = nodes_meta.date 是今天 **且** generated_at >= 今天 20:00
+#        （或 generated_at 距现在 <= 90 分钟：调度器拖过零点时「今天 20:00」还在未来，
+#          这条新鲜度豁免让后一条 cron 不再重复采集，见 known-issues 57）
 # 只看 date 会被「跨零点补跑」骗（known-issues 56）：调度器迟到时 runner 的 date +%F 已是明天
 python <root>/src/publish_free_nodes.py --ci-status
 

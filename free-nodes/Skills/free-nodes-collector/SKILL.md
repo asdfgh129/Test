@@ -58,7 +58,9 @@ python <free-nodes>/src/window_gate.py --input <输出根目录>
 python <free-nodes>/src/publish_free_nodes.py --ci-status   # 0=就绪 / 1=未就绪，并打印 CI_READY=1|0
 ```
 
-就绪 = `nodes_meta.date` 是今天 **且** `generated_at` 不早于今天 20:00。**只看 `date` 会被跨零点补跑骗**：
+就绪 = `nodes_meta.date` 是今天 **且** `generated_at` 不早于今天 20:00（**或** `generated_at` 距现在 ≤90 分钟，
+`CI_FRESH_MINUTES`：调度器把 cron 拖过零点时，「今天 20:00」是 13 小时后的未来，只留绝对钟点会让后一条 cron
+必然重复采集并推送失败，known-issues 57）。**只看 `date` 会被跨零点补跑骗**：
 调度器迟到时 runner 的 `date +%F` 已经是「明天」，10-31→11-01 那次就迟了 5 小时 16 分
 （Docs/known-issues.md 第 54、56 条）。不就绪时按顺序处理：
 

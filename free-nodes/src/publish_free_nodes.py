@@ -38,6 +38,14 @@ DATE_DIR_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 # 20:00 这个下限的取法：早于两条 cron（北京 21:05 / 21:20）留足启动余量，
 # 又晚于任何跨零点补跑（凌晨那批一定早于 20:00），两边都不误伤。
 CI_READY_AFTER = "20:00"
+# 「刚生成」也算就绪的窗口（分钟）。为什么需要它：20:00 这个下限是**当天晚间的**口径，
+# 一旦调度器把 cron 拖过零点（11-01 迟 5h16m、11-02 两条 cron 都拖到次日 06:15/06:19），
+# 凌晨那次 run 的「今天 20:00」还在未来，刚推上去的产物永远判不就绪 ⇒ 后一条 cron
+# 必然重复采集 11 分钟，再撞上「先到先推」→ 提交步骤 non-fast-forward 失败（11-02 run#4 复盘）。
+# 判据本体不动（本地 22:00 窗口仍要求 date==今天 且 >= 20:00，这是拒绝隔夜残留的关键），
+# 只额外接受「generated_at 距现在 <= 这个窗口」的产物：它按定义就是新鲜的，
+# 且不会误收隔夜数据（隔夜至少 8 小时以上）。
+CI_FRESH_MINUTES = 90
 # 这些条目不属于"每日快照"，清理时永远保留（新布局：nodes/Docs/src/Skills 三分层）
 KEEP_NAMES = {"nodes", "Docs", "src", "Skills", "README.md", "CHANGELOGS.md",
               ".gitattributes", ".workbuddy"}
@@ -193,6 +201,17 @@ def ci_ready_status(out_root: Path, after: str = CI_READY_AFTER) -> tuple[bool, 
     if date == today and gen[:16] >= deadline:
         log("CI_READY=1")
         return True, f"就绪（{gen}）"
+    # 「刚生成」豁免：跨零点补跑时 20:00 下限还在未来，只能靠新鲜度判。见 CI_FRESH_MINUTES 注释。
+    try:
+        gen_dt = dt.datetime.strptime(gen[:19], "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        gen_dt = None
+    if gen_dt is not None:
+        age = (dt.datetime.now() - gen_dt).total_seconds() / 60.0
+        if 0 <= age <= CI_FRESH_MINUTES:
+            log(f"CI_READY=1 —— 产物生成于 {int(age)} 分钟前，属刚跑完的同一轮采集"
+                f"（跨零点补跑时 20:00 下限尚未到达，见 CI_FRESH_MINUTES）")
+            return True, f"刚生成（{int(age)} 分钟前）"
     if date != today:
         log(f"CI_READY=0 —— 日期是 {date or '空'}，不是今天（CI 没跑完 / 没派发）")
         return False, f"日期 {date or '空'} 不是今天"

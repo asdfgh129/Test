@@ -92,6 +92,9 @@ jobs:
             --date "$DATE"
 
       - name: 提交采集产物
+        # 守卫判定「今天已有产物」时连提交也不必跑：那种情况本 run 根本没采集，
+        # 工作区是干净的，跑一遍只会打印一句「无变化」（known-issues 57 复盘）。
+        if: steps.guard.outputs.skip != '1'
         # 只提交「下游要用的那几样」：候选清单 + 元数据 + 采集日志 + 仓库质量。
         # 不提交 v2ray/xray/clash/singbox 订阅文件——它们此刻还含 TCP 不可达节点，
         # 由本地第一窗口的 --probe-only 探测后重写再提交，避免公网订阅出现死节点。
