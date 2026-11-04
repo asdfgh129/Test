@@ -1,5 +1,32 @@
 # 每日免费节点采集 —— 自动化执行记录
 
+## 2026-11-04 22:00 运行（第一窗口 / 主窗口）
+
+**结论：21:05 触发器首夜生效，开窗即 CI_READY=1（省 10 分钟等待）；四核全部跑满 cap，GATE: done；
+修掉「池内复测把 last_tested 刷成当天 ⇒ 质量闸门 7 天有效期永不生效」的单向门复活（known-issues 59）**
+
+- **CI 判就绪 → 直接就绪**：22:00 `--sync-only` **0.6 秒一次成功**，`date=2026-11-04`、`generated_at=21:13:02`、
+  `total=12252`、`CI_READY=1`。`actions/runs` 取证：今晚唯一 run 是 **#8 `workflow_dispatch`
+  （13:06:13Z 启动、success、6m49s）** = 21:05 本地触发器（第 58 条新增）；`schedule` 今日**仍零派发**
+  ⇒ cron 继续只当备份，主窗口不必再留等待余量。未 dispatch、未走本地兜底
+- **采集（CI 口径）**：80 仓库 / 26 订阅文件 / 原始 93763 → 去重 12274 / 388 秒；README 链接 46 仓库
+- **探测**：12245 候选 → 可解析 12222 → 探 12200 → 可达 **4286**（35.1%，中位 201ms），CF 前置 2026；分流 3477/3793/4240/4115
+- **验证 31.9 分钟**（`--time-budget 4642`，四核 cap 2500、无 partial）：v2ray 29/2509、xray 71/2508、
+  clash 48/2509、singbox 56/2507；池 251/630/472/419
+- **修复（known-issues 59）**：raw −21%（93763 vs 119663）查到大源头 `sakha1370/OpenRay` 被闸门跳过，
+  但它 `last_tested=今天`、`last_collected=昨天` —— 被跳过的仓库仍因「池内复测」每天拿几条样本
+  （OpenRay 2 条 / Barabama 11 条）刷新 `last_tested`，`today-last_tested` 恒 0 ⇒ 第 53 条的 7 天有效期失效。
+  新增 `_bad_repo_anchor()` 取 `max(last_collected, 样本≥min_tests 的最近实测日)`；`7` 提为 `BAD_REPO_TTL_DAYS`；
+  跳过日志改印「机会起算日 + 有效期」。10 例回归全 PASS，今晚 12 个跳过项名单**与旧判据一致**但都有到期日
+  （最早 11-06，OpenRay 11-11，Hidashimora 11-12）
+- 自检 0 critical / 5 warn（四核 1.1~2.8% + 镜像 10/13）。**未调参**：v2ray 1.2% 连续第四天同水位，
+  xray 2.8% 是近 5 天最高，失败分布与前几日重合 ⇒ 上游波动
+- 推送：`39b4e5a`（30 文件）→ origin/master 成功（自建 v2ray @ 202.50.253.54），无 pending-push
+- **下轮先做**：① 21:05 触发器已验证有效，继续观察 `schedule` 是否彻底放弃（若持续零派发，
+  可把「cron 降级为注释」写进 workflow）；② 盯 `free18/v2ray`/`ovmvo/FreeSub`/`gslege` 于 11-06 到期后
+  重采结果（首次验证第 59 条的到期机制）；③ `Hidashimora` 大样本 0 可用、11-12 重采后若仍 0 则归因上游
+
+
 ## 2026-11-03 22:00 运行（第一窗口 / 主窗口）
 
 **结论：CI 连续第三天没按点派发 → dispatch 9.4 分钟兜底；四核全部测满 cap，GATE: done；
