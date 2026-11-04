@@ -2,6 +2,34 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-11-04 白天（用户要求排查）：CI 一直不派发的根因定案 —— 平台稳定拖后 5~9 小时 + 排队 run 检出旧提交，触发改由 21:05 本地任务承担
+
+- **用户问题**：「CI 为什么一直不能派发」。查 `actions/runs` 7 条全量取证：连续 4 天，应派发的
+  13:05Z/13:20Z 全部落在 **18:20Z~22:19Z（北京 02:20~06:19）** 才 created，22:00 那一刻恒为零；
+  `created_at` 与 `run_started_at` 同秒 ⇒ 延迟在调度器出队，不是 runner 排队。
+  同期 `actions/permissions`=enabled/allowed=all、workflow `state=active`、`default_branch=master`、
+  `fork=false`、仓库 public、`ci_dispatch.py --check` 换到 422 ⇒ **YAML/分支/权限/配额全部无罪**，
+  githubstatus 也无 Actions 事故。结论：`schedule` 被平台稳定拖后，cron 不能当唯一触发源（known-issues 58）
+- **顺带查出真正常年红叉的元凶（known-issues 57 的结论只对了一半）**：`actions/checkout` 默认按
+  **事件里的 sha** 检出，被 `concurrency` 排队的第二条 run 看到的是「事件那一刻」的仓库，
+  前一条刚推上去的产物它看不见 → 守卫判不就绪 → 重复采集 11 分钟 → push 非快进失败。
+  证据：11-03 那对 run 里，`CI_FRESH_MINUTES` 修复**已在该 run 检出的代码中**（`head_sha=351b590`），
+  守卫仍 `skip=0`
+- **修复 ①**（`.github/workflows/collect.yml`）：检出加 `ref: ${{ github.ref_name }}`（拿分支尖端）；
+  「跳过判定」改为**只认远端**——`git fetch --depth=1 origin +refs/heads/master:refs/remotes/origin/master`
+  → `git show origin/master:free-nodes/nodes/nodes_meta.json` 落到 `$RUNNER_TEMP/ci-prod/nodes/`
+  → `--ci-status --workspace "$RUNNER_TEMP" --dir ci-prod`（判据仍只有 `ci_ready_status()` 一处实现）
+- **修复 ②**（同文件提交步骤）：`git push` 被拒时先问远端有没有今天的产物——有则 `::warning::` 不判失败
+  （数据没丢，不再挂红叉），没有才 `::error::` + `exit 1`
+- **修复 ③**（触发路径）：新增 21:05 的本地定时任务「免费节点·CI 采集触发」
+  （`03493c45-d356-4882-b007-404b6326b265`，只跑 `ci_dispatch.py --wait 900`），
+  两条 cron 降级为机会性备份。22:00 主窗口开窗即 `CI_READY=1`，省掉每晚约 10 分钟等待
+- **验证**：浅克隆里原样跑守卫脚本 → 取到远端 nodes_meta（1164103 字节）/ `CI_READY=0` / `skip=0` / rc=0；
+  `--ci-status --workspace <tmp> --dir ci-prod` 三分支回归（昨天产物→1、伪造今天 20:30→0、缺失→1）；
+  YAML 解析通过；`ci_dispatch.py --check` 422 通过
+- **文档**：`Docs/known-issues.md` 第 58 条（含 5 行派发延迟表）、`Docs/automation-prompt.md`
+  （窗口表新增「CI 触发」行 + 为什么不再依赖 cron）、`Skills/free-nodes-collector/SKILL.md` 同步口径
+
 ## 2026-11-03 22:00 第一窗口：CI 连续第三天没按点派发，dispatch 9.4 分钟兜底；修掉「跨零点补跑害两条 cron 重复采集」；四核全部测完
 
 - **CI 判就绪 → 不就绪 → dispatch**：22:01 `--sync-only` **一次成功**（无失败重试），但产物

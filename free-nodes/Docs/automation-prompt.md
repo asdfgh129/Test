@@ -2,22 +2,31 @@
 
 > **权威来源是自动化里配置的任务指令本身**（id 与 rrule 见下），本文件只是
 > 口径摘要 + 变更理由，方便排查「为什么这么配」。两者冲突时以自动化配置为准。
-> 最近一次同步：2026-11-02（CI 加第二条 cron + 统一「产物就绪」判据 + `ci_dispatch.py` 兜底触发，
-> 见 `known-issues.md` 第 54 条复核与第 56 条）。
+> 最近一次同步：2026-11-04（**不再把 cron 当唯一触发源**：新增 21:05 的本地触发任务，
+> cron 降级为「机会性备份」；workflow 守卫改为只认远端产物 + 检出用分支尖端，
+> 见 `known-issues.md` 第 58 条）。上一次同步 2026-11-02（CI 加第二条 cron + 统一「产物就绪」判据
+> + `ci_dispatch.py` 兜底触发，见第 54 条复核与第 56 条）。
 > 旧版这里贴的是「请手动粘贴到自动化」的完整 prompt 全文，2026-10-28 起改为摘要——
 > 因为 `automation_update` 工具已可用，prompt 可以直接改，正文再抄一份必然会滞后。
 
 | 窗口 | automation id | 时间 | 职责 |
 |---|---|---|---|
-| CI（采集） | `.github/workflows/collect.yml` | 每天北京 **21:05 与 21:20** 两条 cron（UTC 13:05 / 13:20） | 只采集：下载 → 解析 → 去重 → 落盘，**不探测** |
+| CI 触发（**主路径**） | `03493c45-d356-4882-b007-404b6326b265` | 每天北京 **21:05** | 只跑 `ci_dispatch.py --wait 900`：`workflow_dispatch` 触发采集并等结论，不采集/不改文件/不碰 git |
+| CI（采集） | `.github/workflows/collect.yml` | 每天北京 21:05 与 21:20 两条 cron（UTC 13:05 / 13:20），**已降级为备份** | 只采集：下载 → 解析 → 去重 → 落盘，**不探测** |
 | 第一窗口（主） | `a3d7bb22-948c-4326-b344-f4c5535ddcd0` | 每天 22:00 | 等 CI 产物 → 内核检查 → 本地 TCP 探测 → 验证 → 自检 → 修复 → 推送 → 闸门 |
 | 第二窗口 | `a4c4ae9d-9d70-4395-b78d-63a0a131e62d` | 每天 23:45 | 闸门判定 →（需要时）续跑验证 → 自检 → 推送 |
 | 第三窗口 | `19f100fb-c01d-4d31-9a1e-76444fbf51ad` | 每天 01:30 | 同第二窗口（跨零点，`--date` 必须取 `Docs/summary.json` 的采集日） |
 
-**为什么两条 cron**：`schedule` 会迟到甚至漏派发——2026-11-01 北京 21:05 那次迟了 **5 小时 16 分**，
-跑到次日 02:20 才启动，`date +%F` 已经是「明天」，产物被标成明天的日期，当晚本地窗口一无所得
-（known-issues 54）。两条 cron 先到先采，后到的那条由 workflow 内的「跳过判定」自动跳过，
-判据与本地共用 `publish_free_nodes.py --ci-status`，不重复实现。
+**为什么不再依赖 cron（2026-11-04 定案）**：`schedule` 被平台**稳定**拖后 5~9 小时——连续 4 天，
+应派发的 13:05Z/13:20Z 全部落在 18:20Z~22:19Z（北京 02:20~06:19）才启动，而 22:00 那一刻一条
+run 都没有；同期权限/分支/YAML/配额全部正常，`workflow_dispatch` 9~11 分钟必成（known-issues 58）。
+所以把**触发**从 cron 换成 21:05 的本地任务：22:00 主窗口一开窗即 `CI_READY=1`，省掉每晚约 10 分钟等待；
+两条 cron 保留但只当机会性备份（迟到时由 workflow 内的「跳过判定」跳过，不再重复采集）。
+
+**跳过判定只看远端（2026-11-04 改）**：`concurrency` 只保证「后一条等前一条跑完」，但
+`actions/checkout` 默认按**事件里的 sha** 检出，排队 run 看不到前一条刚推上去的产物 → 必重复采集、
+push 非快进失败（每晚一个红叉）。现在检出用 `ref: ${{ github.ref_name }}`（拿分支尖端），
+守卫从 `origin/master` 取 `nodes_meta.json` 喂给 `--ci-status`——判据仍只有一处实现。
 
 **为什么要拆成「CI 采集 / 本地探测」**：CI 解决本机到 GitHub 的通道问题（不再需要 uplink 代理与镜像回退）；
 但可达性依赖出口位置，runner 是 Azure 数据中心 IP，会让大量被封数据中心 ASN 的节点变成假阴性。
@@ -37,10 +46,11 @@ python free-nodes/src/collect_nodes.py --out free-nodes --readme-only --no-laten
 # 只看 date 会被「跨零点补跑」骗（known-issues 56）：调度器迟到时 runner 的 date +%F 已是明天
 python <root>/src/publish_free_nodes.py --ci-status
 
-# 不就绪时主动触发 CI（调度器迟到/漏派发的确定性兜底；api.github.com 直连可用，不用建通道）
+# 不就绪时主动触发 CI（**主路径**：21:05 的定时任务就是跑这两行；主窗口的兜底也用它）
+# api.github.com 直连可用，不用建通道；workflow_dispatch 不看调度队列，9~11 分钟出全套产物
 # --check 用一个不存在的 ref 换 422，只验证凭据/路径/权限，不会真的排一次采集
 python <root>/src/ci_dispatch.py --check
-python <root>/src/ci_dispatch.py
+python <root>/src/ci_dispatch.py --wait 900
 
 # 第一窗口开工第一步：把 CI 提交的采集产物拉到本地（拉取同样要翻墙，复用推送的自建通道）
 # 只用 --ff-only，绝不 rebase/reset。实测 2026-10-31：直连 fetch 必然先失败 → 自建通道 → 成功，全程 52 秒

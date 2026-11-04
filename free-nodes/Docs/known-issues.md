@@ -1755,6 +1755,59 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   凡是「同一轮产物被两条触发路径共用」的设计，判据必须在**任何时刻**都自洽：
   用相对时间（新鲜度）+ 绝对钟点（拒绝隔夜）两条一起判，任一条满足即可，比只留绝对钟点稳。
 
+## 58. 「cron 不派发」有两层：平台稳定拖后 5~9 小时 + 排队 run 检出的是「事件那一刻」的旧提交（2026-11-04 排查）
+
+- **现象**：连续 4 天，北京 21:05 / 21:20 两条 cron 到 22:00 一条 run 都没有（每晚靠
+  `ci_dispatch.py` 手动触发，9~11 分钟才拿到产物）；而每天凌晨 02:20~06:20 又冒出**成对**的
+  schedule run，后一条稳定失败在「提交采集产物」。
+- **第一层（平台侧，确定不是配置问题）**：把 4 天的「应派发 → 实际 created_at」排开：
+
+  | 应派发（UTC） | 实际 created（UTC） | 北京时刻 | 迟到 |
+  |---|---|---|---|
+  | 11-01 13:05 | 11-01 18:20:49 | 02:20 | +5h16m |
+  | 11-02 13:05 | 11-02 22:15:20 | 06:15 | +9h10m |
+  | 11-02 13:20 | 11-02 22:19:31 | 06:19 | +8h59m |
+  | 11-03 13:05 | 11-03 20:00:18 | 04:00 | +6h55m |
+  | 11-03 13:20 | 11-03 20:07:04 | 04:07 | +6h47m |
+
+  全部落在 **18:20Z~22:19Z 这条窄带**里，与目标时刻无关；`created_at` 与 `run_started_at`
+  同秒（run 41708508135 两者都是 20:00:18Z，job 20:00:21Z 启动）⇒ 延迟发生在**调度器出队**，
+  不是 runner 排队、也不是 `concurrency`。同期 `actions/permissions` = enabled/allowed=all、
+  workflow `state=active`、`default_branch=master`、`fork=false`、仓库 public、
+  `ci_dispatch.py --check` 用不存在的 ref 换到 422 ⇒ YAML / 分支 / 权限 / 配额全部无罪；
+  githubstatus 这几日也没有 Actions 事故。**结论：`schedule` 被平台稳定拖后 5~9 小时，
+  「21:05 有产物」靠 cron 做不到，只能靠 workflow_dispatch。**
+- **第二层（我们自己的 bug，才是不停冒红叉的元凶）**：`concurrency` 只保证「后一条等前一条跑完」，
+  但 `actions/checkout` 默认按**事件里带的 sha** 检出——排队后才启动的 run 拿到的是
+  「事件那一刻」的提交，前一条 run 刚推上去的产物它**看不见**，于是守卫看到的是隔夜的
+  `nodes_meta`（`date` 不是今天）→ 判不就绪 → 重复采集 11 分钟 → `git push` 非快进失败。
+  **决定性证据**：11-03 那对 run 里，第 57 条的新鲜度豁免（`CI_FRESH_MINUTES`）当时已经在
+  被检出的代码里（失败 run 41709562786 的 `head_sha=351b590`，是 11-03 22:48 发布提交的后继），
+  守卫仍然 `skip=0` ⇒ 第 57 条的「20:00 下限在凌晨不可满足」只解释了**更早那晚**的成因，
+  修掉它并没有修掉红叉。
+- **修复**（`.github/workflows/collect.yml` 三处）：
+  1. 检出加 `ref: ${{ github.ref_name }}`：传分支名时 checkout 会在 run 启动时重新 fetch
+     分支尖端，等于总是拿到最新提交（不再用事件 sha）；
+  2. 跳过判定改成**只认远端**：`git fetch --depth=1 origin +refs/heads/master:refs/remotes/origin/master`
+     → `git show origin/master:free-nodes/nodes/nodes_meta.json` 落到 `$RUNNER_TEMP/ci-prod/nodes/`
+     → `publish_free_nodes.py --ci-status --workspace "$RUNNER_TEMP" --dir ci-prod`。
+     判据仍然只有 `ci_ready_status()` 一处实现，只是把「远端那份」喂给它。因为 `concurrency`
+     是串行的，前一条 run 必然已经 push 完，这一条必然看得见 ⇒ 排队 run 一律 `skip=1`；
+  3. 提交步骤：`git push` 被拒时先问「远端有没有今天的产物」，有就 `::warning::` 不判失败
+     （数据没丢，别再挂红叉），没有才 `::error::` + `exit 1`。
+- **验证**（都在本地做，不占 CI 配额）：浅克隆里原样跑守卫脚本 → 取到 `origin/master` 的
+  nodes_meta（1164103 字节）、打印 `CI_READY=0`、写 `skip=0`、步骤退出码 0；
+  `--ci-status --workspace <tmp> --dir ci-prod` 三分支回归：真实产物（昨天）→ 1、
+  伪造「今天 20:30」→ 0、产物缺失 → 1；YAML 解析通过（两触发、6 个 step 顺序正确）。
+- **另一条腿（把触发变成确定事件）**：新增 **21:05 的本地定时任务「免费节点·CI 采集触发」**，
+  只跑 `ci_dispatch.py --wait 900`（`workflow_dispatch` 不看调度队列，9~11 分钟出全套产物）。
+  这样 22:00 主窗口一开窗就是 `CI_READY=1`，省掉每晚约 10 分钟等待；本机没开机时，
+  22:00 主窗口原有的「不就绪就 dispatch」分支照旧兜底。
+- **教训**：`concurrency` 只解决「同时跑」，不解决「拿着过期快照跑」。凡是「判据读工作区文件、
+  而工作区由并发方写入」的设计，判据必须读**共享事实源（远端/上游）**，不能读本地副本。
+  另外：「昨晚修了 A，今晚还报同样症状」时，先证明 A 的修复**在被检出的那份代码里**，
+  再谈是不是 A 没修对——否则会沿着旧结论反复加固一个不是元凶的地方。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
 
 ### 2026-11-03 自检发现

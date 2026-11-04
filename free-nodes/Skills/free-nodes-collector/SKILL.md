@@ -14,9 +14,11 @@ agent_created: true
 
 **采集在 GitHub Actions，本机做三件事：本地探测 → 验证 → 自检。**
 
-2026-10-31 起「采集」这一步搬到了 CI（仓库根 `.github/workflows/collect.yml`，每天两条 cron：北京 21:05 与 21:20，互为备份）。原因是本机到 `github.com` 长期被阻断，采集要靠池内节点自建上行代理 + 镜像回退，通道是全链路最脆的一环；runner 直连 GitHub，不用代理、不用镜像、配额 5000/时。
+2026-10-31 起「采集」这一步搬到了 CI（仓库根 `.github/workflows/collect.yml`，workflow 内挂了两条 cron：北京 21:05 与 21:20）。原因是本机到 `github.com` 长期被阻断，采集要靠池内节点自建上行代理 + 镜像回退，通道是全链路最脆的一环；runner 直连 GitHub，不用代理、不用镜像、配额 5000/时。
 
-**为什么要两条 cron**：`schedule` 会迟到甚至漏派发。2026-11-01 北京 21:05 那次迟了 **5 小时 16 分**，跑到次日 02:20 才启动（known-issues 54），当晚只能本地兜底。两条 cron 先到先采，后到的那条由 workflow 内的「跳过判定」自动跳过（判据与本地共用 `--ci-status`），不重复采集。
+**触发靠 workflow_dispatch，不靠 cron**（2026-11-04 定案）：`schedule` 不是偶尔迟到，而是**稳定拖后 5~9 小时**——连续 4 天，应派发的 13:05Z/13:20Z 全部落在 18:20Z~22:19Z（北京 02:20~06:19）才启动，22:00 那一刻一条 run 都没有；同期权限/分支/YAML/配额全正常（known-issues 58）。所以 21:05 由本地定时任务跑 `ci_dispatch.py --wait 900` 主动触发，22:00 主窗口一开窗就是 `CI_READY=1`；两条 cron 只当机会性备份，迟到那条由 workflow 内的「跳过判定」跳过。
+
+**跳过判定只认远端产物**：`concurrency` 只保证「后一条等前一条跑完」，但 `actions/checkout` 默认按事件里的 sha 检出，排队 run 看不到前一条刚推上去的产物 ⇒ 必重复采集、push 非快进失败。现在检出用 `ref: ${{ github.ref_name }}`，守卫从 `origin/master` 取 `nodes_meta.json` 再喂给 `--ci-status`（判据仍只有一处实现）。
 
 **但 CI 只做「下载 → 解析 → 去重 → 落盘」，不做 TCP 探测**（`--no-latency-sort`）。免费节点的可达性高度依赖出口位置：runner 出口是 Azure 数据中心 IP，大量节点封数据中心 ASN，在那里判「不可达」是系统性假阴性；反过来「海外通、国内不通」的节点又会被误判为可用。所以探测留在本机 `--probe-only`：
 

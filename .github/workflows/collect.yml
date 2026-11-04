@@ -54,22 +54,48 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          # 显式传分支名，而不是用事件里带的 sha（默认行为）。
+          # 为什么：schedule 事件被拖到几小时后才启动时，同一晚的两条 cron 会排队，
+          # 后一条按「事件那一刻」的 sha 检出 → 前一条刚推上去的采集产物它**看不见**
+          # → 守卫误判「今天还没采」→ 重复采集 11 分钟 → push 非快进失败（known-issues 58）。
+          # 传 ref 时 actions/checkout 会在 run 启动时重新 fetch 分支尖端，等于总是拿到最新提交。
+          ref: ${{ github.ref_name }}
 
       - name: 准备 Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: 跳过判定（当天 20:00 后已有产物就不再采）
+      - name: 跳过判定（远端今天已有产物就不再采）
         id: guard
-        # 两条 cron + 手动/兜底 dispatch 都可能撞在一起。判据与本地完全一致：
-        # nodes_meta.date 是今天 **且** generated_at 不早于今天 20:00
-        # （只看 date 会把跨零点补跑的产物当成当晚的，见 known-issues 56）。
+        # 多条触发路径（两条 cron + 手动/兜底 dispatch）都可能撞在一起。判据与本地完全一致，
+        # 只问一个问题：**远端 master 上**今天这一轮采集产物是否已就绪？
+        # - 只看 `nodes_meta.date` 会把跨零点补跑的产物当成当晚的（known-issues 56）。
+        # - 只看**工作区**会把排队的重复 run 判成「今天还没采」（known-issues 58）：
+        #   排队的 run 检出的是事件那一刻的提交，前一条 run 之后推的产物看不见。
+        #   所以这里强制从 origin/master 取 nodes_meta，把「已推上去」当成就绪的唯一凭据。
         # 判定逻辑只写在 src/publish_free_nodes.py 的 ci_ready_status 里，这里不重复实现。
         run: |
-          if python free-nodes/src/publish_free_nodes.py --ci-status; then
+          set -uo pipefail
+          PROD="$RUNNER_TEMP/ci-prod"
+          mkdir -p "$PROD/nodes"
+          # 显式 refspec：确保 origin/master 这个 ref 本身被更新，而不只是 FETCH_HEAD
+          if git fetch --depth=1 origin +refs/heads/master:refs/remotes/origin/master; then
+            if git show origin/master:free-nodes/nodes/nodes_meta.json > "$PROD/nodes/nodes_meta.json" 2>/dev/null; then
+              echo "已从 origin/master 取到 nodes_meta.json（$(wc -c < "$PROD/nodes/nodes_meta.json") 字节）"
+            else
+              rm -f "$PROD/nodes/nodes_meta.json"
+              echo "origin/master 上没有 nodes_meta.json"
+            fi
+          else
+            rm -f "$PROD/nodes/nodes_meta.json"
+            echo "fetch origin/master 失败，按「没有产物」处理（会重新采集）"
+          fi
+          # --workspace 指向临时根 + --dir 相对名：让 --ci-status 读远端那份，而不是工作区那份
+          if python free-nodes/src/publish_free_nodes.py --ci-status \
+               --workspace "$RUNNER_TEMP" --dir ci-prod; then
             echo "skip=1" >> "$GITHUB_OUTPUT"
-            echo "今天 20:00 后已有采集产物，跳过本次采集"
+            echo "远端今天已有采集产物，跳过本次采集"
           else
             echo "skip=0" >> "$GITHUB_OUTPUT"
           fi
@@ -113,7 +139,21 @@ jobs:
             echo "本次采集无变化，跳过提交"
           else
             git commit -m "chore(free-nodes): CI 采集 $(TZ=Asia/Shanghai date +%F)"
-            git push
+            if ! git push; then
+              # 兜底：并发已按 concurrency 串行化，正常不会撞；万一还是被拒，
+              # 先问一句「远端有没有今天的产物」——有就说明另一条 run 已经推成功，
+              # 数据没丢，别挂红叉（红叉多了真正的事故就没人看得见，known-issues 57/58）。
+              git fetch --depth=1 origin +refs/heads/master:refs/remotes/origin/master || true
+              git show origin/master:free-nodes/nodes/nodes_meta.json \
+                > "$RUNNER_TEMP/ci-prod/nodes/nodes_meta.json" 2>/dev/null || true
+              if python free-nodes/src/publish_free_nodes.py --ci-status \
+                   --workspace "$RUNNER_TEMP" --dir ci-prod; then
+                echo "::warning::push 被拒，但远端已有今天的采集产物，本次不计失败"
+              else
+                echo "::error::push 被拒且远端没有今天的产物，本次采集数据未入库"
+                exit 1
+              fi
+            fi
           fi
 
       - name: 摘要
