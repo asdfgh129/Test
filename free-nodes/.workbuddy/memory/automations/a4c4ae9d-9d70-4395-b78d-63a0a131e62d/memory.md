@@ -122,3 +122,17 @@
 - **给后续窗口的要点**：闸门 done 时 `git status` 里出现 `.workbuddy/memory/**` 一般就是自动化自己写的尾巴，
   属预期；确认 `rev-list` 是 0/0 即可放心 publish，不会带出验证数据
 
+## 2026-11-04（第九晚：GATE: done，未跑验证，零 git 操作）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」（2509/2508/2509/2507，cap 2500），summary 生成于 22:35:26
+- 本日可用（ok）：v2ray 29 / xray 71 / clash 48 / singbox 56（正常水位）；四内核 `partial=false`、`exhausted=false`
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` 无输出；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD a4eeafd）
+- 写本文件后又出现一项 `M free-nodes/.workbuddy/memory/automations/a4c4ae9d…/memory.md` → 按 11-02/11-03 做法
+  publish 一次收干净，本窗口零验证、零自检、零修复
+- **关键澄清（此前误判过两次）**：根 `.workbuddy` 是 junction → git 实际跟踪的是 `free-nodes/.workbuddy/**`，
+  所以 `git check-ignore <根路径>` 会命中 `/.workbuddy/`、`git ls-files <根路径>` 会报 "not tracked"，
+  **但 `git status` 报的是真实的 `free-nodes/.workbuddy/...` 路径且确实被跟踪**。
+  → 判「要不要 publish」只认 `git status`，不要用 check-ignore/ls-files 的根路径结论反推为「没改动」
+
