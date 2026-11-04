@@ -3183,6 +3183,7 @@ def upsert_seed_stats(seed_data, repo_full, stars, contributed, date_str):
 UNKNOWN_QUALITY = 50.0   # 未实测过的仓库给中等先验，避免被实测过的仓库完全压死
 RATE_PRIOR = 0.25        # 未实测仓库在「采集/取样优先级」里的中性可用率
 QUALITY_WINDOW = 5       # 仓库质量口径 = 最近 N 个不同日期的实测滚动汇总（known-issues 第 53 条）
+BAD_REPO_TTL_DAYS = 7    # 「0 可用」结论的有效期：过了这天必须重新采样（known-issues 第 53/58 条）
 
 
 def quality_score(avail_rate, avg_latency):
@@ -3228,7 +3229,7 @@ def repo_sort_key(seed_data, repo_full):
             int(entry.get("stars", 0) or 0))
 
 
-def is_known_bad_repo(seed_data, repo_full, min_tests=20, max_age_days=7):
+def is_known_bad_repo(seed_data, repo_full, min_tests=20, max_age_days=BAD_REPO_TTL_DAYS):
     """历史实测「一个可用都没有」的仓库，今天不必再浪费配额。
 
     判据：实测 ≥20 个、可用 0 个（样本太少不跳，避免误杀新仓库），
@@ -3253,12 +3254,47 @@ def is_known_bad_repo(seed_data, repo_full, min_tests=20, max_age_days=7):
     ok = int(entry.get("ok") or 0)
     if tested < min_tests or ok != 0:
         return False
-    # 没有可信日期就不用陈旧结论封杀（宁可多花一点配额，也不要永久误杀）
-    try:
-        last = date.fromisoformat(str(entry.get("last_tested") or "")[:10])
-    except ValueError:
+    anchor = _bad_repo_anchor(entry, min_tests)
+    if anchor is None:
+        # 没有可信日期就不用陈旧结论封杀（宁可多花一点配额，也不要永久误杀）
         return False
-    return (date.today() - last).days <= max_age_days
+    return (date.today() - anchor).days <= max_age_days
+
+
+def _bad_repo_anchor(entry, min_tests=20):
+    """算「最后一次真正给过这个仓库机会」的日期，作为跳过有效期的起算点。
+
+    **不能用 last_tested**（known-issues 第 58 条）：被闸门跳过的仓库不再采集，
+    但它的旧节点还留在池里，`update_repo_quality` 每天会因「池内复测」拿到几条样本
+    （2026-11-04 实测 OpenRay 只有 2 条、Barabama 11 条），把 last_tested 刷成当天。
+    于是 `today - last_tested` 永远是 0 天，7 天有效期永不生效 —— 第 53 条修好的
+    「单向门」从池内复测这条侧路再次闭合，仓库被永久封杀（OpenRay 是最大量源，
+    日均约 1.9 万条，一次误杀就是 20% 的量）。
+
+    起算点取两者中较晚的一个，两者都不会被「跳过」推进：
+      - `last_collected`：真的拉取过这个仓库的日期（跳过时不更新，经验证 OpenRay
+        被跳过当天仍是 11-03）；
+      - `quality_history` 里**样本量 ≥ min_tests 的最近一次实测**：样本太小的复测
+        说明不了仓库健康度，既不足以判死，也不足以延长封杀。
+    """
+    anchors = []
+    try:
+        anchors.append(date.fromisoformat(str(entry.get("last_collected") or "")[:10]))
+    except ValueError:
+        pass
+    for h in reversed(entry.get("quality_history") or []):
+        if int(h.get("tested") or 0) >= min_tests:
+            try:
+                anchors.append(date.fromisoformat(str(h.get("date") or "")[:10]))
+            except ValueError:
+                pass
+            break
+    if not anchors:
+        try:
+            anchors.append(date.fromisoformat(str(entry.get("last_tested") or "")[:10]))
+        except ValueError:
+            return None
+    return max(anchors)
 
 
 def update_repo_quality(seed_file, per_repo, date_str, stars_map=None,
@@ -3365,9 +3401,10 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
             break
         if skip_bad and seed_data and is_known_bad_repo(seed_data, full):
             entry = find_seed_entry(seed_data, full) or {}
+            _anchor = _bad_repo_anchor(entry)
             print(f"[info] ({i}/{len(ordered)}) {full} → 历史质量过低（近 {QUALITY_WINDOW} 次实测 "
                   f"{entry.get('tested')} 个、可用 {entry.get('ok') or 0} 个，"
-                  f"最后实测 {entry.get('last_tested') or '未知'}），跳过以省配额")
+                  f"机会起算 {_anchor or '未知'}，有效期 {BAD_REPO_TTL_DAYS} 天），跳过以省配额")
             if phase_log is not None:
                 phase_log.append((full, -2))
             processed.add(full)
