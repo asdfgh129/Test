@@ -136,3 +136,15 @@
   **但 `git status` 报的是真实的 `free-nodes/.workbuddy/...` 路径且确实被跟踪**。
   → 判「要不要 publish」只认 `git status`，不要用 check-ignore/ls-files 的根路径结论反推为「没改动」
 
+## 2026-11-05（第十晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」（2509/2510/2508/2507，cap 2500），summary 生成于 22:36:08
+- 本日可用（ok）：v2ray 18 / xray 44 / clash 23 / singbox 26 —— 较 11-04 的 29/71/48/56 齐降约 40%，
+  第一窗口已做四点取证（候选规模、失败分布、池复测、单核耗时）判为上游波动，未调参
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0（HEAD e387672）；
+  `git status --short -- free-nodes .github` 有两项：第一窗口 automation memory（M）+ `2026-11-05.md`（??）
+- 按 11-02 起的一贯做法：写完本文件后 publish 一次收干净；本窗口零验证、零自检、零修复
+- **给后续窗口的要点**：可用数单日腰斩不必立刻怀疑代码——先看第一窗口日志里有没有做过取证；
+  本日属上游波动（候选 3665/3811/4396/4262 与失败分布均正常），第三窗口若同样 GATE: done 直接跳过即可
+
