@@ -7,3 +7,6 @@
 
 - 2026-11-04 21:05：首次执行成功。run 41835055159，`in_progress` → `completed (success)`，退出码 0，约 9 分钟内完成。
 - 备注：本文件在首跑前不存在；脚本输出中 token 已打码（`ghp_…x6hY`），汇报时同样打码。
+- 2026-11-05 21:05：成功。run 42032745579，`in_progress` → `completed (success)`，退出码 0，用时 9m31s。
+- 坑（重要）：本机 Bash 是 Git Bash，命令里的 Windows 反斜杠路径会被吃掉（`C:Usersbemin...` → command not found）。
+  必须给路径加双引号或改用正斜杠，否则第一个 Bash 调用必失败（本次第一跑即因此空转 0.8s，非 GitHub 侧问题）。
