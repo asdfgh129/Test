@@ -5,55 +5,31 @@
  "log-level": "info",
  "proxies": [
   {
-   "name": "SG \\U0001F1F8\\U0001F1EC | @Raydikalx | 0437BE",
+   "name": "end-gfw-kr64-SS",
+   "type": "ss",
+   "server": "13.125.82.209",
+   "port": 8443,
+   "cipher": "chacha20-ietf-poly1305",
+   "password": "7e68e32f-8015-4f37-9082-70e8b0b58043",
+   "udp": true
+  },
+  {
+   "name": "🇳🇱 荷兰 | NLD",
    "type": "vless",
-   "server": "43.163.112.174",
+   "server": "76574ct.nl7.h1clayd.click",
    "port": 443,
-   "uuid": "0dedd47d-47b9-4ed1-9c9f-cbeecad57a68",
+   "uuid": "cda0862a-0f87-4be9-8ed8-1d0c9e382839",
    "udp": true,
-   "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "www.cloudflare.com",
+   "servername": "76574ct.nl7.h1clayd.click",
    "client-fingerprint": "chrome",
    "reality-opts": {
-    "public-key": "mXQudYHNu0pebcdk1_qn-UgcmwhjaV7y9UrYu3HX7Rg",
-    "short-id": "0123456789abcdef"
+    "public-key": "9zW5lTDbs9svY-lzlPp-pq0j2Sr6g031SY0E-3xSHDc",
+    "short-id": "2ca59bdc5121f921"
    }
   },
   {
-   "name": "end-gfw-sg89-VLESS",
-   "type": "vless",
-   "server": "54.251.78.89",
-   "port": 443,
-   "uuid": "7e68e32f-8015-4f37-9082-70e8b0b58043",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "poc.storq.app",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "x8aCD8cJtkDvAjcRrcMG05MNiwh11LaKg70KIRvfN0g",
-    "short-id": "819a87bf1651bf44"
-   }
-  },
-  {
-   "name": "🇯🇵",
-   "type": "vless",
-   "server": "45.78.52.26",
-   "port": 443,
-   "uuid": "0a3432cd-74b8-413a-896d-f51492b030bc",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "portal.citygrainla.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "BlSccfT5tvDIOS7v9VaPd0ulUNhUdvlMjGiNzDNDUHE",
-    "short-id": "051f20c2344a2dfd"
-   }
-  },
-  {
-   "name": "🇮🇹_IT_意大利_IPV4 (7)",
+   "name": "https://t.me/ForceRunVPN-🇮🇹-Milan-340ms-EUROPEAN-LEASE1",
    "type": "ss",
    "server": "202.50.253.99",
    "port": 19999,
@@ -62,16 +38,7 @@
    "udp": true
   },
   {
-   "name": "🇮🇹_IT_意大利_IPV4 (4)",
-   "type": "ss",
-   "server": "202.50.253.18",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "🇮🇹_IT_意大利_IPV4 (5)",
+   "name": "🇮🇹_IT_意大利_IPV4 (6",
    "type": "ss",
    "server": "202.50.253.54",
    "port": 19999,
@@ -80,187 +47,15 @@
    "udp": true
   },
   {
-   "name": "🇮🇹_IT_意大利_IPV4 (2)",
-   "type": "ss",
-   "server": "202.50.253.36",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "US",
+   "name": "Бесплатный",
    "type": "vless",
-   "server": "104.160.44.254",
+   "server": "88.216.129.234",
    "port": 443,
-   "uuid": "0a3432cd-74b8-413a-896d-f51492b030bc",
+   "uuid": "acc50200-7f21-4f90-9cca-0057efcbf042",
    "udp": true,
-   "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "portal.citygrainla.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "BlSccfT5tvDIOS7v9VaPd0ulUNhUdvlMjGiNzDNDUHE",
-    "short-id": "051f20c2344a2dfd"
-   }
-  },
-  {
-   "name": "🇮🇹_IT_意大利_IPV4 (3)",
-   "type": "ss",
-   "server": "202.50.253.63",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "US \\U0001F1FA\\U0001F1F8 | @Raydikalx | FE24D6",
-   "type": "vless",
-   "server": "bot.vudfaro.ir",
-   "port": 5059,
-   "uuid": "7df4f23f-b361-412a-883a-54dfdb5b8c8f",
-   "udp": true
-  },
-  {
-   "name": "SE \\U0001F1F8\\U0001F1EA | @Raydikalx | A7082B",
-   "type": "vless",
-   "server": "138.124.86.230",
-   "port": 48115,
-   "uuid": "b2fe1fa4-6a79-4938-a3f4-63b54ae7f16b",
-   "udp": true,
-   "network": "grpc",
-   "grpc-opts": {
-    "grpc-service-name": "138-124-86-230-sslip-io"
-   },
-   "tls": true,
-   "servername": "138-124-86-230.sslip.io"
-  },
-  {
-   "name": "🇮🇹_IT_意大利_IPV4 (8)",
-   "type": "ss",
-   "server": "202.50.253.72",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "CA \\U0001F1E8\\U0001F1E6 | @Raydikalx | D02DD3",
-   "type": "vless",
-   "server": "ca1.japancase.site",
-   "port": 443,
-   "uuid": "db80088c-32a1-4cb8-a907-0f3cb7844152",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "ca1.japancase.site",
-   "client-fingerprint": "edge",
-   "reality-opts": {
-    "public-key": "zN5buqMK95hn0mv3vKlfoOAi99ehuvP73cUuyNbZNWc",
-    "short-id": "dbd6b473c7038dd5"
-   }
-  },
-  {
-   "name": "https://t.me/ForceRunVPN-🇮🇹-Milan-290ms-EUROPEAN-LEASE1",
-   "type": "ss",
-   "server": "202.50.253.90",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "RU \\U0001F1F7\\U0001F1FA | @Raydikalx | BBFDB9",
-   "type": "vless",
-   "server": "5.42.99.64",
-   "port": 8443,
-   "uuid": "c53ea5e9-ed8b-4990-805d-7f1d6451426c",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "du-rov.secureservice.top",
-   "client-fingerprint": "random",
-   "reality-opts": {
-    "public-key": "fSVfR9NB-6J6smrZlavi0GWd8JfDh0aXuEkKbtuFzUI",
-    "short-id": "3cbc3d737fb9c4af"
-   }
-  },
-  {
-   "name": "🇳🇱",
-   "type": "vless",
-   "server": "179.252.210.173",
-   "port": 8444,
-   "uuid": "35c9f200-7520-4005-b78e-f8a2fb9f68f7",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/api/v1/devices/bf6384dff6/telemetry",
-    "headers": {
-     "Host": "nl21.meshbeat.online"
-    }
-   },
-   "tls": true,
-   "servername": "nl21.meshbeat.online",
+   "servername": "gamenews.best",
    "client-fingerprint": "firefox"
-  },
-  {
-   "name": "🇮🇹_IT_意大利_IPV4 (6)",
-   "type": "ss",
-   "server": "202.50.253.45",
-   "port": 19999,
-   "cipher": "aes-256-gcm",
-   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
-   "udp": true
-  },
-  {
-   "name": "RU \\U0001F1F7\\U0001F1FA | @Raydikalx | 96B5DE",
-   "type": "vless",
-   "server": "du-rov.secureservice.top",
-   "port": 8443,
-   "uuid": "c53ea5e9-ed8b-4990-805d-7f1d6451426c",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "du-rov.secureservice.top",
-   "client-fingerprint": "random",
-   "reality-opts": {
-    "public-key": "fSVfR9NB-6J6smrZlavi0GWd8JfDh0aXuEkKbtuFzUI",
-    "short-id": "3cbc3d737fb9c4af"
-   }
-  },
-  {
-   "name": "🇺🇸",
-   "type": "vless",
-   "server": "174.137.53.15",
-   "port": 443,
-   "uuid": "0a3432cd-74b8-413a-896d-f51492b030bc",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "portal.citygrainla.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "BlSccfT5tvDIOS7v9VaPd0ulUNhUdvlMjGiNzDNDUHE",
-    "short-id": "051f20c2344a2dfd"
-   }
-  },
-  {
-   "name": "🇺🇸US_686|698KB/s|S004-260618 [60517dc3bacf]",
-   "type": "vless",
-   "server": "146.75.59.186",
-   "port": 443,
-   "uuid": "72881b3f-76f7-4cae-912d-e95e602a5ca4",
-   "udp": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/",
-    "headers": {
-     "Host": "copy_az_channel_NUFiLTER_6i.global.ssl.fastly.net."
-    }
-   },
-   "tls": true,
-   "servername": "community.fastly.steamstatic.com",
-   "client-fingerprint": "chrome"
   },
   {
    "name": "🇮🇹_IT_意大利_IPV4",
@@ -272,34 +67,301 @@
    "udp": true
   },
   {
-   "name": "🇨🇿",
+   "name": "🇷🇺 俄罗斯 加拿大 Montreal",
+   "type": "ss",
+   "server": "46.17.47.58",
+   "port": 18443,
+   "cipher": "aes-256-gcm",
+   "password": "cCMJgJTA3BA489YUYrFq7XHXSiSpWlLa",
+   "udp": true
+  },
+  {
+   "name": "NL",
    "type": "vless",
-   "server": "85.155.246.16",
-   "port": 2063,
-   "uuid": "b18d5990-96eb-4587-a386-7f8ef7591e6a",
+   "server": "f0d7aft.nl13.h1clayd.click",
+   "port": 443,
+   "uuid": "cda0862a-0f87-4be9-8ed8-1d0c9e382839",
    "udp": true,
-   "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "rusbid.de",
+   "servername": "f0d7aft.nl13.h1clayd.click",
    "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "MMpt_jWc4J3oySBdf5sPDVRkiWlZmOObth6A1scM9BM"
+    "public-key": "kkCGiCQCKnkozJR1KKCRNtmdBECmThCgI9VSv7iDcWI",
+    "short-id": "8956c57cb4c4f8d2"
    }
   },
   {
-   "name": "🇩🇪",
+   "name": "NL #2",
    "type": "vless",
-   "server": "193.42.11.247",
+   "server": "79.182.39.109",
    "port": 443,
-   "uuid": "94042dd1-d32a-4797-b88c-dc48459e2b34",
+   "uuid": "b7b8ee80-db83-4276-8c68-87dc88b0b0b5",
    "udp": true,
    "tls": true,
-   "servername": "100497t.de18.h1clayd.click",
+   "servername": "71b840t.de7.h1clayd.click",
    "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "x-7K9P2E91DCL-0ONwm14gxDkUseukg98hYzB-1dW1A",
-    "short-id": "5be240e45d3c445c"
+    "public-key": "3wFF83gtIA0sXj-6GGCAa--oQbSr0MVUj0FBc-0QmiE",
+    "short-id": "e572b6579ea525d4"
    }
+  },
+  {
+   "name": "🇩🇪 德国 | DEU",
+   "type": "vless",
+   "server": "178.214.109.1",
+   "port": 443,
+   "uuid": "40a86b1b-239d-455e-b53f-4c270788ba6e",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "promo-digital.wb.ru",
+   "client-fingerprint": "edge",
+   "reality-opts": {
+    "public-key": "3p6W4rMBh1HCwbjq4lcbWO0KjkqTshJU5lkTix5nwTc",
+    "short-id": "1cfa55abe4d2dc7a"
+   }
+  },
+  {
+   "name": "🇮🇹_IT_意大利_IPV4 (7",
+   "type": "ss",
+   "server": "202.50.253.45",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
+   "udp": true
+  },
+  {
+   "name": "🇸🇮",
+   "type": "vless",
+   "server": "92.42.201.160",
+   "port": 14443,
+   "uuid": "a60da2ca-0abf-49f8-9dcb-156989d76ad2",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "node-slo05.rkitman.ru",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "fmZQYGYXw4xYtiuMFvH4Dgse1DBoGazt-vWM7LOdchY",
+    "short-id": "e013fa99a81badcc"
+   }
+  },
+  {
+   "name": "NL #3",
+   "type": "vless",
+   "server": "961ec0g.nl13.h1clayd.click",
+   "port": 443,
+   "uuid": "cda0862a-0f87-4be9-8ed8-1d0c9e382839",
+   "udp": true,
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "7d5abcd7d8a1"
+   },
+   "tls": true,
+   "servername": "961ec0g.nl13.h1clayd.click",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "xn7KVKS5MOnsFrYrEeRS04JssBCOxh12rxegaDFyGkA",
+    "short-id": "6d289ff0f47c0aac"
+   }
+  },
+  {
+   "name": "🇭🇰[www.v2nodes.com] vless-HK-1",
+   "type": "vless",
+   "server": "152.175.6.229",
+   "port": 31884,
+   "uuid": "e9a8144e-5237-488a-afb1-9ca3d8d54c80",
+   "udp": true,
+   "tls": true,
+   "servername": "hk010.zestapp778.com",
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "🔥Join+Telegram:@Farah_VPN🟣",
+   "type": "trojan",
+   "server": "167.82.64.120",
+   "port": 443,
+   "password": "MiTiVPN",
+   "udp": true,
+   "tls": true,
+   "sni": "cdn.akamai.steamstatic.com",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "chrome",
+   "network": "ws",
+   "ws-opts": {
+    "path": "/---@MiTiVPN---@MiTiVPN",
+    "headers": {
+     "Host": "mtlooabmakaakaoijji.global.ssl.fastly.net"
+    }
+   }
+  },
+  {
+   "name": "RU",
+   "type": "vless",
+   "server": "201.34.142.108",
+   "port": 443,
+   "uuid": "4777d90d-265b-4927-a0d1-63f36ed1421c",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/assets/nlrelay01/",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "201.34.142.108",
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "SG - zhuhai.uk 02",
+   "type": "vless",
+   "server": "106.75.143.18",
+   "port": 4022,
+   "uuid": "e4e2afbe-1a21-4ca2-a22f-b5417e825687",
+   "udp": true,
+   "tls": true,
+   "servername": "buylite.tv.apple.com",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "2g8FZHxPWjphq568-OS8ypk7qb76HiMhWua0UAJfOl8",
+    "short-id": "ace0f99d"
+   }
+  },
+  {
+   "name": "🇯🇵",
+   "type": "vless",
+   "server": "74.113.233.192",
+   "port": 443,
+   "uuid": "db80088c-32a1-4cb8-a907-0f3cb7844152",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "jp1.japancase.site",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "vR15JQvAL78o2FzRCftXVm1LTz-xdU31wBB2ohHFD0g",
+    "short-id": "47b225059e19aa39"
+   }
+  },
+  {
+   "name": "end-gfw-kr64-VLESS",
+   "type": "vless",
+   "server": "13.125.82.209",
+   "port": 443,
+   "uuid": "7e68e32f-8015-4f37-9082-70e8b0b58043",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "raining.kr",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "DHOrfoin7TeRpnIoU3d6qT5Yrq3QPVFp49kApATA4iE",
+    "short-id": "e04a526b0b09c765"
+   }
+  },
+  {
+   "name": "US",
+   "type": "trojan",
+   "server": "167.88.61.175",
+   "port": 443,
+   "password": "0ab6c98dae3b48e8b9c4a776b6c9c19a",
+   "udp": true,
+   "tls": true,
+   "sni": "blog.browseseniorrolesandenhanceyourcareertoday.com"
+  },
+  {
+   "name": "NL #4",
+   "type": "vless",
+   "server": "15d7fft.nl11.h1clayd.click",
+   "port": 443,
+   "uuid": "b7b8ee80-db83-4276-8c68-87dc88b0b0b5",
+   "udp": true,
+   "tls": true,
+   "servername": "15d7fft.nl11.h1clayd.click",
+   "reality-opts": {
+    "public-key": "xv6OUZcyzEHXFMTfumuJH-1Rd4NQ0cdmWikek4mm0m4",
+    "short-id": "c71118d9399fb8c2"
+   },
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "🇱🇰 LK_37",
+   "type": "vless",
+   "server": "free.vkehi.store",
+   "port": 443,
+   "uuid": "e4d1298a-1f21-42e2-a53e-1b22c0645c48",
+   "udp": true,
+   "tls": true,
+   "servername": "zoom.com",
+   "alpn": [
+    "h2",
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "www.windowssearchtools.com:443",
+   "type": "vmess",
+   "server": "www.windowssearchtools.com",
+   "port": 443,
+   "uuid": "ba1116e2-8c2f-4e3d-8e50-c954360cf970",
+   "alterId": 0,
+   "cipher": "auto",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/truth",
+    "headers": {
+     "Host": "www.windowssearchtools.com"
+    }
+   },
+   "tls": true,
+   "servername": "www.windowssearchtools.com"
+  },
+  {
+   "name": "🇮🇹_IT_意大利_IPV4 (2",
+   "type": "ss",
+   "server": "202.50.253.36",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
+   "udp": true
+  },
+  {
+   "name": "Бесплатный #2",
+   "type": "vless",
+   "server": "gernode2.barnikle1.me",
+   "port": 1422,
+   "uuid": "f5a915e2-de2c-4939-97c2-9926c4f55719",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "www.ing.nl",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "bNpg56GtTArrVyrnonNlMA-3JyYIAFATdgsH_wn0gmc",
+    "short-id": "4ea6a183"
+   }
+  },
+  {
+   "name": "Бесплатный #3",
+   "type": "vless",
+   "server": "83.141.75.193",
+   "port": 8444,
+   "uuid": "5fa16fdf-5b3c-4f57-988d-b24c6722c91a",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/xh",
+    "mode": "auto",
+    "host": "fi-94-10.cdn-lab.online"
+   },
+   "tls": true,
+   "servername": "fi-94-10.cdn-lab.online",
+   "client-fingerprint": "firefox"
   }
  ],
  "proxy-groups": [
@@ -307,29 +369,32 @@
    "name": "PROXY",
    "type": "select",
    "proxies": [
-    "SG \\U0001F1F8\\U0001F1EC | @Raydikalx | 0437BE",
-    "end-gfw-sg89-VLESS",
-    "🇯🇵",
-    "🇮🇹_IT_意大利_IPV4 (7)",
-    "🇮🇹_IT_意大利_IPV4 (4)",
-    "🇮🇹_IT_意大利_IPV4 (5)",
-    "🇮🇹_IT_意大利_IPV4 (2)",
-    "US",
-    "🇮🇹_IT_意大利_IPV4 (3)",
-    "US \\U0001F1FA\\U0001F1F8 | @Raydikalx | FE24D6",
-    "SE \\U0001F1F8\\U0001F1EA | @Raydikalx | A7082B",
-    "🇮🇹_IT_意大利_IPV4 (8)",
-    "CA \\U0001F1E8\\U0001F1E6 | @Raydikalx | D02DD3",
-    "https://t.me/ForceRunVPN-🇮🇹-Milan-290ms-EUROPEAN-LEASE1",
-    "RU \\U0001F1F7\\U0001F1FA | @Raydikalx | BBFDB9",
-    "🇳🇱",
-    "🇮🇹_IT_意大利_IPV4 (6)",
-    "RU \\U0001F1F7\\U0001F1FA | @Raydikalx | 96B5DE",
-    "🇺🇸",
-    "🇺🇸US_686|698KB/s|S004-260618 [60517dc3bacf]",
+    "end-gfw-kr64-SS",
+    "🇳🇱 荷兰 | NLD",
+    "https://t.me/ForceRunVPN-🇮🇹-Milan-340ms-EUROPEAN-LEASE1",
+    "🇮🇹_IT_意大利_IPV4 (6",
+    "Бесплатный",
     "🇮🇹_IT_意大利_IPV4",
-    "🇨🇿",
-    "🇩🇪",
+    "🇷🇺 俄罗斯 加拿大 Montreal",
+    "NL",
+    "NL #2",
+    "🇩🇪 德国 | DEU",
+    "🇮🇹_IT_意大利_IPV4 (7",
+    "🇸🇮",
+    "NL #3",
+    "🇭🇰[www.v2nodes.com] vless-HK-1",
+    "🔥Join+Telegram:@Farah_VPN🟣",
+    "RU",
+    "SG - zhuhai.uk 02",
+    "🇯🇵",
+    "end-gfw-kr64-VLESS",
+    "US",
+    "NL #4",
+    "🇱🇰 LK_37",
+    "www.windowssearchtools.com:443",
+    "🇮🇹_IT_意大利_IPV4 (2",
+    "Бесплатный #2",
+    "Бесплатный #3",
     "DIRECT"
    ]
   }

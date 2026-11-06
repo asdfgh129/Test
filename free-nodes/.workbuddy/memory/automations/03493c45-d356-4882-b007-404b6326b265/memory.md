@@ -10,3 +10,5 @@
 - 2026-11-05 21:05：成功。run 42032745579，`in_progress` → `completed (success)`，退出码 0，用时 9m31s。
 - 坑（重要）：本机 Bash 是 Git Bash，命令里的 Windows 反斜杠路径会被吃掉（`C:Usersbemin...` → command not found）。
   必须给路径加双引号或改用正斜杠，否则第一个 Bash 调用必失败（本次第一跑即因此空转 0.8s，非 GitHub 侧问题）。
+- 2026-11-06 21:05：成功。run 42222801205，`in_progress` → `completed（success）`，退出码 0，全程 8m23s
+  （含排队+执行）。路径用正斜杠+双引号一次过。产物在 22:00 主窗口开窗前已就绪。
