@@ -148,3 +148,17 @@
 - **给后续窗口的要点**：可用数单日腰斩不必立刻怀疑代码——先看第一窗口日志里有没有做过取证；
   本日属上游波动（候选 3665/3811/4396/4262 与失败分布均正常），第三窗口若同样 GATE: done 直接跳过即可
 
+## 2026-11-06（第十一晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」2509/2506/2508/2508（cap 2500），采集日 2026-11-06、summary 生成于 22:37:04
+- 本日可用（ok）：v2ray 14 / xray 69 / clash 26 / singbox 21；四内核 `partial=false`、`exhausted=false`
+  （候选规模远大于 2500，属「达 cap」而非「测完池子」）。v2ray 14 偏低但仍在 min_available(10) 之上，属源池波动
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0（HEAD 8b5fc53）；
+  `git status --short -- free-nodes .github` 两项，均为自动化 memory 文件（第一窗口的 2026-11-06.md + 主窗口 a3d7bb22 memory）
+- 按 11-02 起的一贯做法 publish 一次收干净 → commit `e809448` → origin/master 成功（v2ray @ 202.50.253.54:19999，第 1 次命中）；
+  推后 status 干净、ahead/behind = 0/0、无 pending-push
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）
+- **给后续窗口的要点**：GATE: done 时若 `git status` 里只有 `.workbuddy/memory/**`，就是自动化自己写的尾巴，
+  publish 一次即可；本次 publish 既收了第一窗口的尾巴，也顺带把本文件纳入同一提交，无需二次补推
+
