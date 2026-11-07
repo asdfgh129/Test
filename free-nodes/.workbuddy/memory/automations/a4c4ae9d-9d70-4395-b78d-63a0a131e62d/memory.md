@@ -162,3 +162,15 @@
 - **给后续窗口的要点**：GATE: done 时若 `git status` 里只有 `.workbuddy/memory/**`，就是自动化自己写的尾巴，
   publish 一次即可；本次 publish 既收了第一窗口的尾巴，也顺带把本文件纳入同一提交，无需二次补推
 
+## 2026-11-07（第十二晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：四内核均「已测满单轮上限」2511/2507/2511/2508（cap 2500），采集日 2026-11-07、summary 生成于 22:35:57
+- 本日可用（ok）：v2ray 31 / xray 78 / clash 24 / singbox 24（正常水位）；四内核 `partial=false`、`exhausted=false`
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0（HEAD 77cb4bb）；
+  `git status --short -- free-nodes .github` 两项，均为自动化 memory（第一窗口的 2026-11-07.md + 主窗口 a3d7bb22 memory）
+- 第一窗口本日已发两次（34fe3ec 28 文件 + 77cb4bb 观察补记），验证与自检均在首窗口完成，0 改动
+- 本窗口零验证、零自检、零修复；只 publish 一次收掉 memory 尾巴（commit 哈希见当晚汇报）
+- **给后续窗口的要点**：本文件故意不写自己的 commit 哈希（否则又会造出新尾巴）；
+  哈希只在汇报里给。查历史提交用 `git log --oneline -- free-nodes/.workbuddy`
+
