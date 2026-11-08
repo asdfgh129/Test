@@ -2,6 +2,17 @@
 
 > 跨天摘要，按日期倒序
 
+## 2026-11-08 第二窗口观察
+
+- 闸门 `GATE: done`（四内核 2142/2499/2511/2506 全部达标），本窗口未占用验证资源，
+  只做尾巴清理：无 pending-push、`rev-list` 0/0，唯一改动是自动化 memory → 一次 publish 收干净
+- **观察（非代码缺陷，属调用方参数笔误）**：第二/三窗口任务提示里写的发布命令是
+  `publish_free_nodes.py --input <root> --proxy auto --date …`，而该脚本**没有 `--input`**
+  （只有 `--workspace` / `--dir`），照抄会直接 `error: unrecognized arguments: --input` 退出码 2。
+  本次改用 `--dir <root>` 后正常（提交 94f3a4d → origin/master）。
+  `Docs/automation-prompt.md` 与 `SKILL.md` 里的写法是对的（`--proxy auto --date …`，
+  路径靠默认推导），错只错在任务提示文本 → 建议修正自动化配置里的提示词，文档不用改
+
 ## 2026-11-08 第一窗口观察
 
 - **质量闸门首次「大规模拦截」是可解释的，不是减产缺陷**：今日原始 58551（昨日 109529，−46%）、
