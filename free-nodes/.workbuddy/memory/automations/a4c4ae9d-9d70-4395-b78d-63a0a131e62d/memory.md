@@ -174,3 +174,17 @@
 - **给后续窗口的要点**：本文件故意不写自己的 commit 哈希（否则又会造出新尾巴）；
   哈希只在汇报里给。查历史提交用 `git log --oneline -- free-nodes/.workbuddy`
 
+## 2026-11-08（第十三晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：v2ray「候选已全部测完」(2142/2131)、xray「候选已全部测完」(2499/2494)、
+  clash「已测满单轮上限」(2511/2500)、singbox「已测满单轮上限」(2506/2500)；
+  采集日 2026-11-08、summary 生成于 22:36:22
+- 本日可用（ok）：v2ray 29 / xray 80 / clash 42 / singbox 45（正常水位）；四内核 `partial=false`
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0
+  （HEAD 4537be9）；`git status --short -- free-nodes .github` 两项，均为自动化 memory
+  （2026-11-08.md 新增 + 主窗口 a3d7bb22 memory 修改）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；只 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：v2ray/xray 本日 `exhausted=true`（池子真测完，2131/2494 < cap 2500），
+  与 clash/singbox 的「达 cap」成因不同但闸门口径一致，都不需要续跑；别因为 exhausted=true 就想去补测
+
