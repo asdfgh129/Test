@@ -1,1470 +1,1526 @@
 {
- "date": "2026-11-08",
- "generated_at": "2026-11-08 22:36:22",
+ "date": "2026-11-09",
+ "generated_at": "2026-11-09 22:37:49",
  "cores": {
   "v2ray": {
-   "tested": 2142,
-   "ok": 29,
-   "unsupported": 3,
-   "config_error": 31,
+   "tested": 2309,
+   "ok": 24,
+   "unsupported": 5,
+   "config_error": 33,
    "reasons": {
-    "unsupported": 3,
-    "tls": 658,
-    "timeout": 1419,
-    "reset": 2,
-    "config": 31
+    "unsupported": 5,
+    "tls": 471,
+    "timeout": 1776,
+    "config": 33
    },
    "rounds": 1,
    "min_available": 10,
-   "cand": 2131,
+   "cand": 2298,
    "exhausted": true,
    "cap": 2500,
-   "sampled": 2142,
+   "sampled": 2309,
    "partial": false,
    "policy": "full",
    "file": "available_v2ray.txt",
    "nodes": [
     {
-     "host": "52.78.103.20",
-     "port": 8443,
-     "proto": "ss",
-     "latency": 296,
-     "repo": "hello-world-1989/cn-news"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 899,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "91.149.236.106",
+     "host": "103.115.17.239",
      "port": 8388,
      "proto": "ss",
-     "latency": 953,
+     "latency": 709,
      "repo": "kooker/FreeSubsCheck"
     },
     {
-     "host": "t.cnmjcn.cyou",
-     "port": 16632,
+     "host": "38.60.224.173",
+     "port": 32153,
      "proto": "vmess",
-     "latency": 997,
+     "latency": 1022,
      "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
-     "host": "202.50.253.81",
+     "host": "202.50.253.72",
      "port": 19999,
      "proto": "ss",
-     "latency": 1020,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1041,
+     "latency": 1068,
      "repo": "ermaozi01/free_clash_vpn"
     },
     {
      "host": "202.50.253.36",
      "port": 19999,
      "proto": "ss",
-     "latency": 1045,
+     "latency": 1489,
      "repo": "ermaozi01/free_clash_vpn"
     },
     {
-     "host": "202.50.253.54",
+     "host": "202.50.253.90",
      "port": 19999,
      "proto": "ss",
-     "latency": 1048,
+     "latency": 1515,
      "repo": "ermaozi01/free_clash_vpn"
     },
     {
-     "host": "46.17.47.58",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1064,
-     "repo": "F0rc3Run/F0rc3Run"
+     "host": "147.45.175.81",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1561,
+     "repo": "NiREvil/vless"
     },
     {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1074,
-     "repo": "ermaozi01/free_clash_vpn"
+     "host": "vps3.nemnogogo.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1718,
+     "repo": "NiREvil/vless"
     },
     {
-     "host": "185.22.153.117",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1095,
-     "repo": "kooker/FreeSubsCheck"
+     "host": "199.232.78.160",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1737,
+     "repo": "snakem982/proxypool"
     },
     {
-     "host": "planb.mojcn.com.linuxlh.xin",
-     "port": 16632,
-     "proto": "vmess",
-     "latency": 1219,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1220,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "51.75.118.79",
-     "port": 20140,
-     "proto": "vmess",
-     "latency": 1274,
+     "host": "vps2.nemnogogo.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1963,
      "repo": "NiREvil/vless"
     },
     {
      "host": "202.50.253.27",
      "port": 19999,
      "proto": "ss",
-     "latency": 1472,
+     "latency": 2202,
      "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "ir.panel.studebaker.ir",
-     "port": 35142,
-     "proto": "vless",
-     "latency": 1498,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "146.75.57.7",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1508,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "v1us9.stablenode.cloud",
-     "port": 24421,
-     "proto": "trojan",
-     "latency": 1631,
-     "repo": "crashgfw/free-airport-nodes"
-    },
-    {
-     "host": "156.67.120.205",
-     "port": 51628,
-     "proto": "ss",
-     "latency": 1740,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "173.212.201.85",
-     "port": 443,
-     "proto": "hysteria2",
-     "latency": 1935,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "170.114.46.6",
-     "port": 2096,
-     "proto": "vless",
-     "latency": 2100,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2419,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "170.114.52.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2486,
-     "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "v1us9.stablenode.cloud",
      "port": 24413,
      "proto": "trojan",
-     "latency": 2619,
+     "latency": 2285,
      "repo": "crashgfw/free-airport-nodes"
     },
     {
-     "host": "59.125.69.22",
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2410,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "31.76.5.79",
      "port": 443,
      "proto": "vless",
-     "latency": 2694,
-     "repo": "snakem982/proxypool"
+     "latency": 2462,
+     "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
      "host": "v1us9.stablenode.cloud",
      "port": 24422,
      "proto": "trojan",
-     "latency": 3042,
+     "latency": 2580,
      "repo": "crashgfw/free-airport-nodes"
     },
     {
-     "host": "216.167.127.197",
-     "port": 443,
+     "host": "170.114.46.6",
+     "port": 2096,
      "proto": "vless",
-     "latency": 3068,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "starlink-ft.251313.xyz",
-     "port": 443,
-     "proto": "hysteria2",
-     "latency": 3287,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "jp.sofast.live",
-     "port": 52683,
-     "proto": "vless",
-     "latency": 4767,
-     "repo": "kooker/FreeSubsCheck"
-    }
-   ]
-  },
-  "xray": {
-   "tested": 2499,
-   "ok": 80,
-   "unsupported": 1,
-   "config_error": 3,
-   "reasons": {
-    "tls": 620,
-    "network": 293,
-    "timeout": 1496,
-    "reset": 6,
-    "unsupported": 1,
-    "config": 3
-   },
-   "rounds": 1,
-   "min_available": 10,
-   "cand": 2494,
-   "exhausted": true,
-   "cap": 2500,
-   "sampled": 2499,
-   "partial": false,
-   "policy": "full",
-   "file": "available_xray.txt",
-   "nodes": [
-    {
-     "host": "52.78.103.20",
-     "port": 8443,
-     "proto": "ss",
-     "latency": 344,
-     "repo": "hello-world-1989/cn-news"
-    },
-    {
-     "host": "52.78.103.20",
-     "port": 443,
-     "proto": "vless",
-     "latency": 501,
-     "repo": "hello-world-1989/cn-news"
-    },
-    {
-     "host": "154.26.188.52",
-     "port": 443,
-     "proto": "vless",
-     "latency": 674,
+     "latency": 2634,
      "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "212.69.135.27",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 844,
-     "repo": "Pawdroid/Free-servers"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 894,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 933,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "5.104.74.128",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 937,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 952,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 959,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "5.104.74.69",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 967,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "5.104.74.21",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 976,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.104.74.117",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 982,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.104.74.70",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 983,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "212.69.135.17",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 986,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1000,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "uk.song69.fun",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1005,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "subscribe.goonars.com",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1009,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "212.69.135.29",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1021,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.104.74.121",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1023,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "t.cnmjcn.cyou",
-     "port": 16632,
-     "proto": "vmess",
-     "latency": 1038,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "planb.mojcn.com.linuxlh.xin",
-     "port": 16632,
-     "proto": "vmess",
-     "latency": 1039,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "185.22.153.117",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1049,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "5.104.74.124",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1050,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "5.104.74.22",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1088,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "163.245.42.5",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1102,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "212.69.135.28",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1157,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.104.74.25",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1183,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "5.42.99.64",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1205,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "us.song69.fun",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1210,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.104.74.27",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1236,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "prvtch.titun.su",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1251,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "2.26.251.236",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1276,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "5.104.74.5",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1308,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "51.75.118.79",
-     "port": 20140,
-     "proto": "vmess",
-     "latency": 1317,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "147.45.153.29",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1329,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "193.160.208.240",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1351,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "78.17.39.129",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1355,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "91.149.236.106",
-     "port": 8388,
-     "proto": "ss",
-     "latency": 1392,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "yoni.dobryak.online",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1433,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "hollandlanzerotte.xyz",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1464,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "du-rov.secureservice.top",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1465,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "15c838x.de11.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1502,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "edge.bookmai.com",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1536,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "pl-balancer.peregrine-sub.net",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1545,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "185.203.4.97",
-     "port": 24009,
-     "proto": "vless",
-     "latency": 1556,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "79.182.39.131",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1564,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "167.82.76.27",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1568,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "85.202.192.182",
-     "port": 16869,
-     "proto": "vless",
-     "latency": 1593,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "162.35.102.51",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1594,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "xssite.webredirect.org",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1595,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "31.56.187.175",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1625,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "193.233.253.180",
-     "port": 8444,
-     "proto": "vless",
-     "latency": 1626,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "canwec.kramiliantha.sbs",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1660,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "whitepanel-ui-production-84c0.up.railway.app",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1679,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "156.67.120.205",
-     "port": 51628,
-     "proto": "ss",
-     "latency": 1699,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "31.77.129.151",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1699,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "212.69.135.26",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1736,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "aiartstudios.best",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1737,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "9e75c7t.de11.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1753,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "renderer-bridge-2-133.mirra.now",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1817,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "31.77.251.29",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1919,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "48.102.160.212",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1957,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1958,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2048,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2090,
-     "repo": "ermaozi01/free_clash_vpn"
     },
     {
      "host": "191.44.112.170",
      "port": 443,
      "proto": "vless",
-     "latency": 2101,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "177.1.187.226",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2109,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "185.218.17.172",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2137,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "35295cx.us8.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2295,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "5.104.74.26",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2392,
+     "latency": 2883,
      "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
-     "host": "ir.panel.studebaker.ir",
-     "port": 35142,
-     "proto": "vless",
-     "latency": 2508,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "04535dt.us8.h1clayd.click",
+     "host": "xsru1.ddnsfree.com",
      "port": 443,
      "proto": "vless",
-     "latency": 2524,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "srv21.buddygpt.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2600,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "gemsubbgem.world",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2722,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "j2.fllow.ir",
-     "port": 25456,
-     "proto": "vless",
-     "latency": 2913,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2995,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "fi.peregrine-sub.net",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3209,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "bridgestone.best",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3446,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "191.44.112.170.sslip.io",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3484,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "9e72bbg.msk2.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3635,
-     "repo": "NiREvil/vless"
-    }
-   ]
-  },
-  "clash": {
-   "tested": 2511,
-   "ok": 42,
-   "unsupported": 0,
-   "config_error": 10,
-   "reasons": {
-    "tls": 376,
-    "network": 291,
-    "timeout": 1792,
-    "config": 10
-   },
-   "rounds": 1,
-   "min_available": 10,
-   "cand": 2649,
-   "exhausted": false,
-   "cap": 2500,
-   "sampled": 2511,
-   "partial": false,
-   "policy": "full",
-   "file": "available_clash.yaml",
-   "nodes": [
-    {
-     "host": "52.78.103.20",
-     "port": 8443,
-     "proto": "ss",
-     "latency": 648,
-     "repo": "hello-world-1989/cn-news"
-    },
-    {
-     "host": "154.26.188.52",
-     "port": 443,
-     "proto": "vless",
-     "latency": 855,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 900,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "t.cnmjcn.cyou",
-     "port": 16632,
-     "proto": "vmess",
-     "latency": 912,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "163.245.42.5",
-     "port": 443,
-     "proto": "vless",
-     "latency": 915,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 936,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "177.3.222.100",
-     "port": 443,
-     "proto": "vless",
-     "latency": 985,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1026,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "78.17.39.129",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1098,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "31.77.129.151",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1116,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "185.22.153.117",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1170,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "prvtch.titun.su",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1193,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1317,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1362,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "193.160.208.240",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1374,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "167.82.64.7",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 1414,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "du-rov.secureservice.top",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1448,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "v1us9.stablenode.cloud",
-     "port": 24421,
-     "proto": "trojan",
-     "latency": 1480,
-     "repo": "crashgfw/free-airport-nodes"
-    },
-    {
-     "host": "199.232.78.160",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 1517,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "91.149.236.106",
-     "port": 8388,
-     "proto": "ss",
-     "latency": 1520,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "5.42.99.64",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1534,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "52.78.103.20",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1577,
-     "repo": "hello-world-1989/cn-news"
-    },
-    {
-     "host": "planb.mojcn.com.linuxlh.xin",
-     "port": 16632,
-     "proto": "vmess",
-     "latency": 1734,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "j2.fllow.ir",
-     "port": 25456,
-     "proto": "vless",
-     "latency": 1758,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "717252g.nl8.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1787,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1796,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "v1us9.stablenode.cloud",
-     "port": 24413,
-     "proto": "trojan",
-     "latency": 1818,
-     "repo": "crashgfw/free-airport-nodes"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1823,
-     "repo": "ermaozi01/free_clash_vpn"
+     "latency": 3050,
+     "repo": "snakem982/proxypool"
     },
     {
      "host": "156.67.120.205",
      "port": 51628,
      "proto": "ss",
-     "latency": 1879,
+     "latency": 3237,
      "repo": "F0rc3Run/F0rc3Run"
     },
     {
-     "host": "177.1.187.227",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1883,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "59.125.69.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2119,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.63",
+     "host": "202.50.253.99",
      "port": 19999,
      "proto": "ss",
-     "latency": 2209,
+     "latency": 3279,
      "repo": "ermaozi01/free_clash_vpn"
     },
     {
-     "host": "173.212.201.85",
+     "host": "146.75.57.7",
      "port": 443,
-     "proto": "hysteria2",
-     "latency": 2319,
+     "proto": "vless",
+     "latency": 3309,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "196.245.153.79",
-     "port": 443,
+     "host": "103.31.4.160",
+     "port": 8443,
      "proto": "vless",
-     "latency": 2607,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "de-bots4.h1cloud.net",
-     "port": 25267,
-     "proto": "trojan",
-     "latency": 2653,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "196.196.149.34",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2658,
+     "latency": 3362,
      "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "104.17.70.206",
      "port": 8443,
      "proto": "vless",
-     "latency": 2725,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "147.45.153.29",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2807,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 3131,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "31.56.187.175",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3163,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "79.182.39.131",
-     "port": 443,
-     "proto": "vless",
      "latency": 3425,
      "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
-     "host": "ec7a81g.de15.h1clayd.click",
+     "host": "59.125.69.22",
      "port": 443,
      "proto": "vless",
-     "latency": 4628,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 3908,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "172.66.203.67",
+     "port": 443,
+     "proto": "vmess",
+     "latency": 4081,
+     "repo": "igareck/vpn-configs-for-russia"
     }
    ]
   },
-  "singbox": {
-   "tested": 2506,
-   "ok": 45,
-   "unsupported": 0,
-   "config_error": 13,
+  "xray": {
+   "tested": 2505,
+   "ok": 88,
+   "unsupported": 2,
+   "config_error": 2,
    "reasons": {
-    "reset": 1936,
-    "tls": 512,
-    "config": 13
+    "unsupported": 2,
+    "tls": 745,
+    "network": 193,
+    "timeout": 1465,
+    "reset": 10,
+    "config": 2
    },
    "rounds": 1,
    "min_available": 10,
-   "cand": 2535,
+   "cand": 2668,
    "exhausted": false,
    "cap": 2500,
-   "sampled": 2506,
+   "sampled": 2505,
    "partial": false,
    "policy": "full",
-   "file": "available_singbox.json",
+   "file": "available_xray.txt",
    "nodes": [
     {
-     "host": "52.78.103.20",
+     "host": "212.103.62.233",
      "port": 443,
      "proto": "vless",
-     "latency": 497,
-     "repo": "hello-world-1989/cn-news"
+     "latency": 768,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "52.78.103.20",
-     "port": 8443,
+     "host": "103.115.17.239",
+     "port": 8388,
      "proto": "ss",
-     "latency": 666,
-     "repo": "hello-world-1989/cn-news"
+     "latency": 872,
+     "repo": "kooker/FreeSubsCheck"
     },
     {
-     "host": "154.26.188.52",
+     "host": "87.76.211.218",
      "port": 443,
      "proto": "vless",
-     "latency": 765,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 902,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "t.cnmjcn.cyou",
-     "port": 16632,
-     "proto": "vmess",
-     "latency": 911,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "host": "87.76.211.222",
+     "port": 443,
+     "proto": "vless",
+     "latency": 952,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "planb.mojcn.com.linuxlh.xin",
-     "port": 16632,
-     "proto": "vmess",
-     "latency": 1008,
+     "host": "202.50.253.90",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 963,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "5.104.74.124",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 980,
      "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
      "host": "202.50.253.36",
      "port": 19999,
      "proto": "ss",
-     "latency": 1078,
+     "latency": 984,
      "repo": "ermaozi01/free_clash_vpn"
     },
     {
-     "host": "185.22.153.117",
-     "port": 18443,
-     "proto": "ss",
-     "latency": 1086,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "45.76.172.197",
+     "host": "87.76.211.237",
      "port": 443,
      "proto": "vless",
-     "latency": 1139,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "edge.bookmai.com",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1160,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "51.75.118.79",
-     "port": 20140,
-     "proto": "vmess",
-     "latency": 1164,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1179,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "79.182.39.131",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1321,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "163.245.42.5",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1321,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "renderer-bridge-2-133.mirra.now",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1478,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "59.125.69.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1526,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "45.63.53.81",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1530,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "147.45.153.29",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1564,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "whitepanel-ui-production-84c0.up.railway.app",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1569,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "147.45.175.81",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1614,
+     "latency": 989,
      "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "156.67.120.205",
-     "port": 51628,
-     "proto": "ss",
-     "latency": 1626,
-     "repo": "F0rc3Run/F0rc3Run"
-    },
-    {
-     "host": "177.3.222.100",
+     "host": "217.60.30.39",
      "port": 443,
      "proto": "vless",
-     "latency": 1721,
+     "latency": 991,
      "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "31.77.129.151",
+     "host": "87.76.211.238",
      "port": 443,
      "proto": "vless",
-     "latency": 1766,
-     "repo": "NiREvil/vless"
+     "latency": 1019,
+     "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "62.109.1.5",
-     "port": 2058,
+     "host": "5.104.74.244",
+     "port": 8443,
      "proto": "vless",
-     "latency": 1812,
+     "latency": 1024,
      "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1821,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "xsru2.freeddns.org",
+     "host": "31.185.105.24",
      "port": 443,
      "proto": "vless",
-     "latency": 1825,
+     "latency": 1025,
      "repo": "whoahaow/rjsxrd"
     },
     {
-     "host": "v1us9.stablenode.cloud",
-     "port": 24413,
-     "proto": "trojan",
-     "latency": 1864,
-     "repo": "crashgfw/free-airport-nodes"
+     "host": "195.123.209.32",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1026,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "212.69.135.17",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1062,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "sanv9w64y2s.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1076,
+     "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "46.19.138.214",
      "port": 443,
      "proto": "vless",
-     "latency": 1943,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1109,
+     "repo": "danmaifu/mianfeijiedian"
     },
     {
-     "host": "15b171g.nl7.h1clayd.click",
+     "host": "201.8.87.113",
      "port": 443,
      "proto": "vless",
-     "latency": 1997,
+     "latency": 1140,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "38.60.224.173",
+     "port": 32153,
+     "proto": "vmess",
+     "latency": 1142,
      "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
-     "host": "202.50.253.99",
+     "host": "151.101.36.128",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1150,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "132.243.74.118",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1189,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "78.17.39.129",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1216,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "ktmhkdl3vgjf.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1224,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "2.27.210.198",
+     "port": 57064,
+     "proto": "vless",
+     "latency": 1236,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "45.90.56.195",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1236,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "145.79.187.50",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1276,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "45.139.27.125",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1278,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "91.232.103.51",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1298,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "187.7.205.49",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1327,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "201.58.189.104",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1328,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "83.217.201.82",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1349,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "201.58.189.105",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1402,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "176.108.245.237",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1403,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "185.246.155.91",
+     "port": 10103,
+     "proto": "vless",
+     "latency": 1447,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "hw895h0hk.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1451,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.54",
      "port": 19999,
      "proto": "ss",
-     "latency": 2041,
+     "latency": 1455,
      "repo": "ermaozi01/free_clash_vpn"
     },
     {
-     "host": "191.44.112.170.sslip.io",
+     "host": "217.60.30.53",
      "port": 443,
      "proto": "vless",
-     "latency": 2167,
+     "latency": 1502,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "83.141.75.138",
+     "port": 2066,
+     "proto": "vless",
+     "latency": 1503,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "xsru2.freeddns.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1504,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "147.45.175.81",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1510,
      "repo": "NiREvil/vless"
+    },
+    {
+     "host": "151.101.36.201",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1512,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "znz8713lpegu.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1521,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "185.173.179.218",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1533,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "85.202.192.182",
+     "port": 16869,
+     "proto": "vless",
+     "latency": 1560,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "151.101.36.246",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1591,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "201.34.142.108",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1671,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "145.79.187.16",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1674,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "151.101.36.88",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1678,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "200.102.179.69",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1710,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "179.253.86.209",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1717,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.45",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1722,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "151.101.36.227",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1762,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "144.31.242.123",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1778,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "200.169.179.233",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1845,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "217.12.204.105",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1862,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "171.22.27.161",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1875,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "185.246.155.91",
+     "port": 10403,
+     "proto": "vless",
+     "latency": 1903,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "vps2.nemnogogo.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1906,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "upload.onecloudtraining.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1921,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "177.202.74.60",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1933,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "media.onecloudtraining.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1951,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "vps3.nemnogogo.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1956,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "rxrum1frdy11.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2029,
+     "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "202.50.253.72",
      "port": 19999,
      "proto": "ss",
-     "latency": 2197,
+     "latency": 2058,
      "repo": "ermaozi01/free_clash_vpn"
     },
     {
-     "host": "170.114.46.6",
-     "port": 2096,
-     "proto": "vless",
-     "latency": 2200,
-     "repo": "whoahaow/rjsxrd"
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2136,
+     "repo": "ermaozi01/free_clash_vpn"
     },
     {
-     "host": "5.42.99.64",
-     "port": 8443,
+     "host": "31.76.5.79",
+     "port": 443,
      "proto": "vless",
-     "latency": 2250,
+     "latency": 2157,
      "repo": "0xRadikal/Free-v2ray-Configs"
     },
     {
-     "host": "191.44.112.170",
+     "host": "link.onecloudtraining.com",
      "port": 443,
      "proto": "vless",
-     "latency": 2338,
-     "repo": "NiREvil/vless"
+     "latency": 2178,
+     "repo": "snakem982/proxypool"
     },
     {
-     "host": "173.212.201.85",
+     "host": "prvtch.titun.su",
      "port": 443,
-     "proto": "hysteria2",
-     "latency": 2359,
+     "proto": "vless",
+     "latency": 2203,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "46.33.8.253",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2248,
      "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "wp686i1z0y.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2266,
+     "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "xssite.webredirect.org",
      "port": 443,
      "proto": "vless",
-     "latency": 2512,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "34.3.101.225",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2561,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "du-rov.secureservice.top",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2572,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "196.196.149.34",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2615,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "177.1.187.227",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2974,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "v1us9.stablenode.cloud",
-     "port": 24422,
-     "proto": "trojan",
-     "latency": 3082,
-     "repo": "crashgfw/free-airport-nodes"
-    },
-    {
-     "host": "146.75.57.7",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3193,
+     "latency": 2268,
      "repo": "snakem982/proxypool"
     },
     {
-     "host": "196.245.52.188",
+     "host": "gemsubbgem.world",
      "port": 443,
      "proto": "vless",
-     "latency": 3388,
+     "latency": 2326,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "193.108.56.9",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2372,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "main.onecloudtraining.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2442,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "2.26.251.236",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2584,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "151.101.36.235",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2794,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "202.50.253.81",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2804,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "177.3.252.45",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2821,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "tracker.onecloudtraining.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2883,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "g50ur7wpf.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3047,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "v299veiis4.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3156,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "qzm8f0k3ji.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3169,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "13.143.191.145",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3205,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "130.94.49.242",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3208,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "179.253.87.31",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3395,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "145.79.187.59",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3775,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "150.241.82.7",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3921,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "j8nzoyrbf.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 4068,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "mmqil73z4tj3.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 4311,
+     "repo": "whoahaow/rjsxrd"
+    }
+   ]
+  },
+  "clash": {
+   "tested": 2509,
+   "ok": 50,
+   "unsupported": 0,
+   "config_error": 11,
+   "reasons": {
+    "tls": 352,
+    "network": 295,
+    "timeout": 1801,
+    "config": 11
+   },
+   "rounds": 1,
+   "min_available": 10,
+   "cand": 2911,
+   "exhausted": false,
+   "cap": 2500,
+   "sampled": 2509,
+   "partial": false,
+   "policy": "full",
+   "file": "available_clash.yaml",
+   "nodes": [
+    {
+     "host": "103.115.17.239",
+     "port": 8388,
+     "proto": "ss",
+     "latency": 719,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "151.101.36.88",
+     "port": 443,
+     "proto": "vless",
+     "latency": 791,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "201.58.189.104",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 999,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "212.103.62.233",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1001,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "163.245.42.5",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1021,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "46.33.8.253",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1032,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "46.33.8.246",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1041,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "assets.onecloudtraining.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1055,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "94.241.172.107",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1077,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "prvtch.titun.su",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1140,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "38.60.224.173",
+     "port": 32153,
+     "proto": "vmess",
+     "latency": 1141,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "edge.bookmai.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1195,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "201.58.189.105",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1216,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1235,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "78.17.39.129",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1238,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "link.onecloudtraining.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1244,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "104.171.135.229",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1322,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "s1.berluno.ir",
+     "port": 1155,
+     "proto": "vless",
+     "latency": 1334,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "xsru1.ddnsfree.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1335,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "201.34.142.108",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1350,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "msk9.gacvpn.site",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1367,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "uuuss2.qiksme.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1479,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "151.101.36.7",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 1552,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "129.101.103.211",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1569,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "xsru2.freeddns.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1590,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "193.160.208.240",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1599,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "xssite.webredirect.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1638,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1644,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "171.22.27.161",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1698,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "202.50.253.36",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1744,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "151.101.36.253",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1747,
+     "repo": "igareck/vpn-configs-for-russia"
+    },
+    {
+     "host": "199.232.78.160",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1767,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "dddz-1-x.473221.xyz",
+     "port": 34759,
+     "proto": "vless",
+     "latency": 1775,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "176.108.245.237",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1777,
      "repo": "whoahaow/rjsxrd"
     },
     {
      "host": "v1us9.stablenode.cloud",
      "port": 24421,
      "proto": "trojan",
-     "latency": 3445,
+     "latency": 1860,
      "repo": "crashgfw/free-airport-nodes"
     },
     {
-     "host": "717252g.nl8.h1clayd.click",
+     "host": "109.104.153.43",
+     "port": 33336,
+     "proto": "ssr",
+     "latency": 1903,
+     "repo": "sakha1370/OpenRay"
+    },
+    {
+     "host": "151.101.36.128",
      "port": 443,
      "proto": "vless",
-     "latency": 5558,
+     "latency": 2020,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "185.246.155.91",
+     "port": 10403,
+     "proto": "vless",
+     "latency": 2043,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "202.50.253.72",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2119,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "191.44.112.170",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2125,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "v1us9.stablenode.cloud",
+     "port": 24422,
+     "proto": "trojan",
+     "latency": 2229,
+     "repo": "crashgfw/free-airport-nodes"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2237,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "202.50.253.90",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2292,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "music.3apes.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2378,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "upload.onecloudtraining.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2541,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "n2.topingr.ir",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2729,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "185.246.155.91",
+     "port": 10103,
+     "proto": "vless",
+     "latency": 2758,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "msk5.gacvpn.site",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2778,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "156.67.120.205",
+     "port": 51628,
+     "proto": "ss",
+     "latency": 2784,
+     "repo": "F0rc3Run/F0rc3Run"
+    },
+    {
+     "host": "59.125.69.22",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3370,
+     "repo": "NiREvil/vless"
+    }
+   ]
+  },
+  "singbox": {
+   "tested": 2505,
+   "ok": 42,
+   "unsupported": 0,
+   "config_error": 13,
+   "reasons": {
+    "tls": 512,
+    "reset": 1937,
+    "auth": 1,
+    "config": 13
+   },
+   "rounds": 1,
+   "min_available": 10,
+   "cand": 2761,
+   "exhausted": false,
+   "cap": 2500,
+   "sampled": 2505,
+   "partial": false,
+   "policy": "full",
+   "file": "available_singbox.json",
+   "nodes": [
+    {
+     "host": "212.103.62.233",
+     "port": 443,
+     "proto": "vless",
+     "latency": 800,
      "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "103.115.17.239",
+     "port": 8388,
+     "proto": "ss",
+     "latency": 820,
+     "repo": "kooker/FreeSubsCheck"
+    },
+    {
+     "host": "38.60.224.173",
+     "port": 32153,
+     "proto": "vmess",
+     "latency": 953,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "43.203.246.67",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1029,
+     "repo": "hello-world-1989/cn-news"
+    },
+    {
+     "host": "202.50.253.36",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1090,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "163.245.42.5",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1095,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "edge.bookmai.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1127,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "201.58.189.105",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1128,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "202.50.253.18",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1131,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "46.19.138.214",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1149,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "xsru1.ddnsfree.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1315,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "201.58.189.104",
+     "port": 2083,
+     "proto": "vless",
+     "latency": 1368,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "179.43.166.190",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1375,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "xsru2.freeddns.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1431,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "185.246.155.91",
+     "port": 10103,
+     "proto": "vless",
+     "latency": 1444,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "147.45.175.81",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1544,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "176.108.245.237",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1598,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "s1.berluno.ir",
+     "port": 1155,
+     "proto": "vless",
+     "latency": 1620,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "202.50.253.99",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1647,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "xssite.webredirect.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1671,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "129.101.103.211",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1723,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "202.50.253.63",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1742,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "79.182.39.108",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1742,
+     "repo": "danmaifu/mianfeijiedian"
+    },
+    {
+     "host": "146.75.57.7",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1770,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "59.125.69.22",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1788,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "199.232.78.160",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1816,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "202.50.253.72",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 1826,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "200.169.179.233",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1830,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "45.76.172.197",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1859,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "msk5.gacvpn.site",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1860,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "185.246.155.91",
+     "port": 10403,
+     "proto": "vless",
+     "latency": 2045,
+     "repo": "snakem982/proxypool"
+    },
+    {
+     "host": "music.3apes.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2395,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "prvtch.titun.su",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2444,
+     "repo": "cbusifabcap/daily_free_vpn"
+    },
+    {
+     "host": "83.217.201.82",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2515,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "202.50.253.54",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 2834,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "uuuss2.qiksme.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3063,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "5.42.99.64",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 3117,
+     "repo": "whoahaow/rjsxrd"
+    },
+    {
+     "host": "v1us9.stablenode.cloud",
+     "port": 24413,
+     "proto": "trojan",
+     "latency": 3177,
+     "repo": "crashgfw/free-airport-nodes"
+    },
+    {
+     "host": "vps3.nemnogogo.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 3382,
+     "repo": "NiREvil/vless"
+    },
+    {
+     "host": "202.50.253.90",
+     "port": 19999,
+     "proto": "ss",
+     "latency": 3571,
+     "repo": "ermaozi01/free_clash_vpn"
+    },
+    {
+     "host": "pnvmuzw0w1el.apruxdomain.online",
+     "port": 443,
+     "proto": "vless",
+     "latency": 4150,
+     "repo": "0xRadikal/Free-v2ray-Configs"
+    },
+    {
+     "host": "v1us9.stablenode.cloud",
+     "port": 24421,
+     "proto": "trojan",
+     "latency": 4776,
+     "repo": "crashgfw/free-airport-nodes"
     }
    ]
   }
