@@ -188,3 +188,17 @@
 - **给后续窗口的要点**：v2ray/xray 本日 `exhausted=true`（池子真测完，2131/2494 < cap 2500），
   与 clash/singbox 的「达 cap」成因不同但闸门口径一致，都不需要续跑；别因为 exhausted=true 就想去补测
 
+## 2026-11-09（第十四晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：v2ray「候选已全部测完」(2309/2298)、xray「已测满单轮上限」(2505/2500)、
+  clash「已测满单轮上限」(2509/2500)、singbox「已测满单轮上限」(2505/2500)；
+  采集日 2026-11-09、summary 生成于 22:37:49
+- 本日可用（ok）：v2ray 24 / xray 88 / clash 50 / singbox 42（正常水位）；四内核 `partial=false`
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0
+  （HEAD 8e3b3d1 已是今日提交）；`git status --short -- free-nodes .github` **无输出**（比前几晚更干净，
+  第一窗口未留 memory 尾巴，今日也没有 `free-nodes/.workbuddy/memory/2026-11-09.md`）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写本文件后只 publish 一次收掉尾巴
+- **给后续窗口的要点**：`git status` 全空时仍要 publish —— 因为本文件（automation memory）本身被跟踪，
+  写完就产生改动；判定顺序永远是「先看 status/rev-list 再写文件」，写之前那份干净结论才是第一窗口的真实状态
+
