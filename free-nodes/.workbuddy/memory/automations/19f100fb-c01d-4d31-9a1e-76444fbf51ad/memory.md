@@ -1,5 +1,27 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-09 采集日（2026-11-10 01:30 运行）
+
+- 闸门退出码 0：v2ray「候选已全部测完」（2309/2298）、xray/clash/singbox「已测满单轮上限」
+  （2505/2509/2505，cap 2500）→ GATE: done → 本窗口未采集、未跑验证、未重跑自检（未占用验证资源）
+- 本日可用数 v2ray 24 / xray 88 / clash 50 / singbox 42（池 270/797/496/436）；
+  采集总量 9298 → 去重 3118 → TCP 可达 3118/3118（中位 233ms），CF 前置 1027
+- 产物核对：available 24/88/50/**43（含 1 条 direct，净 42）** 与 summary 逐项一致；
+  `nodes_uris.txt` 与 `nodes_meta.total/reachable` 均 3118；`tested_state` 四内核 2309/2505/2509/2505（date=11-09）
+- **尾巴三处全干净**：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 无需补推
+- 本日发布链：CI `8e40c4c`(02:26)/`aa89c72`(21:11) + 第一窗口 `e103593`(22:41)/`8e3b3d1`(22:44)
+  + 第二窗口 `da5da4f`(23:47，仅 automation memory)，已全部在 origin/master
+- 自检（第一窗口 22:38 产物）：0 critical / **4 warn** = v2ray 1.0%、clash 2.0%、singbox 1.7% 低水位
+  + 镜像失效 10/13（可用 gh-proxy.com / gh-proxy.org / gh.monlor.com）→ 按 known-issues 口径不改代码
+- 观察项一：采集总量 9298、去重 3118（昨 8272/2830），仍低于月初 1.1~1.3 万；但 TCP 可达 100%、
+  四核可用数均在正常水位，判上游当日产出偏少，非采集故障
+- 观察项二：CI 在 11-09 **02:26** 还有一次「CI 采集 2026-11-09」提交，属 11-08 侧 cron 迟到派发
+  （known-issues 54 同型，runner 的 `date +%F` 已跨日）。已核对无残留：`Docs/report.md`、
+  `collection_logs.md` 中无 `2026-11-09 02:26` 条目（被 21:11 真实采集按日期替换），
+  11-08 的 21:11 条目完好 → 无需处置，只作记录
+- 本窗口记忆文件在核查之后写，留作下一个发布顺带提交（沿用既有约定，不是故障）
+
 ## 2026-11-08 采集日（2026-11-09 01:30 运行）
 
 - 闸门退出码 0：v2ray/xray「候选已全部测完」（2142/2131、2499/2494），
