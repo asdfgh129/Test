@@ -202,3 +202,19 @@
 - **给后续窗口的要点**：`git status` 全空时仍要 publish —— 因为本文件（automation memory）本身被跟踪，
   写完就产生改动；判定顺序永远是「先看 status/rev-list 再写文件」，写之前那份干净结论才是第一窗口的真实状态
 
+## 2026-11-10（第十五晚：GATE: done，未跑验证）
+
+- 闸门退出码 0：v2ray「候选已全部测完」(2261/2254)、xray「已测满单轮上限」(2504/2500)、
+  clash「已测满单轮上限」(2508/2500)、singbox「已测满单轮上限」(2504/2500)；
+  采集日 2026-11-10、summary 生成于 22:35:35
+- 本日可用（ok）：v2ray 24 / xray 55 / clash 33 / singbox 45（正常水位，均在 min_available 10 之上）；
+  四内核 `partial=false`
+- 开工前 taskkill 四内核均「没有找到进程」→ 第一窗口正常收尾，无残留
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0
+  （HEAD b5a4887 已是今日提交）；`git status --short -- free-nodes .github` 仅一项
+  `M free-nodes/.workbuddy/memory/automations/a3d7bb22…/memory.md`（主窗口自己的 memory）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写本文件后 publish 一次收掉尾巴
+- 观察：singbox 今日失败原因以 `reset` 占绝对多数（1915/2504），与既往以 `timeout` 为主不同，
+  但可用数 45 属正常水位、未触及任何阈值，故未动参数；若连续多日如此再取证（记入 review_logs 更合适）
+- **给后续窗口的要点**：singbox `reset` 突增但 ok 正常时属上游/DNS 层面波动，不要因为失败原因分布变了就调超时
+
