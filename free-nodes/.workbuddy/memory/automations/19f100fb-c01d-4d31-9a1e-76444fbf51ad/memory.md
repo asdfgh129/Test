@@ -1,5 +1,26 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-10 采集日（2026-11-11 01:30 运行）
+
+- 闸门退出码 0：v2ray「候选已全部测完」（2261/2254）、xray/clash/singbox「已测满单轮上限」
+  （2504/2500、2508/2500、2504/2500）→ GATE: done → 本窗口未采集、未跑验证、未重跑自检（未占用验证资源）
+- 本日可用数 v2ray 24 / xray 55 / clash 33 / singbox 45（池 279/831/516/458）；
+  采集总量 9578 → 去重 3090 → TCP 可达 3090/3090（中位 262ms），CF 前置 972
+- 产物核对：available 24/55/33/**46（含 1 条 direct，净 45）** 与 summary 的 ok 逐项一致；
+  `nodes_uris.txt` 与 `nodes_meta.total/reachable` 均 3090；`tested_state` 四内核 2261/2504/2508/2504（date=11-10）
+- **尾巴三处全干净**：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 无需补推
+- 本日发布链：CI `baaa13c`(07:07)/`1f7066a`(21:14) + 第一窗口 `b5a4887`(22:39)
+  + 第二窗口 `c9b3c8d`(23:47，已把第二窗口记忆带上)，全部在 origin/master
+- 自检（第一窗口 22:36 产物）：0 critical / **6 warn** = 四核可用率 1.1/2.2/1.3/1.8% 低水位
+  + crashgfw 0 条（下载失败 URLError）+ 镜像失效 10/13（可用 gh-proxy.com / gh-proxy.org / gh.monlor.com）
+- **下载失败 8 仓不构成通道故障**：URLError 3 个（crashgfw、HakurouKen、ripaojiedian，分属不同域名）、
+  HTTP 403 2 个、HTTP 404 2 个、`clashv2ray-hub` 两仓「空响应」（known-issues 55 生成链未完成）、HTTP 526 1 个
+  → 无「同域多仓同时失败」，按 11-03 判据不改采集代码
+- 观察项：CI 在 11-10 **07:07** 还有一次「CI 采集 2026-11-10」，属 11-09 侧 cron 迟到派发
+  （known-issues 54 同型）；`Docs/report.md` 仅保留 `## 2026-11-10 21:14` 一条，无 `07:07` 残留 → 无需处置
+- 本窗口记忆文件在核查之后写，补推后三处重新变干净（见提交 hash）
+
 ## 2026-11-09 采集日（2026-11-10 01:30 运行）
 
 - 闸门退出码 0：v2ray「候选已全部测完」（2309/2298）、xray/clash/singbox「已测满单轮上限」
