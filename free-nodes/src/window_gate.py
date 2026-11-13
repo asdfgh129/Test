@@ -20,6 +20,13 @@
     - exhausted=true            → 跑完（候选全部测过）
     - tested >= min(cand, cap)  → 跑完（候选多于单轮上限时，测满上限就是既定口径）
 
+日期新鲜度（2026-11-13 新增）：summary 是**本地验证**的产物，本地某天没跑就一直是上次那天的。
+不校验日期的话，只要本地连续几晚没跑（机器休眠、窗口没触发），闸门会一直拿旧 summary 回 done，
+后续窗口全部空转、订阅也一直停在旧日期。所以在没给 --date 时按「今天」判断新鲜度：
+    - summary 日期 == 今天            → 认可
+    - summary 日期 == 昨天且当前时刻 < 06:00 → 认可（跨零点窗口，01:30 那次用的就是昨天）
+    - 其他                            → 视为过期，按未跑完处理（GATE: continue）
+
 注意：`partial` 只描述**本窗口**，`tested` 是本日累计，所以两者要分开看——
 只看 partial 会把「第一窗被强杀、第二窗补完」误判成没跑完。
 """
@@ -28,9 +35,34 @@ import argparse
 import json
 import os
 import sys
+from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import layout as lay  # 统一布局，禁止在脚本里硬编码目录
+
+# 跨零点窗口（01:30 那次）处理的是前一天的采集日，所以「昨天」只在凌晨时段被认可。
+CROSS_MIDNIGHT_UNTIL_HOUR = 6
+
+
+def _date_fresh(summary_date, now=None):
+    """summary 的日期是否够新（用于没显式给 --date 的场景）。
+
+    返回 (是否新鲜, 说明)。规则见模块 docstring：今天内 / 凌晨时的昨天 才算新鲜。
+    """
+    now = now or datetime.now()
+    try:
+        d = datetime.strptime(summary_date, "%Y-%m-%d").date()
+    except (TypeError, ValueError):
+        return False, f"summary 日期无法解析：{summary_date!r}"
+    today = now.date()
+    if d == today:
+        return True, "采集日为今天"
+    if d == today - timedelta(days=1):
+        if now.hour < CROSS_MIDNIGHT_UNTIL_HOUR:
+            return True, "采集日为昨天（跨零点窗口）"
+        return False, f"summary 停在昨天 {summary_date}，今天的本地验证还没跑"
+    return False, f"summary 停在 {summary_date}，已过期 {(today - d).days} 天（本地验证没跑）"
+
 
 
 def _core_done(st):
@@ -84,6 +116,12 @@ def main():
         print(f"[gate] summary 日期 {date_str} 与期望 {args.date} 不符")
         print("GATE: continue（不是同一采集日，按未跑完处理）")
         return 1
+    if not args.date:
+        fresh, why = _date_fresh(date_str)
+        if not fresh:
+            print(f"[gate] {why}")
+            print("GATE: continue（summary 不是今天的，本地验证还没跑，按未跑完处理）")
+            return 1
 
     stats = data.get("cores") or {}
     print(f"[gate] 采集日 {date_str}（生成于 {data.get('generated_at', '-')}）")

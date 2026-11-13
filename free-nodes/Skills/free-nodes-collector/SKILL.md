@@ -51,7 +51,8 @@ python <free-nodes>/src/health_check.py --dir <输出根目录>
 python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的输出>
 
 # 6. 收尾闸门：判定今晚还要不要跑下一个窗口（done=不用跑，continue=交给下一窗口）
-python <free-nodes>/src/window_gate.py --input <输出根目录>
+#    不带 --date 时按本机时钟校验 summary 新鲜度（停在昨天且已过 06:00、或更早 ⇒ continue）
+python <free-nodes>/src/window_gate.py --input <输出根目录> [--date <采集日>]
 ```
 
 **兜底**：先判「今天的 CI 产物到位没有」——判据只有一处实现，别自己数 `date`：

@@ -69,7 +69,8 @@ python <root>/src/test_nodes.py --input <root> --cores v2ray,xray,clash,singbox 
   --fair-budget --time-budget <5400 - 已用秒数 - 600>
 
 # 收尾闸门（每个窗口都要跑；第三窗口必须带 --date <采集日期>）
-python <root>/src/window_gate.py --input <root>
+# 不带 --date 时闸门自己按本机时钟校验 summary 新鲜度：停在昨天（非凌晨）或更早一律 GATE: continue
+python <root>/src/window_gate.py --input <root> [--date <采集日期>]
 ```
 
 ## 口径与依据（2026-10-28 实测）
@@ -108,7 +109,10 @@ python <root>/src/window_gate.py --input <root>
 - **本地第一窗口必须跑 `--probe-only`**：它同时负责「只留 TCP 可达」与「延迟排序」两件事，
   跳过它就等于把未过滤的候选直接发出去
 - **每个窗口收尾必须跑 `window_gate.py`**：判定有四个分支（partial / exhausted / 测满上限 / 漏跑），
-  三个窗口必须用同一套标准；第三窗口带 `--date <采集日期>`，否则每晚都判「日期不符」白跑一次
+  三个窗口必须用同一套标准；第三窗口带 `--date <采集日期>`，否则每晚都判「日期不符」白跑一次。
+  不带 `--date` 时闸门自带新鲜度校验（summary 停在昨天且过了 06:00、或更早 ⇒ `GATE: continue`），
+  因为 summary 只在**本地跑过验证**时才会更新：本地停跑几晚后，旧 summary 会让闸门永远回 done
+  （2026-11-13 实测：本地停跑两晚，闸门拿 11-10 的 summary 回了 done，见 known-issues 61）
 - **`--max-test` 不按「怕超时」降级**：要给余量就调 `--time-budget` / `--fair-budget`，
   不要退回 1000/600 那种拍脑袋数字（2026-10-27 用户明确要求）
 - **`--fair-budget` 必加**：内核顺序跑，不加会让第一个内核吃光预算、后面三个一个都不测
