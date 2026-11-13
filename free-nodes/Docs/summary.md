@@ -2,21 +2,21 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
-## 2026-11-13 10:40
+## 2026-11-13 22:47
 
-- 预筛：TCP 连通 36740/37270 个节点
+- 预筛：TCP 连通 5780/5901 个节点
 - 测试地址：`https://gstatic.com/generate_204`，并发 24，超时 3.0s（超时即判失败，不再等）
 - 测试策略：全量——候选 ≤ 2500 个全部测试；超过则只测排序前 2500 个
-- 弹性测试量（按目标可用数反推）：v2ray 上次 5/2504 = 0.2%（2026-11-13）→ 目标 30 个约需 15024，取 2500；xray 上次 7/1371 = 0.5%（2026-11-13）→ 目标 30 个约需 5876，取 2500；clash 上次 3/2283 = 0.1%（2026-11-13）→ 目标 30 个约需 22830，取 2500；singbox 上次 1/1674 = 0.1%（2026-11-13）→ 目标 30 个约需 50220，取 2500
+- 弹性测试量（按目标可用数反推）：v2ray 上次 7/3896 = 0.2%（2026-11-13）→ 目标 30 个约需 16697，取 2500；xray 上次 22/2571 = 0.9%（2026-11-13）→ 目标 30 个约需 3506，取 2500；clash 上次 12/3531 = 0.3%（2026-11-13）→ 目标 30 个约需 8828，取 2500；singbox 上次 6/3114 = 0.2%（2026-11-13）→ 目标 30 个约需 15570，取 2500
 - 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；不复测（实测复测收益 1.7%）；「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）
-- 总耗时：20.0 分钟
+- 总耗时：41.1 分钟
 
 | 代理内核 | 测试数量 | 可用数量 | 可用率 | 不支持 | 配置错误 | 不可达 | 轮次 | 可用文件 |
 |---|---|---|---|---|---|---|---|---|
-| v2ray | 3896 | 7 | 0.2% | 4 | 10 | 3875 | 截断（上限 2500） | `nodes/available_v2ray.txt` |
-| xray | 2571 | 22 | 0.9% | 1 | 0 | 2548 | 截断（上限 2500） | `nodes/available_xray.txt` |
-| clash | 3531 | 12 | 0.3% | 0 | 4 | 3515 | 截断（上限 2500） | `nodes/available_clash.yaml` |
-| singbox | 3114 | 6 | 0.2% | 0 | 3 | 3105 | 截断（上限 2500） | `nodes/available_singbox.json` |
+| v2ray | 2513 | 17 | 0.7% | 6 | 37 | 2453 | 截断（上限 2500） | `nodes/available_v2ray.txt` |
+| xray | 2504 | 54 | 2.2% | 1 | 10 | 2439 | 截断（上限 2500） | `nodes/available_xray.txt` |
+| clash | 2511 | 32 | 1.3% | 0 | 54 | 2425 | 截断（上限 2500） | `nodes/available_clash.yaml` |
+| singbox | 2510 | 38 | 1.5% | 0 | 18 | 2454 | 截断（上限 2500） | `nodes/available_singbox.json` |
 
 ### 多目标可达性
 
@@ -24,29 +24,37 @@
 
 | 内核 | 目标 | 通过 | 测试 | 通过率 |
 |---|---|---|---|---|
-| v2ray | primary | 2 | 1378 | 0% |
-| v2ray | github | 2 | 2 | 100% |
-| v2ray | x | 1 | 2 | 50% |
-| v2ray | cloudflare | 2 | 2 | 100% |
-| v2ray | youtube | 2 | 2 | 100% |
-| xray | primary | 15 | 1199 | 1% |
-| xray | github | 12 | 15 | 80% |
-| xray | x | 13 | 15 | 87% |
-| xray | cloudflare | 12 | 15 | 80% |
-| xray | youtube | 13 | 15 | 87% |
-| clash | primary | 9 | 1244 | 1% |
-| clash | github | 5 | 9 | 56% |
-| clash | x | 5 | 9 | 56% |
-| clash | cloudflare | 5 | 9 | 56% |
-| clash | youtube | 8 | 9 | 89% |
-| singbox | primary | 5 | 1437 | 0% |
-| singbox | github | 3 | 5 | 60% |
-| singbox | x | 3 | 5 | 60% |
-| singbox | cloudflare | 3 | 5 | 60% |
-| singbox | youtube | 3 | 5 | 60% |
+| v2ray | primary | 17 | 2470 | 1% |
+| v2ray | github | 6 | 17 | 35% |
+| v2ray | x | 8 | 17 | 47% |
+| v2ray | cloudflare | 13 | 17 | 76% |
+| v2ray | youtube | 13 | 17 | 76% |
+| xray | primary | 54 | 2498 | 2% |
+| xray | github | 34 | 54 | 63% |
+| xray | x | 47 | 54 | 87% |
+| xray | cloudflare | 40 | 54 | 74% |
+| xray | youtube | 46 | 54 | 85% |
+| clash | primary | 32 | 2457 | 1% |
+| clash | github | 19 | 32 | 59% |
+| clash | x | 29 | 32 | 91% |
+| clash | cloudflare | 27 | 32 | 84% |
+| clash | youtube | 23 | 32 | 72% |
+| singbox | primary | 38 | 2491 | 2% |
+| singbox | github | 24 | 38 | 63% |
+| singbox | x | 31 | 38 | 82% |
+| singbox | cloudflare | 32 | 38 | 84% |
+| singbox | youtube | 29 | 38 | 76% |
 
 
-> **本轮未跑完**（墙钟预算到期主动收尾或分窗口续跑，不是失败）：中途截断：v2ray（3896/1884）；中途截断：xray（2571/1919）；中途截断：clash（3531/1999）；中途截断：singbox（3114/2042）。已测结果全部有效且已落盘，剩余部分下次运行用 `--cores` + `--resume-tested` 接着测。
+### 带宽测试（2MB 串行下载，每内核按延迟升序取样）
+
+| 内核 | 测了 | 有数据 | 中位 Mbps | 最高 Mbps |
+|---|---|---|---|---|
+| v2ray | 17 | 0 | - | - |
+| xray | 20 | 0 | - | - |
+| clash | 20 | 0 | - | - |
+| singbox | 20 | 0 | - | - |
+
 
 ### 失败原因分布
 
@@ -54,22 +62,26 @@
 
 | 代理内核 | 原因 | 数量 |
 |---|---|---|
-| v2ray | 连接超时 | 1193 |
-| v2ray | TLS 握手失败（证书/协议不匹配） | 182 |
-| v2ray | 配置被内核拒绝（参数不符） | 10 |
-| v2ray | 该内核不支持（协议/传输/加密/插件） | 4 |
-| v2ray | 网络层失败 | 1 |
-| xray | 连接超时 | 810 |
-| xray | TLS 握手失败（证书/协议不匹配） | 253 |
-| xray | 网络层失败 | 121 |
+| v2ray | 连接超时 | 1831 |
+| v2ray | TLS 握手失败（证书/协议不匹配） | 622 |
+| v2ray | 配置被内核拒绝（参数不符） | 37 |
+| v2ray | 该内核不支持（协议/传输/加密/插件） | 6 |
+| xray | 连接超时 | 1426 |
+| xray | TLS 握手失败（证书/协议不匹配） | 795 |
+| xray | 网络层失败 | 209 |
+| xray | 配置被内核拒绝（参数不符） | 10 |
+| xray | 连接被重置 | 9 |
 | xray | 该内核不支持（协议/传输/加密/插件） | 1 |
-| clash | 连接超时 | 1063 |
-| clash | 网络层失败 | 97 |
-| clash | TLS 握手失败（证书/协议不匹配） | 75 |
-| clash | 配置被内核拒绝（参数不符） | 4 |
-| singbox | 连接被重置 | 1214 |
-| singbox | TLS 握手失败（证书/协议不匹配） | 218 |
-| singbox | 配置被内核拒绝（参数不符） | 3 |
+| clash | 连接超时 | 1869 |
+| clash | TLS 握手失败（证书/协议不匹配） | 444 |
+| clash | 网络层失败 | 111 |
+| clash | 配置被内核拒绝（参数不符） | 54 |
+| clash | 连接被重置 | 1 |
+| singbox | 连接被重置 | 1551 |
+| singbox | TLS 握手失败（证书/协议不匹配） | 899 |
+| singbox | 配置被内核拒绝（参数不符） | 18 |
+| singbox | 认证失败（口令/UUID 不符） | 3 |
+| singbox | 内核启动失败或超时 | 1 |
 
 
 ### 可用节点池（跨天累积）
@@ -78,10 +90,10 @@
 
 | 内核 | 池内节点 | 今日新增 | 今日复测通过 | 池文件 |
 |---|---|---|---|---|
-| v2ray | 211 | 2 | 5 | `pool/pool_v2ray.txt` |
-| xray | 652 | 15 | 7 | `pool/pool_xray.txt` |
-| clash | 357 | 9 | 3 | `pool/pool_clash.yaml` |
-| singbox | 334 | 5 | 1 | `pool/pool_singbox.json` |
+| v2ray | 215 | 4 | 13 | `pool/pool_v2ray.txt` |
+| xray | 693 | 41 | 13 | `pool/pool_xray.txt` |
+| clash | 376 | 19 | 13 | `pool/pool_clash.yaml` |
+| singbox | 354 | 20 | 18 | `pool/pool_singbox.json` |
 
 池目录：`nodes/pool`（`pool_<core>.<ext>` 可直接导入客户端；`pool_state.json` 存首见/最近通过/通过次数/最佳延迟）
 
@@ -92,98 +104,183 @@
 
 | 仓库 | 实测 | 可用 | 可用率 | 平均延迟 | 质量分 |
 |---|---|---|---|---|---|
-| Maskkost93/kizyak-vpn-4.0 | 58 | 11 | 19% | 1647ms | 33.4 |
-| 0xRadikal/Free-v2ray-Configs | 14 | 1 | 7% | 1844ms | 23.9 |
-| igareck/vpn-configs-for-russia | 316 | 13 | 4% | 1833ms | 21.9 |
-| rekt0ro/ProxyRift | 31 | 1 | 3% | 1784ms | 21.6 |
-| miladtahanian/Config-Collector | 43 | 1 | 2% | 1204ms | 24.4 |
-| whoahaow/rjsxrd | 394 | 3 | 1% | 1796ms | 19.8 |
-| hamedcode/port-based-v2ray-configs | 1317 | 1 | 0% | 916ms | 24.6 |
-| SoliSpirit/SolVPN | 88 | 0 | 0% | -ms | 0.0 |
-| amirkma/proxykma | 28 | 0 | 0% | -ms | 0.0 |
-| rtwo2/FastNodes | 113 | 0 | 0% | -ms | 0.0 |
-| kooker/FreeSubsCheck | 42 | 0 | 0% | -ms | 0.0 |
-| WLget/V2ray_free | 12 | 0 | 0% | -ms | 0.0 |
-| v2raynnodes/clashfree | 12 | 0 | 0% | -ms | 0.0 |
-| v2raynnodes/v2rayfree | 4 | 0 | 0% | -ms | 0.0 |
-| cbusifabcap/daily_free_vpn | 4 | 0 | 0% | -ms | 0.0 |
-| MustafaBaqer/VestraNet-Nodes | 219 | 0 | 0% | -ms | 0.0 |
-| SoliSpirit/v2ray-configs | 924 | 0 | 0% | -ms | 0.0 |
-| DarkRoyalty/shnajder-vpn-configs | 692 | 0 | 0% | -ms | 0.0 |
-| pie-with-jam/PulseProxy | 574 | 0 | 0% | -ms | 0.0 |
-| freenodess/freenodess | 35 | 0 | 0% | -ms | 0.0 |
-| LoneKingCode/free-proxy-db | 159 | 0 | 0% | -ms | 0.0 |
-| lanzm/MetaFetch | 201 | 0 | 0% | -ms | 0.0 |
+| rtwo2/FastNodes | 1 | 1 | 100% | 1086ms | 93.5 |
+| ermaozi01/free_clash_vpn | 55 | 33 | 60% | 2019ms | 59.9 |
+| zhuhaiuk/free-nodes | 21 | 11 | 52% | 1742ms | 56.2 |
+| hello-world-1989/cn-news | 6 | 3 | 50% | 1044ms | 58.7 |
+| F0rc3Run/F0rc3Run | 8 | 3 | 38% | 2125ms | 43.5 |
+| FLAT447/v2ray-lists | 47 | 16 | 34% | 1997ms | 41.8 |
+| LeilaoMi/AutoMergePublicNodes-Optimized | 3 | 1 | 33% | 1756ms | 42.8 |
+| Areral/ScarletDevil | 91 | 28 | 31% | 2075ms | 39.1 |
+| rekt0ro/ProxyRift | 47 | 11 | 23% | 2077ms | 33.9 |
+| Mehinator/Derafsh | 21 | 3 | 14% | 2097ms | 27.4 |
+| 0xRadikal/Free-v2ray-Configs | 14 | 2 | 14% | 1786ms | 29.3 |
+| crashgfw/free-airport-nodes | 32 | 4 | 12% | 3491ms | 17.8 |
+| bzfq21/proxy-singbox | 32 | 3 | 9% | 1719ms | 26.2 |
+| MohammadBahemmat/V2ray-Collector | 240 | 6 | 2% | 1158ms | 24.8 |
+| whoahaow/rjsxrd | 249 | 3 | 1% | 1911ms | 19.4 |
+| aviamastersgh/vpn-free-russia | 1500 | 8 | 1% | 1516ms | 21.3 |
+| VOID-Anonymity/V.O.I.D-VPN_Bypass | 466 | 1 | 0% | 1589ms | 20.6 |
+| 10Dream/sub-mod | 1629 | 3 | 0% | 706ms | 25.9 |
+| AmazingCoderA/PypsCFG | 985 | 1 | 0% | 2743ms | 13.6 |
+| cxddgtb/dljdsjq | 1280 | 0 | 0% | -ms | 0.0 |
+| adop1344-bot/LetoVPN_free | 97 | 0 | 0% | -ms | 0.0 |
+| fmw86/free-proxy-pool | 19 | 0 | 0% | -ms | 0.0 |
+| MahanKenway/Freedom-V2Ray | 1608 | 0 | 0% | -ms | 0.0 |
+| Alirewa/V2ray-Configs | 486 | 0 | 0% | -ms | 0.0 |
+| Andy181-github/Autoscrapefreenodes | 242 | 0 | 0% | -ms | 0.0 |
+| … | 共 40 个仓库 | | | | |
 
 
 ### 各内核可用节点详情
 
-#### v2ray（7 个可用）
+#### v2ray（17 个可用）
 
 | 节点 | 协议 | 延迟 | 来源仓库 |
 |---|---|---|---|
-| `52.77.214.112:8443` | ss | 618ms | hello-world-1989/cn-news |
-| `3.34.49.234:8443` | ss | 636ms | hello-world-1989/cn-news |
-| `139.224.244.8:49534` | vmess | 744ms | rtwo2/FastNodes |
-| `178.17.58.55:443` | hysteria2 | 982ms | rtwo2/FastNodes |
-| `k9-85j.pages.dev:443` | vless | 1232ms | igareck/vpn-configs-for-russia |
-| `de-tg.fastlanehosting.ru:443` | hysteria2 | 1636ms | rtwo2/FastNodes |
-| `wells.aisb.dpdns.org:443` | vless | 2184ms | igareck/vpn-configs-for-russia |
+| `178.17.58.55:443` | hysteria2 | 1086ms | rtwo2/FastNodes |
+| `202.50.253.27:19999` | ss | 1112ms | ermaozi01/free_clash_vpn |
+| `202.50.253.63:19999` | ss | 1134ms | ermaozi01/free_clash_vpn |
+| `202.50.253.36:19999` | ss | 1162ms | ermaozi01/free_clash_vpn |
+| `202.50.253.99:19999` | ss | 1430ms | ermaozi01/free_clash_vpn |
+| `202.50.253.54:19999` | ss | 1506ms | ermaozi01/free_clash_vpn |
+| `vps3.nemnogogo.com:443` | vless | 1745ms | zhuhaiuk/free-nodes |
+| `202.50.253.18:19999` | ss | 1808ms | F0rc3Run/F0rc3Run |
+| `202.50.253.45:19999` | ss | 1911ms | ermaozi01/free_clash_vpn |
+| `199.68.156.221:2087` | trojan | 2049ms | Mehinator/Derafsh |
+| `201.24.116.192:443` | vless | 2321ms | zhuhaiuk/free-nodes |
+| `202.50.253.81:19999` | ss | 2452ms | ermaozi01/free_clash_vpn |
+| `hk1t.wawojk.dpdns.org:443` | vless | 2579ms | bzfq21/proxy-singbox |
+| `202.50.253.90:19999` | ss | 2909ms | ermaozi01/free_clash_vpn |
+| `luminexorizon.ink:443` | vless | 3229ms | aviamastersgh/vpn-free-russia |
+| `v1us9.stablenode.cloud:24422` | trojan | 3283ms | crashgfw/free-airport-nodes |
+| `202.50.253.72:19999` | ss | 3620ms | ermaozi01/free_clash_vpn |
 
-#### xray（22 个可用）
-
-| 节点 | 协议 | 延迟 | 来源仓库 |
-|---|---|---|---|
-| `82.29.36.252:443` | vless | 297ms | rtwo2/FastNodes |
-| `139.224.244.8:49534` | vmess | 444ms | rtwo2/FastNodes |
-| `212.69.135.225:8443` | vless | 899ms | Maskkost93/kizyak-vpn-4.0 |
-| `104.26.6.171:443` | trojan | 916ms | hamedcode/port-based-v2ray-configs |
-| `de-tg.fastlanehosting.ru:443` | hysteria2 | 970ms | rtwo2/FastNodes |
-| `5.104.74.50:8443` | vless | 1106ms | Maskkost93/kizyak-vpn-4.0 |
-| `178.17.58.55:443` | hysteria2 | 1376ms | rtwo2/FastNodes |
-| `spacex.com:443` | vless | 1439ms | igareck/vpn-configs-for-russia |
-| `14f7f5f0.mrbl69black.pages.dev:443` | vless | 1513ms | igareck/vpn-configs-for-russia |
-| `lanzerotte1312.live:443` | vless | 1540ms | Maskkost93/kizyak-vpn-4.0 |
-| `1fd53cx.se5.h1clayd.shop:443` | vless | 1597ms | Maskkost93/kizyak-vpn-4.0 |
-| `62.60.219.235:443` | vless | 1844ms | 0xRadikal/Free-v2ray-Configs |
-| `157.22.190.220:2053` | vless | 1902ms | whoahaow/rjsxrd |
-| `c3b4ce4b957a.vps.myjino.ru:53898` | vless | 2046ms | Maskkost93/kizyak-vpn-4.0 |
-| `pl3.fox-lisa.ru:443` | vless | 2260ms | Maskkost93/kizyak-vpn-4.0 |
-| `wells.aisb.dpdns.org:443` | vless | 2270ms | igareck/vpn-configs-for-russia |
-| `lt.t1n2.com:443` | vless | 2284ms | Maskkost93/kizyak-vpn-4.0 |
-| `100gramm.pro:443` | vless | 2408ms | Maskkost93/kizyak-vpn-4.0 |
-| `k9-85j.pages.dev:443` | vless | 2511ms | igareck/vpn-configs-for-russia |
-| `3.34.49.234:8443` | ss | 2983ms | hello-world-1989/cn-news |
-| `45.192.203.44:10727` | vless | 3232ms | rtwo2/FastNodes |
-| `18.171.57.116:443` | ss | 4198ms | miladtahanian/Config-Collector |
-
-#### clash（12 个可用）
+#### xray（54 个可用）
 
 | 节点 | 协议 | 延迟 | 来源仓库 |
 |---|---|---|---|
-| `139.224.244.8:49534` | vmess | 840ms | rtwo2/FastNodes |
-| `de-tg.fastlanehosting.ru:443` | hysteria2 | 1117ms | rtwo2/FastNodes |
-| `k9-85j.pages.dev:443` | vless | 1254ms | igareck/vpn-configs-for-russia |
-| `lt.t1n2.com:443` | vless | 1281ms | Maskkost93/kizyak-vpn-4.0 |
-| `lanzerotte1312.live:443` | vless | 1304ms | Maskkost93/kizyak-vpn-4.0 |
-| `1fd53cx.se5.h1clayd.shop:443` | vless | 1395ms | Maskkost93/kizyak-vpn-4.0 |
-| `52.77.214.112:443` | vless | 1606ms | hello-world-1989/cn-news |
-| `proxy-34l.pages.dev:2087` | vless | 1750ms | igareck/vpn-configs-for-russia |
-| `wells.aisb.dpdns.org:443` | vless | 1756ms | igareck/vpn-configs-for-russia |
-| `157.22.190.220:2053` | vless | 1771ms | whoahaow/rjsxrd |
-| `104.18.35.86:2096` | trojan | 1784ms | rekt0ro/ProxyRift |
-| `yd.2.hhhhh.eu.org:443` | vless | 2601ms | igareck/vpn-configs-for-russia |
+| `3.39.252.190:443` | vless | 659ms | hello-world-1989/cn-news |
+| `27septgerm.site:444` | vless | 951ms | Areral/ScarletDevil |
+| `84.32.23.119:443` | vless | 985ms | 10Dream/sub-mod |
+| `202.50.253.45:19999` | ss | 996ms | ermaozi01/free_clash_vpn |
+| `18.175.123.65:443` | ss | 1008ms | MohammadBahemmat/V2ray-Collector |
+| `202.50.253.90:19999` | ss | 1026ms | ermaozi01/free_clash_vpn |
+| `94.183.164.96:8443` | vless | 1051ms | whoahaow/rjsxrd |
+| `edge.bookmai.com:443` | vless | 1056ms | aviamastersgh/vpn-free-russia |
+| `202.50.253.27:19999` | ss | 1060ms | ermaozi01/free_clash_vpn |
+| `94.183.164.96:443` | vless | 1148ms | rekt0ro/ProxyRift |
+| `143.246.204.21:443` | vless | 1188ms | aviamastersgh/vpn-free-russia |
+| `104.171.133.209:443` | vless | 1192ms | aviamastersgh/vpn-free-russia |
+| `217.199.253.177:443` | vless | 1321ms | Areral/ScarletDevil |
+| `217.156.123.33:443` | vless | 1335ms | Areral/ScarletDevil |
+| `18.199.171.99:443` | ss | 1355ms | MohammadBahemmat/V2ray-Collector |
+| `us-05.avroraservice.online:8443` | vless | 1373ms | FLAT447/v2ray-lists |
+| `us032023.ssgreen.org:443` | vmess | 1379ms | rekt0ro/ProxyRift |
+| `202.50.253.72:19999` | ss | 1422ms | ermaozi01/free_clash_vpn |
+| `5.149.250.41:443` | vless | 1449ms | FLAT447/v2ray-lists |
+| `162.55.242.208:2096` | vless | 1467ms | 0xRadikal/Free-v2ray-Configs |
+| `80.96.108.29:8443` | vless | 1492ms | aviamastersgh/vpn-free-russia |
+| `104.233.9.100:443` | vless | 1556ms | rekt0ro/ProxyRift |
+| `13.143.137.98:443` | vless | 1589ms | VOID-Anonymity/V.O.I.D-VPN_Bypass |
+| `201.34.142.108:443` | vless | 1631ms | aviamastersgh/vpn-free-russia |
+| `94.139.250.226:443` | vless | 1697ms | FLAT447/v2ray-lists |
+| `201.24.116.192:443` | vless | 1707ms | zhuhaiuk/free-nodes |
+| `89.150.45.246:443` | vless | 1762ms | Areral/ScarletDevil |
+| `153.56.229.207:443` | vless | 1820ms | whoahaow/rjsxrd |
+| `200.165.236.84:443` | vless | 1877ms | rekt0ro/ProxyRift |
+| `206.53.48.69:443` | vless | 2008ms | FLAT447/v2ray-lists |
+| `hedgerow.moltex.click:443` | vless | 2080ms | rekt0ro/ProxyRift |
+| `87.121.89.160:8443` | vless | 2096ms | rekt0ro/ProxyRift |
+| `forumdrun.xubi.org:443` | vless | 2106ms | 0xRadikal/Free-v2ray-Configs |
+| `hk1t.wawojk.dpdns.org:443` | vless | 2243ms | bzfq21/proxy-singbox |
+| `199.68.156.221:2087` | trojan | 2272ms | Mehinator/Derafsh |
+| `birchwood.moltex.click:443` | vless | 2293ms | rekt0ro/ProxyRift |
+| `9.247.174.134:8443` | vless | 2323ms | zhuhaiuk/free-nodes |
+| `144.31.158.109:443` | vless | 2350ms | rekt0ro/ProxyRift |
+| `vps3.nemnogogo.com:443` | vless | 2362ms | zhuhaiuk/free-nodes |
+| `nexianetwork.anymor.org:8686` | vless | 2364ms | rekt0ro/ProxyRift |
+| … | 共 54 个 | | |
 
-#### singbox（6 个可用）
+#### clash（32 个可用）
 
 | 节点 | 协议 | 延迟 | 来源仓库 |
 |---|---|---|---|
-| `139.224.244.8:49534` | vmess | 669ms | rtwo2/FastNodes |
-| `18.171.57.116:443` | ss | 1204ms | miladtahanian/Config-Collector |
-| `kclx.eu.org:443` | vless | 1456ms | igareck/vpn-configs-for-russia |
-| `vless3.gem-audio2.us.ci:443` | vless | 1528ms | igareck/vpn-configs-for-russia |
-| `157.22.190.220:2053` | vless | 1714ms | whoahaow/rjsxrd |
-| `wells.aisb.dpdns.org:443` | vless | 2337ms | igareck/vpn-configs-for-russia |
+| `13.231.100.94:2377` | ss | 334ms | bzfq21/proxy-singbox |
+| `84.32.23.119:443` | vless | 587ms | 10Dream/sub-mod |
+| `edge.bookmai.com:443` | vless | 1007ms | aviamastersgh/vpn-free-russia |
+| `202.50.253.99:19999` | ss | 1045ms | ermaozi01/free_clash_vpn |
+| `3.39.252.190:443` | vless | 1065ms | hello-world-1989/cn-news |
+| `18.175.123.65:443` | ss | 1094ms | MohammadBahemmat/V2ray-Collector |
+| `202.50.253.54:19999` | ss | 1104ms | ermaozi01/free_clash_vpn |
+| `202.50.253.72:19999` | ss | 1145ms | ermaozi01/free_clash_vpn |
+| `84.32.217.164:443` | vless | 1164ms | FLAT447/v2ray-lists |
+| `217.199.253.177:443` | vless | 1222ms | Areral/ScarletDevil |
+| `9.247.174.134:8443` | vless | 1235ms | zhuhaiuk/free-nodes |
+| `27septgerm.site:444` | vless | 1250ms | Areral/ScarletDevil |
+| `202.50.253.63:19999` | ss | 1252ms | ermaozi01/free_clash_vpn |
+| `89.150.45.246:443` | vless | 1317ms | Areral/ScarletDevil |
+| `vps3.nemnogogo.com:443` | vless | 1404ms | zhuhaiuk/free-nodes |
+| `5.149.250.41:443` | vless | 1542ms | FLAT447/v2ray-lists |
+| `94.139.250.226:443` | vless | 1607ms | FLAT447/v2ray-lists |
+| `201.24.116.192:443` | vless | 1632ms | zhuhaiuk/free-nodes |
+| `217.156.123.33:443` | vless | 1711ms | Areral/ScarletDevil |
+| `206.53.48.69:443` | vless | 1711ms | FLAT447/v2ray-lists |
+| `206.245.153.57:8443` | hysteria2 | 1814ms | Areral/ScarletDevil |
+| `199.68.156.221:2087` | trojan | 1969ms | Mehinator/Derafsh |
+| `196.245.52.183:443` | vless | 2005ms | Areral/ScarletDevil |
+| `202.50.253.81:19999` | ss | 2052ms | ermaozi01/free_clash_vpn |
+| `202.50.253.18:19999` | ss | 2214ms | F0rc3Run/F0rc3Run |
+| `202.50.253.36:19999` | ss | 2654ms | ermaozi01/free_clash_vpn |
+| `v1us9.stablenode.cloud:24413` | trojan | 2889ms | crashgfw/free-airport-nodes |
+| `ws3.falmero.store:443` | vless | 2892ms | Areral/ScarletDevil |
+| `5b1b23x.pl5.h1clayd.click:443` | vless | 3009ms | FLAT447/v2ray-lists |
+| `v1us9.stablenode.cloud:24421` | trojan | 3078ms | crashgfw/free-airport-nodes |
+| `202.50.253.45:19999` | ss | 3149ms | ermaozi01/free_clash_vpn |
+| `202.50.253.90:19999` | ss | 3187ms | ermaozi01/free_clash_vpn |
+
+#### singbox（38 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `84.32.23.119:443` | vless | 547ms | 10Dream/sub-mod |
+| `18.175.123.65:443` | ss | 1058ms | MohammadBahemmat/V2ray-Collector |
+| `5.149.250.41:443` | vless | 1085ms | FLAT447/v2ray-lists |
+| `202.50.253.81:19999` | ss | 1089ms | ermaozi01/free_clash_vpn |
+| `172.235.36.156:443` | vless | 1159ms | Areral/ScarletDevil |
+| `185.42.214.39:23243` | vless | 1187ms | MohammadBahemmat/V2ray-Collector |
+| `18.199.171.99:443` | ss | 1245ms | MohammadBahemmat/V2ray-Collector |
+| `172.233.129.172:443` | vless | 1265ms | Areral/ScarletDevil |
+| `89.150.45.246:443` | vless | 1294ms | Areral/ScarletDevil |
+| `edge.bookmai.com:443` | vless | 1332ms | aviamastersgh/vpn-free-russia |
+| `206.245.153.57:8443` | hysteria2 | 1338ms | Areral/ScarletDevil |
+| `201.24.116.192:443` | vless | 1344ms | zhuhaiuk/free-nodes |
+| `9.247.174.134:8443` | vless | 1357ms | zhuhaiuk/free-nodes |
+| `217.156.123.33:443` | vless | 1402ms | Areral/ScarletDevil |
+| `3.39.252.190:443` | vless | 1407ms | hello-world-1989/cn-news |
+| `194.180.207.154:443` | vless | 1476ms | Areral/ScarletDevil |
+| `84.32.217.164:443` | vless | 1532ms | FLAT447/v2ray-lists |
+| `202.50.253.36:19999` | ss | 1606ms | ermaozi01/free_clash_vpn |
+| `7fb7d2t.de31.h1clayd.shop:443` | vless | 1695ms | Areral/ScarletDevil |
+| `vps3.nemnogogo.com:443` | vless | 1730ms | zhuhaiuk/free-nodes |
+| `45.63.53.81:443` | vless | 1756ms | LeilaoMi/AutoMergePublicNodes-Optimized |
+| `202.50.253.27:19999` | ss | 1796ms | ermaozi01/free_clash_vpn |
+| `202.50.253.54:19999` | ss | 1859ms | ermaozi01/free_clash_vpn |
+| `94.139.250.226:443` | vless | 1970ms | FLAT447/v2ray-lists |
+| `27septgerm.site:444` | vless | 2026ms | Areral/ScarletDevil |
+| `202.50.253.72:19999` | ss | 2035ms | ermaozi01/free_clash_vpn |
+| `206.53.48.69:443` | vless | 2090ms | FLAT447/v2ray-lists |
+| `79.141.166.66:443` | vless | 2262ms | Areral/ScarletDevil |
+| `202.50.253.18:19999` | ss | 2354ms | F0rc3Run/F0rc3Run |
+| `217.199.253.177:443` | vless | 2427ms | Areral/ScarletDevil |
+| `202.50.253.90:19999` | ss | 2509ms | ermaozi01/free_clash_vpn |
+| `202.50.253.99:19999` | ss | 2514ms | ermaozi01/free_clash_vpn |
+| `172.235.51.71:443` | vless | 2581ms | Areral/ScarletDevil |
+| `172.236.241.130:443` | vless | 2949ms | Areral/ScarletDevil |
+| `202.50.253.45:19999` | ss | 3063ms | ermaozi01/free_clash_vpn |
+| `202.50.253.63:19999` | ss | 3111ms | ermaozi01/free_clash_vpn |
+| `v1us9.stablenode.cloud:24421` | trojan | 4714ms | crashgfw/free-airport-nodes |
+| `196.245.52.183:443` | vless | 5028ms | Areral/ScarletDevil |
 
 ## 2026-11-10 22:35
 

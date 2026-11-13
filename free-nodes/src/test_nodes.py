@@ -646,6 +646,11 @@ DEFAULT_BW_BYTES = 2000000      # 2MB：0.5Mbps 的节点约 32s，1Mbps 约 16s
 DEFAULT_BW_TIMEOUT = 15.0
 DEFAULT_BW_MAX = 20             # 每内核最多测这么多个节点的带宽（按延迟升序取）
 DEFAULT_BW_BUDGET = 240.0       # 每内核带宽测试的时间上限（秒）：串行下载很容易吃穿窗口
+# 2026-11-13：speed.cloudflare.com 对 urllib 默认 UA（Python-urllib/3.13）直接 403，
+# 且 403 与「节点慢」在结果里长得一样（都是 ok=False、bytes=0），连续两天 77 个样本 0 条带宽数据。
+# 实测同一 URL：默认 UA 403 / 浏览器 UA 200 ⇒ 必须带浏览器 UA 才能测到数值（known-issues 64）。
+DEFAULT_BW_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                 "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
 
 
 def build_targets(args):
@@ -830,7 +835,9 @@ def _download_bandwidth(port, spec):
     t0 = time.time()
     total = 0
     try:
-        with opener.open(url, timeout=max(3.0, timeout)) as resp:
+        req = urllib.request.Request(url, headers={"User-Agent": DEFAULT_BW_UA,
+                                                  "Accept": "*/*"})
+        with opener.open(req, timeout=max(3.0, timeout)) as resp:
             while True:
                 if time.time() - t0 > timeout:
                     return {"ok": total > 0, "mbps": round(total * 8 / max(0.001, time.time() - t0) / 1e6, 2),

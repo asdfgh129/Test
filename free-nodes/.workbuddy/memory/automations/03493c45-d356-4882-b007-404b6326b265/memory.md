@@ -26,3 +26,5 @@
   退出码 0，全程 6m53s。沿用后台运行 + TaskOutput(600000) 一次过，无新坑。
 - 2026-11-13：成功。run 43345124362，`pending` → `completed（success）`，退出码 0，后台运行 7m1s 收尾。
   沿用正斜杠+双引号路径 + run_in_background + TaskOutput(timeout 600000) 定型流程，一次过。
+- 2026-11-13 21:05（当晚正式窗口）：成功。run 43430768994，`in_progress` → `completed（success）`，退出码 0，
+  后台运行 7m10s（21:06 触发、21:13 收尾）。同一定型流程继续有效，无新坑。
