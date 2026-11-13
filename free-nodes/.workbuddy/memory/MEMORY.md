@@ -63,6 +63,9 @@
 - `exhausted=true` = 候选已全测完，此时别加测试量、别放宽探测地址；可用数仍 <10 属源池质量问题。
 - `test_nodes.py` 两个坑：① `ThreadPoolExecutor.map` 会吃空生成器，时间检查形同虚设，必须按块提交；
   ② 模块顶层有 `as c`/`as lay` 别名，函数内禁用 `c`/`lay` 当循环变量。
+- 带宽测速（第三步）：`speed.cloudflare.com/__down` 对 urllib 默认 UA **直接 403**，必须带浏览器 UA
+  （`DEFAULT_BW_UA`，known-issues 64）；「全部没数据」先按失败原因分类，403 ≠ 超时（后者调参、前者改请求头）。
+  当前口径 2MB/15s，慢节点会被截断但 `mbps` 按已下载字节/已用时算，数值仍可用。
 
 ## 四内核协议能力（详见 Docs/protocol.md）
 - `layout.CAPS` 是唯一事实来源（test_nodes 分流与 uplink `_cores_for` 都读它）。
