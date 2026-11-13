@@ -46,6 +46,7 @@ from datetime import date, datetime, timedelta, timezone
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # uplink 内部反向 import 本模块，必须延迟导入（放在 main() 里），否则循环导入
 import layout as lay  # 统一布局：四内核命名/文件格式/能力矩阵/md 日志（无反向依赖）
+import repo_pool as rpool  # 仓库地址池（入池/出池/评分/配额），2026-11-11 起采集清单由它决定
 
 # ---------------------------------------------------------------- SSL 上下文（三级回退）
 # 受管 Python 可能缺少 CA 证书库：certifi → Windows 证书存储 → 不校验（带警告）
@@ -892,7 +893,7 @@ def classify_readme_link(url, repo_full, link_text=""):
     return None
 
 
-def extract_readme_links(text, repo_full, today=None, tolerance=0):
+def extract_readme_links(text, repo_full, today=None, tolerance=0, limit=MAX_README_LINKS):
     """从 README 抽出订阅链接，并按「内核 + 日期」筛选。
 
     返回 (links, stats)：
@@ -965,8 +966,8 @@ def extract_readme_links(text, repo_full, today=None, tolerance=0):
         found.append({"kind": kind, "target": target, "kernel": kernel,
                       "day": day.isoformat() if day else None})
         stats["kernels"][kernel or "any"] = stats["kernels"].get(kernel or "any", 0) + 1
-    stats["kept"] = len(found[:MAX_README_LINKS])
-    return found[:MAX_README_LINKS], stats
+    stats["kept"] = len(found[:max(1, limit)])
+    return found[:max(1, limit)], stats
 
 
 def err_tag(e):
@@ -1095,7 +1096,7 @@ def fetch_url_text(url, timeout=15):
 
 
 def collect_from_readme(repo_full, items, token, records, budget=90, workers=4,
-                        date_tolerance=0):
+                        date_tolerance=0, max_links=MAX_README_LINKS, max_nodes=0):
     """读 README → 跟随它声明的订阅链接 → 提取节点。
 
     返回 (链接数, 节点数, 明细, 链接统计)。这是很多仓库唯一暴露真实订阅文件的地方
@@ -1112,16 +1113,23 @@ def collect_from_readme(repo_full, items, token, records, budget=90, workers=4,
     except Exception as e:  # noqa: BLE001
         print(f"[warn] README 下载失败 {repo_full}/{readme['path']}: {e}", file=sys.stderr)
         return 0, 0, [], {}
-    links, lstats = extract_readme_links(text, repo_full, tolerance=date_tolerance)
+    links, lstats = extract_readme_links(text, repo_full, tolerance=date_tolerance,
+                                         limit=max_links)
     if not links:
         return 0, 0, [], lstats
     deadline = time.time() + budget
     lock = threading.Lock()
     detail = []
+    counter = {"n": 0}      # 已提取条数（用于单仓上限，见 max_nodes）
 
     def work(link):
         kind, target = link["kind"], link["target"]
         if time.time() > deadline:
+            return None
+        # 单仓产量上限（2026-11-11）：一个仓库 10 条链接各给 2.6 万条时，
+        # 光解析就能吃掉整个采集预算，而多出来的那 20 万条去重后与已有节点高度重合。
+        # 超过上限就不再跟新链接，把预算留给别的仓库。
+        if max_nodes and counter["n"] >= max_nodes:
             return None
         label = (os.path.basename(target) if kind == "repo_path"
                  else (os.path.basename(urllib.parse.urlsplit(target).path) or target[-32:]))
@@ -1142,7 +1150,21 @@ def collect_from_readme(repo_full, items, token, records, budget=90, workers=4,
         n = extract_text_into(t, src, repo_full, local, os.path.splitext(target)[1],
                               kernel=link.get("kernel"))
         with lock:
+            # 单仓上限必须在这里**截断本次解析结果**（2026-11-13）：上面的
+            # `counter["n"] >= max_nodes` 只在「开始下一个链接」时判断，而 links 是 4 并发下载、
+            # 每个文件的解析在锁外完成——一个仓库放 4 条各 17 万条的大文件时，4 个 worker 会
+            # 同时跑完，counter 一次性冲到 69.6 万条（2026-11-13 rtwo2/FastNodes 实测），
+            # 上限形同虚设，随后探测环节要为一个聚合站多花 20 分钟。
+            if max_nodes:
+                remain = max_nodes - counter["n"]
+                if remain <= 0:
+                    detail.append((label, 0, "超出单仓上限"))
+                    return 0
+                if len(local) > remain:
+                    local = local[:remain]
+                    n = len(local)
             records.extend(local)
+            counter["n"] += n
             detail.append((label, n, ""))
         return n
 
@@ -1150,6 +1172,9 @@ def collect_from_readme(repo_full, items, token, records, budget=90, workers=4,
     with ThreadPoolExecutor(max_workers=max(1, min(workers, len(links)))) as ex:
         for n in ex.map(work, links):
             total += n or 0
+    if max_nodes and total > max_nodes:
+        print(f"[warn] {repo_full}：单仓产出 {total} 条超过上限 {max_nodes}，"
+              f"后续链接已跳过（避免一个仓库吃光采集预算）")
     detail_lines = [f"{lab}:{f'下载失败({tag})' if n is None else n}"
                     for lab, n, tag in detail]
     return len(links), total, detail_lines, lstats
@@ -2467,25 +2492,99 @@ def record_hostport(record):
     return None
 
 
+def _merge_repo(record, repo):
+    """把仓库并入记录的 repos（去重时用；同一仓库重复出现不会重复登记）。"""
+    if not repo:
+        return
+    repos = record.setdefault("repos", [])
+    if repo not in repos:
+        repos.append(repo)
+
+
 def dedupe(records):
-    seen_uri, seen_hostport = set(), set()
+    """两级去重（完整 URI → host:port），并把**同一节点的全部来源仓库登记到一起**。
+
+    以前去重只丢重复、不记归属：一个节点被 5 个仓库同时给出时只剩第一条，
+    仓库产量就全算在“谁先被扫到”头上，评分里根本看不出谁在真正供给。
+    现在被丢掉的那条把自己的 `repo` 并入保留记录的 `repos`：
+      - `repos` 是去重后的**完整归属**（>=1 个），供仓库产量按 1/N 分摊（repo_pool.update_yield）；
+      - 记录原有的 `repo` 字段保持不变（兼容 nodes_meta / 日志 / 旧脚本）。
+    幂等：同一仓库重复并入不会产生重复项，`uniq_count()` 反复调用也安全。
+    """
+    seen_uri, seen_hostport = {}, {}
     uniq, dropped = [], 0
     for r in records:
+        _merge_repo(r, r.get("repo") or "")
         uri_key = r["uri"] if r["kind"] == "uri" else None
-        if uri_key:
-            if uri_key in seen_uri:
-                dropped += 1
-                continue
-            seen_uri.add(uri_key)
+        if uri_key and uri_key in seen_uri:
+            _merge_repo(seen_uri[uri_key], r.get("repo") or "")
+            dropped += 1
+            continue
         hp = record_hostport(r)
         if hp and hp[1]:
             key = (hp[0], hp[1])
             if key in seen_hostport:
+                _merge_repo(seen_hostport[key], r.get("repo") or "")
                 dropped += 1
                 continue
-            seen_hostport.add(key)
+            seen_hostport[key] = r
+        if uri_key:
+            seen_uri[uri_key] = r
         uniq.append(r)
     return uniq, dropped
+
+
+def load_pool_keys(root):
+    """读节点池的 host:port 索引：{key: {"cores": set(), "repos": set()}}。
+
+    去重要「考虑节点池中的节点」（用户 2026-11-11 要求）：池里已有的节点即使今天
+    没有从这个仓库采到，也要把当前采集命中的仓库补登到池条目上，这样池节点的
+    仓库归属才是完整的（下一步评估仓库可用率要用）。
+    """
+    out = {}
+    try:
+        import pool as node_pool  # 延迟导入，避免与 collect 的顶层依赖打架
+    except Exception:  # noqa: BLE001
+        return out
+    try:
+        state = node_pool.load_state(root)
+    except Exception:  # noqa: BLE001
+        return out
+    for core, got in (state.get("cores") or {}).items():
+        for n in got.get("nodes") or []:
+            key = n.get("key")
+            if not key:
+                continue
+            slot = out.setdefault(key, {"cores": set(), "repos": set()})
+            slot["cores"].add(core)
+            repo = n.get("repo")
+            if repo:
+                slot["repos"].add(repo)
+            for r2 in n.get("repos") or []:
+                slot["repos"].add(r2)
+    return out
+
+
+def mark_pool_membership(records, root):
+    """给去重后的记录打上 `in_pool` / 池内仓库归属。返回命中池的条数。"""
+    keys = load_pool_keys(root)
+    hit = 0
+    for r in records:
+        hp = record_hostport(r)
+        if not hp or not hp[1]:
+            continue
+        slot = keys.get(f"{hp[0]}:{hp[1]}")
+        if not slot:
+            continue
+        hit += 1
+        r["in_pool"] = True
+        r["pool_cores"] = sorted(slot["cores"])
+        for repo in slot["repos"]:
+            _merge_repo(r, repo)
+    if keys:
+        print(f"[info] 节点池核对：{hit}/{len(records)} 条候选已在池内"
+              f"（池内共 {len(keys)} 个 host:port，仓库归属已回填）")
+    return hit
 
 
 # ---------------------------------------------------------------- TCP 延迟探测与排序
@@ -2856,18 +2955,25 @@ def write_outputs(records, out_dir, date_str):
 
 
 def write_nodes_meta(out_dir, records, date_str, tcp_stats=None):
-    """写出节点元数据（延迟 + 来源仓库），供验证阶段做「延迟优先取样」和「仓库质量考核」。"""
+    """写出节点元数据（延迟 + 来源仓库 + 池内归属），供验证阶段取样与仓库考核。"""
     nodes = []
     for r in records:
         hp = record_hostport(r)
         if not hp or not hp[1]:
             continue
+        repos = list(r.get("repos") or [])
+        first = r.get("repo") or ""
+        if first and first not in repos:
+            repos.insert(0, first)
         nodes.append({
             "key": f"{hp[0]}:{hp[1]}",
             "host": hp[0], "port": hp[1],
             "tcp_latency": r.get("tcp_latency"),
             "cf": record_is_cf(r),
-            "repo": r.get("repo", ""),
+            "repo": first,
+            "repos": repos,
+            "in_pool": bool(r.get("in_pool")),
+            "pool_cores": list(r.get("pool_cores") or []),
             "source": r.get("source", ""),
         })
     lat = [n["tcp_latency"] for n in nodes if n.get("tcp_latency") is not None]
@@ -2900,10 +3006,70 @@ def write_nodes_meta(out_dir, records, date_str, tcp_stats=None):
         "nodes": nodes,
     }
     path = lay.meta_path(out_dir)
-    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(os.path.dirname(path) or out_dir, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=1)
     return path, meta
+
+
+def repo_attribution(uniq, raw_by_repo=None):
+    """按「去重后的完整归属」统计每个仓库的产量，节点数按 1/N 分摊。
+
+    为什么要分摊：搬运型聚合站把别人全量抄一遍，原始条数天然最大；若按原始条数计产量，
+    评分第一名永远是抄得最全的那个，而它没有创造任何供给。按 1/N 分摊后，
+    「独家供给」的仓库得分最高，「转载」的仓库只拿到零头（用户 2026-11-11 口径）。
+    """
+    raw_by_repo = raw_by_repo or {}
+    stats = {}
+    for r in uniq:
+        repos = list(r.get("repos") or []) or ([r.get("repo")] if r.get("repo") else [])
+        repos = [x for x in dict.fromkeys(repos) if x]
+        if not repos:
+            continue
+        share = 1.0 / len(repos)
+        for repo in repos:
+            st = stats.setdefault(repo, {"nodes": 0, "uniq": 0.0, "exclusive": 0})
+            st["nodes"] += 1
+            st["uniq"] += share
+            if len(repos) == 1:
+                st["exclusive"] += 1
+    for repo, st in stats.items():
+        st["raw"] = int(raw_by_repo.get(repo) or 0)
+        st["uniq"] = round(st["uniq"], 2)
+        st["share"] = round(st["uniq"] / max(1, st["nodes"]), 3)
+    return stats
+
+
+def write_repo_yield(out_dir, date_str, attr, raw_total, uniq_total, pool_stat=None):
+    """写 Docs/repo_yield.md：每仓库原始条数 / 去重后归属 / 独有率 / 当前分数。"""
+    rows = sorted(attr.items(), key=lambda kv: -kv[1]["uniq"])
+    lines = [
+        f"- 原始提取：{raw_total} 条 → 去重后 {uniq_total} 条"
+        f"（归属按「同一节点 N 个仓库各记 1/N」分摊）",
+        "- 独有率 = 该仓库给出的节点里「只有它给」的比例；高独有率的小仓库比全量转载的大仓库更有价值",
+    ]
+    if pool_stat:
+        lines.append(f"- 仓库池：active {pool_stat.get('active')} / 出池 {pool_stat.get('evicted')}，"
+                     f"今日 push {pool_stat.get('pushed_today')} 个，已实测 {pool_stat.get('tested')} 个")
+    lines += ["", "| 仓库 | 原始 | 去重归属 | 覆盖节点 | 独有节点 | 独有率 | 当前分数 |",
+              "|---|---|---|---|---|---|---|"]
+    for repo, st in rows[:40]:
+        rate = st["exclusive"] / st["nodes"] if st["nodes"] else 0
+        lines.append(f"| {repo} | {st['raw']} | {st['uniq']} | {st['nodes']} | "
+                     f"{st['exclusive']} | {rate * 100:.0f}% | {st.get('score', '-')} |")
+    if len(rows) > 40:
+        lines.append(f"| … | 共 {len(rows)} 个仓库 | | | | | |")
+    os.makedirs(lay.docs_dir(out_dir), exist_ok=True)
+    path = lay.repo_yield_path(out_dir)
+    try:
+        lay.upsert_section(path, date_str, lay.now_stamp().split(" ")[1], "\n".join(lines),
+                           doc_title="仓库产量归属（时间倒序）",
+                           intro="按日期倒序累积；同一天重跑会替换当天小节。"
+                                 "归属按 1/N 分摊，避免转载型聚合站占据产量榜。")
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] 仓库产量表写入失败: {str(e)[:80]}", file=sys.stderr)
+        return None
+    return path
 
 
 def run_probe_only(out_dir, date_str, args):
@@ -2945,8 +3111,16 @@ def run_probe_only(out_dir, date_str, args):
             skipped += 1
             continue
         old = prev.get(f"{parsed[1]}:{parsed[2]}") or {}
-        records.append({"kind": "uri", "uri": u, "parsed": parsed,
-                        "repo": old.get("repo", ""), "source": old.get("source", "")})
+        rec = {"kind": "uri", "uri": u, "parsed": parsed,
+               "repo": old.get("repo", ""), "source": old.get("source", "")}
+        # 仓库归属（可能是多个）与池内标记必须原样继承：探测只改延迟，不该动归属，
+        # 否则本地这一轮会把 CI 登记好的多仓库信息冲成单仓库（2026-11-11 改造）
+        if old.get("repos"):
+            rec["repos"] = list(old["repos"])
+        if old.get("in_pool"):
+            rec["in_pool"] = True
+            rec["pool_cores"] = list(old.get("pool_cores") or [])
+        records.append(rec)
     if not records:
         print("[error] 候选清单里没有可解析 host:port 的条目", file=sys.stderr)
         return 3
@@ -2973,6 +3147,8 @@ def run_probe_only(out_dir, date_str, args):
         print(f"[info] 按延迟截断：{len(kept)} → {args.keep_nodes} 条")
         kept = kept[:args.keep_nodes]
 
+    # 池内归属回填（探测不改归属，只补「这个节点是不是池里的」这一层信息）
+    mark_pool_membership(kept, out_dir)
     out = write_outputs(kept, out_dir, date_str)
     write_nodes_meta(out_dir, kept, date_str, tcp_stats)
     cf_n = sum(1 for r in kept if record_is_cf(r))
@@ -3373,7 +3549,7 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
                        per_repo_files=3, phase_log=None, seed_data=None,
                        readme_stats=None, skip_bad=True, reorder=True, deadline=None,
                        readme_only=False, date_tolerance=0, fail_reasons=None,
-                       partial_fails=None):
+                       partial_fails=None, quota_fn=None, max_nodes_per_repo=0):
     """对一批仓库执行「读 README → 列文件 → 下载 → 提取」。
 
     contrib 记录各仓库贡献的原始节点数；phase_log 记录 (仓库名, 节点数) 供采集日志使用
@@ -3413,12 +3589,23 @@ def collect_from_repos(repo_list, token, records, processed, contrib, counters, 
         items = list_repo_files(full, token)
         readme_nodes = 0
         lstats = {}
+        # 单仓配额由仓库评分决定（2026-11-11）：高分仓 10 链接/90s，中分 6/60，低分 3/40。
+        # 这是「优先从高质量仓库提取」的落地方式——不是简单地把它排在前面，而是给它更多预算。
+        links_cap, budget_s, tier = (MAX_README_LINKS, 90, "default")
+        if quota_fn is not None:
+            try:
+                links_cap, budget_s, tier = quota_fn(full)
+            except Exception:  # noqa: BLE001
+                links_cap, budget_s, tier = MAX_README_LINKS, 90, "default"
         if items and (readme_stats is not None or readme_only):
             links, readme_nodes, detail, lstats = collect_from_readme(
-                full, items, token, records, date_tolerance=date_tolerance)
+                full, items, token, records, budget=budget_s, workers=4,
+                date_tolerance=date_tolerance, max_links=links_cap,
+                max_nodes=max_nodes_per_repo)
             if readme_stats is not None:
                 readme_stats[full] = {"links": links, "nodes": readme_nodes,
-                                      "detail": detail, "stats": lstats}
+                                      "detail": detail, "stats": lstats,
+                                      "tier": tier, "quota": f"{links_cap}链接/{budget_s}s"}
             if links:
                 day_note = ""
                 if lstats.get("date_skipped"):
@@ -3583,6 +3770,90 @@ def append_collection_log(log_file, date_str, phases, raw_count, uniq, dropped,
 # ---------------------------------------------------------------- 主流程
 
 
+def prev_available_total(root):
+    """上一次验证的四内核可用总数（弹性调节的输入）。读不到返回 None。"""
+    path = lay.summary_json_path(root)
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None
+    total = 0
+    for st in (data.get("cores") or {}).values():
+        if isinstance(st, dict):
+            total += int(st.get("ok") or 0)
+    return total if total else None
+
+
+def elastic_repo_count(base, root):
+    """按「上次可用节点总数」弹性伸缩本次采集的仓库数。
+
+    用户口径（2026-11-11）：每天按运行时间与可用节点数量/质量调节采集与测试量。
+    这里是采集侧的落地：可用数充裕（≥200）时收紧到 0.85×（省时间给验证），
+    中位（100~199）维持原值，偏少（<100）扩到 1.35× 补量。
+    """
+    total = prev_available_total(root)
+    if total is None:
+        factor, why = 1.0, "无上次可用数据"
+    elif total >= 200:
+        factor, why = 0.85, f"上次可用 {total} 条（充裕）"
+    elif total >= 100:
+        factor, why = 1.0, f"上次可用 {total} 条（中位）"
+    else:
+        factor, why = 1.35, f"上次可用 {total} 条（偏少）"
+    n = int(round(base * factor))
+    # 下限 8 但不得超过 base 的 2 倍（小样本调试时 --max-repos 4 不该被抬到 20）
+    n = max(1, min(base * 2, max(8, n)))
+    print(f"[elastic] 采集仓库数 {base} → {n}（{why}，系数 {factor}）")
+    return n
+
+
+def verify_near_expiry(pool_data, token=None, today=None, limit=40):
+    """对「快到 5 天」的池内仓库复核一次 pushed_at，避免因为没被搜索命中而误出池。
+
+    搜索只覆盖「近两天 push 过」的仓库；一个 4 天前 push、今天没再更新的仓库不会出现在
+    搜索结果里，它记录的 pushed_at 就会停在那里——若直接按记录判 5 天，会把其实刚更新过的
+    仓库踢出池。所以对 push_days>=4 的条目单独查一次 /repos/{full}（每天最多几十个，
+    核心配额 5000/时完全吃得下）。
+    """
+    pend = [r for r in pool_data.get("repos", []) if rpool.needs_verify(r, today)]
+    if not pend:
+        return 0
+    pend.sort(key=lambda r: -(rpool.staleness(r, today) or 0))
+    done = refreshed = 0
+    for r in pend[:max(1, limit)]:
+        try:
+            data = github_api(f"/repos/{r['full_name']}", token)
+        except Exception as e:  # noqa: BLE001
+            print(f"[warn] 复核 {r['full_name']} 的 push 时间失败：{str(e)[:60]}", file=sys.stderr)
+            continue
+        done += 1
+        before = r.get("last_push")
+        if data.get("pushed_at"):
+            rpool.apply_push(r, data["pushed_at"])
+        if r.get("last_push") != before:
+            refreshed += 1
+    print(f"[info] 近到期仓库复核：查了 {done}/{len(pend)} 个，刷新 push 时间 {refreshed} 个"
+          f"（避免误出池）")
+    return refreshed
+
+
+def repo_fail_counts(phases, partial_fails=None):
+    """每个仓库的「下载失败链接数」，作为评分里失败率惩罚的输入。"""
+    out = {}
+    for entries in (phases or {}).values():
+        for full, got in entries or []:
+            if got == -1:
+                out[full] = out.get(full, 0) + 1
+    for full, txt in (partial_fails or {}).items():
+        m = re.match(r"(\d+)/", str(txt))
+        if m:
+            out[full] = out.get(full, 0) + int(m.group(1))
+    return out
+
+
 def main():
     import uplink  # 延迟导入：uplink 反向依赖本模块
 
@@ -3596,6 +3867,10 @@ def main():
                     help="每个阶段最多扫描的新增仓库数（默认 80；带 token 时可放心放大）")
     ap.add_argument("--max-seeds", type=int, default=30,
                     help="节点不足时最多补充采集的种子仓库数（默认 30）")
+    ap.add_argument("--max-nodes-per-repo", type=int, default=40000,
+                    help="单个仓库最多提取多少条节点（默认 40000）。"
+                         "经验值：正规量源单日 1~2.3 万条；超过这个量级的多半是聚合转载，"
+                         "去重后与已有节点高度重合，白吃解析与采集预算。0=不限")
     ap.add_argument("--search-pages", type=int, default=2,
                     help="每个关键词翻几页搜索结果（每页 100 条，默认 2 页；匿名限额下建议 1）")
     ap.add_argument("--search-days", type=int, default=3,
@@ -3739,7 +4014,13 @@ def main():
 
     records, processed, contrib = [], set(), {}
     counters = {"files": 0}
-    seed_data = load_seed_list(seed_file)
+    # 仓库地址池（2026-11-11 用户需求）：入池 / 5 天未更新出池 / 评分 / 配额全在这里。
+    # 文件名沿用 seed_repos.json（历史名，避免两份清单漂移），结构由 repo_pool 升到 v2。
+    pool_data = rpool.load(seed_file)
+    if pool_data.get("_migrated"):
+        print(f"[info] 仓库池升级到 v{rpool.VERSION} 口径：{pool_data['_migrated']} 个条目补齐"
+              f"入池/出池/评分字段")
+    seed_data = pool_data      # 旧的质量闸门与排序函数仍按 {repos:[...]} 读，向下兼容
     readme_stats = {}
     log_file = lay.collection_log_path(out_dir)
     report_repos = []
@@ -3764,24 +4045,48 @@ def main():
                            readme_stats=readme_stats, skip_bad=not args.keep_bad_repos,
                            deadline=deadline, readme_only=args.readme_only,
                            date_tolerance=args.readme_date_tolerance,
-                           fail_reasons=fail_reasons, partial_fails=partial_fails)
+                           fail_reasons=fail_reasons, partial_fails=partial_fails,
+                           max_nodes_per_repo=args.max_nodes_per_repo,
+                           quota_fn=lambda full: rpool.quota(
+                               rpool.find(pool_data, full) or {"tested": 0}))
 
     # 质量快照（写入日志，便于追溯「为什么先采这个仓库」）
-    scored = [r for r in seed_data.get("repos", []) if r.get("tested")]
-    scored.sort(key=lambda r: (-(r.get("avail_rate") or 0), -(r.get("contributed") or 0)))
-    quality_hint = "、".join(
-        f"{r['full_name']}(可用率{(r.get('avail_rate') or 0) * 100:.0f}%/质量{r.get('quality')})"
-        for r in scored[:8])
+    quality_hint = rpool.priority_hint(pool_data, today_iso, 8)
     if quality_hint:
-        print(f"[info] 质量优先顺序：{quality_hint}")
+        print(f"[info] 质量优先顺序（仓库评分）：{quality_hint}")
 
-    # ── 阶段 1：当天有更新的仓库 ──
-    repos_a = search_repos(args.token, args.max_repos, args.min_stars, today_iso,
+    # ── 阶段 1：仓库池采集（按评分从高到低取前 N 个）──
+    # 与旧逻辑的区别：以前每次只采「今天刚 push 的仓库」，一个 3 天前更新、节点仍然有效的
+    # 仓库永远轮不到；现在池内 5 天内的 active 仓库都参与，按分数（含新鲜度）排序取前 N，
+    # 既保住稳定量源，又让「今天刚更新的」自动排到前面。
+    repo_count = elastic_repo_count(args.max_repos, out_dir)
+    # 搜索命中**全部入池**（不只入今天要采的那几个）：池是靠日积月累变准的，
+    # 只把「今天采过的 80 个」记进池，等于每天重新认识世界一遍。
+    discovery_cap = max(200, args.max_repos * 3)
+    repos_a = search_repos(args.token, discovery_cap, args.min_stars, today_iso,
                            pages=args.search_pages)
-    print(f"[info] 阶段1（当天更新仓库）：发现 {len(repos_a)} 个候选")
+    print(f"[info] 阶段1（当天更新仓库）：搜索命中 {len(repos_a)} 个（全部入池，按评分采集）")
+    for r in repos_a:
+        rpool.mark_seen(pool_data, r["full_name"], r.get("stars", 0),
+                        r.get("pushed_at", ""), today_iso)
+    verify_near_expiry(pool_data, args.token, today_iso)
+    gone = rpool.evict_stale(pool_data, today_iso)
+    if gone:
+        print(f"[info] 仓库池出池 {len(gone)} 个（超过 {rpool.STALE_DAYS} 天未更新）："
+              f"{'、'.join(gone[:10])}" + ("…" if len(gone) > 10 else ""))
+    rpool.refresh(pool_data, today_iso)
+    pool_stat = rpool.summary(pool_data, today_iso)
+    print(f"[info] 仓库池：active {pool_stat['active']} / 出池 {pool_stat['evicted']}，"
+          f"今日 push {pool_stat['pushed_today']} 个，已实测 {pool_stat['tested']} 个，"
+          f"分数 {pool_stat['score_min']}~{pool_stat['score_max']}（中位 {pool_stat['score_median']}）")
+
+    pool_list = [{"full_name": r["full_name"], "stars": r.get("stars", 0),
+                  "pushed_at": r.get("last_push", ""), "score": r.get("score", 0)}
+                 for r in rpool.active_repos(pool_data, today_iso, limit=repo_count)]
+    print(f"[info] 阶段1 采集清单：池内按评分取前 {len(pool_list)} 个")
     budget = max(0, quota_left() - 5)
-    run_phase("阶段1·当天更新", repos_a, budget)
-    report_repos.extend(repos_a)
+    run_phase("阶段1·仓库池按评分", pool_list, budget)
+    report_repos.extend(pool_list)
     print(f"[info] 阶段1 完成，当前唯一节点：{uniq_count()} 条")
 
     # ── 阶段 2：仍不足 → 时间窗口放宽到前 N 天 + 扩大仓库数量 ──
@@ -3790,7 +4095,13 @@ def main():
         wide_iso = (now - timedelta(days=max(1, args.search_days))).strftime("%Y-%m-%d")
         repos_b = search_repos(args.token, args.max_repos * 2, args.min_stars, wide_iso,
                               pages=args.search_pages)
+        for r in repos_b:
+            ent = rpool.mark_seen(pool_data, r["full_name"], r.get("stars", 0),
+                                  r.get("pushed_at", ""), today_iso)
+            rpool.score_entry(ent, today_iso)
         fresh = [r for r in repos_b if r["full_name"] not in processed]
+        # 新入池的仓库也参与评分排序（新鲜度满分、可用率走先验），不能被老仓库挤到队尾
+        fresh.sort(key=lambda r: -((rpool.find(pool_data, r["full_name"]) or {}).get("score") or 0))
         print(f"[info] 阶段2（放宽至前 {args.search_days} 天更新 {wide_iso} 起，"
               f"扩大仓库数）：新增候选 {len(fresh)} 个")
         budget = max(0, quota_left() - 5)
@@ -3798,34 +4109,31 @@ def main():
         report_repos.extend(r for r in fresh if r["full_name"] not in {x["full_name"] for x in report_repos})
         print(f"[info] 阶段2 完成，当前唯一节点：{uniq_count()} 条")
 
-    # ── 阶段 3：仍不足 → 补充采集动态清单中的主流种子仓库（按质量分排序）──
+    # ── 阶段 3：仍不足 → 补充采集仓库池里分数最高的、还没采过的仓库 ──
     if uniq_count() < args.target_nodes:
         quota_left()
-        seed_repos = sorted(seed_data["repos"],
-                            key=lambda r: (r.get("avail_rate") if r.get("tested") else RATE_PRIOR,
-                                           r.get("contributed", 0), r.get("stars", 0)),
-                            reverse=True)
         pending = []
-        for r in seed_repos:
+        for r in rpool.active_repos(pool_data, today_iso):
             if r["full_name"] in processed:
                 continue
-            pending.append(r)
+            pending.append({"full_name": r["full_name"], "stars": r.get("stars", 0),
+                            "pushed_at": r.get("last_push", ""), "score": r.get("score", 0)})
             if len(pending) >= args.max_seeds:
                 break
-        print(f"[info] 阶段3（补充主流种子仓库，质量优先）：待采集 {len(pending)} 个")
+        print(f"[info] 阶段3（补充池内高评分仓库）：待采集 {len(pending)} 个")
         budget = max(0, quota_left() - 5)
-        run_phase("阶段3·主流种子仓库", pending, budget)
-        report_repos.extend({"full_name": r["full_name"], "stars": r.get("stars", 0),
-                             "pushed_at": r.get("last_collected", "") or date_str}
-                            for r in pending)
+        run_phase("阶段3·池内高评分补充", pending, budget)
+        report_repos.extend(pending)
         print(f"[info] 阶段3 完成，当前唯一节点：{uniq_count()} 条")
 
-    # ── 更新动态仓库清单 ──
+    # ── 更新仓库池：产量归属（1/N 分摊）+ 失败率 + 评分 ──
     stars_map = {r["full_name"]: r.get("stars", 0) for r in report_repos}
-    for full, got in contrib.items():
-        upsert_seed_stats(seed_data, full, stars_map.get(full, 0), got, date_str)
-    save_seed_list(seed_file, seed_data, date_str)
-    print(f"[info] 动态仓库清单已更新（{len(seed_data['repos'])} 个仓库，本次贡献节点 {len(contrib)} 个仓库）")
+    for full, ent in ((n, rpool.find(pool_data, n)) for n in stars_map):
+        if ent and not ent.get("stars"):
+            ent["stars"] = stars_map[full]
+    rpool.save(seed_file, pool_data, today_iso)
+    print(f"[info] 仓库池已更新（active {rpool.summary(pool_data, today_iso)['active']} 个，"
+          f"本次贡献节点 {len(contrib)} 个仓库）")
 
     raw_count = len(records)
     uniq, dropped = dedupe(records)
@@ -3885,6 +4193,30 @@ def main():
                   f"末尾 {'不可达' if uniq[-1].get('tcp_latency') is None else str(uniq[-1].get('tcp_latency')) + 'ms'}")
         else:
             print("[warn] 本次没有任何节点通过解析（预算过短或全部来源失败），按空结果继续落盘")
+
+    # ── 去重后的仓库归属（2026-11-11 用户需求）──
+    # 产量按 1/N 分摊回写仓库池、回填池内归属、再落一份可读的产量表。
+    # 顺序不能反：mark_pool_membership 要把池内仓库并进 repos，之后算归属才完整。
+    mark_pool_membership(uniq, out_dir)
+    attr = repo_attribution(uniq, contrib)
+    fails = repo_fail_counts(phases, partial_fails)
+    rpool.update_yield(pool_data,
+                       {k: {"raw": v["raw"], "uniq": v["uniq"]} for k, v in attr.items()},
+                       date_str, fail=fails)
+    extra = {k: {"raw": 0, "uniq": 0} for k in fails if k not in attr}
+    if extra:      # 下载失败但 0 产出的仓库也要留样本，否则失败率惩罚永远不生效
+        rpool.update_yield(pool_data, extra, date_str, fail=fails)
+    rpool.refresh(pool_data, today_iso)
+    rpool.save(seed_file, pool_data, today_iso)
+    for repo, st in attr.items():
+        ent = rpool.find(pool_data, repo)
+        st["score"] = (ent or {}).get("score")
+    yield_doc = write_repo_yield(out_dir, date_str, attr, raw_count, len(uniq),
+                                 pool_stat=rpool.summary(pool_data, today_iso))
+    if attr:
+        top = sorted(attr.items(), key=lambda kv: -kv[1]["uniq"])[:5]
+        print("[info] 产量归属 Top5（去重后按 1/N 分摊）："
+              + "、".join(f"{k.split('/')[-1]} {v['uniq']}（原始 {v['raw']}）" for k, v in top))
 
     meta_path, meta = write_nodes_meta(out_dir, uniq, date_str, tcp_stats) if uniq else (None, None)
     out = write_outputs(uniq, out_dir, date_str)

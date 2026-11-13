@@ -99,7 +99,11 @@ def load(state, core):
 # ---------------------------------------------------------------- 合并 / 淘汰
 
 def merge(pool, results, date_str):
-    """把本次实测可用的节点并入池。返回 (新增数, 更新数)。"""
+    """把本次实测可用的节点并入池。返回 (新增数, 更新数)。
+
+    每条节点带 `repos`（多仓库归属，2026-11-11 起）：实测通过时把来源仓库并进池条目，
+    池条目的仓库集合因此会一直累积——同一个节点被谁提供过，事后可查（仓库可用率评估要用）。
+    """
     idx = {n.get("key"): n for n in pool.get("nodes", []) if n.get("key")}
     added = updated = 0
     for r in results:
@@ -109,15 +113,20 @@ def merge(pool, results, date_str):
         k = node_key(host, port)
         lat = r.get("latency")
         lat = int(lat) if isinstance(lat, (int, float)) and lat > 0 else None
+        repos = [x for x in (r.get("repos") or []) if x]
+        if r.get("repo") and r["repo"] not in repos:
+            repos.insert(0, r["repo"])
         entry = idx.get(k)
         if entry is None:
             entry = {
                 "key": k, "host": host, "port": port,
                 "uri": r.get("uri", ""), "proto": r.get("proto", ""),
-                "repo": r.get("repo", ""),
+                "repo": r.get("repo", ""), "repos": repos,
                 "first_seen": date_str, "last_ok": date_str,
                 "ok_count": 1, "best_latency": lat, "last_latency": lat,
             }
+            if r.get("bw"):
+                entry["bw_mbps"] = r["bw"].get("mbps")
             pool.setdefault("nodes", []).append(entry)
             idx[k] = entry
             added += 1
@@ -125,9 +134,16 @@ def merge(pool, results, date_str):
             entry["uri"] = r.get("uri") or entry.get("uri", "")
             entry["proto"] = r.get("proto") or entry.get("proto", "")
             entry["repo"] = r.get("repo") or entry.get("repo", "")
+            merged = list(entry.get("repos") or [])
+            for repo in repos:
+                if repo not in merged:
+                    merged.append(repo)
+            entry["repos"] = merged
             entry["last_ok"] = date_str
             entry["ok_count"] = int(entry.get("ok_count") or 0) + 1
             entry["last_latency"] = lat
+            if r.get("bw") and r["bw"].get("mbps"):
+                entry["bw_mbps"] = r["bw"]["mbps"]
             if lat is not None:
                 best = entry.get("best_latency")
                 entry["best_latency"] = lat if best is None else min(best, lat)

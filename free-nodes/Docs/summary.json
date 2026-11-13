@@ -1,1197 +1,1500 @@
 {
- "date": "2026-11-10",
- "generated_at": "2026-11-10 22:35:35",
+ "date": "2026-11-13",
+ "generated_at": "2026-11-13 10:40:13",
  "cores": {
   "v2ray": {
-   "tested": 2261,
-   "ok": 24,
-   "unsupported": 3,
-   "config_error": 30,
-   "reasons": {
-    "unsupported": 3,
-    "tls": 590,
-    "timeout": 1614,
-    "config": 30
-   },
-   "rounds": 1,
-   "min_available": 10,
-   "cand": 2254,
-   "exhausted": true,
-   "cap": 2500,
-   "sampled": 2261,
-   "partial": false,
-   "policy": "full",
-   "file": "available_v2ray.txt",
-   "nodes": [
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1071,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1112,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1148,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "104.143.223.236",
-     "port": 2085,
-     "proto": "vless",
-     "latency": 1214,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "130.94.95.198",
-     "port": 57353,
-     "proto": "vless",
-     "latency": 1298,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1421,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "5.42.111.231",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1558,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1560,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "vps3.nemnogogo.com",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1561,
-     "repo": "cbusifabcap/daily_free_vpn"
-    },
-    {
-     "host": "p1tun2.greewebservices.ir",
-     "port": 2050,
-     "proto": "ss",
-     "latency": 1811,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "wwww.qarvian.ir",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2064,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2082,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2127,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "91.149.236.106",
-     "port": 8388,
-     "proto": "ss",
-     "latency": 2147,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "169.197.140.208",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 2293,
-     "repo": "sakha1370/OpenRay"
-    },
-    {
-     "host": "lt.krevetkabs111.net",
-     "port": 14443,
-     "proto": "vless",
-     "latency": 2350,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2597,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "138.16.249.118",
-     "port": 14443,
-     "proto": "vless",
-     "latency": 2625,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "146.75.57.111",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2649,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2819,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 3209,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "146.75.59.186",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3346,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "95.163.209.247",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3869,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "59.125.69.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3882,
-     "repo": "snakem982/proxypool"
-    }
-   ]
-  },
-  "xray": {
-   "tested": 2504,
-   "ok": 55,
-   "unsupported": 2,
-   "config_error": 5,
-   "reasons": {
-    "network": 208,
-    "tls": 817,
-    "timeout": 1401,
-    "reset": 16,
-    "unsupported": 2,
-    "config": 5
-   },
-   "rounds": 1,
-   "min_available": 10,
-   "cand": 2695,
-   "exhausted": false,
-   "cap": 2500,
-   "sampled": 2504,
-   "partial": false,
-   "policy": "full",
-   "file": "available_xray.txt",
-   "nodes": [
-    {
-     "host": "104.36.69.105",
-     "port": 443,
-     "proto": "vless",
-     "latency": 934,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "151.101.36.111",
-     "port": 443,
-     "proto": "vless",
-     "latency": 962,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 997,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "45.152.167.19",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1002,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1006,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "94.183.164.96",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1094,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "p1tun2.greewebservices.ir",
-     "port": 2050,
-     "proto": "ss",
-     "latency": 1217,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "212.69.86.159",
-     "port": 8447,
-     "proto": "vless",
-     "latency": 1250,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "94.183.164.96",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 1252,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "static-us.song69.fun",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1276,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "148.113.5.22",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1294,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "79.182.39.138",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1323,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "201.58.189.105",
-     "port": 2083,
-     "proto": "vless",
-     "latency": 1359,
-     "repo": "shabane/kamaji"
-    },
-    {
-     "host": "subscribe.goonars.com",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1388,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "static-de1.song69.fun",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1393,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "104.171.135.229",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1402,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "gemsubbgem.world",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1406,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "72.56.38.83",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1439,
-     "repo": "jichangx/free-nodes"
-    },
-    {
-     "host": "3fb2b6t.se2.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1447,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "5.42.111.231",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1502,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "46.8.114.205",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1508,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "138.16.249.118",
-     "port": 14443,
-     "proto": "vless",
-     "latency": 1510,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1614,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "2.27.175.229",
-     "port": 446,
-     "proto": "vless",
-     "latency": 1696,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "13.143.182.117",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1740,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1750,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "157.22.185.68",
-     "port": 2058,
-     "proto": "vless",
-     "latency": 1761,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "89.208.113.126",
-     "port": 8552,
-     "proto": "vless",
-     "latency": 1901,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "lt.krevetkabs111.net",
-     "port": 14443,
-     "proto": "vless",
-     "latency": 1930,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "panel.apexkey.store",
-     "port": 2053,
-     "proto": "vless",
-     "latency": 1960,
-     "repo": "zhuhaiuk/free-nodes"
-    },
-    {
-     "host": "91.215.40.106",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1994,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "104.225.239.235",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2026,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2044,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2055,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "guide.blog-forme.ru",
-     "port": 2087,
-     "proto": "vless",
-     "latency": 2102,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "94.183.164.119",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2138,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2178,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2188,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "zfapi.zalolink.com",
-     "port": 46105,
-     "proto": "vless",
-     "latency": 2277,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "78.159.245.40",
-     "port": 8445,
-     "proto": "vless",
-     "latency": 2287,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "zfapi.zalolink.com",
-     "port": 46957,
-     "proto": "vless",
-     "latency": 2427,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "144.31.225.74",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2485,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "94.183.164.119",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2524,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "91.149.236.106",
-     "port": 8388,
-     "proto": "ss",
-     "latency": 2558,
-     "repo": "kooker/FreeSubsCheck"
-    },
-    {
-     "host": "193.168.200.67",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2793,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "195.72.166.251",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2866,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "dwedfs.whitenw.net",
-     "port": 8445,
-     "proto": "vless",
-     "latency": 3015,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "213.199.57.127",
-     "port": 2087,
-     "proto": "vless",
-     "latency": 3106,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "estonia2.banovano.space",
-     "port": 17417,
-     "proto": "vless",
-     "latency": 3234,
-     "repo": "Danialsamadi/v2go"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 3237,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "srv21.buddygpt.ru",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3330,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "170.114.46.6",
-     "port": 2096,
-     "proto": "vless",
-     "latency": 3334,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "151.101.36.235",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3368,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "q.krevetkabs111.net",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3410,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "191.44.112.170.sslip.io",
-     "port": 443,
-     "proto": "trojan",
-     "latency": 4259,
-     "repo": "ermaozi01/free_clash_vpn"
-    }
-   ]
-  },
-  "clash": {
-   "tested": 2508,
-   "ok": 33,
-   "unsupported": 0,
+   "tested": 3896,
+   "ok": 7,
+   "unsupported": 4,
    "config_error": 10,
    "reasons": {
-    "network": 226,
-    "tls": 465,
-    "timeout": 1774,
+    "network": 1,
+    "tls": 182,
+    "timeout": 1193,
+    "unsupported": 4,
     "config": 10
    },
    "rounds": 1,
    "min_available": 10,
-   "cand": 2922,
+   "cand": 28727,
    "exhausted": false,
    "cap": 2500,
-   "sampled": 2508,
-   "partial": false,
+   "sampled": 1884,
+   "partial": true,
    "policy": "full",
+   "elastic": "上次 5/2504 = 0.2%（2026-11-13）→ 目标 30 个约需 15024，取 2500",
+   "bw": null,
+   "targets": {
+    "primary": {
+     "passed": 2,
+     "total": 1378
+    },
+    "github": {
+     "passed": 2,
+     "total": 2
+    },
+    "x": {
+     "passed": 1,
+     "total": 2
+    },
+    "cloudflare": {
+     "passed": 2,
+     "total": 2
+    },
+    "youtube": {
+     "passed": 2,
+     "total": 2
+    }
+   },
+   "file": "available_v2ray.txt",
+   "nodes": [
+    {
+     "host": "52.77.214.112",
+     "port": 8443,
+     "proto": "ss",
+     "latency": 618,
+     "repo": "hello-world-1989/cn-news",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "3.34.49.234",
+     "port": 8443,
+     "proto": "ss",
+     "latency": 636,
+     "repo": "hello-world-1989/cn-news",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "139.224.244.8",
+     "port": 49534,
+     "proto": "vmess",
+     "latency": 744,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "178.17.58.55",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 982,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "k9-85j.pages.dev",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1232,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1232,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1063,
+       "code": 200
+      },
+      "x": {
+       "ok": false,
+       "ms": 3018,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1210,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1037,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "de-tg.fastlanehosting.ru",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1636,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "wells.aisb.dpdns.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2184,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2184,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 2325,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 2064,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 2023,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1997,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    }
+   ]
+  },
+  "xray": {
+   "tested": 2571,
+   "ok": 22,
+   "unsupported": 1,
+   "config_error": 0,
+   "reasons": {
+    "tls": 253,
+    "network": 121,
+    "timeout": 810,
+    "unsupported": 1
+   },
+   "rounds": 1,
+   "min_available": 10,
+   "cand": 25537,
+   "exhausted": false,
+   "cap": 2500,
+   "sampled": 1919,
+   "partial": true,
+   "policy": "full",
+   "elastic": "上次 7/1371 = 0.5%（2026-11-13）→ 目标 30 个约需 5876，取 2500",
+   "bw": null,
+   "targets": {
+    "primary": {
+     "passed": 15,
+     "total": 1199
+    },
+    "github": {
+     "passed": 12,
+     "total": 15
+    },
+    "x": {
+     "passed": 13,
+     "total": 15
+    },
+    "cloudflare": {
+     "passed": 12,
+     "total": 15
+    },
+    "youtube": {
+     "passed": 13,
+     "total": 15
+    }
+   },
+   "file": "available_xray.txt",
+   "nodes": [
+    {
+     "host": "82.29.36.252",
+     "port": 443,
+     "proto": "vless",
+     "latency": 297,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "139.224.244.8",
+     "port": 49534,
+     "proto": "vmess",
+     "latency": 444,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "212.69.135.225",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 899,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 899,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1254,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1029,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 889,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1010,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "104.26.6.171",
+     "port": 443,
+     "proto": "trojan",
+     "latency": 916,
+     "repo": "hamedcode/port-based-v2ray-configs",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 916,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 912,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 978,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 990,
+       "code": 0,
+       "err": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] ce"
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 985,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "de-tg.fastlanehosting.ru",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 970,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "5.104.74.50",
+     "port": 8443,
+     "proto": "vless",
+     "latency": 1106,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1106,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1241,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 970,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1026,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 929,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "178.17.58.55",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1376,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "spacex.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1439,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1439,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 3002,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "x": {
+       "ok": false,
+       "ms": 3017,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 3017,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "youtube": {
+       "ok": false,
+       "ms": 3010,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "14f7f5f0.mrbl69black.pages.dev",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1513,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1513,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 330,
+       "code": 0,
+       "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+      },
+      "x": {
+       "ok": false,
+       "ms": 230,
+       "code": 0,
+       "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 3037,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "youtube": {
+       "ok": false,
+       "ms": 3017,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "lanzerotte1312.live",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1540,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1540,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1510,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1125,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1414,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1190,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "1fd53cx.se5.h1clayd.shop",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1597,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1597,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1495,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1437,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 642,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 576,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "62.60.219.235",
+     "port": 443,
+     "proto": "vless",
+     "latency": 1844,
+     "repo": "0xRadikal/Free-v2ray-Configs",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1844,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1697,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1786,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 810,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 873,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "157.22.190.220",
+     "port": 2053,
+     "proto": "vless",
+     "latency": 1902,
+     "repo": "whoahaow/rjsxrd",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1902,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1827,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 2040,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1748,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1738,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "c3b4ce4b957a.vps.myjino.ru",
+     "port": 53898,
+     "proto": "vless",
+     "latency": 2046,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2046,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1343,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1918,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1569,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1347,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "pl3.fox-lisa.ru",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2260,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2260,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1453,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1721,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 3307,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 2337,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "wells.aisb.dpdns.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2270,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2270,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 3055,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "x": {
+       "ok": true,
+       "ms": 1926,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1448,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1711,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "lt.t1n2.com",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2284,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2284,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1112,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1275,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1213,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1105,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "100gramm.pro",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2408,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2408,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1677,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1859,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1571,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1507,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "k9-85j.pages.dev",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2511,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2511,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 933,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1578,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1737,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1671,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "3.34.49.234",
+     "port": 8443,
+     "proto": "ss",
+     "latency": 2983,
+     "repo": "hello-world-1989/cn-news",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "45.192.203.44",
+     "port": 10727,
+     "proto": "vless",
+     "latency": 3232,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "18.171.57.116",
+     "port": 443,
+     "proto": "ss",
+     "latency": 4198,
+     "repo": "miladtahanian/Config-Collector",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    }
+   ]
+  },
+  "clash": {
+   "tested": 3531,
+   "ok": 12,
+   "unsupported": 0,
+   "config_error": 4,
+   "reasons": {
+    "network": 97,
+    "tls": 75,
+    "timeout": 1063,
+    "config": 4
+   },
+   "rounds": 1,
+   "min_available": 10,
+   "cand": 35326,
+   "exhausted": false,
+   "cap": 2500,
+   "sampled": 1999,
+   "partial": true,
+   "policy": "full",
+   "elastic": "上次 3/2283 = 0.1%（2026-11-13）→ 目标 30 个约需 22830，取 2500",
+   "bw": null,
+   "targets": {
+    "primary": {
+     "passed": 9,
+     "total": 1244
+    },
+    "github": {
+     "passed": 5,
+     "total": 9
+    },
+    "x": {
+     "passed": 5,
+     "total": 9
+    },
+    "cloudflare": {
+     "passed": 5,
+     "total": 9
+    },
+    "youtube": {
+     "passed": 8,
+     "total": 9
+    }
+   },
    "file": "available_clash.yaml",
    "nodes": [
     {
-     "host": "104.143.223.236",
-     "port": 2085,
-     "proto": "vless",
-     "latency": 903,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "host": "139.224.244.8",
+     "port": 49534,
+     "proto": "vmess",
+     "latency": 840,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
     },
     {
-     "host": "193.168.200.67",
+     "host": "de-tg.fastlanehosting.ru",
+     "port": 443,
+     "proto": "hysteria2",
+     "latency": 1117,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
+    },
+    {
+     "host": "k9-85j.pages.dev",
      "port": 443,
      "proto": "vless",
-     "latency": 1020,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1254,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1254,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 919,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1609,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1399,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 820,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1024,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.54",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1061,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "130.94.95.198",
-     "port": 57353,
-     "proto": "vless",
-     "latency": 1099,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "79.182.39.138",
+     "host": "lt.t1n2.com",
      "port": 443,
      "proto": "vless",
-     "latency": 1137,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1281,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1281,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1206,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1279,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1118,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1358,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "104.225.239.235",
+     "host": "lanzerotte1312.live",
      "port": 443,
      "proto": "vless",
-     "latency": 1230,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1304,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1304,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1580,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1393,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1276,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 928,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "zfapi.zalolink.com",
-     "port": 46957,
-     "proto": "vless",
-     "latency": 1359,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "163.245.42.5",
+     "host": "1fd53cx.se5.h1clayd.shop",
      "port": 443,
      "proto": "vless",
-     "latency": 1396,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1395,
+     "repo": "Maskkost93/kizyak-vpn-4.0",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1395,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 3017,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "x": {
+       "ok": false,
+       "ms": 3019,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 3011,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1226,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "72.56.4.84",
+     "host": "52.77.214.112",
      "port": 443,
      "proto": "vless",
-     "latency": 1456,
-     "repo": "0xRadikal/Free-v2ray-Configs"
+     "latency": 1606,
+     "repo": "hello-world-1989/cn-news",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
     },
     {
-     "host": "130.78.30.152",
+     "host": "proxy-34l.pages.dev",
+     "port": 2087,
+     "proto": "vless",
+     "latency": 1750,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1750,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 3012,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "x": {
+       "ok": false,
+       "ms": 1767,
+       "code": 0,
+       "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 1698,
+       "code": 0,
+       "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 969,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "wells.aisb.dpdns.org",
      "port": 443,
      "proto": "vless",
-     "latency": 1497,
-     "repo": "whoahaow/rjsxrd"
+     "latency": 1756,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1756,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1446,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1171,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1122,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1219,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "151.101.36.88",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1533,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1628,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "138.16.249.118",
-     "port": 14443,
-     "proto": "vless",
-     "latency": 1648,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "jp004.421421.xyz",
-     "port": 20230,
-     "proto": "vless",
-     "latency": 1674,
-     "repo": "cbusifabcap/daily_free_vpn"
-    },
-    {
-     "host": "wwww.qarvian.ir",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1746,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "104.36.69.105",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1759,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "13.143.182.117",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1951,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "146.75.57.111",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1969,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "13.36.165.6",
-     "port": 443,
-     "proto": "ss",
-     "latency": 2065,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2255,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "panel.apexkey.store",
+     "host": "157.22.190.220",
      "port": 2053,
      "proto": "vless",
-     "latency": 2272,
-     "repo": "zhuhaiuk/free-nodes"
+     "latency": 1771,
+     "repo": "whoahaow/rjsxrd",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1771,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1679,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1866,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1758,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1799,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "151.101.36.111",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2308,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "196.196.149.80",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2400,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "104.17.70.206",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 2448,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "vps3.nemnogogo.com",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2517,
-     "repo": "cbusifabcap/daily_free_vpn"
-    },
-    {
-     "host": "5.42.111.231",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2535,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2660,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "p1tun2.greewebservices.ir",
-     "port": 2050,
-     "proto": "ss",
-     "latency": 2770,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "3fb2b6t.se2.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3019,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "38917fx.es1.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3112,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "153.56.228.153",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3421,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "191.44.112.170.sslip.io",
-     "port": 443,
+     "host": "104.18.35.86",
+     "port": 2096,
      "proto": "trojan",
-     "latency": 4612,
-     "repo": "ermaozi01/free_clash_vpn"
+     "latency": 1784,
+     "repo": "rekt0ro/ProxyRift",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1784,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 3039,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "x": {
+       "ok": false,
+       "ms": 3142,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 3003,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "youtube": {
+       "ok": false,
+       "ms": 3013,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      }
+     },
+     "bw_mbps": null
+    },
+    {
+     "host": "yd.2.hhhhh.eu.org",
+     "port": 443,
+     "proto": "vless",
+     "latency": 2601,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2601,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 3016,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "x": {
+       "ok": false,
+       "ms": 3010,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 3009,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 2830,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     }
    ]
   },
   "singbox": {
-   "tested": 2504,
-   "ok": 45,
+   "tested": 3114,
+   "ok": 6,
    "unsupported": 0,
-   "config_error": 13,
+   "config_error": 3,
    "reasons": {
-    "reset": 1915,
-    "auth": 3,
-    "tls": 528,
-    "config": 13
+    "reset": 1214,
+    "tls": 218,
+    "config": 3
    },
    "rounds": 1,
    "min_available": 10,
-   "cand": 2753,
+   "cand": 34370,
    "exhausted": false,
    "cap": 2500,
-   "sampled": 2504,
-   "partial": false,
+   "sampled": 2042,
+   "partial": true,
    "policy": "full",
+   "elastic": "上次 1/1674 = 0.1%（2026-11-13）→ 目标 30 个约需 50220，取 2500",
+   "bw": null,
+   "targets": {
+    "primary": {
+     "passed": 5,
+     "total": 1437
+    },
+    "github": {
+     "passed": 3,
+     "total": 5
+    },
+    "x": {
+     "passed": 3,
+     "total": 5
+    },
+    "cloudflare": {
+     "passed": 3,
+     "total": 5
+    },
+    "youtube": {
+     "passed": 3,
+     "total": 5
+    }
+   },
    "file": "available_singbox.json",
    "nodes": [
     {
-     "host": "91.149.236.106",
-     "port": 8388,
-     "proto": "ss",
-     "latency": 858,
-     "repo": "kooker/FreeSubsCheck"
+     "host": "139.224.244.8",
+     "port": 49534,
+     "proto": "vmess",
+     "latency": 669,
+     "repo": "rtwo2/FastNodes",
+     "repos": [],
+     "targets": {},
+     "bw_mbps": null
     },
     {
-     "host": "104.143.223.236",
-     "port": 2085,
-     "proto": "vless",
-     "latency": 988,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.36",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 991,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "212.69.86.159",
-     "port": 8447,
-     "proto": "vless",
-     "latency": 1006,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.90",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1028,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "193.168.200.67",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1038,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "163.245.42.5",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1091,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.18",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1098,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "jp004.421421.xyz",
-     "port": 20230,
-     "proto": "vless",
-     "latency": 1127,
-     "repo": "cbusifabcap/daily_free_vpn"
-    },
-    {
-     "host": "13.36.165.6",
+     "host": "18.171.57.116",
      "port": 443,
      "proto": "ss",
-     "latency": 1171,
-     "repo": "snakem982/proxypool"
+     "latency": 1204,
+     "repo": "miladtahanian/Config-Collector",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1204,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 967,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1384,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 914,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1980,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "172.235.36.156",
+     "host": "kclx.eu.org",
      "port": 443,
      "proto": "vless",
-     "latency": 1228,
-     "repo": "sakha1370/OpenRay"
+     "latency": 1456,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1456,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 332,
+       "code": 0,
+       "err": "URLError: <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>"
+      },
+      "x": {
+       "ok": false,
+       "ms": 251,
+       "code": 0,
+       "err": "URLError: <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 3021,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "youtube": {
+       "ok": false,
+       "ms": 3017,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "5.42.111.231",
+     "host": "vless3.gem-audio2.us.ci",
      "port": 443,
      "proto": "vless",
-     "latency": 1286,
-     "repo": "NiREvil/vless"
+     "latency": 1528,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1528,
+       "code": 204
+      },
+      "github": {
+       "ok": false,
+       "ms": 3002,
+       "code": 0,
+       "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+      },
+      "x": {
+       "ok": false,
+       "ms": 226,
+       "code": 0,
+       "err": "URLError: <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>"
+      },
+      "cloudflare": {
+       "ok": false,
+       "ms": 244,
+       "code": 0,
+       "err": "URLError: <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>"
+      },
+      "youtube": {
+       "ok": false,
+       "ms": 226,
+       "code": 0,
+       "err": "URLError: <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>"
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "130.94.95.198",
-     "port": 57353,
-     "proto": "vless",
-     "latency": 1308,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "72.56.4.84",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1379,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "104.171.135.229",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1419,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "panel.apexkey.store",
+     "host": "157.22.190.220",
      "port": 2053,
      "proto": "vless",
-     "latency": 1492,
-     "repo": "zhuhaiuk/free-nodes"
+     "latency": 1714,
+     "repo": "whoahaow/rjsxrd",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 1714,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 1848,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 1975,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1641,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 1802,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     },
     {
-     "host": "vps3.nemnogogo.com",
+     "host": "wells.aisb.dpdns.org",
      "port": 443,
      "proto": "vless",
-     "latency": 1511,
-     "repo": "cbusifabcap/daily_free_vpn"
-    },
-    {
-     "host": "104.36.69.105",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1681,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "172.236.241.130",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1741,
-     "repo": "sakha1370/OpenRay"
-    },
-    {
-     "host": "362c1eg.se2.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1789,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.72",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1811,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.99",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1842,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "acm.org",
-     "port": 80,
-     "proto": "vless",
-     "latency": 1866,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "wwww.qarvian.ir",
-     "port": 443,
-     "proto": "vless",
-     "latency": 1889,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "202.50.253.63",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 1944,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "362c1eg.se1.h1clayd.click",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2032,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "146.75.57.111",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2074,
-     "repo": "snakem982/proxypool"
-    },
-    {
-     "host": "lt.krevetkabs111.net",
-     "port": 14443,
-     "proto": "vless",
-     "latency": 2138,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "p1tun2.greewebservices.ir",
-     "port": 2050,
-     "proto": "ss",
-     "latency": 2163,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "79.182.39.138",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2164,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "202.50.253.81",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2178,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "45.76.172.197",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2183,
-     "repo": "NiREvil/vless"
-    },
-    {
-     "host": "89.187.7.4",
-     "port": 2166,
-     "proto": "vless",
-     "latency": 2391,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "13.143.182.117",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2497,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "202.50.253.45",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2580,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "202.50.253.27",
-     "port": 19999,
-     "proto": "ss",
-     "latency": 2582,
-     "repo": "ermaozi01/free_clash_vpn"
-    },
-    {
-     "host": "104.225.239.235",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2648,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "138.16.249.118",
-     "port": 14443,
-     "proto": "vless",
-     "latency": 2674,
-     "repo": "igareck/vpn-configs-for-russia"
-    },
-    {
-     "host": "172.235.51.71",
-     "port": 443,
-     "proto": "vless",
-     "latency": 2919,
-     "repo": "sakha1370/OpenRay"
-    },
-    {
-     "host": "starlink-ft.251313.xyz",
-     "port": 443,
-     "proto": "hysteria2",
-     "latency": 3078,
-     "repo": "danmaifu/mianfeijiedian"
-    },
-    {
-     "host": "104.17.70.206",
-     "port": 8443,
-     "proto": "vless",
-     "latency": 3507,
-     "repo": "0xRadikal/Free-v2ray-Configs"
-    },
-    {
-     "host": "153.56.228.153",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3743,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "196.196.149.80",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3762,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "196.199.122.2",
-     "port": 443,
-     "proto": "vless",
-     "latency": 3849,
-     "repo": "whoahaow/rjsxrd"
-    },
-    {
-     "host": "jp.sofast.live",
-     "port": 52683,
-     "proto": "vless",
-     "latency": 5456,
-     "repo": "kooker/FreeSubsCheck"
+     "latency": 2337,
+     "repo": "igareck/vpn-configs-for-russia",
+     "repos": [],
+     "targets": {
+      "primary": {
+       "ok": true,
+       "ms": 2337,
+       "code": 204
+      },
+      "github": {
+       "ok": true,
+       "ms": 2172,
+       "code": 200
+      },
+      "x": {
+       "ok": true,
+       "ms": 2035,
+       "code": 200
+      },
+      "cloudflare": {
+       "ok": true,
+       "ms": 1984,
+       "code": 200
+      },
+      "youtube": {
+       "ok": true,
+       "ms": 2036,
+       "code": 200
+      }
+     },
+     "bw_mbps": null
     }
    ]
   }

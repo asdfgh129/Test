@@ -1,5 +1,26 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-13 09:26 迟到触发（采集日期仍为 2026-11-10）
+
+- **断档两晚**：11-11、11-12 两晚的三个窗口都没跑（本机离线）。`Docs/summary.json` 与
+  `nodes/tested_state.json` 仍是 11-10 22:35，`available_*` 停 11-10 → 本窗口按规则取
+  `summary.date=2026-11-10` 作采集日期，闸门仍判 **GATE: done**（v2ray 2261/2254 测完、
+  其余三核测满 2500 上限）。这个 done 只代表「11-10 那份数据」，**不代表今晚跑过**
+- 本窗口未采集、未探测、未验证（未占用验证资源），也未发布：`git add free-nodes` 会把
+  11-11 下午那批未验证的 src 改造一起带上，绝不能推
+- 尾巴处理：无 `pending-push.json`，HEAD 原本落后远端 3 个提交（全是 CI 产物），
+  已 `git merge --ff-only` 快进到 `a75934c`（CI 采集 2026-11-13）
+- **CI 采集量涨 10 倍（11-11 起）**：原始 104 万 → 去重 10.5 万（此前约 1 万）。
+  主因单仓 `rtwo2/FastNodes` 10 条链接吐 694,974 条、`pog7x/vpn-configs` 133,623、
+  `asgharkapk/...` 68,382。`nodes_uris.txt` 现 117,760 行、`nodes_meta.reachable=0`（CI 不探测，符合口径）
+- CI 派发持续漂移：11-11 04:33、11-12 04:17、11-13 04:52（北京），cron 21:05 迟到 7~8h（known-issues 54/58 同型）；
+  今日 09:28 另有两次 `workflow_dispatch`（run 33/34），疑为第一/第二窗口迟到后各自派发
+- **工作区有 11-11 15:39~16:25 的未提交改造**（`repo_pool.py` 484 行新增 +
+  collect/test/layout/pool 共 856 行）：仓库地址池评分/配额、单仓产量上限 `--max-nodes-per-repo`、
+  池条目 `repos` 多归属与 `bw_mbps`。py_compile 与 `--help` 通过，**未跑过真实采集 → 不提交**
+- 判据留用：**闸门只看 summary，summary 不更新就说明前一晚整条链没跑**——遇到迟到触发（本窗口 09:26）
+  先比对 `summary/tested_state` 的 mtime 与 `nodes_uris` 的 mtime，三者停在同一天就是断档，别当成「今晚已跑完」
+
 ## 2026-11-10 采集日（2026-11-11 01:30 运行）
 
 - 闸门退出码 0：v2ray「候选已全部测完」（2261/2254）、xray/clash/singbox「已测满单轮上限」

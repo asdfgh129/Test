@@ -2,6 +2,189 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
+## 2026-11-13 10:40
+
+- 预筛：TCP 连通 36740/37270 个节点
+- 测试地址：`https://gstatic.com/generate_204`，并发 24，超时 3.0s（超时即判失败，不再等）
+- 测试策略：全量——候选 ≤ 2500 个全部测试；超过则只测排序前 2500 个
+- 弹性测试量（按目标可用数反推）：v2ray 上次 5/2504 = 0.2%（2026-11-13）→ 目标 30 个约需 15024，取 2500；xray 上次 7/1371 = 0.5%（2026-11-13）→ 目标 30 个约需 5876，取 2500；clash 上次 3/2283 = 0.1%（2026-11-13）→ 目标 30 个约需 22830，取 2500；singbox 上次 1/1674 = 0.1%（2026-11-13）→ 目标 30 个约需 50220，取 2500
+- 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；不复测（实测复测收益 1.7%）；「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）
+- 总耗时：20.0 分钟
+
+| 代理内核 | 测试数量 | 可用数量 | 可用率 | 不支持 | 配置错误 | 不可达 | 轮次 | 可用文件 |
+|---|---|---|---|---|---|---|---|---|
+| v2ray | 3896 | 7 | 0.2% | 4 | 10 | 3875 | 截断（上限 2500） | `nodes/available_v2ray.txt` |
+| xray | 2571 | 22 | 0.9% | 1 | 0 | 2548 | 截断（上限 2500） | `nodes/available_xray.txt` |
+| clash | 3531 | 12 | 0.3% | 0 | 4 | 3515 | 截断（上限 2500） | `nodes/available_clash.yaml` |
+| singbox | 3114 | 6 | 0.2% | 0 | 3 | 3105 | 截断（上限 2500） | `nodes/available_singbox.json` |
+
+### 多目标可达性
+
+主目标（`primary`，默认 gstatic/generate_204）通过才算可用；其余目标只在主目标通过后于同一内核会话内补测，各自独立记录延迟。
+
+| 内核 | 目标 | 通过 | 测试 | 通过率 |
+|---|---|---|---|---|
+| v2ray | primary | 2 | 1378 | 0% |
+| v2ray | github | 2 | 2 | 100% |
+| v2ray | x | 1 | 2 | 50% |
+| v2ray | cloudflare | 2 | 2 | 100% |
+| v2ray | youtube | 2 | 2 | 100% |
+| xray | primary | 15 | 1199 | 1% |
+| xray | github | 12 | 15 | 80% |
+| xray | x | 13 | 15 | 87% |
+| xray | cloudflare | 12 | 15 | 80% |
+| xray | youtube | 13 | 15 | 87% |
+| clash | primary | 9 | 1244 | 1% |
+| clash | github | 5 | 9 | 56% |
+| clash | x | 5 | 9 | 56% |
+| clash | cloudflare | 5 | 9 | 56% |
+| clash | youtube | 8 | 9 | 89% |
+| singbox | primary | 5 | 1437 | 0% |
+| singbox | github | 3 | 5 | 60% |
+| singbox | x | 3 | 5 | 60% |
+| singbox | cloudflare | 3 | 5 | 60% |
+| singbox | youtube | 3 | 5 | 60% |
+
+
+> **本轮未跑完**（墙钟预算到期主动收尾或分窗口续跑，不是失败）：中途截断：v2ray（3896/1884）；中途截断：xray（2571/1919）；中途截断：clash（3531/1999）；中途截断：singbox（3114/2042）。已测结果全部有效且已落盘，剩余部分下次运行用 `--cores` + `--resume-tested` 接着测。
+
+### 失败原因分布
+
+「不支持 / 配置被拒绝」属于本机内核能力或参数问题，不是节点问题；只有 tls / auth / refused / reset / timeout 才是节点侧的失败证据。
+
+| 代理内核 | 原因 | 数量 |
+|---|---|---|
+| v2ray | 连接超时 | 1193 |
+| v2ray | TLS 握手失败（证书/协议不匹配） | 182 |
+| v2ray | 配置被内核拒绝（参数不符） | 10 |
+| v2ray | 该内核不支持（协议/传输/加密/插件） | 4 |
+| v2ray | 网络层失败 | 1 |
+| xray | 连接超时 | 810 |
+| xray | TLS 握手失败（证书/协议不匹配） | 253 |
+| xray | 网络层失败 | 121 |
+| xray | 该内核不支持（协议/传输/加密/插件） | 1 |
+| clash | 连接超时 | 1063 |
+| clash | 网络层失败 | 97 |
+| clash | TLS 握手失败（证书/协议不匹配） | 75 |
+| clash | 配置被内核拒绝（参数不符） | 4 |
+| singbox | 连接被重置 | 1214 |
+| singbox | TLS 握手失败（证书/协议不匹配） | 218 |
+| singbox | 配置被内核拒绝（参数不符） | 3 |
+
+
+### 可用节点池（跨天累积）
+
+每个内核一份池文件：实测通过的节点自动入池，池内节点次日继续复测，连续多天未通过则淘汰。
+
+| 内核 | 池内节点 | 今日新增 | 今日复测通过 | 池文件 |
+|---|---|---|---|---|
+| v2ray | 211 | 2 | 5 | `pool/pool_v2ray.txt` |
+| xray | 652 | 15 | 7 | `pool/pool_xray.txt` |
+| clash | 357 | 9 | 3 | `pool/pool_clash.yaml` |
+| singbox | 334 | 5 | 1 | `pool/pool_singbox.json` |
+
+池目录：`nodes/pool`（`pool_<core>.<ext>` 可直接导入客户端；`pool_state.json` 存首见/最近通过/通过次数/最佳延迟）
+
+
+### 仓库节点可用率（本次实测）
+
+可用率是仓库质量的硬指标：连续偏低会降低采集优先级，长期 0 可用会被跳过。
+
+| 仓库 | 实测 | 可用 | 可用率 | 平均延迟 | 质量分 |
+|---|---|---|---|---|---|
+| Maskkost93/kizyak-vpn-4.0 | 58 | 11 | 19% | 1647ms | 33.4 |
+| 0xRadikal/Free-v2ray-Configs | 14 | 1 | 7% | 1844ms | 23.9 |
+| igareck/vpn-configs-for-russia | 316 | 13 | 4% | 1833ms | 21.9 |
+| rekt0ro/ProxyRift | 31 | 1 | 3% | 1784ms | 21.6 |
+| miladtahanian/Config-Collector | 43 | 1 | 2% | 1204ms | 24.4 |
+| whoahaow/rjsxrd | 394 | 3 | 1% | 1796ms | 19.8 |
+| hamedcode/port-based-v2ray-configs | 1317 | 1 | 0% | 916ms | 24.6 |
+| SoliSpirit/SolVPN | 88 | 0 | 0% | -ms | 0.0 |
+| amirkma/proxykma | 28 | 0 | 0% | -ms | 0.0 |
+| rtwo2/FastNodes | 113 | 0 | 0% | -ms | 0.0 |
+| kooker/FreeSubsCheck | 42 | 0 | 0% | -ms | 0.0 |
+| WLget/V2ray_free | 12 | 0 | 0% | -ms | 0.0 |
+| v2raynnodes/clashfree | 12 | 0 | 0% | -ms | 0.0 |
+| v2raynnodes/v2rayfree | 4 | 0 | 0% | -ms | 0.0 |
+| cbusifabcap/daily_free_vpn | 4 | 0 | 0% | -ms | 0.0 |
+| MustafaBaqer/VestraNet-Nodes | 219 | 0 | 0% | -ms | 0.0 |
+| SoliSpirit/v2ray-configs | 924 | 0 | 0% | -ms | 0.0 |
+| DarkRoyalty/shnajder-vpn-configs | 692 | 0 | 0% | -ms | 0.0 |
+| pie-with-jam/PulseProxy | 574 | 0 | 0% | -ms | 0.0 |
+| freenodess/freenodess | 35 | 0 | 0% | -ms | 0.0 |
+| LoneKingCode/free-proxy-db | 159 | 0 | 0% | -ms | 0.0 |
+| lanzm/MetaFetch | 201 | 0 | 0% | -ms | 0.0 |
+
+
+### 各内核可用节点详情
+
+#### v2ray（7 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `52.77.214.112:8443` | ss | 618ms | hello-world-1989/cn-news |
+| `3.34.49.234:8443` | ss | 636ms | hello-world-1989/cn-news |
+| `139.224.244.8:49534` | vmess | 744ms | rtwo2/FastNodes |
+| `178.17.58.55:443` | hysteria2 | 982ms | rtwo2/FastNodes |
+| `k9-85j.pages.dev:443` | vless | 1232ms | igareck/vpn-configs-for-russia |
+| `de-tg.fastlanehosting.ru:443` | hysteria2 | 1636ms | rtwo2/FastNodes |
+| `wells.aisb.dpdns.org:443` | vless | 2184ms | igareck/vpn-configs-for-russia |
+
+#### xray（22 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `82.29.36.252:443` | vless | 297ms | rtwo2/FastNodes |
+| `139.224.244.8:49534` | vmess | 444ms | rtwo2/FastNodes |
+| `212.69.135.225:8443` | vless | 899ms | Maskkost93/kizyak-vpn-4.0 |
+| `104.26.6.171:443` | trojan | 916ms | hamedcode/port-based-v2ray-configs |
+| `de-tg.fastlanehosting.ru:443` | hysteria2 | 970ms | rtwo2/FastNodes |
+| `5.104.74.50:8443` | vless | 1106ms | Maskkost93/kizyak-vpn-4.0 |
+| `178.17.58.55:443` | hysteria2 | 1376ms | rtwo2/FastNodes |
+| `spacex.com:443` | vless | 1439ms | igareck/vpn-configs-for-russia |
+| `14f7f5f0.mrbl69black.pages.dev:443` | vless | 1513ms | igareck/vpn-configs-for-russia |
+| `lanzerotte1312.live:443` | vless | 1540ms | Maskkost93/kizyak-vpn-4.0 |
+| `1fd53cx.se5.h1clayd.shop:443` | vless | 1597ms | Maskkost93/kizyak-vpn-4.0 |
+| `62.60.219.235:443` | vless | 1844ms | 0xRadikal/Free-v2ray-Configs |
+| `157.22.190.220:2053` | vless | 1902ms | whoahaow/rjsxrd |
+| `c3b4ce4b957a.vps.myjino.ru:53898` | vless | 2046ms | Maskkost93/kizyak-vpn-4.0 |
+| `pl3.fox-lisa.ru:443` | vless | 2260ms | Maskkost93/kizyak-vpn-4.0 |
+| `wells.aisb.dpdns.org:443` | vless | 2270ms | igareck/vpn-configs-for-russia |
+| `lt.t1n2.com:443` | vless | 2284ms | Maskkost93/kizyak-vpn-4.0 |
+| `100gramm.pro:443` | vless | 2408ms | Maskkost93/kizyak-vpn-4.0 |
+| `k9-85j.pages.dev:443` | vless | 2511ms | igareck/vpn-configs-for-russia |
+| `3.34.49.234:8443` | ss | 2983ms | hello-world-1989/cn-news |
+| `45.192.203.44:10727` | vless | 3232ms | rtwo2/FastNodes |
+| `18.171.57.116:443` | ss | 4198ms | miladtahanian/Config-Collector |
+
+#### clash（12 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `139.224.244.8:49534` | vmess | 840ms | rtwo2/FastNodes |
+| `de-tg.fastlanehosting.ru:443` | hysteria2 | 1117ms | rtwo2/FastNodes |
+| `k9-85j.pages.dev:443` | vless | 1254ms | igareck/vpn-configs-for-russia |
+| `lt.t1n2.com:443` | vless | 1281ms | Maskkost93/kizyak-vpn-4.0 |
+| `lanzerotte1312.live:443` | vless | 1304ms | Maskkost93/kizyak-vpn-4.0 |
+| `1fd53cx.se5.h1clayd.shop:443` | vless | 1395ms | Maskkost93/kizyak-vpn-4.0 |
+| `52.77.214.112:443` | vless | 1606ms | hello-world-1989/cn-news |
+| `proxy-34l.pages.dev:2087` | vless | 1750ms | igareck/vpn-configs-for-russia |
+| `wells.aisb.dpdns.org:443` | vless | 1756ms | igareck/vpn-configs-for-russia |
+| `157.22.190.220:2053` | vless | 1771ms | whoahaow/rjsxrd |
+| `104.18.35.86:2096` | trojan | 1784ms | rekt0ro/ProxyRift |
+| `yd.2.hhhhh.eu.org:443` | vless | 2601ms | igareck/vpn-configs-for-russia |
+
+#### singbox（6 个可用）
+
+| 节点 | 协议 | 延迟 | 来源仓库 |
+|---|---|---|---|
+| `139.224.244.8:49534` | vmess | 669ms | rtwo2/FastNodes |
+| `18.171.57.116:443` | ss | 1204ms | miladtahanian/Config-Collector |
+| `kclx.eu.org:443` | vless | 1456ms | igareck/vpn-configs-for-russia |
+| `vless3.gem-audio2.us.ci:443` | vless | 1528ms | igareck/vpn-configs-for-russia |
+| `157.22.190.220:2053` | vless | 1714ms | whoahaow/rjsxrd |
+| `wells.aisb.dpdns.org:443` | vless | 2337ms | igareck/vpn-configs-for-russia |
+
 ## 2026-11-10 22:35
 
 - 预筛：TCP 连通 3058/3090 个节点

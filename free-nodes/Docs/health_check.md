@@ -2,6 +2,89 @@
 
 > 按日期倒序累积，最新一次运行在最上面
 
+## 2026-11-13 10:40
+
+**结论：无严重问题，5 个告警可优化**
+
+### 关键指标
+
+| 指标 | 值 |
+|---|---|
+| 输出目录 | C:\Users\bemin\WorkBuddy\Test\free-nodes |
+| 目标节点 | 1000 |
+| 去重后节点 | 37270 |
+| 采集总量(过滤前) | 117782 |
+| 各内核订阅 | v2ray 29142、xray 25920、clash 35956、singbox 34990 |
+| 协议分布 | hy2 54 / hysteria2 110 / ss 623 / ssr 91 / trojan 2693 / tuic 20 / vless 31284 / vmess 2395 |
+| TCP 可达 | 37270/37270（中位数 214ms） |
+| 验证已执行 | 是 |
+| 各内核可用 | {'v2ray': '7/3896', 'xray': '22/2571', 'clash': '12/3531', 'singbox': '6/3114'} |
+| 可用节点池 | v2ray 211、xray 652、clash 357、singbox 334 |
+
+### 发现与建议
+
+#### 🟡 [验证] v2ray 可用率异常低 0.2%（7/3896）
+
+- 建议动作：同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+
+#### 🟡 [验证] xray 可用率异常低 0.9%（22/2571）
+
+- 建议动作：同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+
+#### 🟡 [验证] clash 可用率异常低 0.3%（12/3531）
+
+- 建议动作：同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+
+#### 🟡 [验证] singbox 可用率异常低 0.2%（6/3114）
+
+- 建议动作：同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+
+#### 🟡 [下载通道] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/
+
+- 建议动作：失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+
+#### 🔵 [产物] 主清单 37270 条；各内核订阅：v2ray 29142、xray 25920、clash 35956、singbox 34990
+
+
+#### 🔵 [规模] 节点数 37270 达到目标 1000
+
+
+#### 🔵 [仓库效率] 扫描仓库 77 个：有产出 34、解析不到节点 10、下载失败 6、无候选文件 0、README 无订阅链接跳过 27（产出率 68%，按有尝试采集的 50 个计算）
+
+
+#### 🔵 [README 采集] 50 个仓库的 README 声明了订阅链接，提取 2372944 条节点
+
+
+#### 🔵 [延迟排序] 37270/37270 个服务器 TCP 可达（100%），延迟中位数 214ms，<100ms 共 1765 条
+
+
+#### 🔵 [延迟排序] 11524/37270 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后
+
+
+#### 🔵 [仓库质量] 已评分 62 个仓库，可用率 >=10% 的 9 个，零可用 25 个（7 天内跳过、过期自动重采，known-issues 53）
+
+
+#### 🔵 [节点池] 池内节点：v2ray 211、xray 652、clash 357、singbox 334
+
+
+#### 🔵 [去重] 去重剔除 95%（2255162/2372944）
+
+- 建议动作：重复度极高：说明多个仓库共享同一上游源，可减少同类仓库扫描以省配额
+
+#### 🔵 [下载通道] jsDelivr 可用 3/4：fastly.jsdelivr.net、gcore.jsdelivr.net、testingcf.jsdelivr.net（不可达：cdn.jsdelivr.net）
+
+
+#### 🔵 [配额] GitHub 配额剩余 core 5000/5000、search 30/30（已配置 token ghp_…x6hY）
+
+
+### 待办清单（需人工或自动修复）
+
+1. [warn] v2ray 可用率异常低 0.2%（7/3896） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+2. [warn] xray 可用率异常低 0.9%（22/2571） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+3. [warn] clash 可用率异常低 0.3%（12/3531） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+4. [warn] singbox 可用率异常低 0.2%（6/3114） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+5. [warn] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ → 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+
 ## 2026-11-10 22:36
 
 **结论：无严重问题，6 个告警可优化**

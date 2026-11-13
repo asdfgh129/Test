@@ -51,6 +51,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import collect_nodes as c  # 复用解析与格式转换逻辑
 import layout as lay  # 统一布局：四内核命名/能力矩阵/文件格式/md 日志
 import pool as node_pool  # 按内核的跨天可用节点池
+import repo_pool as rpool  # 仓库地址池：实测结果按仓库滚动汇总并重算评分
 
 CREATE_NO_WINDOW = 0x08000000 if os.name == "nt" else 0
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -193,6 +194,14 @@ PROTO_NORMALIZE = {"hy2": "hysteria2", "hysteria": "hysteria2", "shadowsocks": "
 # 未实测过的仓库在取样时的中性可用率先验：比多数免费聚合仓库（5%-20%）乐观，
 # 但不至于压过实测 30%+ 的好仓库
 RATE_PRIOR = 0.25
+
+# 单仓库取样配额：一个仓库最多占本轮样本的这个比例（且不少于 MAX_REPO_FLOOR 条）。
+# 2026-11-13 实测的必要性：rtwo2/FastNodes 一个仓库当次贡献 11.7 万条去重后节点，
+# 而「未知仓库按 RATE_PRIOR=0.25 排序」让它们排在实测 14%~21% 的质量仓库之前，
+# 2504 个样本里它独占 2254 个（90%），可用数从 24/55 塌到 5/7。配额只限制「谁进样本」，
+# 不改排序口径；仓库数不足填满样本时按原顺序回补，保证测试量不缩水。
+MAX_REPO_SHARE = 0.15
+MAX_REPO_FLOOR = 30
 
 
 # ---------------------------------------------------------------- 工具
@@ -610,6 +619,110 @@ def wait_port(port, timeout):
 # 所以这里筛掉的不是误杀，而是假可用。
 DEFAULT_TEST_URL = "https://gstatic.com/generate_204"
 
+# ---------------------------------------------------------------- 多目标延迟测试
+# 2026-11-11 用户需求：「延迟测试可以多测几个目标地址是否可达，包括 google、github、x.com 等」。
+# 目标集合的取舍：全部 HTTPS、响应体很小、且都是中文用户真正常打的站点。
+#   - google(gstatic 裸域)：主判据，必须真出境才通，与历史口径完全一致（便于逐日对比）；
+#   - github：api.github.com/zen 返回一行文本，国内直连常被 RST，能通说明代理真的出境且没被墙；
+#   - x：x.com/robots.txt 小文件，最能区分「只对部分域名放行」的中转节点；
+#   - cloudflare：cdn-cgi/trace 返回纯文本，且能看出出口 IP（Cloudflare 前置节点多半在这里暴露）；
+#   - youtube：robots.txt，与 google 主域不同源，用于识别「Google 能通但 YouTube 被针对性阻断」。
+# 判定：**主目标（google）不过就整体判不可用**（与历史数据可比），过了再补测其余 4 个，
+# 各自独立记录延迟/失败原因。这样 98% 的死人只多付一次请求，活人才付 5 次。
+TEST_TARGETS = [
+    {"id": "google", "url": "https://gstatic.com/generate_204", "label": "Google"},
+    {"id": "github", "url": "https://api.github.com/zen", "label": "GitHub"},
+    {"id": "x", "url": "https://x.com/robots.txt", "label": "X"},
+    {"id": "cloudflare", "url": "https://www.cloudflare.com/cdn-cgi/trace", "label": "Cloudflare"},
+    {"id": "youtube", "url": "https://www.youtube.com/robots.txt", "label": "YouTube"},
+]
+
+# ---------------------------------------------------------------- 带宽测试
+# 2026-11-11 用户需求：延迟测试后对可用节点做带宽测试。
+# 测速源用 Cloudflare 的测速端点：支持任意字节、全球任播、HTTPS，且不像公共测速站那样限速。
+# 备选（Cloudflare 端点整段失败时人工换）：https://cachefly.cachefly.net/10mb.test
+DEFAULT_BW_URL = "https://speed.cloudflare.com/__down?bytes={bytes}"
+DEFAULT_BW_BYTES = 2000000      # 2MB：0.5Mbps 的节点约 32s，1Mbps 约 16s，够区分快慢又不至于太贵
+DEFAULT_BW_TIMEOUT = 15.0
+DEFAULT_BW_MAX = 20             # 每内核最多测这么多个节点的带宽（按延迟升序取）
+DEFAULT_BW_BUDGET = 240.0       # 每内核带宽测试的时间上限（秒）：串行下载很容易吃穿窗口
+
+
+def build_targets(args):
+    """按 --test-url / --no-multi-target 组装测试目标（第一个永远是主判据）。"""
+    primary = ("primary", args.test_url)
+    if getattr(args, "no_multi_target", False):
+        return [primary]
+    rest = [(t["id"], t["url"]) for t in TEST_TARGETS if t["url"] != args.test_url]
+    return [primary] + rest
+
+
+def prev_pass_stats(path):
+    """读上一次汇总里各内核的 (tested, ok, date)，供弹性调节估算可用率。
+
+    读不到 / 字段缺失一律返回空字典——调用方会退回「按上限测」，不会因为缺数据少测。
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    out = {}
+    for core, st in (data.get("cores") or {}).items():
+        if isinstance(st, dict) and int(st.get("tested") or 0) > 0:
+            out[lay.canon(core)] = (int(st["tested"]), int(st.get("ok") or 0),
+                                    data.get("date") or "")
+    return out
+
+
+def limit_per_repo(ordered, cap, share=MAX_REPO_SHARE, floor=MAX_REPO_FLOOR):
+    """按「单仓库配额」从候选顺序里截出本轮样本（2026-11-13）。
+
+    背景：取样顺序是「仓库可用率高的在前」，但**未实测仓库**用的是 RATE_PRIOR=0.25 的先验，
+    于是一个刚出现、动辄十几万条的聚合仓库会排在实测 14%~21% 的老仓库前面——它的节点
+    又几乎全是死的，结果整轮预算被它吃光（11-13 实测 90% 样本来自同一个仓库，可用数 24→5）。
+
+    这里只限制「一个仓库能进多少条样本」，不动排序口径；仓库数不够填满 cap 时，
+    按原顺序把剩下的回补进来，保证测试量不缩水（宁可拥挤，也不能测得比预算少）。
+    """
+    per = max(int(floor), int(cap * share))
+    picked, cnt, taken = [], {}, set()
+    for n in ordered:
+        if len(picked) >= cap:
+            break
+        r = n.get("repo") or ""
+        if cnt.get(r, 0) >= per:
+            continue
+        picked.append(n)
+        taken.add(id(n))
+        cnt[r] = cnt.get(r, 0) + 1
+    if len(picked) < cap:
+        for n in ordered:
+            if len(picked) >= cap:
+                break
+            if id(n) in taken:
+                continue
+            picked.append(n)
+    return picked
+
+
+def elastic_test_cap(core, args, prev):
+    """按「每内核目标可用数」反推本内核该测多少个（用户 2026-11-11 口径）。
+
+    可用率低的时候多测（才能捞够目标数量），可用率高的时候少测（省时间给带宽与其他内核）。
+    上下限：--min-test（默认 800，防止某天可用率极高就只测几十个）与 --max-test（2500）。
+    """
+    if args.target_avail <= 0:
+        return args.max_test, "弹性关闭（固定上限）"
+    tested, ok, day = prev.get(core) or (0, 0, "")
+    if not tested or not ok:
+        return args.max_test, "无上次可用率数据，按上限测"
+    rate = ok / float(tested)
+    need = int(round(args.target_avail / rate))
+    cap = max(args.min_test, min(args.max_test, need))
+    return cap, (f"上次 {ok}/{tested} = {rate * 100:.1f}%（{day}）→ "
+                 f"目标 {args.target_avail} 个约需 {need}，取 {cap}")
+
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
     """禁止跟随重定向。
@@ -702,15 +815,57 @@ def _read_log(path):
         return ""
 
 
-def _once(core, uri, exe, allocator, test_url, test_timeout, startup_timeout):
-    """跑一次「起内核 → 请求 → 收尾」，返回 (ok, latency, note, reason, log)。"""
+def _download_bandwidth(port, spec):
+    """通过本地代理下载固定字节数，返回 {ok, mbps, bytes, secs, err}。
+
+    计时口径是「从发出请求到收完最后一个字节」，包含 TLS 握手与首包等待——这更接近用户
+    实际打开网页的体感，也比「只算稳态吞吐」更能区分慢节点。超时是**整体超时**：
+    每读一块就查一次表，避免慢速滴流把单节点拖成几分钟（免费节点里很常见）。
+    """
+    url = (spec.get("url") or DEFAULT_BW_URL).replace("{bytes}", str(int(spec.get("bytes") or DEFAULT_BW_BYTES)))
+    timeout = float(spec.get("timeout") or DEFAULT_BW_TIMEOUT)
+    proxy = f"http://127.0.0.1:{port}"
+    opener = urllib.request.build_opener(
+        urllib.request.ProxyHandler({"http": proxy, "https": proxy}), _NoRedirect)
+    t0 = time.time()
+    total = 0
+    try:
+        with opener.open(url, timeout=max(3.0, timeout)) as resp:
+            while True:
+                if time.time() - t0 > timeout:
+                    return {"ok": total > 0, "mbps": round(total * 8 / max(0.001, time.time() - t0) / 1e6, 2),
+                            "bytes": total, "secs": round(time.time() - t0, 2), "err": "超时截断"}
+                chunk = resp.read(65536)
+                if not chunk:
+                    break
+                total += len(chunk)
+        secs = max(0.001, time.time() - t0)
+        return {"ok": total > 0, "mbps": round(total * 8 / secs / 1e6, 2),
+                "bytes": total, "secs": round(secs, 2)}
+    except Exception as e:  # noqa: BLE001
+        secs = max(0.001, time.time() - t0)
+        return {"ok": False, "mbps": round(total * 8 / secs / 1e6, 2) if total else 0,
+                "bytes": total, "secs": round(secs, 2),
+                "err": f"{type(e).__name__}: {str(e)[:50]}"}
+
+
+def _once(core, uri, exe, allocator, test_url, test_timeout, startup_timeout,
+          targets=None, bw_spec=None):
+    """跑一次「起内核 → 请求（可多目标、可选带宽）→ 收尾」。
+
+    返回 (ok, latency, note, reason, log, extra)：
+      extra = {"targets": {id: {ok, ms, code, err?}}, "bw": {...} | None}
+
+    **多目标共用同一个内核会话**（2026-11-11）：主目标不通就立刻结束——免费节点 98% 死在这里，
+    再打 4 个站点纯属浪费；主目标通了才补测其余目标，才付那几次请求的钱。
+    """
     spec = CORES[core]
     port = allocator.get()
     if not port:
-        return False, 0, "端口分配失败", "unknown", ""
+        return False, 0, "端口分配失败", "unknown", "", {}
     cfg = build_config(core, uri, port)
     if not cfg:
-        return False, 0, "该内核无法表达该节点", "unsupported", ""
+        return False, 0, "该内核无法表达该节点", "unsupported", "", {}
     tmpdir = tempfile.mkdtemp(prefix=f"nt_{core}_")
     ext = ".yaml" if spec["kind"] == "yaml" else ".json"
     cfg_path = os.path.join(tmpdir, "config" + ext)
@@ -730,7 +885,7 @@ def _once(core, uri, exe, allocator, test_url, test_timeout, startup_timeout):
         if logf:
             logf.close()
         shutil.rmtree(tmpdir, ignore_errors=True)
-        return False, 0, f"启动失败: {str(e)[:40]}", "startup", ""
+        return False, 0, f"启动失败: {str(e)[:40]}", "startup", "", {}
 
     try:
         deadline = time.time() + startup_timeout
@@ -751,21 +906,38 @@ def _once(core, uri, exe, allocator, test_url, test_timeout, startup_timeout):
                 logf = None
             log = _read_log(log_path)
             reason = "config" if proc.poll() is not None else "startup"
-            ok, out = (False, "")
+            out = ""
             if reason == "config":
                 # 用内核自己的校验命令复核：确认是配置问题，而不是节点不通
                 out = check_config(core, exe, cfg_path)[1]
-            return False, 0, f"内核未就绪（{REASON_LABELS[reason]}）", reason, log + out
+            return False, 0, f"内核未就绪（{REASON_LABELS[reason]}）", reason, log + out, {}
 
-        ok, latency, code, err = http_via_proxy(port, test_url, test_timeout)
+        # ── 多目标：主目标不通就立刻结束，通了才补测其余目标 ──
+        plan = targets or [("primary", test_url)]
+        extra = {"targets": {}, "bw": None}
+        first = None
+        for tid, turl in plan:
+            ok, latency, code, err = http_via_proxy(port, turl, test_timeout)
+            info = {"ok": bool(ok), "ms": round(latency), "code": code}
+            if not ok:
+                info["err"] = (err or "")[:60]
+            extra["targets"][tid] = info
+            if first is None:
+                first = (ok, latency, code, err)
+                if not ok:
+                    break
+        ok, latency, code, err = first
         if ok:
-            return True, latency, f"HTTP {code}", "", ""
+            passed = sum(1 for v in extra["targets"].values() if v["ok"])
+            if bw_spec and passed >= int(bw_spec.get("min_targets") or 2):
+                extra["bw"] = _download_bandwidth(port, bw_spec)
+            return True, latency, f"HTTP {code}", "", "", extra
         if logf:
             logf.flush()
         log = _read_log(log_path)
         note = f"HTTP {code} 重定向(未跟随)" if 300 <= code < 400 else (
             f"HTTP {code}" if code else "请求失败")
-        return False, latency, note, classify_failure(f"{log}\n{err}", note), log
+        return False, latency, note, classify_failure(f"{log}\n{err}", note), log, extra
     finally:
         try:
             proc.kill()
@@ -777,9 +949,104 @@ def _once(core, uri, exe, allocator, test_url, test_timeout, startup_timeout):
         shutil.rmtree(tmpdir, ignore_errors=True)
 
 
+def _bw_session(core, uri, exe, allocator, spec):
+    """起一次内核、只做带宽下载、收尾。返回 _download_bandwidth 的结果。"""
+    cs = CORES[core]
+    port = allocator.get()
+    if not port:
+        return {"ok": False, "mbps": 0, "bytes": 0, "secs": 0, "err": "端口分配失败"}
+    cfg = build_config(core, uri, port)
+    if not cfg:
+        return {"ok": False, "mbps": 0, "bytes": 0, "secs": 0, "err": "该内核无法表达该节点"}
+    tmpdir = tempfile.mkdtemp(prefix=f"bw_{core}_")
+    ext = ".yaml" if cs["kind"] == "yaml" else ".json"
+    cfg_path = os.path.join(tmpdir, "config" + ext)
+    logf = None
+    try:
+        with open(cfg_path, "w", encoding="utf-8") as f:
+            json.dump(cfg, f, ensure_ascii=False)
+        logf = open(os.path.join(tmpdir, "kernel.log"), "ab")
+        proc = subprocess.Popen(
+            ([exe, "-d", tmpdir, "-f", cfg_path] if core == "clash"
+             else [exe] + cs["args"] + [cfg_path]),
+            cwd=tmpdir, stdout=logf, stderr=logf, creationflags=CREATE_NO_WINDOW)
+    except Exception as e:  # noqa: BLE001
+        if logf:
+            logf.close()
+        shutil.rmtree(tmpdir, ignore_errors=True)
+        return {"ok": False, "mbps": 0, "bytes": 0, "secs": 0, "err": f"启动失败 {str(e)[:40]}"}
+    try:
+        if not wait_port(port, 6.0):
+            return {"ok": False, "mbps": 0, "bytes": 0, "secs": 0, "err": "内核未就绪"}
+        return _download_bandwidth(port, spec)
+    finally:
+        try:
+            proc.kill()
+            proc.wait(timeout=3)
+        except Exception:  # noqa: BLE001
+            pass
+        if logf:
+            logf.close()
+        shutil.rmtree(tmpdir, ignore_errors=True)
+
+
+def _target_totals(tested):
+    """统计各目标地址的通过数（多目标口径的可读摘要）。"""
+    tot = {}
+    for t in tested:
+        for tid, info in (t.get("targets") or {}).items():
+            slot = tot.setdefault(tid, {"passed": 0, "total": 0})
+            slot["total"] += 1
+            if info.get("ok"):
+                slot["passed"] += 1
+    return tot
+
+
+def measure_bandwidth(core, results, tools_dir, args, allocator):
+    """第三步：对**已通过延迟测试**的节点测带宽，每内核最多 --bw-max 个（按延迟升序）。
+
+    刻意串行：并发下载会互相抢带宽，测出来的数字全是假的。所以带宽测试只在
+    「延迟已经筛完、剩下的都是活节点」之后做，且严格受 --bw-max / --bw-budget 双重限制
+    （35 个节点 × 2MB 串行就可能吃掉 5 分钟，四内核叠起来足够把窗口吃穿）。
+    """
+    if args.no_bw or not results or args.bw_max <= 0:
+        return {}
+    cs = CORES[core]
+    exe = os.path.join(tools_dir, cs["dir"], cs["exe"])
+    if not os.path.exists(exe):
+        return {}
+    spec = args._bw_spec
+    budget = float(getattr(args, "bw_budget", 0) or 0)
+    t0 = time.time()
+    picked = sorted(results, key=lambda r: r.get("latency") or 99999)[:args.bw_max]
+    got = {}
+    for i, node in enumerate(picked, 1):
+        if budget and time.time() - t0 > budget:
+            print(f"[warn] {core}：带宽测试已用 {time.time() - t0:.0f}s 达到预算 {budget:.0f}s，"
+                  f"剩下 {len(picked) - i + 1} 个跳过")
+            break
+        deadline = getattr(args, "_deadline", None)
+        if deadline and time.time() > deadline - 120:
+            print(f"[warn] {core}：临近墙钟预算，停止带宽测试（已测 {i - 1} 个）")
+            break
+        bw = _bw_session(core, node["uri"], exe, allocator, spec)
+        key = f"{node['host']}:{node['port']}"
+        got[key] = bw
+        if bw.get("ok"):
+            print(f"[bw] {core} {key} {bw['mbps']}Mbps（{bw['bytes'] / 1e6:.2f}MB/"
+                  f"{bw['secs']}s）")
+        else:
+            print(f"[bw] {core} {key} 失败：{bw.get('err') or '无数据'}")
+    ok_n = sum(1 for v in got.values() if v.get("ok"))
+    mbps = sorted(v["mbps"] for v in got.values() if v.get("ok"))
+    print(f"[info] {core} 带宽测试完成：{ok_n}/{len(got)} 个有数据"
+          + (f"，中位 {mbps[len(mbps) // 2]}Mbps，耗时 {time.time() - t0:.0f}s" if mbps else ""))
+    return got
+
+
 def test_one(core, uri, exe, allocator, test_url, test_timeout, startup_timeout,
-             retry=1):
-    """启动内核实测单个节点，返回 (是否可用, 延迟ms, 说明, 原因)。
+             retry=1, targets=None, bw_spec=None):
+    """启动内核实测单个节点，返回 (是否可用, 延迟ms, 说明, 原因, extra)。
 
     判定链路（保证「测不过」= 真的用不了）：
     1. 能力不支持 / 配置被内核拒绝 → 原因标 unsupported / config，**不算不可达**；
@@ -788,15 +1055,17 @@ def test_one(core, uri, exe, allocator, test_url, test_timeout, startup_timeout,
        **但 HTTP 超时类不重试**：3s 都没应答，再等 3s 只会同样超时（实测拿昨天可用节点
        做 12s 复测，28 个 3s 判失败的里只有 2 个变可用，都是 4~5s 的慢节点），
        而每次重试要多花一个完整超时的墙钟，是夜里跑不完的主要成本之一。
+    4. extra 里带多目标的逐项结果与带宽（见 `_once`），失败时为空字典。
     """
     core = lay.canon(core)
-    last = (False, 0, "未测试", "unknown")
+    last = (False, 0, "未测试", "unknown", {})
     for attempt in range(max(0, retry) + 1):
-        ok, latency, note, reason, _log = _once(core, uri, exe, allocator,
-                                                test_url, test_timeout, startup_timeout)
+        ok, latency, note, reason, _log, extra = _once(
+            core, uri, exe, allocator, test_url, test_timeout, startup_timeout,
+            targets=targets, bw_spec=bw_spec)
         if ok:
-            return ok, latency, note, ""
-        last = (ok, latency, note, reason)
+            return ok, latency, note, "", extra
+        last = (ok, latency, note, reason, extra)
         if reason in ("unsupported", "config"):
             break           # 结构性失败，重试没有意义
         if reason == "timeout":
@@ -834,16 +1103,25 @@ def test_core(core, nodes, tools_dir, workers, args, allocator):
     t0 = time.time()
 
     def worker(node):
-        ok, latency, note, reason = test_one(core, node["uri"], exe, allocator,
-                                            args.test_url, args.test_timeout,
-                                            args.startup_timeout, args.retry)
+        ok, latency, note, reason, extra = test_one(
+            core, node["uri"], exe, allocator, args.test_url, args.test_timeout,
+            args.startup_timeout, args.retry,
+            targets=getattr(args, "_targets", None),
+            bw_spec=None)   # 带宽统一走第三步（串行），不在并发通道里做——并发下载测出来的数字是假的
+        tgt = (extra or {}).get("targets") or {}
+        bw = (extra or {}).get("bw")
         with lock:
             tested.append({**node, "ok": ok, "reason": reason,
-                           "latency": round(latency) if ok else None})
+                           "latency": round(latency) if ok else None,
+                           "targets": tgt, "bw": bw})
             if ok:
-                results.append({**node, "latency": round(latency), "note": note})
+                results.append({**node, "latency": round(latency), "note": note,
+                                "targets": tgt, "bw": bw})
         if ok:
-            print(f"[ok] {core} {node['proto']:<9} {node['host']}:{node['port']} {round(latency)}ms")
+            passed = sum(1 for v in tgt.values() if v.get("ok"))
+            bw_note = f" bw {bw['mbps']}Mbps" if bw and bw.get("ok") else ""
+            print(f"[ok] {core} {node['proto']:<9} {node['host']}:{node['port']} "
+                  f"{round(latency)}ms 目标 {passed}/{len(tgt) or 1}{bw_note}")
 
     # 分批提交而不是 ex.map(worker, nodes)：ThreadPoolExecutor.map 会**一次性把迭代器吃空**
     # （内部先 `[submit(...) for args in zip(*iterables)]`），预算检查会被跳过、等于没限时。
@@ -915,6 +1193,88 @@ def write_core_outputs(core, results, out_dir):
     return {"path": path, "count": n}
 
 
+def write_nodes_table(root, stats, date_str, target_ids, bw_enabled):
+    """写可用节点总表：`nodes/available_nodes.json` + `Docs/available_nodes.md`。
+
+    用户 2026-11-11 要求「最后产生可用节点表，包括到各目标地址的延迟时间和带宽」。
+    按 host:port 合并四个内核的结果：同一个服务器在 v2ray 与 xray 下都通时只占一行，
+    `cores` 列出全部可用内核——订阅文件仍是每内核一份，这张表是给人看的总览。
+    """
+    merged = {}
+    for core, st in (stats or {}).items():
+        if not st:
+            continue
+        for r in st.get("results") or []:
+            key = f"{r['host']}:{r['port']}"
+            slot = merged.setdefault(key, {
+                "key": key, "host": r["host"], "port": r["port"],
+                "proto": r.get("proto", ""), "cores": [],
+                "repos": list(r.get("repos") or ([r["repo"]] if r.get("repo") else [])),
+                "tcp_latency": r.get("tcp_latency"), "latency": {}, "targets": {},
+                "bw_mbps": None, "in_pool": bool(r.get("in_pool")),
+            })
+            slot["cores"].append(core)
+            for repo in r.get("repos") or []:
+                if repo not in slot["repos"]:
+                    slot["repos"].append(repo)
+            slot["latency"][core] = r.get("latency")
+            for tid, info in (r.get("targets") or {}).items():
+                cur = slot["targets"].get(tid)
+                if cur is None or (info.get("ok") and not cur.get("ok")):
+                    slot["targets"][tid] = info
+            bw = r.get("bw") or {}
+            if bw.get("ok") and (slot["bw_mbps"] is None or bw["mbps"] > slot["bw_mbps"]):
+                slot["bw_mbps"] = bw["mbps"]
+    rows = sorted(merged.values(),
+                  key=lambda x: ((x["targets"].get("primary") or {}).get("ms") or 99999,
+                                 x["tcp_latency"] or 99999))
+    os.makedirs(lay.nodes_dir(root), exist_ok=True)
+    data = {"date": date_str, "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "targets": target_ids, "bw_enabled": bool(bw_enabled),
+            "total": len(rows), "nodes": rows}
+    try:
+        with open(lay.nodes_table_path(root), "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=1)
+    except OSError as e:
+        print(f"[warn] 可用节点表写入失败: {e}", file=sys.stderr)
+        return None
+
+    head = ["| 节点 | 内核 | 协议 | 主目标 | " + " | ".join(target_ids[1:] or [])
+            + (" | 带宽 |" if bw_enabled else " |"),
+            "|---" * (4 + max(0, len(target_ids) - 1) + (1 if bw_enabled else 0)) + "|"]
+
+    lines = [f"- 可用节点 **{len(rows)}** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）",
+             f"- 延迟测试目标：{'、'.join(target_ids)}（主判据 `primary`）",
+             ("- 带宽：2MB 串行下载，每内核最多 " + str(DEFAULT_BW_MAX) + " 个"
+              if bw_enabled else "- 带宽：本轮未测（--no-bw）"),
+             "", head[0], head[1]]
+    for n in rows[:120]:
+        cells = []
+        for tid in target_ids:
+            info = n["targets"].get(tid) or {}
+            cells.append(f"{info['ms']}ms" if info.get("ok") else "✗")
+        bw = f"{n['bw_mbps']}Mbps" if n.get("bw_mbps") else "-"
+        core_txt = "/".join(sorted(n["cores"]))
+        lines.append(f"| `{n['key']}` | {core_txt} | {n['proto']} | " + " | ".join(cells)
+                     + (f" | {bw} |" if bw_enabled else " |"))
+    if len(rows) > 120:
+        lines.append(f"| … | 共 {len(rows)} 个 | | | | | |")
+    lines += ["", "> 来源仓库（可多个，去重时按 1/N 分摊产量）："]
+    for n in rows[:120]:
+        if n["repos"]:
+            lines.append(f"> - `{n['key']}`：{'、'.join(n['repos'])}")
+    try:
+        lay.upsert_section(os.path.join(lay.docs_dir(root), "available_nodes.md"), date_str,
+                           lay.now_stamp().split(" ")[1], "\n".join(lines),
+                           doc_title="可用节点总表（时间倒序）",
+                           intro="按日期倒序累积；同一天重跑会替换当天小节")
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] 可用节点表（md）写入失败: {str(e)[:80]}", file=sys.stderr)
+    print(f"[done] 可用节点表：{lay.nodes_table_path(root)}（{len(rows)} 个节点，"
+          f"{len(target_ids)} 个目标{'，含带宽' if bw_enabled else ''}）")
+    return data
+
+
 def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                   pool_notes=None, repo_stats=None, budget_skipped=None,
                   resume_skipped=None, ran_cores=None):
@@ -929,10 +1289,13 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                        f"时间预算 {args.escalate_budget}s）")
     else:
         policy_line = "- 测试策略：限量——只测初始取样（--no-escalate）"
+    elastic_line = "；".join(f"{c} {st['elastic']}" for c, st in stats.items()
+                             if st and st.get("elastic"))
     lines = [
         f"- 预筛：TCP 连通 {tcp_alive}/{tcp_total} 个节点",
         f"- 测试地址：`{args.test_url}`，并发 {args.workers}，超时 {args.test_timeout}s（超时即判失败，不再等）",
         policy_line,
+        *([f"- 弹性测试量（按目标可用数反推）：{elastic_line}"] if elastic_line else []),
         f"- 判定口径：可用 = 通过 HTTP CONNECT 真的取到 2xx；"
         + (f"网络类失败复测 {args.retry} 次；" if args.retry else "不复测（实测复测收益 1.7%）；")
         + "「内核不支持」「配置被内核拒绝」不计入不可达（见 protocol.md 的失败分类）",
@@ -957,6 +1320,34 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
             rt = str(rounds) if rounds <= 1 else f"{rounds}（候选{'已测完' if st.get('exhausted') else '未测完'}）"
         lines.append(f"| {core} | {st['tested']} | {st['ok']} | {rate} | {unsup} | {cfg_err} | "
                      f"{dead} | {rt} | `{lay.NODES_DIR}/{lay.AVAIL_FILE[lay.canon(core)]}` |")
+
+    # 多目标可达性：这是 2026-11-11 新增的口径，主目标通过才算可用，
+    # 附加目标只在主目标通过后补测——用来区分「只通某几个站」的中转节点。
+    tgt_rows = []
+    for core, st in stats.items():
+        if not st or not st.get("targets"):
+            continue
+        for tid, v in st["targets"].items():
+            tgt_rows.append((core, tid, int(v.get("passed") or 0), int(v.get("total") or 0)))
+    if tgt_rows:
+        lines += ["", "### 多目标可达性", "",
+                  "主目标（`primary`，默认 gstatic/generate_204）通过才算可用；"
+                  "其余目标只在主目标通过后于同一内核会话内补测，各自独立记录延迟。", "",
+                  "| 内核 | 目标 | 通过 | 测试 | 通过率 |", "|---|---|---|---|---|"]
+        for core, tid, p, t in tgt_rows:
+            lines.append(f"| {core} | {tid} | {p} | {t} | {(p / t * 100 if t else 0):.0f}% |")
+        lines.append("")
+
+    # 带宽（第三步）：只对已通过延迟测试的节点测，串行限量
+    bw_rows = [(c, st["bw"]) for c, st in stats.items() if st and st.get("bw")]
+    if bw_rows:
+        lines += ["", "### 带宽测试（2MB 串行下载，每内核按延迟升序取样）", "",
+                  "| 内核 | 测了 | 有数据 | 中位 Mbps | 最高 Mbps |", "|---|---|---|---|---|"]
+        for core, bw in bw_rows:
+            lines.append(f"| {core} | {bw.get('tested', 0)} | {bw.get('ok', 0)} | "
+                         f"{bw.get('median') if bw.get('median') is not None else '-'} | "
+                         f"{bw.get('max') if bw.get('max') is not None else '-'} |")
+        lines.append("")
 
     # 墙钟预算收尾的说明：这**不是失败**，是主动让路给平台硬上限
     # 只报「本窗口真的跑过」的内核：合并进来的前窗口结果不该被当成这轮的截断
@@ -1056,9 +1447,15 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                        "sampled": st.get("sampled"),
                        "partial": st.get("partial", False),
                        "policy": st.get("policy"),
+                       "elastic": st.get("elastic", ""),
+                       "bw": st.get("bw"),
+                       "targets": st.get("targets", {}),
                        "file": lay.AVAIL_FILE[lay.canon(core)],
                        "nodes": [{"host": r["host"], "port": r["port"], "proto": r["proto"],
-                                  "latency": r["latency"], "repo": r.get("repo", "")}
+                                  "latency": r["latency"], "repo": r.get("repo", ""),
+                                  "repos": r.get("repos") or [],
+                                  "targets": r.get("targets") or {},
+                                  "bw_mbps": (r.get("bw") or {}).get("mbps")}
                                  for r in st["results"]],
                    }) for core, st in stats.items()}}, f, ensure_ascii=False, indent=1)
     if repo_stats:
@@ -1210,7 +1607,27 @@ def main():
                          " 117 个节点里，放宽到 12s 重测只有 2 个变可用（1.7%%，且都是 4~5s 慢节点），"
                          "而复测一次要多花一整个超时的墙钟、吞吐直接腰斩——不值")
     ap.add_argument("--test-url", default=DEFAULT_TEST_URL,
-                    help=f"验证用测试地址（默认 {DEFAULT_TEST_URL}，HTTPS）")
+                    help=f"主判据地址（默认 {DEFAULT_TEST_URL}，HTTPS）。"
+                         "主目标不通即判该节点不可用（与历史口径一致）")
+    ap.add_argument("--no-multi-target", action="store_true",
+                    help="只测主目标，不补测 GitHub/X/Cloudflare/YouTube（默认补测；"
+                         "补测只在主目标通过后进行，同一内核会话内顺序打）")
+    ap.add_argument("--no-bw", action="store_true", help="跳过带宽测试（第三步）")
+    ap.add_argument("--bw-max", type=int, default=DEFAULT_BW_MAX,
+                    help=f"每内核最多测多少个节点的带宽（按延迟升序取，默认 {DEFAULT_BW_MAX}）")
+    ap.add_argument("--bw-budget", type=float, default=DEFAULT_BW_BUDGET,
+                    help=f"每内核带宽测试的时间上限秒数（默认 {DEFAULT_BW_BUDGET:.0f}，0=不限）")
+    ap.add_argument("--bw-bytes", type=int, default=DEFAULT_BW_BYTES,
+                    help=f"带宽测试下载字节数（默认 {DEFAULT_BW_BYTES} = 2MB）")
+    ap.add_argument("--bw-timeout", type=float, default=DEFAULT_BW_TIMEOUT,
+                    help=f"带宽测试整体超时秒数（默认 {DEFAULT_BW_TIMEOUT}）")
+    ap.add_argument("--bw-url", default=DEFAULT_BW_URL,
+                    help=f"带宽测试地址模板（默认 {DEFAULT_BW_URL}，{{bytes}} 会被替换）")
+    ap.add_argument("--target-avail", type=int, default=30,
+                    help="弹性调节目标：每个内核希望拿到多少个可用节点（默认 30）。"
+                         "测试量 = clamp(target/上次可用率, --min-test, --max-test)；0=关闭弹性")
+    ap.add_argument("--min-test", type=int, default=800,
+                    help="弹性调节的下限测试量（默认 800）")
     ap.add_argument("--seed-file", default=None,
                     help="仓库清单路径（默认 <root>/src/seed_repos.json），用于写入仓库质量分")
     ap.add_argument("--pool-dir", default=None,
@@ -1281,6 +1698,16 @@ def main():
     # 与其被杀，不如自己看着表收尾——没测到的留给下个窗口，测到的必须落盘
     deadline = t0 + args.time_budget if args.time_budget > 0 else None
     args._deadline = deadline
+    # 多目标与带宽（2026-11-11）：一次组装，四内核共用同一套目标与测速参数
+    args._targets = build_targets(args)
+    args._bw_spec = None if args.no_bw else {
+        "url": args.bw_url, "bytes": args.bw_bytes,
+        "timeout": args.bw_timeout, "min_targets": 2}
+    print(f"[info] 延迟测试目标（{len(args._targets)} 个，主判据 {args._targets[0][1]}）："
+          + "、".join(f"{tid}" for tid, _ in args._targets))
+    if args._bw_spec:
+        print(f"[info] 带宽测试：{args.bw_bytes / 1e6:.1f}MB / 超时 {args.bw_timeout:.0f}s，"
+              f"每内核最多 {args.bw_max} 个（只测「主目标+至少1个附加目标」都通的节点）")
     budget_skipped = []
     resume_skipped = []
     ran_cores = []
@@ -1297,6 +1724,11 @@ def main():
     # 分窗口运行时（22:00/23:45/01:30 各一次），每个窗口只测一部分内核。
     # 汇总必须累积同一天前面窗口的结果，否则先跑完的内核会从 summary.json 里消失
     prev_cores = load_prev_cores(lay.summary_json_path(out_dir), date_str)
+    # 弹性调节的输入：上一次（或今天前面窗口）各内核的可用率
+    prev_pass = prev_pass_stats(lay.summary_json_path(out_dir))
+    if prev_pass:
+        print("[info] 弹性调节输入（上次可用率）："
+              + "、".join(f"{k} {v[1]}/{v[0]}" for k, v in prev_pass.items()))
 
     def _merge_prev():
         added = []
@@ -1374,16 +1806,20 @@ def main():
                 break
             idx += 1
         # ── 取样策略 ──
-        # 全量模式（默认）：候选 ≤ full_below 全部测；超过只测排序前 max_test 个
-        # （用户要求：晚间时间空闲，节点不多就全测；过多则按上面的顺序截断到 max_test）
+        # 全量模式（默认）：候选 ≤ full_below 全部测；超过则只测排序前「弹性上限」个。
+        # 弹性上限由 --target-avail 反推（上次可用率越低测得越多），见 elastic_test_cap。
+        cap_eff, cap_why = (args.max_test, "全量模式")
         if args.no_full_test:
             sampled = ordered[:min(args.limit, len(ordered))]
         elif len(ordered) <= args.full_below:
             sampled = list(ordered)
+            cap_eff = len(ordered)
         else:
-            sampled = ordered[:args.max_test]
-            print(f"[info] {core}：候选 {len(ordered)} 个超过全量阈值 {args.full_below}，"
-                  f"按排序截取前 {len(sampled)} 个测试")
+            cap_eff, cap_why = elastic_test_cap(core, args, prev_pass)
+            sampled = limit_per_repo(ordered, cap_eff)
+            print(f"[elastic] {core}：候选 {len(ordered)} 超过全量阈值 {args.full_below}，"
+                  f"测试量 {cap_eff}（{cap_why}；单仓上限 "
+                  f"{max(MAX_REPO_FLOOR, int(cap_eff * MAX_REPO_SHARE))} 条）")
 
         # 续跑（--resume-tested）：跳过本日已测过的节点，接着测排序里的下一批候选。
         # 不加这个的话，第二个窗口会从排序头部重测一遍，把 90 分钟全花在重复劳动上
@@ -1448,6 +1884,7 @@ def main():
         if args.no_full_test:
             cap = args.limit_cap if args.limit_cap > 0 else max(args.limit * 5,
                                                                 args.min_available * 10)
+            cap_eff = cap
         else:
             cap = args.max_test
         t_core = time.time()
@@ -1529,6 +1966,22 @@ def main():
                     st["latency_sum"] += int(lat)
                     st["latency_n"] += 1
 
+        # ── 第三步：带宽测试（对已通过延迟测试的可用节点，串行、限量）──
+        # 放在延迟测试之后：此时剩下的都是活节点，2MB 下载才有意义；串行是为了数字可信。
+        bw_map = measure_bandwidth(core, results, args.tools, args, allocator)
+        if bw_map:
+            for r in results:
+                got = bw_map.get(f"{r['host']}:{r['port']}")
+                if got:
+                    r["bw"] = got
+            bw_ok = [v for v in bw_map.values() if v.get("ok")]
+            bw_vals = sorted(v["mbps"] for v in bw_ok)
+            stats_bw = {"tested": len(bw_map), "ok": len(bw_ok),
+                        "median": bw_vals[len(bw_vals) // 2] if bw_vals else None,
+                        "max": bw_vals[-1] if bw_vals else None}
+        else:
+            stats_bw = None
+
         outs = write_core_outputs(core, results, out_dir)
         reasons = {}
         for t in tested:
@@ -1542,11 +1995,14 @@ def main():
         stats[core] = {"tested": cum_tested, "ok": len(results), "results": results,
                        "rounds": 1 + esc_rounds, "min_available": args.min_available,
                        "cand": len(cand), "exhausted": cursor >= len(ordered),
-                       "cap": cap, "sampled": len(sampled),
+                       "cap": cap_eff, "sampled": len(sampled),
                        "partial": len(tested) < len(sampled),
                        "policy": "limited" if args.no_full_test else "full",
                        "unsupported": reasons.get("unsupported", 0),
                        "config_err": reasons.get("config", 0),
+                       "elastic": cap_why if not args.no_full_test and len(ordered) > args.full_below else "",
+                       "bw": stats_bw,
+                       "targets": _target_totals(tested),
                        "reasons": reasons}
         # 只有「过完能力预筛、配置合法、网络层仍失败」的才算真不可达。
         # 用本窗口的数字算：results 里含前面窗口并回来的节点，直接相减会出负数
@@ -1582,10 +2038,15 @@ def main():
     if pool_state is not None:
         node_pool.save_state(pool_root, pool_state, date_str)
 
-    # 仓库质量回写动态清单（下次采集按质量分排序、跳过长期 0 可用的仓库）
+    # 仓库质量回写仓库池（下次采集按分数排序与分配配额；v2 起走 repo_pool）
     if repo_stats:
         try:
-            c.update_repo_quality(seed_file, repo_stats, date_str)
+            pool_data = rpool.load(seed_file)
+            rpool.update_quality(pool_data, repo_stats, date_str)
+            for r in pool_data.get("repos", []):
+                if r.get("state", "active") == "active":
+                    rpool.score_entry(r, date_str)
+            rpool.save(seed_file, pool_data, date_str)
             ranked = sorted(repo_stats.items(),
                             key=lambda kv: -(kv[1]["ok"] / kv[1]["tested"] if kv[1]["tested"] else 0))
             print("[info] 仓库质量已写入 " + str(seed_file) + "："
@@ -1601,6 +2062,9 @@ def main():
                             repo_stats=repo_stats, budget_skipped=budget_skipped,
                             resume_skipped=resume_skipped, ran_cores=ran_cores)
     print(f"[done] 汇总报告：{summary}")
+    # 可用节点总表（各目标延迟 + 带宽），放在最后写：它要合并四个内核的结果
+    write_nodes_table(out_dir, stats, date_str,
+                      [tid for tid, _ in args._targets], bool(args._bw_spec))
     for core, st in stats.items():
         if st:
             print(f"[done] {core}: {st['ok']}/{st['tested']} 可用 → "

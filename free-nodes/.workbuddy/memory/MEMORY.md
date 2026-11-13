@@ -28,6 +28,8 @@
 - **窗口闸门** `src/window_gate.py` 读 `Docs/summary.json` 四分支判定（partial / exhausted /
   tested≥min(cand,cap) / 内核漏跑），输出 `GATE: done|continue`（rc 0/1）。第二三窗口开工先跑，done 就结束。
   **第三窗口必须 `--date <采集日>`**（summary.date 是昨天，用 `date +%F` 会天天白跑）。
+  未给 `--date` 时闸门自带新鲜度校验：summary 停在「昨天且已过 06:00」或更早 ⇒ `GATE: continue`
+  （summary 只在本地跑过验证时才更新，机器休眠几晚会让旧 summary 一直骗出 done，见 known-issues 61）。
 
 ### 时间账与窗口接力
 - 平台对单次运行有 **90 分钟强制取消**（`[CANCELLED] Run timed out`），任务内部改不掉。

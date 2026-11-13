@@ -519,6 +519,16 @@ def seed_file_path(root):
     return os.path.join(root, SRC_DIR, SEED_FILE)
 
 
+def repo_yield_path(root):
+    """仓库产量归属表（Docs/repo_yield.md）。"""
+    return os.path.join(root, DOCS_DIR, "repo_yield.md")
+
+
+def nodes_table_path(root):
+    """可用节点总表（各目标延迟 + 带宽），验证阶段产出。"""
+    return os.path.join(root, NODES_DIR, "available_nodes.json")
+
+
 def repo_quality_path(root):
     return os.path.join(root, SRC_DIR, REPO_QUALITY_FILE)
 

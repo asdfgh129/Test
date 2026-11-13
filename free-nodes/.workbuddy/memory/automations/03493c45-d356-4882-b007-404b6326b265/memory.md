@@ -22,3 +22,7 @@
   单次即可覆盖 6~10 分钟运行，无需轮询。
 - 2026-11-10 21:05：成功。run 42821498553，`in_progress` → `completed（success）`，退出码 0，全程 9m0s
   （21:05 触发、21:15 收尾，是近期最慢的一次但仍未触到 900s 等待上限）。产物应在 22:00 主窗口开窗前就绪。
+- 2026-11-13（本次触发实际在上午补跑）：成功。run 43345124362，pending → queued → completed（success），
+  退出码 0，全程 6m53s。沿用后台运行 + TaskOutput(600000) 一次过，无新坑。
+- 2026-11-13：成功。run 43345124362，`pending` → `completed（success）`，退出码 0，后台运行 7m1s 收尾。
+  沿用正斜杠+双引号路径 + run_in_background + TaskOutput(timeout 600000) 定型流程，一次过。
