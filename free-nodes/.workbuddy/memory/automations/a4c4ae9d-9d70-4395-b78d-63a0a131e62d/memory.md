@@ -269,3 +269,20 @@
   ② 先看 `Get-CimInstance Win32_Process` 里有没有别的窗口在 probe/test，别起第二份验证；
   ③ 本机 sleep 会让整晚窗口全丢，CI 数据不会丢，但订阅会停在旧日期——恢复后应优先补一次验证+发布
 
+## 2026-11-13 晚（第十七次记录：GATE: done，未跑验证）
+
+- 开工前：taskkill 四内核均「没有找到进程」；`Get-CimInstance Win32_Process -Filter "Name='python.exe'"` 无结果
+  → 本机无并发窗口、无残留（沿用 11-13 上午的「先查进程再跑闸门」顺序）
+- 闸门退出码 0：采集日 **2026-11-13（生成于 22:47:01）**，四核均「已测满单轮上限」2513/2504/2511/2510（cap 2500）
+  → 停掉上午那次「summary 停在 11-10」的异常，本机流程已恢复正常节奏
+- 本日可用（按 `nodes/available_nodes.json` 去重 74 条）：v2ray 17 / xray 54 / clash 32 / singbox 38，正常水位
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` 无输出；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD `a2b1aae`，今日第三次发布）
+- 上午登记的「用户 11-11 未提交 WIP（repo_pool.py 等 856 行）」已被今日发布一并入库
+  （`src/repo_pool.py` 已 tracked，`62627c0` 带入），风险条目可关闭
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写完本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：`available_v2ray.txt` / `available_xray.txt` 是 **base64 订阅包**（整文件一行、无 `\n`），
+  `wc -l` 会给出 0 或 1，别据此判「可用数为 0」；要数条数就 `base64 -d` 后数行，或直接读 `available_nodes.json` 的
+  `cores` 字段（clash 在 `available_clash.yaml` 的 `proxies`、singbox 在 `available_singbox.json` 的 `outbounds`，
+  文件名后缀各内核不同）
+
