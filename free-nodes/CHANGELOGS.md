@@ -2,6 +2,28 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-11-14 13:00 用户拍板：按现状运行 + 第 2/3 窗口开关收归第一窗口
+
+- **决策一（上限）**：评分权重 40/25/20/15 + 惩罚、gstatic 主门槛 + 补测 4 目标、
+  带宽只测多站可用、`--max-test 2500` 等口径**全部保持现状**，不因为「可用数看着少」调参。
+  新增 `Docs/quota.md`：列出现行上限、连续 3 晚命中的触发条件、分档提高顺序
+  （带宽覆盖 → MAX_TEST → 源池 → 窗口阈值）、以及「不属于提高上限能解决的问题」。
+  每档一次只动一处、观察 3 晚、无改善就回退。
+- **决策二（窗口开关）**：11-01~11-13 第一窗口连续 13 晚 `GATE: done`、耗时 31.8~41.1 分钟，
+  第 2/3 窗口同期夜夜「未跑验证」⇒ 依据连续 7 个有运行的夜晚全部达标，把开关置 **off**，
+  两个 automation（`a4c4ae9d…` / `19f100fb…`）置 **PAUSED**。
+  以后首窗 `GATE: continue` / 耗时 >50 分钟 / 断档 ≥2 天 ⇒ 当夜 `SWITCH_ACTION: resume` 自动恢复。
+- **改动**：`src/window_gate.py` 新增 `--first-window`（唯一写开关）、`--check-switch`、
+  `--backfill`、`Docs/window_switch.json`（history / followup_used / pause-resume 时间）；
+  `src/test_nodes.py` 的 `summary.json` 加 `elapsed_min`；主窗口 automation prompt 的第 6 步
+  换成 `--first-window` 并固定 `SWITCH_ACTION` 对齐动作；
+  `Skills/free-nodes-collector/SKILL.md`、`Docs/automation-prompt.md`、known-issues 第 65 条同步。
+  **不带开关的旧闸门命令也自动读开关**，所以第 2/3 窗口 prompt 未改、行为已受控。
+- **回归**：6 个临时目录覆盖单晚达标 / 连续 7 晚 / 当晚没跑完 / 耗时 70 分钟 /
+  开关停用跳过 / 主窗口断档自动恢复；真实仓库 `--backfill` 得
+  `SWITCH: off（11-05~11-13 七晚首窗全部跑完，最长 41.1 分钟）`，默认闸门命令返回
+  `GATE: done` 且退出码 0。**本次未改任何现行测试参数**。
+
 ## 2026-11-13 22:00 第一窗口（主窗口）：四核全部测完、GATE 待判；可用 47 → 141；
 **修掉带宽测速「连续两天全 0」——Cloudflare 对 urllib 默认 UA 回 403**
 

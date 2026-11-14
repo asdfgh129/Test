@@ -13,9 +13,34 @@
 |---|---|---|---|
 | CI 触发（**主路径**） | `03493c45-d356-4882-b007-404b6326b265` | 每天北京 **21:05** | 只跑 `ci_dispatch.py --wait 900`：`workflow_dispatch` 触发采集并等结论，不采集/不改文件/不碰 git |
 | CI（采集） | `.github/workflows/collect.yml` | 每天北京 21:05 与 21:20 两条 cron（UTC 13:05 / 13:20），**已降级为备份** | 只采集：下载 → 解析 → 去重 → 落盘，**不探测** |
-| 第一窗口（主） | `a3d7bb22-948c-4326-b344-f4c5535ddcd0` | 每天 22:00 | 等 CI 产物 → 内核检查 → 本地 TCP 探测 → 验证 → 自检 → 修复 → 推送 → 闸门 |
-| 第二窗口 | `a4c4ae9d-9d70-4395-b78d-63a0a131e62d` | 每天 23:45 | 闸门判定 →（需要时）续跑验证 → 自检 → 推送 |
-| 第三窗口 | `19f100fb-c01d-4d31-9a1e-76444fbf51ad` | 每天 01:30 | 同第二窗口（跨零点，`--date` 必须取 `Docs/summary.json` 的采集日） |
+| 第一窗口（主） | `a3d7bb22-948c-4326-b344-f4c5535ddcd0` | 每天 22:00 | 等 CI 产物 → 内核检查 → 本地 TCP 探测 → 验证 → 自检 → 修复 → 推送 → **闸门 + 第 2/3 窗口开关决策**（`--first-window`） |
+| 第二窗口（**当前 PAUSED**） | `a4c4ae9d-9d70-4395-b78d-63a0a131e62d` | 每天 23:45（停用中，不触发） | 闸门判定 →（需要时）续跑验证 → 自检 → 推送 |
+| 第三窗口（**当前 PAUSED**） | `19f100fb-c01d-4d31-9a1e-76444fbf51ad` | 每天 01:30（停用中，不触发） | 同第二窗口（跨零点，`--date` 必须取 `Docs/summary.json` 的采集日） |
+
+## 第 2/3 窗口自动开关（2026-11-14 定案，见 known-issues 第 65 条）
+
+**开关只由第一窗口控制**：它每晚收尾跑 `window_gate.py --first-window`，把结果写进
+`Docs/window_switch.json` 并输出 `SWITCH: on|off` / `SWITCH_ACTION: pause|resume|keep`；
+主窗口用 `automation_update` **只改这两个 automation 的 status** 做幂等对齐
+（pause=PAUSED、resume=ACTIVE、keep=不动）。第 2/3 窗口的 prompt 不需要改命令——
+不带开关的旧闸门命令现在会先读开关，`off` 时直接输出 `GATE: done` 退出 0。
+
+- **证据**：2026-11-01~11-13 第一窗口连续 13 晚 `GATE: done`，验证耗时 31.8~41.1 分钟；
+  第二/三窗口同期每夜都记「未跑验证、未占用验证资源」。初始化时 `--backfill` 从
+  `Docs/summary.md` 回填最近 7 个有运行的夜晚（11-05~11-13，11-11/12 本机离线无记录），
+  全部达标 ⇒ 2026-11-14 开关置 **off**，两个窗口置 PAUSED。
+- **关闭**：最近 `STREAK_REQUIRED=7` 个有运行的夜晚全部 done，且每晚 `elapsed_min ≤ 50`。
+  用「有运行的夜晚」而不是连续日历日，是为了不让机器离线的空档永久阻断停用。
+- **立即开启**（当夜就要靠后两窗口）：`GATE: continue` / 有 pending 内核 / `partial=true` /
+  验证耗时 >50 分钟（窗口吃紧）/ 开关 off 但主窗口断档 ≥2 天（fail-safe）。
+- **数据**：`Docs/summary.json` 新增 `elapsed_min` 字段供开关直接读取，不再解析 md 文本；
+  开关文件保存 history（每晚 gate/耗时/pending）、`followup_used`（后两窗口被真正用到的记录）、
+  最近一次 pause/resume 时间，全部随发布入库，可复盘。
+- **边界**：若第一窗口自己连续多晚没运行，三个窗口会一起停摆，没人执行 fail-safe。
+  恢复本机后手动把两个 automation 置 ACTIVE，或跑一次 `--check-switch`（按断档自动把开关改回 on）。
+
+**上限调整规则**：现行上限与「结果不理想时按什么顺序提高」见 `Docs/quota.md`；
+当前按现状运行，连续 3 晚命中触发条件才动手，一次只动一档并观察 3 晚。
 
 **为什么不再依赖 cron（2026-11-04 定案）**：`schedule` 被平台**稳定**拖后 5~9 小时——连续 4 天，
 应派发的 13:05Z/13:20Z 全部落在 18:20Z~22:19Z（北京 02:20~06:19）才启动，而 22:00 那一刻一条
@@ -143,3 +168,11 @@ python <root>/src/window_gate.py --input <root> [--date <采集日期>]
   当晚白等）。修法三条：CI 加第二条 cron（北京 21:20，必须晚于主 cron 否则每晚都会用到偏旧的数据）互为备份 + workflow 内「跳过判定」；
   「产物就绪」判据收敛到 `publish_free_nodes.py --ci-status`（date 是今天 **且** generated_at ≥ 20:00）；
   新增 `ci_dispatch.py` 走 `workflow_dispatch` 做确定性兜底（`--check` 用不存在的 ref 换 422 验证权限）
+- 11-11：架构改造落地（仓库地址池 + 评分 + 多仓库去重登记 + 三步测试 + 弹性测试量），
+  11-13 已产出 `Docs/available_nodes.md` / `nodes/available_nodes.json` / `Docs/repo_yield.md`；
+  同日修掉带宽 403（第 64 条）
+- 11-14：用户拍板「按现状运行，结果不理想再提高上限」→ 新增 `Docs/quota.md` 固化分档顺序；
+  「最近一段时间用不到第 2/3 窗口就关掉、时间不够再开启」→ 开关判定固定到第一窗口：
+  `window_gate.py --first-window` 写 `Docs/window_switch.json` 并输出 `SWITCH_ACTION`，
+  主窗口据此用 `automation_update` 只改后两窗口 status。连续 13 晚未使用后，
+  两窗口置 PAUSED（第 65 条）

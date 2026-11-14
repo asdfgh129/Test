@@ -42,6 +42,17 @@
 - 进度记录默认开：`test_nodes.py` 无条件写 `nodes/tested_state.json`（`{date, cores:{core:[host:port]}}`）。
 - 三窗口验证前都要 `taskkill` 残留内核（被强杀会留 xray/v2ray/mihomo/sing-box 占端口）。
 - 时间账（全量 4×2500）：同步 ~1min + 内核检查 22s + 探测 ~3min + 验证 ~29min + 自检发布 ~7min ≈ 40min。
+- **第 2/3 窗口自动开关（2026-11-14 用户拍板，known-issues 65）**：判定权只在第一窗口。
+  `window_gate.py --first-window` 写 `Docs/window_switch.json` 并输出 `SWITCH: on|off` /
+  `SWITCH_ACTION: pause|resume|keep`；主窗口用 automation_update **只改**后两窗口 status。
+  关闭 = 最近 7 个**有运行的夜晚**全 done 且 `elapsed_min ≤ 50`；开启 = 当晚 continue / 有 pending /
+  耗时 >50 / 主窗口断档 ≥2 天（fail-safe）。**不带开关的旧闸门命令也自动读开关**（off ⇒ GATE done 退出 0），
+  所以第 2/3 窗口 prompt 一行未改、行为已受控。2026-11-14 起两窗口 PAUSED（连续 13 晚未使用）。
+  `Docs/summary.json` 新增 `elapsed_min` 供开关读取，别再解析 md 文本。
+  边界：若第一窗口自己连续多晚没跑，三个窗口会一起停摆，需手动恢复或跑一次 `--check-switch`。
+- **上限按现状运行**（同日拍板）：结果不理想才按 `Docs/quota.md` 分档提高，连续 3 晚命中才动手、
+  一次一档、观察 3 晚。弹性反推因可用率 0.7~2.2% 夜夜 clamp 到 2500 属已知结论，
+  **不要提高 `--target-avail`**（只会更顶）；带宽上限实际 20/核（非推荐 60）。
 
 ### 采集口径
 - `--readme-only`：只跟随 README 声明的订阅链接，不扫仓库目录；链接按内核归属（v2ray/xray/clash/singbox），

@@ -1440,7 +1440,10 @@ def write_summary(root, stats, args, date_str, tcp_total, tcp_alive, elapsed,
                               doc_title="节点可用性验证汇总（时间倒序）",
                               intro="按日期倒序累积；同一天重跑会替换当天小节")
     with open(lay.summary_json_path(root), "w", encoding="utf-8") as f:
+        # elapsed_min 供 window_gate.py 判断「首窗是否吃紧」（第 2/3 窗口自动开关），
+        # 避免开关再去解析 summary.md 的文本；只在 json 里加字段，不改任何 md 内容
         json.dump({"date": date_str, "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                   "elapsed_min": round(elapsed / 60.0, 1),
                    "cores": {core: (None if st is None else {
                        "tested": st["tested"], "ok": st["ok"],
                        "unsupported": st.get("unsupported", 0),

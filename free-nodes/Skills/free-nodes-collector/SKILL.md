@@ -50,9 +50,16 @@ python <free-nodes>/src/health_check.py --dir <输出根目录>
 # 5. 发布（暂存 free-nodes + .github/workflows，不碰仓库里其他项目）
 python <free-nodes>/src/publish_free_nodes.py --proxy auto --date <date +%F 的输出>
 
-# 6. 收尾闸门：判定今晚还要不要跑下一个窗口（done=不用跑，continue=交给下一窗口）
+# 6. 收尾（第一窗口，主窗口专用）：闸门判定 + 决策第 2/3 窗口开关
+#    --first-window 写 Docs/window_switch.json 并输出 SWITCH / SWITCH_ACTION；
+#    SWITCH_ACTION=pause|resume 要用 automation_update 同步两个窗口的 status（只改 status）
 #    不带 --date 时按本机时钟校验 summary 新鲜度（停在昨天且已过 06:00、或更早 ⇒ continue）
-python <free-nodes>/src/window_gate.py --input <输出根目录> [--date <采集日>]
+python <free-nodes>/src/window_gate.py --input <输出根目录> --first-window
+
+# 6b. 开工（第 2/3 窗口）：先读开关；off 直接 GATE: done 跳过，on 才跑闸门
+#     **不带任何开关的旧命令也会自动读开关**，行为一致，所以旧 prompt 不用改命令；
+#     第三窗口仍必须带 --date <采集日>（取 Docs/summary.json 的 date，不是 date +%F）
+python <free-nodes>/src/window_gate.py --input <输出根目录> --check-switch --window 2 [--date <采集日>]
 ```
 
 **兜底**：先判「今天的 CI 产物到位没有」——判据只有一处实现，别自己数 `date`：
@@ -97,12 +104,16 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
 |---|---|---|
 | 单次运行墙钟上限 | **90 分钟**（超时报 `[CANCELLED] Run timed out`） | 传 `--time-budget` 主动收尾，不要压缩测试量 |
 | `--time-budget` 取值 | `5400 - 已用秒数 - 600`（给自检+发布留 10 分钟） | 先 `date +%s` 记开始时刻再算 |
-| 多窗口续跑 | 22:00 探测+验证 / 23:45 续跑 / 01:30 再续跑 | 后续窗口加 `--resume-tested`，**首窗口绝对不能加** |
+| 多窗口续跑 | 22:00 探测+验证 / 23:45 续跑 / 01:30 再续跑 | 后续窗口加 `--resume-tested`，**首窗口绝对不能加**；2026-11-14 起后两窗口默认停用，只在第一窗口判定需要时恢复（见下） |
 | 后两个窗口空转 | 第一窗口通常已测满四内核 | 每个窗口收尾跑 `window_gate.py`：`GATE: done` 就跳过，别再白跑 90 分钟 |
 | 内核顺序跑，首个内核吃光预算 | 实测首窗口 v2ray 吃满 2321s，其余三内核零数据 | 第二/第三窗口加 `--fair-budget` 均分墙钟 |
 | 增量落盘 | 每内核测完立即写 available / summary / 池 | 被强杀只丢当前内核，不会新旧混排 |
 
 **测试量不设人为上限**：`--max-test` 一律给 2500，与 `layout.py` 的 `FULL_BELOW = MAX_TEST = 2500` 保持一致（10-28 从 3000 下调，理由见 known-issues 第 40 条）。不要因为「怕超时」自行降到 1000 或 600——那些数字是拍脑袋估的，与实测吞吐对不上，压了反而白少测一批；也不要自己抬回 3000，那是另外两条口径（3s 超时 / 24 并发）定下来之前的旧值。
+
+**第 2/3 窗口自动开关（2026-11-14 起，详见 known-issues 第 65 条）**：判定权**只在第一窗口**。近 7 个有运行的夜晚首窗全部 `GATE: done` 且每晚验证耗时 ≤50 分钟 → `SWITCH: off`，把两个窗口置 PAUSED；当晚 `GATE: continue` / 有 pending 内核 / 耗时 >50 分钟 / 主窗口断档 ≥2 天 → `SWITCH: on`，当夜恢复 ACTIVE 让它们接手。状态与历史在 `Docs/window_switch.json`，`src/window_gate.py` 的 `--first-window` 写、`--check-switch`（以及不带开关的旧命令）只读。
+
+**现行上限与「结果不理想时按什么顺序提高」见 `Docs/quota.md`**：按现状运行，连续 3 晚命中触发条件才动手，一次只动一档、观察 3 晚，不要凭感觉调参数。
 
 ## 关键口径（结论，理由见参考文件）
 
