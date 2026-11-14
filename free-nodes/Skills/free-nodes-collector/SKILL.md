@@ -115,6 +115,34 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
 
 **现行上限与「结果不理想时按什么顺序提高」见 `Docs/quota.md`**：按现状运行，连续 3 晚命中触发条件才动手，一次只动一档、观察 3 晚，不要凭感觉调参数。
 
+## 2026-11-11 架构改造：仓库池 / 评分 / 三步测试 / 弹性（现行链路）
+
+> 代码唯一事实来源仍是 `src/`；本节是流程摘要，参数与调整顺序见 `Docs/quota.md`，
+> 上线经过见 known-issues 第 66 条。
+
+**CI 侧（只碰 GitHub）**
+
+- `src/repo_pool.json`（`repo_pool.py` 维护，吸收旧 `seed_repos.json`）：每天搜索命中入池，
+  `pushed_at` 超过 5 天没更新 → `state=evicted`（保留 90 天复盘、不再采集），被搜索再次命中自动复活。
+- 评分 `100 × (0.40·可用率 + 0.25·产量 + 0.20·新鲜度 + 0.15·延迟) × 惩罚`；
+  可用率样本 <20 向先验 0.25 收缩，**产量按仓库数均分**（防搬运型聚合站霸榜）。
+  高分仓 10 链接/90s、中分 6/60、低分 3/40 —— 这就是「优先从高质量仓库提取」的落地方式。
+- 两级去重（完整 URI → host:port）时 `repos[]` 取**并集**，并与 `nodes/pool/pool_state.json`
+  对照回填 `in_pool` 与池中已登记的仓库；`nodes_meta.json` 每节点带 `repos` / `in_pool`。
+  产量统计写 `Docs/repo_yield.md`（原始条数 / 去重后归属 / 独有率）。
+
+**本机侧（三步测试，第一窗口）**
+
+1. TCP 可达探测：`collect_nodes.py --probe-only`，128 并发 / 1.5s，不可达整条丢弃；
+2. 四内核多目标延迟：主判据 `gstatic/generate_204`，通过后**同一内核会话**补测
+   GitHub / X / Cloudflare / YouTube 各自延迟（不重复启动内核，额外成本几乎为零）；
+3. 带宽：`speed.cloudflare.com/__down` 2MB，只测「主目标 + ≥1 附加目标」里延迟最低的
+   `DEFAULT_BW_MAX=20` 个/内核，**必须带浏览器 UA**（否则全 403，见第 64 条）。
+- 产物：`nodes/available_nodes.json` + `Docs/available_nodes.md`（各目标延迟 / 带宽 / 所属仓库 /
+  内核 / TCP 延迟）；四份订阅文件保持可直接导入的格式不变。
+- 弹性：`--target-avail 30` 反推每内核测试量，clamp 800~2500；采集仓库数按昨日可用总数在 80~120 间伸缩。
+  当前因可用率 0.7~2.2% 夜夜顶到 2500，属已知结论，**不要提高 target**（见 `Docs/quota.md`）。
+
 ## 关键口径（结论，理由见参考文件）
 
 - **探测地址用裸域 HTTPS**：默认 `https://gstatic.com/generate_204`。不能带 `www`（会命中国内缓存节点、直连就返回 204、毫无区分度），不能用明文 HTTP（可被篡改、且触发宿主明文确认弹窗打断自动化），必须走代理。
