@@ -688,7 +688,12 @@ def limit_per_repo(ordered, cap, share=MAX_REPO_SHARE, floor=MAX_REPO_FLOOR):
     又几乎全是死的，结果整轮预算被它吃光（11-13 实测 90% 样本来自同一个仓库，可用数 24→5）。
 
     这里只限制「一个仓库能进多少条样本」，不动排序口径；仓库数不够填满 cap 时，
-    按原顺序把剩下的回补进来，保证测试量不缩水（宁可拥挤，也不能测得比预算少）。
+    按仓库**轮流**回补，保证测试量不缩水（宁可拥挤，也不能测得比预算少）。
+
+    回补必须跨仓库轮转（known-issues 66）：2026-11-14 实测按 `ordered` 头部顺序回补时，
+    配额便宜全被排在第一的大仓吃回去——日志写「单仓上限 375 条」，实际 rtwo2 拿了
+    1105/2514（44%），三个 0.0~0.2% 可用率的聚合仓合计吃掉 62.6% 的测试预算。
+    回补改成按仓库轮转后，同样输入下 rtwo2 回到 ~390 条，多出的名额分散给其他仓库。
     """
     per = max(int(floor), int(cap * share))
     picked, cnt, taken = [], {}, set()
@@ -702,12 +707,30 @@ def limit_per_repo(ordered, cap, share=MAX_REPO_SHARE, floor=MAX_REPO_FLOOR):
         taken.add(id(n))
         cnt[r] = cnt.get(r, 0) + 1
     if len(picked) < cap:
+        # 余量按仓库轮转补齐：先按仓库分组（保持组内原顺序），再一圈一圈各取一条，
+        # 避免「排在最前面的大仓」把剩余名额整包拿走（配额形同虚设）
+        groups, order_keys = {}, []
         for n in ordered:
-            if len(picked) >= cap:
-                break
             if id(n) in taken:
                 continue
-            picked.append(n)
+            r = n.get("repo") or ""
+            if r not in groups:
+                groups[r] = []
+                order_keys.append(r)
+            groups[r].append(n)
+        cursor = {r: 0 for r in order_keys}
+        while len(picked) < cap:
+            added = False
+            for r in order_keys:
+                if len(picked) >= cap:
+                    break
+                q, i = groups[r], cursor[r]
+                if i < len(q):
+                    picked.append(q[i])
+                    cursor[r] = i + 1
+                    added = True
+            if not added:
+                break
     return picked
 
 
@@ -1828,8 +1851,9 @@ def main():
             cap_eff, cap_why = elastic_test_cap(core, args, prev_pass)
             sampled = limit_per_repo(ordered, cap_eff)
             print(f"[elastic] {core}：候选 {len(ordered)} 超过全量阈值 {args.full_below}，"
-                  f"测试量 {cap_eff}（{cap_why}；单仓上限 "
-                  f"{max(MAX_REPO_FLOOR, int(cap_eff * MAX_REPO_SHARE))} 条）")
+                  f"测试量 {cap_eff}（{cap_why}；单仓配额 "
+                  f"{max(MAX_REPO_FLOOR, int(cap_eff * MAX_REPO_SHARE))} 条，"
+                  f"余量按仓库轮转回补）")
 
         # 续跑（--resume-tested）：跳过本日已测过的节点，接着测排序里的下一批候选。
         # 不加这个的话，第二个窗口会从排序头部重测一遍，把 90 分钟全花在重复劳动上
