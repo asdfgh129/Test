@@ -286,3 +286,23 @@
   `cores` 字段（clash 在 `available_clash.yaml` 的 `proxies`、singbox 在 `available_singbox.json` 的 `outbounds`，
   文件名后缀各内核不同）
 
+## 2026-11-15（第十八次记录：GATE: done，未跑验证；首窗口耗时超标把后两窗自动打开）
+
+- 开工前：`Get-CimInstance Win32_Process -Filter "Name='python.exe'"` 无结果、四内核无残留 → 无并发窗口
+  （沿用 11-13 的「先查进程再跑闸门」顺序；本次**没有跑 taskkill**，因为闸门 done 本窗口不启动验证，
+  盲杀反而有风险）
+- 闸门退出码 0：采集日 **2026-11-15（生成于 23:00:43）**，四核均「已测满单轮上限」2510/2505/2505/2507（cap 2500）
+- 本日可用（summary.ok）：v2ray 21 / xray 52 / clash 36 / singbox 17，均高于 `min_available` 10，正常水位。
+  候选池 6463/6129/8446/8161 远大于 cap ⇒ `exhausted=false` 属「达 cap」而非「测完池子」
+- **今晚与既往不同的一点**：首窗口 `elapsed_min=53.6 > 50`，`window_gate --first-window` 把
+  `Docs/window_switch.json` 从 off 翻成 **on**（reason「今晚验证耗时 53.6 分钟 > 50 分钟上限，窗口吃紧」），
+  于是本窗口被真正启用；但四核内容判定全 done ⇒ 启用了也没活干，属开关只判「耗时/断档」、内容另判的正常组合。
+  若 11-16 首窗口回到 ≤50 且 done，开关会再次自动关闭（连续 7 晚计数的 streak 已被今晚打断，需重新累积）
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0（HEAD `43a8a3a`）；
+  `git status --short -- free-nodes .github` 两项：主窗口 a3d7bb22 的 memory（M）+ `Docs/window_switch.json`（M，
+  即上面那次开关翻转），均为自动化自身产物，不含验证数据
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写完本文件后 publish 一次收干净
+- **给后续窗口的要点**：`Docs/window_switch.json` 每晚会因 `--first-window` 判定而变动，它是入库文件，
+  所以首窗口只要跑过、第二窗口几乎必然看到它 M —— 属预期尾巴，别当成「第一窗口没发布」的证据；
+  真正的未发布信号只看 pending-push.json 与 `rev-list` 的 ahead 数
+

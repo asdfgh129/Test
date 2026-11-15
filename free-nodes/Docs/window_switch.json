@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "followup_windows": "off",
-  "updated_at": "2026-11-14 22:58:31",
-  "reason": "最近 7 个有运行的夜晚（2026-11-06~2026-11-14）首窗全部跑完、最长 42.5 分钟（≤50），后两窗口用不上",
+  "followup_windows": "on",
+  "updated_at": "2026-11-15 23:04:31",
+  "reason": "今晚验证耗时 53.6 分钟 > 50 分钟上限，窗口吃紧；第 2/3 窗口保持/恢复启用",
   "streak_done": 7,
   "required_streak": 7,
   "max_elapsed_min": 50.0,
@@ -63,10 +63,18 @@
       "pending": [],
       "summary_date": "2026-11-14",
       "source": "first_window"
+    },
+    {
+      "date": "2026-11-15",
+      "gate": "done",
+      "elapsed_min": 53.6,
+      "pending": [],
+      "summary_date": "2026-11-15",
+      "source": "first_window"
     }
   ],
   "followup_used": [],
   "last_pause_at": "2026-11-14 22:58:31",
-  "last_resume_at": null,
+  "last_resume_at": "2026-11-15 23:04:31",
   "stale_recovered": false
 }
