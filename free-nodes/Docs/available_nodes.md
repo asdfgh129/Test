@@ -2,6 +2,189 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
+## 2026-11-15 23:00
+
+- 可用节点 **86** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）
+- 延迟测试目标：primary、github、x、cloudflare、youtube（主判据 `primary`）
+- 带宽：2MB 串行下载，每内核最多 20 个
+
+| 节点 | 内核 | 协议 | 主目标 | github | x | cloudflare | youtube | 带宽 |
+|---|---|---|---|---|---|---|---|---|
+| `112.49.65.212:18000` | clash/singbox/v2ray | trojan | 223ms | 2044ms | 345ms | 158ms | 263ms | 23.7Mbps |
+| `56.10.12.77:8443` | v2ray/xray | ss | 548ms | 490ms | 541ms | 395ms | 641ms | 0.42Mbps |
+| `3.71.179.221:443` | clash/singbox/xray | ss | 732ms | 719ms | 771ms | 662ms | 684ms | 4.64Mbps |
+| `92.5.55.38:59924` | xray | ss | 746ms | 729ms | 1021ms | 877ms | ✗ | - |
+| `3.79.47.19:443` | clash/singbox/xray | ss | 809ms | 704ms | 837ms | 720ms | 780ms | 5.67Mbps |
+| `56.10.12.77:443` | xray | vless | 879ms | 845ms | 961ms | 820ms | 919ms | - |
+| `213.182.201.138:3090` | clash/v2ray | vless | 929ms | 924ms | 553ms | 430ms | 446ms | 4.63Mbps |
+| `202.50.253.81:19999` | v2ray/xray | ss | 1011ms | ✗ | 3661ms | 2418ms | 2788ms | 0.54Mbps |
+| `179.254.127.194:443` | xray | vless | 1054ms | ✗ | ✗ | ✗ | ✗ | 0.93Mbps |
+| `zfapi.zalolink.com:42120` | clash/xray | vless | 1070ms | 2655ms | 2207ms | 2835ms | 989ms | - |
+| `202.50.253.27:19999` | v2ray/xray | ss | 1119ms | ✗ | 1869ms | 2258ms | 1357ms | 0.22Mbps |
+| `151.101.36.128:443` | xray | vless | 1125ms | ✗ | 1827ms | 580ms | 615ms | 0.29Mbps |
+| `ench-snet-app.w-ctrip.cn:34926` | singbox | trojan | 1173ms | ✗ | ✗ | ✗ | ✗ | 0.06Mbps |
+| `213.171.31.83:443` | clash | vless | 1173ms | ✗ | ✗ | 2068ms | ✗ | - |
+| `178.17.58.55:443` | v2ray | hysteria2 | 1176ms | ✗ | ✗ | ✗ | ✗ | - |
+| `202.50.253.36:19999` | v2ray/xray | ss | 1185ms | ✗ | 1632ms | 989ms | 2791ms | 0.24Mbps |
+| `150.241.75.103:443` | xray | vless | 1209ms | 1253ms | 1304ms | 1324ms | 1544ms | 4.23Mbps |
+| `202.50.253.90:19999` | xray | ss | 1223ms | ✗ | 1247ms | ✗ | 4011ms | - |
+| `timete.hagrid-connected.com:443` | xray | vless | 1350ms | ✗ | ✗ | ✗ | ✗ | 0.02Mbps |
+| `157.173.30.95:443` | xray | vless | 1373ms | ✗ | 1132ms | ✗ | ✗ | 1.13Mbps |
+| `179.254.127.219:443` | xray | vless | 1381ms | ✗ | ✗ | ✗ | ✗ | 1.2Mbps |
+| `202.50.253.18:19999` | v2ray | ss | 1409ms | ✗ | 2928ms | ✗ | ✗ | 0.42Mbps |
+| `176.98.176.60:443` | clash | vless | 1451ms | 1774ms | 1780ms | 1468ms | 1406ms | 0.51Mbps |
+| `31.76.31.240:4443` | clash/xray | vless | 1464ms | ✗ | 2984ms | 2347ms | 2983ms | 0.13Mbps |
+| `201.51.12.98:443` | xray | vless | 1475ms | ✗ | 736ms | 1685ms | ✗ | - |
+| `202.50.253.72:19999` | v2ray/xray | ss | 1516ms | ✗ | 1576ms | 2657ms | 1094ms | 0.44Mbps |
+| `176.109.101.18:443` | clash/xray | vless | 1520ms | ✗ | ✗ | 4434ms | ✗ | 3.43Mbps |
+| `136.148.213.149:443` | xray | vless | 1530ms | 614ms | 746ms | 651ms | 921ms | - |
+| `196.196.149.34:443` | clash/xray | vless | 1549ms | ✗ | 2972ms | 2801ms | 3306ms | - |
+| `finland.freegate.win:443` | xray | vless | 1559ms | 1511ms | 1969ms | 1518ms | 1483ms | - |
+| `fastly2.dunnexa.ir:443` | singbox/v2ray | trojan | 1570ms | ✗ | 1701ms | 1457ms | 1591ms | 0.91Mbps |
+| `72.56.4.84:443` | clash | vless | 1573ms | 1531ms | ✗ | ✗ | ✗ | - |
+| `zfapi.zalolink.com:46957` | clash | vless | 1631ms | 1911ms | 5270ms | 1330ms | 2628ms | 2.82Mbps |
+| `202.50.253.99:19999` | v2ray/xray | ss | 1651ms | ✗ | 1684ms | 2312ms | 2515ms | 0.58Mbps |
+| `zfapi.zalolink.com:11802` | clash/xray | vless | 1694ms | 1875ms | ✗ | 1495ms | 1510ms | 1.09Mbps |
+| `tgfree.rush-server.com:443` | xray | vless | 1784ms | ✗ | ✗ | ✗ | ✗ | - |
+| `151.101.36.2:443` | clash/xray | vless | 1858ms | 3160ms | 1940ms | 2005ms | ✗ | 0.21Mbps |
+| `vps3.nemnogogo.com:443` | v2ray/xray | vless | 1938ms | 684ms | 825ms | 678ms | 828ms | - |
+| `196.196.208.20:443` | clash | vless | 1943ms | 1847ms | 1881ms | 1625ms | 1721ms | 2.49Mbps |
+| `202.50.253.63:19999` | v2ray/xray | ss | 1945ms | ✗ | 1558ms | 2346ms | 1705ms | 0.24Mbps |
+| `217.60.27.93:443` | xray | vless | 1957ms | 1443ms | 2870ms | 1792ms | 1922ms | - |
+| `172.235.36.156:443` | singbox | vless | 1982ms | ✗ | 1652ms | ✗ | ✗ | 0.06Mbps |
+| `riga.freegate.win:443` | xray | vless | 1983ms | 1861ms | 2613ms | 2298ms | 1416ms | - |
+| `202.50.253.45:19999` | v2ray/xray | ss | 1993ms | ✗ | 1166ms | 1377ms | 4162ms | 0.47Mbps |
+| `202.50.253.54:19999` | v2ray/xray | ss | 2006ms | ✗ | 1984ms | 1075ms | 2349ms | 0.35Mbps |
+| `84.54.57.122:443` | xray | vless | 2008ms | ✗ | ✗ | ✗ | ✗ | - |
+| `104.171.133.213:443` | clash | vless | 2012ms | 1377ms | 1403ms | 1378ms | 1603ms | 0.64Mbps |
+| `83.171.241.182:25155` | xray | vless | 2045ms | 2468ms | 1945ms | 1550ms | 1100ms | - |
+| `31.76.114.22:443` | xray | vless | 2083ms | 1767ms | 2243ms | 1877ms | 1497ms | - |
+| `172.236.241.130:443` | singbox | vless | 2086ms | ✗ | ✗ | ✗ | ✗ | - |
+| `83.171.241.182:443` | clash/singbox/xray | vless | 2094ms | 1948ms | 1985ms | 1943ms | 1887ms | 1.11Mbps |
+| `arranged-samuel-cradle-hayes.trycloudflare.com:443` | xray | vmess | 2115ms | ✗ | 2882ms | ✗ | 1951ms | - |
+| `zfapi.zalolink.com:30322` | clash | vless | 2177ms | 3919ms | 4106ms | 2538ms | 3155ms | 2.87Mbps |
+| `153.56.228.151:443` | clash | vless | 2202ms | 1459ms | 1487ms | 2072ms | 2147ms | 2.67Mbps |
+| `185.71.216.95:2091` | clash/singbox | vless | 2230ms | ✗ | ✗ | ✗ | ✗ | 0.41Mbps |
+| `196.245.52.188:443` | clash | vless | 2231ms | ✗ | ✗ | ✗ | 3291ms | - |
+| `179.254.92.134:443` | clash | vless | 2251ms | 3278ms | ✗ | ✗ | 3224ms | - |
+| `d4a338t.pl8.h1clayd.click:443` | clash | vless | 2258ms | 2622ms | ✗ | 1473ms | 1491ms | - |
+| `185.71.216.177:2089` | clash/singbox | vless | 2305ms | ✗ | 2491ms | 3396ms | ✗ | 0.6Mbps |
+| `147.224.233.249:63690` | clash | vless | 2315ms | 1839ms | 2073ms | 1636ms | 1984ms | - |
+| `13.143.232.205:443` | clash/xray | vless | 2356ms | ✗ | ✗ | ✗ | 840ms | - |
+| `v1us9.stablenode.cloud:24413` | singbox/v2ray | trojan | 2389ms | 1676ms | 2982ms | 3574ms | 1415ms | 1.36Mbps |
+| `base.hosamobenl.co.uk:443` | xray | vless | 2413ms | ✗ | 1445ms | ✗ | 3016ms | - |
+| `46.243.233.165:59715` | v2ray | vless | 2448ms | 1693ms | 1075ms | 1137ms | 1255ms | 0.37Mbps |
+| `185.71.216.177:2194` | clash/xray | vless | 2537ms | ✗ | 3474ms | 4577ms | ✗ | - |
+| `us032014.ssgreen.org:443` | xray | vmess | 2568ms | ✗ | ✗ | ✗ | ✗ | - |
+| `34.55.45.96:443` | clash/xray | vless | 2622ms | 3258ms | 1726ms | 1194ms | 967ms | 0.1Mbps |
+| `v1us9.stablenode.cloud:24421` | singbox/v2ray | trojan | 2693ms | 2047ms | 2890ms | 1678ms | 1719ms | 0.57Mbps |
+| `167.17.179.175:443` | singbox/v2ray/xray | hysteria2 | 2710ms | 1408ms | 1093ms | 643ms | 646ms | 1.14Mbps |
+| `130.78.31.25:443` | xray | vless | 2747ms | ✗ | ✗ | 2722ms | ✗ | - |
+| `185.71.216.94:2090` | clash | vless | 2807ms | ✗ | ✗ | ✗ | ✗ | - |
+| `213.108.23.226:46312` | xray | vless | 2823ms | 1331ms | 3409ms | 1392ms | 1607ms | - |
+| `f3b21at.de18.h1clayd.click:443` | clash | vless | 2943ms | 2401ms | 2591ms | 2334ms | 1148ms | - |
+| `zfapi.zalolink.com:43149` | xray | vless | 2986ms | ✗ | 1090ms | 1005ms | 999ms | - |
+| `172.233.129.172:443` | singbox | vless | 3072ms | ✗ | 2113ms | ✗ | ✗ | 0.08Mbps |
+| `185.71.216.95:2093` | singbox | vless | 3184ms | ✗ | ✗ | ✗ | 3061ms | 0.07Mbps |
+| `151.101.36.246:443` | xray | vless | 3411ms | 1973ms | 3105ms | 728ms | 2621ms | - |
+| `201.24.116.192:443` | v2ray/xray | vless | 3456ms | 1158ms | 874ms | 692ms | 1125ms | - |
+| `13.140.86.73:6079` | clash/xray | ss | 3643ms | 4991ms | ✗ | ✗ | 4855ms | - |
+| `196.240.181.132:443` | xray | vless | 3669ms | ✗ | 2301ms | ✗ | ✗ | - |
+| `185.71.216.177:2093` | clash/singbox | vless | 3742ms | 3123ms | 2075ms | ✗ | 4303ms | 1.2Mbps |
+| `s5.abol.ahbpanel.ir:80` | xray | ss | 3785ms | ✗ | ✗ | ✗ | ✗ | - |
+| `196.196.149.80:443` | clash | vless | 4139ms | ✗ | ✗ | ✗ | ✗ | - |
+| `185.71.216.94:2194` | clash | vless | 4566ms | ✗ | ✗ | ✗ | ✗ | - |
+| `v1us9.stablenode.cloud:24422` | clash/singbox/v2ray | trojan | 4764ms | 1412ms | 2629ms | 1355ms | 2989ms | 0.38Mbps |
+| `185.71.216.95:2092` | clash | vless | 4863ms | ✗ | ✗ | ✗ | ✗ | - |
+
+> 来源仓库（可多个，去重时按 1/N 分摊产量）：
+> - `112.49.65.212:18000`：rtwo2/FastNodes
+> - `56.10.12.77:8443`：hello-world-1989/cn-news
+> - `3.71.179.221:443`：rekt0ro/ProxyRift
+> - `92.5.55.38:59924`：rekt0ro/ProxyRift
+> - `3.79.47.19:443`：rekt0ro/ProxyRift
+> - `56.10.12.77:443`：hello-world-1989/cn-news
+> - `213.182.201.138:3090`：0xRadikal/Free-v2ray-Configs
+> - `202.50.253.81:19999`：ermaozi01/free_clash_vpn
+> - `179.254.127.194:443`：rekt0ro/ProxyRift
+> - `zfapi.zalolink.com:42120`：ishalumi/proxy-node-collector
+> - `202.50.253.27:19999`：ermaozi01/free_clash_vpn
+> - `151.101.36.128:443`：rekt0ro/ProxyRift
+> - `ench-snet-app.w-ctrip.cn:34926`：rekt0ro/ProxyRift
+> - `213.171.31.83:443`：rekt0ro/ProxyRift
+> - `178.17.58.55:443`：rtwo2/FastNodes
+> - `202.50.253.36:19999`：ermaozi01/free_clash_vpn
+> - `150.241.75.103:443`：rekt0ro/ProxyRift
+> - `202.50.253.90:19999`：ermaozi01/free_clash_vpn
+> - `timete.hagrid-connected.com:443`：0xRadikal/Free-v2ray-Configs
+> - `157.173.30.95:443`：rekt0ro/ProxyRift
+> - `179.254.127.219:443`：whoahaow/rjsxrd
+> - `202.50.253.18:19999`：F0rc3Run/F0rc3Run
+> - `176.98.176.60:443`：0xRadikal/Free-v2ray-Configs
+> - `31.76.31.240:4443`：rekt0ro/ProxyRift
+> - `201.51.12.98:443`：zhuhaiuk/free-nodes
+> - `202.50.253.72:19999`：ermaozi01/free_clash_vpn
+> - `176.109.101.18:443`：whoahaow/rjsxrd
+> - `136.148.213.149:443`：Areral/ScarletDevil
+> - `196.196.149.34:443`：rekt0ro/ProxyRift
+> - `finland.freegate.win:443`：rekt0ro/ProxyRift
+> - `fastly2.dunnexa.ir:443`：HamoonSoleimani/Pr0xySh4rk
+> - `72.56.4.84:443`：YawStar/Proxy-Hunter
+> - `zfapi.zalolink.com:46957`：Areral/ScarletDevil
+> - `202.50.253.99:19999`：ermaozi01/free_clash_vpn
+> - `zfapi.zalolink.com:11802`：YawStar/Proxy-Hunter
+> - `tgfree.rush-server.com:443`：R3ZARAHIMI/tg-v2ray-configs-every2h
+> - `151.101.36.2:443`：Mehinator/Derafsh
+> - `vps3.nemnogogo.com:443`：zhuhaiuk/free-nodes
+> - `196.196.208.20:443`：rekt0ro/ProxyRift
+> - `202.50.253.63:19999`：ermaozi01/free_clash_vpn
+> - `217.60.27.93:443`：Mehinator/Derafsh
+> - `172.235.36.156:443`：Areral/ScarletDevil
+> - `riga.freegate.win:443`：rekt0ro/ProxyRift
+> - `202.50.253.45:19999`：ermaozi01/free_clash_vpn
+> - `202.50.253.54:19999`：ermaozi01/free_clash_vpn
+> - `84.54.57.122:443`：rekt0ro/ProxyRift
+> - `104.171.133.213:443`：0xRadikal/Free-v2ray-Configs
+> - `83.171.241.182:25155`：rekt0ro/ProxyRift
+> - `31.76.114.22:443`：ishalumi/proxy-node-collector
+> - `172.236.241.130:443`：Areral/ScarletDevil
+> - `83.171.241.182:443`：whoahaow/rjsxrd
+> - `arranged-samuel-cradle-hayes.trycloudflare.com:443`：sakha1370/OpenRay
+> - `zfapi.zalolink.com:30322`：YawStar/Proxy-Hunter
+> - `153.56.228.151:443`：0xRadikal/Free-v2ray-Configs
+> - `185.71.216.95:2091`：rekt0ro/ProxyRift
+> - `196.245.52.188:443`：snakem982/proxypool
+> - `179.254.92.134:443`：YawStar/Proxy-Hunter
+> - `d4a338t.pl8.h1clayd.click:443`：rekt0ro/ProxyRift
+> - `185.71.216.177:2089`：rekt0ro/ProxyRift
+> - `147.224.233.249:63690`：rekt0ro/ProxyRift
+> - `13.143.232.205:443`：rekt0ro/ProxyRift
+> - `v1us9.stablenode.cloud:24413`：VoroninaYanina/free-nodes
+> - `base.hosamobenl.co.uk:443`：zhuhaiuk/free-nodes
+> - `46.243.233.165:59715`：whoahaow/rjsxrd
+> - `185.71.216.177:2194`：rekt0ro/ProxyRift
+> - `us032014.ssgreen.org:443`：rekt0ro/ProxyRift
+> - `34.55.45.96:443`：rekt0ro/ProxyRift
+> - `v1us9.stablenode.cloud:24421`：VoroninaYanina/free-nodes
+> - `167.17.179.175:443`：rekt0ro/ProxyRift
+> - `130.78.31.25:443`：rekt0ro/ProxyRift
+> - `185.71.216.94:2090`：rekt0ro/ProxyRift
+> - `213.108.23.226:46312`：rekt0ro/ProxyRift
+> - `f3b21at.de18.h1clayd.click:443`：Areral/ScarletDevil
+> - `zfapi.zalolink.com:43149`：ermaozi01/free_clash_vpn
+> - `172.233.129.172:443`：Areral/ScarletDevil
+> - `185.71.216.95:2093`：rekt0ro/ProxyRift
+> - `151.101.36.246:443`：rekt0ro/ProxyRift
+> - `201.24.116.192:443`：zhuhaiuk/free-nodes
+> - `13.140.86.73:6079`：snakem982/proxypool
+> - `196.240.181.132:443`：rekt0ro/ProxyRift
+> - `185.71.216.177:2093`：rekt0ro/ProxyRift
+> - `s5.abol.ahbpanel.ir:80`：F0rc3Run/F0rc3Run
+> - `196.196.149.80:443`：YawStar/Proxy-Hunter
+> - `185.71.216.94:2194`：rekt0ro/ProxyRift
+> - `v1us9.stablenode.cloud:24422`：VoroninaYanina/free-nodes
+> - `185.71.216.95:2092`：rekt0ro/ProxyRift
+
 ## 2026-11-14 22:50
 
 - 可用节点 **31** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）
