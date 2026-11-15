@@ -1,5 +1,26 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-15 采集日（2026-11-16 01:30 运行）
+
+- 闸门退出码 0：四内核「已测满单轮上限」（2510/2505/2505/2507，cap 2500）→ GATE: done
+  → 本窗口未采集、未跑验证、未重跑自检、未发布（未占用验证资源）
+- 本日可用 v2ray 21 / xray 52 / clash 36 / singbox 17（池 177/611/342/314）；
+  主清单 8983 条 TCP 全可达（100%，中位 236ms），CF 前置 1464
+- 产物核对：available 21/52/36/**18（含 1 条 direct，净 17）** 与 summary 的 ok 逐项一致；
+  `nodes_uris` 8983 = `nodes_meta.total/reachable` 8983；tested_state date=11-15（四核 2510/2505/2505/2507）
+- **尾巴三处全干净**：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 无需补推
+- 本日发布链：CI `9f98910`(02:46，属 11-14 侧 cron 迟到派发)/`7faf948`(21:10) + 第一窗口 `43a8a3a`(23:03)
+  + 第二窗口 `7e4f8d5`(23:47，只带 memory + window_switch.json)，已全部在 origin/master
+- 自检（第一窗口 23:01 产物）：0 critical / **5 warn** = 四核可用率 0.8/2.1/1.4/0.7% 低水位
+  + 镜像失效 11/13（可用 gh-proxy.org / gh.monlor.com）→ 按 known-issues 口径不改代码
+- **窗口开关本日恢复启用**：第一窗口 `elapsed_min=53.6 > 50` → `followup_windows` 由 off 转 on
+  （`last_resume_at 2026-11-15 23:04`，`streak_done` 已 7/7 但耗时超限故 fail-safe 开启）。
+  因此本窗口被触发；闸门 done 说明这次触发是多余的、但符合设计（宁可多跑一次、不可漏跑）
+- 内核进程检查：xray / sing-box 均无残留（第一窗口正常收尾，第二窗口未跑内核）
+- 观察项：四核可用率合计 126，较 11-14（15/11/…）回升；singbox 17 为近几日低点但仍在 min_available(10) 之上
+- 本窗口记忆文件在核查之后写，留作下一个发布顺带提交（沿用既有约定，不是故障）
+
 ## 2026-11-13 采集日（2026-11-14 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（2513/2504/2511/2510，cap 2500）→ GATE: done
