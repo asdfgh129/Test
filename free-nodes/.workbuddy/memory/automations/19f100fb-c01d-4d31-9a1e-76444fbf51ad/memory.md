@@ -1,5 +1,31 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-16 采集日（2026-11-17 01:30 运行）
+
+- 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2507/2500、xray 1447/1445、clash 2094/2088、
+  singbox 2505/2500）→ GATE: done → 本窗口未采集、未跑验证、未重跑自检（未占用验证资源）
+- 本日可用 v2ray 20 / xray 74 / clash 72 / singbox 120（池 148/578/360/376）；
+  主清单 9916 条 TCP 全可达（100%，中位 233ms），CF 前置 2073；原始 160917 → 去重 29411
+- 产物核对：available 20/74/72/**121（含 1 条 direct，净 120）** 与 summary 的 ok 逐项一致；
+  `nodes_uris` 9916 = `nodes_meta.total/reachable` 9916；tested_state date=11-16（四核 2507/1447/2094/2505）
+- **尾巴三处全干净**：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 无需补推
+- 本日发布链：CI `9def48a`(03:22，11-15 侧 cron 迟到派发)/`8698dfb`(21:18) + 第一窗口 `1d29978`(22:58)
+  + 第二窗口 `87607a2`(23:47)，已全部在 origin/master
+- 自检（第一窗口 22:55 产物）：0 critical / **3 warn** = v2ray 可用率 0.8% 低水位 + 镜像失效 10/13
+  + 「4 个高贡献仓库本次 0 条（全为下载失败 URLError）」
+- **四仓 URLError 取证（未改代码，结论与 known-issues 60 一致）**：crashgfw / VoroninaYanina /
+  hysteria350 / free-proxy-nodes 四仓 `pushed_at` 全为 11-16T10:45Z（同一运营方镜像组），README 6 条链接
+  **同指 `ndxy.fn0821.xyz/nodes/<hash>`**（另有 `f2.st0103.top`）→ 属「同域多仓同时失败」；
+  本机实测 `ndxy.fn0821.xyz` 订阅链接 **200 / 4000B 正常**，`f2.st0103.top` 立即 RST ⇒ 仍是 **CI(Azure) 出口侧**
+  不可达，采集代码无需改，也不该加镜像（非 GitHub raw，镜像救不了第三方域）
+- `735754647/Free-Nodes` HTTP 404：上游文件已删（known-issues 43/55 判据，先看 git trees 再怀疑自己）
+- 窗口开关仍 on（`reason` 写 `耗时达标=False`，因 11-15 那晚 elapsed 53.6 > 50；连续 done 已 7/7）
+  → 本窗口被正常触发，闸门 done 说明这次触发多余但符合「宁可多跑一次」设计
+- 本窗口记忆文件在核查之后写入，产生 1 个纯文档尾巴 → 按「有尾巴就收干净」规则 publish 收尾
+- 判据留用：**四条高贡献仓同时 URLError 先看 pushed_at 与链接域名是否同一家**；同一运营方镜像组共用
+  一条订阅域，整域被 CI 出口封就会一次性全灭，别当成四个独立故障去改采集代码
+
 ## 2026-11-15 采集日（2026-11-16 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（2510/2505/2505/2507，cap 2500）→ GATE: done
