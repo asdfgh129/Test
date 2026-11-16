@@ -58,26 +58,33 @@
      "ok": 4,
      "rate": 0.003,
      "latency": 778
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 1356,
+     "ok": 6,
+     "rate": 0.004,
+     "latency": 876
     }
    ],
-   "tested": 4189,
-   "ok": 10,
-   "avail_rate": 0.002,
-   "avg_latency": 778,
-   "last_tested": "2026-11-15",
-   "quality": 25.5,
-   "score": 57.8,
+   "tested": 5545,
+   "ok": 16,
+   "avail_rate": 0.003,
+   "avg_latency": 876,
+   "last_tested": "2026-11-16",
+   "quality": 25.0,
+   "score": 57.5,
    "score_parts": {
-    "rate": 0.0036,
+    "rate": 0.0038,
     "yield": 1.0,
     "fresh": 1.0,
-    "lat": 0.8444,
+    "lat": 0.8248,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 4189,
-     "ok": 10,
-     "raw": 0.0024
+     "tested": 5545,
+     "ok": 16,
+     "raw": 0.0029
     },
     "yield_info": {
      "daily": 5418.7,
@@ -87,57 +94,255 @@
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 778
+     "avg_latency": 876
     }
    },
    "push_days": 0
   },
   {
-   "full_name": "ermaozi01/free_clash_vpn",
-   "stars": 836,
-   "contributed": 1302,
+   "full_name": "aviamastersgh/vpn-free-russia",
+   "stars": 72,
+   "contributed": 153085,
    "last_collected": "2026-11-16",
-   "tested": 292,
-   "ok": 132,
-   "avail_rate": 0.452,
-   "avg_latency": 1972,
-   "quality": 49.8,
-   "last_tested": "2026-11-15",
-   "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 54,
-     "ok": 26,
-     "rate": 0.481,
-     "latency": 1892
-    },
-    {
-     "date": "2026-11-10",
-     "tested": 52,
-     "ok": 35,
-     "rate": 0.673,
-     "latency": 1993
-    },
+   "first_seen": "2026-11-13",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
     {
      "date": "2026-11-13",
-     "tested": 55,
-     "ok": 33,
-     "rate": 0.6,
-     "latency": 2019
+     "raw": 11505,
+     "uniq": 975.01,
+     "fail": 0
     },
     {
      "date": "2026-11-14",
-     "tested": 59,
-     "ok": 20,
-     "rate": 0.339,
-     "latency": 2011
+     "raw": 10886,
+     "uniq": 1021.25,
+     "fail": 0
     },
     {
      "date": "2026-11-15",
-     "tested": 72,
-     "ok": 18,
-     "rate": 0.25,
-     "latency": 1972
+     "raw": 12115,
+     "uniq": 1673.25,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 11955,
+     "uniq": 1887.82,
+     "fail": 0
+    }
+   ],
+   "quality_history": [
+    {
+     "date": "2026-11-13",
+     "tested": 1500,
+     "ok": 8,
+     "rate": 0.005,
+     "latency": 1516
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 472,
+     "ok": 1,
+     "rate": 0.002,
+     "latency": 922
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 1214,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 1131,
+     "ok": 1,
+     "rate": 0.001,
+     "latency": 1464
+    }
+   ],
+   "score": 51.6,
+   "score_parts": {
+    "rate": 0.0035,
+    "yield": 0.8341,
+    "fresh": 1.0,
+    "lat": 0.7072,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 4317,
+     "ok": 10,
+     "raw": 0.0023
+    },
+    "yield_info": {
+     "daily": 793.9,
+     "uniq_7d": 5557.3
+    },
+    "fresh_info": {
+     "push_days": 0
+    },
+    "lat_info": {
+     "avg_latency": 1464
+    }
+   },
+   "push_days": 0,
+   "tested": 4317,
+   "ok": 10,
+   "avail_rate": 0.002,
+   "avg_latency": 1464,
+   "last_tested": "2026-11-16",
+   "quality": 21.4
+  },
+  {
+   "full_name": "Areral/ScarletDevil",
+   "stars": 14,
+   "contributed": 15114,
+   "first_seen": "",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
+   "last_collected": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-13",
+     "raw": 2068,
+     "uniq": 164.04,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-14",
+     "raw": 1932,
+     "uniq": 142.94,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 2270,
+     "uniq": 186.95,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 2686,
+     "uniq": 221.26,
+     "fail": 0
+    }
+   ],
+   "quality_history": [
+    {
+     "date": "2026-11-13",
+     "tested": 91,
+     "ok": 28,
+     "rate": 0.308,
+     "latency": 2075
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 78,
+     "ok": 7,
+     "rate": 0.09,
+     "latency": 2322
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 231,
+     "ok": 6,
+     "rate": 0.026,
+     "latency": 2207
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 385,
+     "ok": 73,
+     "rate": 0.19,
+     "latency": 1483
+    }
+   ],
+   "score": 50.9,
+   "score_parts": {
+    "rate": 0.1478,
+    "yield": 0.5791,
+    "fresh": 1.0,
+    "lat": 0.7034,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 785,
+     "ok": 114,
+     "raw": 0.1452
+    },
+    "yield_info": {
+     "daily": 102.2,
+     "uniq_7d": 715.2
+    },
+    "fresh_info": {
+     "push_days": 0
+    },
+    "lat_info": {
+     "avg_latency": 1483
+    }
+   },
+   "push_days": 0,
+   "tested": 785,
+   "ok": 114,
+   "avail_rate": 0.145,
+   "avg_latency": 1483,
+   "last_tested": "2026-11-16",
+   "quality": 31.3
+  },
+  {
+   "full_name": "sakha1370/OpenRay",
+   "stars": 256,
+   "contributed": 328129,
+   "last_collected": "2026-11-16",
+   "tested": 2772,
+   "ok": 7,
+   "avail_rate": 0.003,
+   "avg_latency": 1442,
+   "quality": 21.6,
+   "last_tested": "2026-11-16",
+   "quality_history": [
+    {
+     "date": "2026-11-09",
+     "tested": 223,
+     "ok": 1,
+     "rate": 0.004,
+     "latency": 1903
+    },
+    {
+     "date": "2026-11-10",
+     "tested": 419,
+     "ok": 4,
+     "rate": 0.01,
+     "latency": 2045
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 652,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 332,
+     "ok": 1,
+     "rate": 0.003,
+     "latency": 2115
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 1146,
+     "ok": 1,
+     "rate": 0.001,
+     "latency": 1442
     }
    ],
    "first_seen": "2026-11-13",
@@ -149,51 +354,51 @@
    "yield_days": [
     {
      "date": "2026-11-13",
-     "raw": 40,
-     "uniq": 3.11,
+     "raw": 0,
+     "uniq": 2.07,
      "fail": 0
     },
     {
      "date": "2026-11-14",
-     "raw": 46,
-     "uniq": 3.13,
+     "raw": 15306,
+     "uniq": 1009.62,
      "fail": 0
     },
     {
      "date": "2026-11-15",
-     "raw": 54,
-     "uniq": 3.37,
+     "raw": 15892,
+     "uniq": 1161.41,
      "fail": 0
     },
     {
      "date": "2026-11-16",
-     "raw": 50,
-     "uniq": 3.29,
+     "raw": 16092,
+     "uniq": 1194.89,
      "fail": 0
     }
    ],
-   "score": 49.9,
+   "score": 50.1,
    "score_parts": {
-    "rate": 0.4391,
-    "yield": 0.1305,
+    "rate": 0.0043,
+    "yield": 0.7716,
     "fresh": 1.0,
-    "lat": 0.6056,
+    "lat": 0.7116,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 292,
-     "ok": 132,
-     "raw": 0.4521
+     "tested": 2772,
+     "ok": 7,
+     "raw": 0.0025
     },
     "yield_info": {
-     "daily": 1.8,
-     "uniq_7d": 12.9
+     "daily": 481.1,
+     "uniq_7d": 3368.0
     },
     "fresh_info": {
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 1972
+     "avg_latency": 1442
     }
    },
    "push_days": 0
@@ -203,20 +408,13 @@
    "stars": 893,
    "contributed": 305064,
    "last_collected": "2026-11-16",
-   "tested": 577,
-   "ok": 80,
-   "avail_rate": 0.139,
-   "avg_latency": 1505,
-   "quality": 30.7,
-   "last_tested": "2026-11-15",
+   "tested": 548,
+   "ok": 97,
+   "avail_rate": 0.177,
+   "avg_latency": 1824,
+   "quality": 31.4,
+   "last_tested": "2026-11-16",
    "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 277,
-     "ok": 32,
-     "rate": 0.116,
-     "latency": 1818
-    },
     {
      "date": "2026-11-10",
      "tested": 193,
@@ -244,6 +442,13 @@
      "ok": 6,
      "rate": 0.07,
      "latency": 1505
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 248,
+     "ok": 49,
+     "rate": 0.198,
+     "latency": 1824
     }
    ],
    "first_seen": "2026-11-13",
@@ -278,18 +483,18 @@
      "fail": 0
     }
    ],
-   "score": 49.2,
+   "score": 49.8,
    "score_parts": {
-    "rate": 0.1424,
+    "rate": 0.1796,
     "yield": 0.5223,
     "fresh": 1.0,
-    "lat": 0.699,
+    "lat": 0.6352,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 577,
-     "ok": 80,
-     "raw": 0.1386
+     "tested": 548,
+     "ok": 97,
+     "raw": 0.177
     },
     "yield_info": {
      "daily": 64.5,
@@ -299,7 +504,113 @@
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 1505
+     "avg_latency": 1824
+    }
+   },
+   "push_days": 0
+  },
+  {
+   "full_name": "hello-world-1989/cn-news",
+   "stars": 661,
+   "contributed": 198,
+   "last_collected": "2026-11-16",
+   "tested": 42,
+   "ok": 12,
+   "avail_rate": 0.286,
+   "avg_latency": 307,
+   "quality": 48.2,
+   "last_tested": "2026-11-16",
+   "quality_history": [
+    {
+     "date": "2026-11-10",
+     "tested": 6,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-13",
+     "tested": 6,
+     "ok": 3,
+     "rate": 0.5,
+     "latency": 1044
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 10,
+     "ok": 4,
+     "rate": 0.4,
+     "latency": 1678
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 10,
+     "ok": 3,
+     "rate": 0.3,
+     "latency": 623
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 10,
+     "ok": 2,
+     "rate": 0.2,
+     "latency": 307
+    }
+   ],
+   "first_seen": "2026-11-13",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-13",
+     "raw": 6,
+     "uniq": 4.25,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-14",
+     "raw": 6,
+     "uniq": 9.33,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 6,
+     "uniq": 6.08,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 6,
+     "uniq": 5.75,
+     "fail": 0
+    }
+   ],
+   "score": 49.8,
+   "score_parts": {
+    "rate": 0.2742,
+    "yield": 0.1914,
+    "fresh": 1.0,
+    "lat": 0.9386,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 42,
+     "ok": 12,
+     "raw": 0.2857
+    },
+    "yield_info": {
+     "daily": 3.6,
+     "uniq_7d": 25.4
+    },
+    "fresh_info": {
+     "push_days": 0
+    },
+    "lat_info": {
+     "avg_latency": 307
     }
    },
    "push_days": 0
@@ -383,51 +694,51 @@
    "quality": 55.0
   },
   {
-   "full_name": "hello-world-1989/cn-news",
-   "stars": 661,
-   "contributed": 198,
+   "full_name": "ermaozi01/free_clash_vpn",
+   "stars": 836,
+   "contributed": 1302,
    "last_collected": "2026-11-16",
-   "tested": 38,
-   "ok": 11,
-   "avail_rate": 0.289,
-   "avg_latency": 623,
-   "quality": 46.5,
-   "last_tested": "2026-11-15",
+   "tested": 307,
+   "ok": 134,
+   "avail_rate": 0.436,
+   "avg_latency": 2201,
+   "quality": 47.3,
+   "last_tested": "2026-11-16",
    "quality_history": [
     {
-     "date": "2026-11-09",
-     "tested": 6,
-     "ok": 1,
-     "rate": 0.167,
-     "latency": 1029
-    },
-    {
      "date": "2026-11-10",
-     "tested": 6,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
+     "tested": 52,
+     "ok": 35,
+     "rate": 0.673,
+     "latency": 1993
     },
     {
      "date": "2026-11-13",
-     "tested": 6,
-     "ok": 3,
-     "rate": 0.5,
-     "latency": 1044
+     "tested": 55,
+     "ok": 33,
+     "rate": 0.6,
+     "latency": 2019
     },
     {
      "date": "2026-11-14",
-     "tested": 10,
-     "ok": 4,
-     "rate": 0.4,
-     "latency": 1678
+     "tested": 59,
+     "ok": 20,
+     "rate": 0.339,
+     "latency": 2011
     },
     {
      "date": "2026-11-15",
-     "tested": 10,
-     "ok": 3,
-     "rate": 0.3,
-     "latency": 623
+     "tested": 72,
+     "ok": 18,
+     "rate": 0.25,
+     "latency": 1972
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 69,
+     "ok": 28,
+     "rate": 0.406,
+     "latency": 2201
     }
    ],
    "first_seen": "2026-11-13",
@@ -439,157 +750,51 @@
    "yield_days": [
     {
      "date": "2026-11-13",
-     "raw": 6,
-     "uniq": 4.25,
+     "raw": 40,
+     "uniq": 3.11,
      "fail": 0
     },
     {
      "date": "2026-11-14",
-     "raw": 6,
-     "uniq": 9.33,
+     "raw": 46,
+     "uniq": 3.13,
      "fail": 0
     },
     {
      "date": "2026-11-15",
-     "raw": 6,
-     "uniq": 6.08,
+     "raw": 54,
+     "uniq": 3.37,
      "fail": 0
     },
     {
      "date": "2026-11-16",
-     "raw": 6,
-     "uniq": 5.75,
+     "raw": 50,
+     "uniq": 3.29,
      "fail": 0
     }
    ],
-   "score": 49.0,
+   "score": 48.7,
    "score_parts": {
-    "rate": 0.2759,
-    "yield": 0.1914,
+    "rate": 0.4251,
+    "yield": 0.1305,
     "fresh": 1.0,
-    "lat": 0.8754,
+    "lat": 0.5598,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 38,
-     "ok": 11,
-     "raw": 0.2895
+     "tested": 307,
+     "ok": 134,
+     "raw": 0.4365
     },
     "yield_info": {
-     "daily": 3.6,
-     "uniq_7d": 25.4
+     "daily": 1.8,
+     "uniq_7d": 12.9
     },
     "fresh_info": {
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 623
-    }
-   },
-   "push_days": 0
-  },
-  {
-   "full_name": "sakha1370/OpenRay",
-   "stars": 256,
-   "contributed": 328129,
-   "last_collected": "2026-11-16",
-   "tested": 1628,
-   "ok": 6,
-   "avail_rate": 0.004,
-   "avg_latency": 2115,
-   "quality": 17.6,
-   "last_tested": "2026-11-15",
-   "quality_history": [
-    {
-     "date": "2026-11-08",
-     "tested": 2,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-09",
-     "tested": 223,
-     "ok": 1,
-     "rate": 0.004,
-     "latency": 1903
-    },
-    {
-     "date": "2026-11-10",
-     "tested": 419,
-     "ok": 4,
-     "rate": 0.01,
-     "latency": 2045
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 652,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 332,
-     "ok": 1,
-     "rate": 0.003,
-     "latency": 2115
-    }
-   ],
-   "first_seen": "2026-11-13",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 0,
-     "uniq": 2.07,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 15306,
-     "uniq": 1009.62,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 15892,
-     "uniq": 1161.41,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 16092,
-     "uniq": 1194.89,
-     "fail": 0
-    }
-   ],
-   "score": 48.2,
-   "score_parts": {
-    "rate": 0.0067,
-    "yield": 0.7716,
-    "fresh": 1.0,
-    "lat": 0.577,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 1628,
-     "ok": 6,
-     "raw": 0.0037
-    },
-    "yield_info": {
-     "daily": 481.1,
-     "uniq_7d": 3368.0
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": 2115
+     "avg_latency": 2201
     }
    },
    "push_days": 0
@@ -599,20 +804,13 @@
    "stars": 890,
    "contributed": 95683,
    "last_collected": "2026-11-16",
-   "tested": 5150,
-   "ok": 98,
+   "tested": 4024,
+   "ok": 76,
    "avail_rate": 0.019,
-   "avg_latency": 1839,
-   "quality": 20.3,
-   "last_tested": "2026-11-15",
+   "avg_latency": 1774,
+   "quality": 20.7,
+   "last_tested": "2026-11-16",
    "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 1976,
-     "ok": 58,
-     "rate": 0.029,
-     "latency": 1941
-    },
     {
      "date": "2026-11-10",
      "tested": 1924,
@@ -640,6 +838,13 @@
      "ok": 7,
      "rate": 0.009,
      "latency": 1839
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 850,
+     "ok": 36,
+     "rate": 0.042,
+     "latency": 1774
     }
    ],
    "first_seen": "2026-11-13",
@@ -674,18 +879,18 @@
      "fail": 0
     }
    ],
-   "score": 47.9,
+   "score": 48.1,
    "score_parts": {
-    "rate": 0.0199,
+    "rate": 0.02,
     "yield": 0.7041,
     "fresh": 1.0,
-    "lat": 0.6322,
+    "lat": 0.6452,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 5150,
-     "ok": 98,
-     "raw": 0.019
+     "tested": 4024,
+     "ok": 76,
+     "raw": 0.0189
     },
     "yield_info": {
      "daily": 279.7,
@@ -695,76 +900,10 @@
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 1839
+     "avg_latency": 1774
     }
    },
    "push_days": 0
-  },
-  {
-   "full_name": "ishalumi/proxy-node-collector",
-   "stars": 38,
-   "contributed": 9919,
-   "first_seen": "",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "last_collected": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-15",
-     "raw": 2859,
-     "uniq": 748.17,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 2638,
-     "uniq": 816.96,
-     "fail": 0
-    }
-   ],
-   "quality_history": [
-    {
-     "date": "2026-11-15",
-     "tested": 1500,
-     "ok": 3,
-     "rate": 0.002,
-     "latency": 1548
-    }
-   ],
-   "score": 47.5,
-   "score_parts": {
-    "rate": 0.0053,
-    "yield": 0.6762,
-    "fresh": 1.0,
-    "lat": 0.6904,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 1500,
-     "ok": 3,
-     "raw": 0.002
-    },
-    "yield_info": {
-     "daily": 223.6,
-     "uniq_7d": 1565.1
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": 1548
-    }
-   },
-   "push_days": 0,
-   "tested": 1500,
-   "ok": 3,
-   "avail_rate": 0.002,
-   "avg_latency": 1548,
-   "last_tested": "2026-11-15",
-   "quality": 20.9
   },
   {
    "full_name": "rekt0ro/ProxyRift",
@@ -824,26 +963,33 @@
      "ok": 48,
      "rate": 0.068,
      "latency": 2245
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 282,
+     "ok": 38,
+     "rate": 0.135,
+     "latency": 2444
     }
    ],
-   "tested": 929,
-   "ok": 69,
-   "avail_rate": 0.074,
-   "avg_latency": 2245,
-   "last_tested": "2026-11-15",
-   "quality": 21.7,
-   "score": 47.3,
+   "tested": 1211,
+   "ok": 107,
+   "avail_rate": 0.088,
+   "avg_latency": 2444,
+   "last_tested": "2026-11-16",
+   "quality": 21.5,
+   "score": 47.2,
    "score_parts": {
-    "rate": 0.078,
+    "rate": 0.091,
     "yield": 0.6367,
     "fresh": 1.0,
-    "lat": 0.551,
+    "lat": 0.5112,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 929,
-     "ok": 69,
-     "raw": 0.0743
+     "tested": 1211,
+     "ok": 107,
+     "raw": 0.0884
     },
     "yield_info": {
      "daily": 162.6,
@@ -853,214 +999,23 @@
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 2245
+     "avg_latency": 2444
     }
    },
    "push_days": 0
-  },
-  {
-   "full_name": "Areral/ScarletDevil",
-   "stars": 14,
-   "contributed": 15114,
-   "first_seen": "",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "last_collected": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 2068,
-     "uniq": 164.04,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 1932,
-     "uniq": 142.94,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 2270,
-     "uniq": 186.95,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 2686,
-     "uniq": 221.26,
-     "fail": 0
-    }
-   ],
-   "quality_history": [
-    {
-     "date": "2026-11-13",
-     "tested": 91,
-     "ok": 28,
-     "rate": 0.308,
-     "latency": 2075
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 78,
-     "ok": 7,
-     "rate": 0.09,
-     "latency": 2322
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 231,
-     "ok": 6,
-     "rate": 0.026,
-     "latency": 2207
-    }
-   ],
-   "score": 47.2,
-   "score_parts": {
-    "rate": 0.1095,
-    "yield": 0.5791,
-    "fresh": 1.0,
-    "lat": 0.5586,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 400,
-     "ok": 41,
-     "raw": 0.1025
-    },
-    "yield_info": {
-     "daily": 102.2,
-     "uniq_7d": 715.2
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": 2207
-    }
-   },
-   "push_days": 0,
-   "tested": 400,
-   "ok": 41,
-   "avail_rate": 0.102,
-   "avg_latency": 2207,
-   "last_tested": "2026-11-15",
-   "quality": 23.9
-  },
-  {
-   "full_name": "10Dream/sub-mod",
-   "stars": 23,
-   "contributed": 280000,
-   "first_seen": "",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "last_collected": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 40000,
-     "uniq": 7608.21,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 40000,
-     "uniq": 7402.02,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 40000,
-     "uniq": 4091.85,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 40000,
-     "uniq": 6708.91,
-     "fail": 0
-    }
-   ],
-   "quality_history": [
-    {
-     "date": "2026-11-13",
-     "tested": 1629,
-     "ok": 3,
-     "rate": 0.002,
-     "latency": 706
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 1233,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 736,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    }
-   ],
-   "score": 45.1,
-   "score_parts": {
-    "rate": 0.0022,
-    "yield": 1.0,
-    "fresh": 1.0,
-    "lat": 0.0,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 3598,
-     "ok": 3,
-     "raw": 0.0008
-    },
-    "yield_info": {
-     "daily": 3687.3,
-     "uniq_7d": 25811.0
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": null
-    }
-   },
-   "push_days": 0,
-   "tested": 3598,
-   "ok": 3,
-   "avail_rate": 0.001,
-   "avg_latency": null,
-   "last_tested": "2026-11-15",
-   "quality": 0.1
   },
   {
    "full_name": "zhuhaiuk/free-nodes",
    "stars": 443,
    "contributed": 337,
    "last_collected": "2026-11-16",
-   "tested": 71,
-   "ok": 27,
-   "avail_rate": 0.38,
-   "avg_latency": 2373,
-   "quality": 42.4,
-   "last_tested": "2026-11-15",
+   "tested": 67,
+   "ok": 28,
+   "avail_rate": 0.418,
+   "avg_latency": 2333,
+   "quality": 45.3,
+   "last_tested": "2026-11-16",
    "quality_history": [
-    {
-     "date": "2026-11-08",
-     "tested": 16,
-     "ok": 7,
-     "rate": 0.438,
-     "latency": 1750
-    },
     {
      "date": "2026-11-09",
      "tested": 6,
@@ -1088,6 +1043,13 @@
      "ok": 6,
      "rate": 0.273,
      "latency": 2373
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 12,
+     "ok": 8,
+     "rate": 0.667,
+     "latency": 2333
     }
    ],
    "first_seen": "2026-11-13",
@@ -1122,18 +1084,18 @@
      "fail": 0
     }
    ],
-   "score": 44.7,
+   "score": 45.9,
    "score_parts": {
-    "rate": 0.3516,
+    "rate": 0.3793,
     "yield": 0.1093,
     "fresh": 1.0,
-    "lat": 0.5254,
+    "lat": 0.5334,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 71,
-     "ok": 27,
-     "raw": 0.3803
+     "tested": 67,
+     "ok": 28,
+     "raw": 0.4179
     },
     "yield_info": {
      "daily": 1.4,
@@ -1143,7 +1105,7 @@
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 2373
+     "avg_latency": 2333
     }
    },
    "push_days": 0
@@ -1192,20 +1154,27 @@
      "ok": 6,
      "rate": 0.194,
      "latency": 2327
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 32,
+     "ok": 6,
+     "rate": 0.188,
+     "latency": 1900
     }
    ],
-   "score": 44.2,
+   "score": 45.1,
    "score_parts": {
-    "rate": 0.2157,
+    "rate": 0.2048,
     "yield": 0.3025,
     "fresh": 1.0,
-    "lat": 0.5346,
+    "lat": 0.62,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 31,
-     "ok": 6,
-     "raw": 0.1935
+     "tested": 63,
+     "ok": 12,
+     "raw": 0.1905
     },
     "yield_info": {
      "daily": 10.3,
@@ -1215,65 +1184,22 @@
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 2327
+     "avg_latency": 1900
     }
    },
    "push_days": 0,
-   "tested": 31,
-   "ok": 6,
-   "avail_rate": 0.194,
-   "avg_latency": 2327,
-   "last_tested": "2026-11-15",
-   "quality": 29.6
+   "tested": 63,
+   "ok": 12,
+   "avail_rate": 0.19,
+   "avg_latency": 1900,
+   "last_tested": "2026-11-16",
+   "quality": 31.9
   },
   {
-   "full_name": "F0rc3Run/F0rc3Run",
-   "stars": 324,
-   "contributed": 22394,
+   "full_name": "MohammadBahemmat/V2ray-Collector",
+   "stars": 94,
+   "contributed": 33082,
    "last_collected": "2026-11-16",
-   "tested": 56,
-   "ok": 7,
-   "avail_rate": 0.125,
-   "avg_latency": 2597,
-   "quality": 23.2,
-   "last_tested": "2026-11-15",
-   "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 5,
-     "ok": 2,
-     "rate": 0.4,
-     "latency": 3010
-    },
-    {
-     "date": "2026-11-10",
-     "tested": 2,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-13",
-     "tested": 8,
-     "ok": 3,
-     "rate": 0.375,
-     "latency": 2125
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 21,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 20,
-     "ok": 2,
-     "rate": 0.1,
-     "latency": 2597
-    }
-   ],
    "first_seen": "2026-11-13",
    "last_seen": "2026-11-16",
    "last_push": "2026-11-16",
@@ -1283,74 +1209,163 @@
    "yield_days": [
     {
      "date": "2026-11-13",
-     "raw": 807,
-     "uniq": 22.27,
+     "raw": 1545,
+     "uniq": 143.76,
      "fail": 0
     },
     {
      "date": "2026-11-14",
-     "raw": 751,
-     "uniq": 24.65,
+     "raw": 1571,
+     "uniq": 155.7,
      "fail": 0
     },
     {
      "date": "2026-11-15",
-     "raw": 775,
-     "uniq": 25.47,
+     "raw": 2105,
+     "uniq": 189.08,
      "fail": 0
     },
     {
      "date": "2026-11-16",
-     "raw": 818,
-     "uniq": 28.6,
+     "raw": 785,
+     "uniq": 63.01,
      "fail": 0
     }
    ],
-   "score": 42.1,
+   "quality_history": [
+    {
+     "date": "2026-11-13",
+     "tested": 240,
+     "ok": 6,
+     "rate": 0.025,
+     "latency": 1158
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 98,
+     "ok": 1,
+     "rate": 0.01,
+     "latency": 1076
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 387,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 145,
+     "ok": 4,
+     "rate": 0.028,
+     "latency": 1761
+    }
+   ],
+   "score": 44.1,
    "score_parts": {
-    "rate": 0.1579,
-    "yield": 0.3417,
+    "rate": 0.018,
+    "yield": 0.547,
     "fresh": 1.0,
-    "lat": 0.4806,
+    "lat": 0.6478,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 56,
-     "ok": 7,
-     "raw": 0.125
+     "tested": 870,
+     "ok": 11,
+     "raw": 0.0126
     },
     "yield_info": {
-     "daily": 14.4,
-     "uniq_7d": 101.0
+     "daily": 78.8,
+     "uniq_7d": 551.5
     },
     "fresh_info": {
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 2597
+     "avg_latency": 1761
     }
    },
-   "push_days": 0
+   "push_days": 0,
+   "tested": 870,
+   "ok": 11,
+   "avail_rate": 0.013,
+   "avg_latency": 1761,
+   "last_tested": "2026-11-16",
+   "quality": 20.3
+  },
+  {
+   "full_name": "HotDrify/drifyconfigs",
+   "stars": 5,
+   "contributed": 10,
+   "first_seen": "",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
+   "last_collected": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-16",
+     "raw": 10,
+     "uniq": 1.78,
+     "fail": 0
+    }
+   ],
+   "quality_history": [
+    {
+     "date": "2026-11-16",
+     "tested": 15,
+     "ok": 6,
+     "rate": 0.4,
+     "latency": 1534
+    }
+   ],
+   "score": 43.7,
+   "score_parts": {
+    "rate": 0.3143,
+    "yield": 0.0283,
+    "fresh": 1.0,
+    "lat": 0.6932,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 15,
+     "ok": 6,
+     "raw": 0.4
+    },
+    "yield_info": {
+     "daily": 0.3,
+     "uniq_7d": 1.8
+    },
+    "fresh_info": {
+     "push_days": 0
+    },
+    "lat_info": {
+     "avg_latency": 1534
+    }
+   },
+   "push_days": 0,
+   "tested": 15,
+   "ok": 6,
+   "avail_rate": 0.4,
+   "avg_latency": 1534,
+   "last_tested": "2026-11-16",
+   "quality": 48.8
   },
   {
    "full_name": "snakem982/proxypool",
    "stars": 2281,
    "contributed": 6187,
    "last_collected": "2026-11-16",
-   "tested": 231,
-   "ok": 47,
-   "avail_rate": 0.203,
-   "avg_latency": 3064,
-   "quality": 25.8,
-   "last_tested": "2026-11-15",
+   "tested": 251,
+   "ok": 34,
+   "avail_rate": 0.135,
+   "avg_latency": 1581,
+   "quality": 30.0,
+   "last_tested": "2026-11-16",
    "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 72,
-     "ok": 32,
-     "rate": 0.444,
-     "latency": 1746
-    },
     {
      "date": "2026-11-10",
      "tested": 100,
@@ -1378,6 +1393,13 @@
      "ok": 3,
      "rate": 0.058,
      "latency": 3064
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 92,
+     "ok": 19,
+     "rate": 0.207,
+     "latency": 1581
     }
    ],
    "first_seen": "2026-11-13",
@@ -1412,18 +1434,18 @@
      "fail": 0
     }
    ],
-   "score": 41.7,
+   "score": 43.6,
    "score_parts": {
-    "rate": 0.2072,
+    "rate": 0.1439,
     "yield": 0.3033,
     "fresh": 1.0,
-    "lat": 0.3872,
+    "lat": 0.6838,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 231,
-     "ok": 47,
-     "raw": 0.2035
+     "tested": 251,
+     "ok": 34,
+     "raw": 0.1355
     },
     "yield_info": {
      "daily": 10.3,
@@ -1433,16 +1455,58 @@
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 3064
+     "avg_latency": 1581
     }
    },
    "push_days": 0
   },
   {
-   "full_name": "aviamastersgh/vpn-free-russia",
-   "stars": 72,
-   "contributed": 153085,
+   "full_name": "shabane/kamaji",
+   "stars": 173,
+   "contributed": 279904,
    "last_collected": "2026-11-16",
+   "tested": 500,
+   "ok": 20,
+   "avail_rate": 0.04,
+   "avg_latency": 2068,
+   "quality": 20.4,
+   "last_tested": "2026-11-16",
+   "quality_history": [
+    {
+     "date": "2026-11-01",
+     "rate": 0.067,
+     "quality": 25.9,
+     "tested": 255
+    },
+    {
+     "date": "2026-11-07",
+     "tested": 99,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-10",
+     "tested": 16,
+     "ok": 1,
+     "rate": 0.062,
+     "latency": 1359
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 43,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 87,
+     "ok": 2,
+     "rate": 0.023,
+     "latency": 2068
+    }
+   ],
    "first_seen": "2026-11-13",
    "last_seen": "2026-11-16",
    "last_push": "2026-11-16",
@@ -1452,83 +1516,160 @@
    "yield_days": [
     {
      "date": "2026-11-13",
-     "raw": 11505,
-     "uniq": 975.01,
+     "raw": 10290,
+     "uniq": 55.92,
      "fail": 0
     },
     {
      "date": "2026-11-14",
-     "raw": 10886,
-     "uniq": 1021.25,
+     "raw": 10290,
+     "uniq": 70.09,
      "fail": 0
     },
     {
      "date": "2026-11-15",
-     "raw": 12115,
-     "uniq": 1673.25,
+     "raw": 10290,
+     "uniq": 77.26,
      "fail": 0
     },
     {
      "date": "2026-11-16",
-     "raw": 11955,
-     "uniq": 1887.82,
+     "raw": 11432,
+     "uniq": 72.05,
      "fail": 0
     }
    ],
-   "quality_history": [
-    {
-     "date": "2026-11-13",
-     "tested": 1500,
-     "ok": 8,
-     "rate": 0.005,
-     "latency": 1516
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 472,
-     "ok": 1,
-     "rate": 0.002,
-     "latency": 922
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 1214,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    }
-   ],
-   "score": 41.0,
+   "score": 42.3,
    "score_parts": {
-    "rate": 0.0044,
-    "yield": 0.8341,
+    "rate": 0.0481,
+    "yield": 0.4618,
     "fresh": 1.0,
-    "lat": 0.0,
+    "lat": 0.5864,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 3186,
-     "ok": 9,
-     "raw": 0.0028
+     "tested": 500,
+     "ok": 20,
+     "raw": 0.04
     },
     "yield_info": {
-     "daily": 793.9,
-     "uniq_7d": 5557.3
+     "daily": 39.3,
+     "uniq_7d": 275.3
     },
     "fresh_info": {
      "push_days": 0
     },
     "lat_info": {
-     "avg_latency": null
+     "avg_latency": 2068
     }
    },
-   "push_days": 0,
-   "tested": 3186,
-   "ok": 9,
-   "avail_rate": 0.003,
-   "avg_latency": null,
-   "last_tested": "2026-11-15",
-   "quality": 0.2
+   "push_days": 0
+  },
+  {
+   "full_name": "F0rc3Run/F0rc3Run",
+   "stars": 324,
+   "contributed": 22394,
+   "last_collected": "2026-11-16",
+   "tested": 62,
+   "ok": 7,
+   "avail_rate": 0.113,
+   "avg_latency": 2387,
+   "quality": 23.6,
+   "last_tested": "2026-11-16",
+   "quality_history": [
+    {
+     "date": "2026-11-10",
+     "tested": 2,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-13",
+     "tested": 8,
+     "ok": 3,
+     "rate": 0.375,
+     "latency": 2125
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 21,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 20,
+     "ok": 2,
+     "rate": 0.1,
+     "latency": 2597
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 11,
+     "ok": 2,
+     "rate": 0.182,
+     "latency": 2387
+    }
+   ],
+   "first_seen": "2026-11-13",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-13",
+     "raw": 807,
+     "uniq": 22.27,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-14",
+     "raw": 751,
+     "uniq": 24.65,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 775,
+     "uniq": 25.47,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 818,
+     "uniq": 28.6,
+     "fail": 0
+    }
+   ],
+   "score": 42.2,
+   "score_parts": {
+    "rate": 0.1463,
+    "yield": 0.3417,
+    "fresh": 1.0,
+    "lat": 0.5226,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 62,
+     "ok": 7,
+     "raw": 0.1129
+    },
+    "yield_info": {
+     "daily": 14.4,
+     "uniq_7d": 101.0
+    },
+    "fresh_info": {
+     "push_days": 0
+    },
+    "lat_info": {
+     "avg_latency": 2387
+    }
+   },
+   "push_days": 0
   },
   {
    "full_name": "VoroninaYanina/free-nodes",
@@ -1607,98 +1748,6 @@
    "avg_latency": 3023,
    "last_tested": "2026-11-15",
    "quality": 27.2
-  },
-  {
-   "full_name": "Mehinator/Derafsh",
-   "stars": 5,
-   "contributed": 3500,
-   "first_seen": "",
-   "last_seen": "2026-11-15",
-   "last_push": "2026-11-15",
-   "last_collected": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 500,
-     "uniq": 51.99,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 500,
-     "uniq": 53.4,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 500,
-     "uniq": 52.68,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 500,
-     "uniq": 68.17,
-     "fail": 0
-    }
-   ],
-   "quality_history": [
-    {
-     "date": "2026-11-13",
-     "tested": 21,
-     "ok": 3,
-     "rate": 0.143,
-     "latency": 2097
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 7,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 96,
-     "ok": 3,
-     "rate": 0.031,
-     "latency": 1825
-    }
-   ],
-   "score": 39.5,
-   "score_parts": {
-    "rate": 0.0764,
-    "yield": 0.4379,
-    "fresh": 0.8,
-    "lat": 0.635,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 124,
-     "ok": 6,
-     "raw": 0.0484
-    },
-    "yield_info": {
-     "daily": 32.3,
-     "uniq_7d": 226.2
-    },
-    "fresh_info": {
-     "push_days": 1
-    },
-    "lat_info": {
-     "avg_latency": 1825
-    }
-   },
-   "push_days": 1,
-   "tested": 124,
-   "ok": 6,
-   "avail_rate": 0.048,
-   "avg_latency": 1825,
-   "last_tested": "2026-11-15",
-   "quality": 22.4
   },
   {
    "full_name": "fmw86/free-proxy-pool",
@@ -1915,18 +1964,25 @@
      "ok": 0,
      "rate": 0.0,
      "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 152,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
     }
    ],
    "score": 37.2,
    "score_parts": {
-    "rate": 0.0036,
+    "rate": 0.0033,
     "yield": 0.8436,
     "fresh": 0.8,
     "lat": 0.0,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 1639,
+     "tested": 1791,
      "ok": 1,
      "raw": 0.0006
     },
@@ -1942,91 +1998,184 @@
     }
    },
    "push_days": 1,
-   "tested": 1639,
+   "tested": 1791,
    "ok": 1,
    "avail_rate": 0.001,
    "avg_latency": null,
-   "last_tested": "2026-11-15",
+   "last_tested": "2026-11-16",
    "quality": 0.1
   },
   {
-   "full_name": "R3ZARAHIMI/tg-v2ray-configs-every2h",
-   "stars": 56,
-   "contributed": 15201,
+   "full_name": "ishalumi/proxy-node-collector",
+   "stars": 38,
+   "contributed": 9919,
+   "first_seen": "",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
    "last_collected": "2026-11-16",
-   "first_seen": "2026-11-12",
-   "last_seen": "2026-11-14",
-   "last_push": "2026-11-14",
    "state": "active",
    "evicted_at": "",
    "evict_reason": "",
    "yield_days": [
     {
-     "date": "2026-11-14",
-     "raw": 2052,
-     "uniq": 225.56,
-     "fail": 0
-    },
-    {
      "date": "2026-11-15",
-     "raw": 2126,
-     "uniq": 265.65,
+     "raw": 2859,
+     "uniq": 748.17,
      "fail": 0
     },
     {
      "date": "2026-11-16",
-     "raw": 2197,
-     "uniq": 294.26,
+     "raw": 2638,
+     "uniq": 816.96,
      "fail": 0
     }
    ],
    "quality_history": [
     {
-     "date": "2026-11-14",
-     "tested": 164,
-     "ok": 1,
-     "rate": 0.006,
-     "latency": 2376
+     "date": "2026-11-15",
+     "tested": 1500,
+     "ok": 3,
+     "rate": 0.002,
+     "latency": 1548
     },
     {
-     "date": "2026-11-15",
-     "tested": 454,
-     "ok": 1,
-     "rate": 0.002,
-     "latency": 1784
+     "date": "2026-11-16",
+     "tested": 778,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
     }
    ],
-   "score": 36.9,
+   "score": 37.0,
    "score_parts": {
-    "rate": 0.011,
-    "yield": 0.5907,
-    "fresh": 0.6,
-    "lat": 0.6432,
+    "rate": 0.0035,
+    "yield": 0.6762,
+    "fresh": 1.0,
+    "lat": 0.0,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 618,
-     "ok": 2,
-     "raw": 0.0032
+     "tested": 2278,
+     "ok": 3,
+     "raw": 0.0013
     },
     "yield_info": {
-     "daily": 112.2,
-     "uniq_7d": 785.5
+     "daily": 223.6,
+     "uniq_7d": 1565.1
     },
     "fresh_info": {
-     "push_days": 2
+     "push_days": 0
     },
     "lat_info": {
-     "avg_latency": 1784
+     "avg_latency": null
     }
    },
-   "push_days": 2,
-   "tested": 618,
-   "ok": 2,
-   "avail_rate": 0.003,
-   "avg_latency": 1784,
-   "last_tested": "2026-11-15",
-   "quality": 19.5
+   "push_days": 0,
+   "tested": 2278,
+   "ok": 3,
+   "avail_rate": 0.001,
+   "avg_latency": null,
+   "last_tested": "2026-11-16",
+   "quality": 0.1
+  },
+  {
+   "full_name": "Mehinator/Derafsh",
+   "stars": 5,
+   "contributed": 3500,
+   "first_seen": "",
+   "last_seen": "2026-11-15",
+   "last_push": "2026-11-15",
+   "last_collected": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-13",
+     "raw": 500,
+     "uniq": 51.99,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-14",
+     "raw": 500,
+     "uniq": 53.4,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 500,
+     "uniq": 52.68,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 500,
+     "uniq": 68.17,
+     "fail": 0
+    }
+   ],
+   "quality_history": [
+    {
+     "date": "2026-11-13",
+     "tested": 21,
+     "ok": 3,
+     "rate": 0.143,
+     "latency": 2097
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 7,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 96,
+     "ok": 3,
+     "rate": 0.031,
+     "latency": 1825
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 105,
+     "ok": 5,
+     "rate": 0.048,
+     "latency": 2701
+    }
+   ],
+   "score": 36.4,
+   "score_parts": {
+    "rate": 0.0643,
+    "yield": 0.4379,
+    "fresh": 0.8,
+    "lat": 0.4598,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 229,
+     "ok": 11,
+     "raw": 0.048
+    },
+    "yield_info": {
+     "daily": 32.3,
+     "uniq_7d": 226.2
+    },
+    "fresh_info": {
+     "push_days": 1
+    },
+    "lat_info": {
+     "avg_latency": 2701
+    }
+   },
+   "push_days": 1,
+   "tested": 229,
+   "ok": 11,
+   "avail_rate": 0.048,
+   "avg_latency": 2701,
+   "last_tested": "2026-11-16",
+   "quality": 17.2
   },
   {
    "full_name": "Eleven1985/Scrape-By-Country",
@@ -2426,20 +2575,27 @@
      "ok": 0,
      "rate": 0.0,
      "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 20,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
     }
    ],
    "score": 34.7,
    "score_parts": {
-    "rate": 0.0093,
+    "rate": 0.009,
     "yield": 0.5741,
     "fresh": 1.0,
     "lat": 0.0,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 627,
+     "tested": 647,
      "ok": 1,
-     "raw": 0.0016
+     "raw": 0.0015
     },
     "yield_info": {
      "daily": 98.1,
@@ -2453,11 +2609,11 @@
     }
    },
    "push_days": 0,
-   "tested": 627,
+   "tested": 647,
    "ok": 1,
    "avail_rate": 0.002,
    "avg_latency": null,
-   "last_tested": "2026-11-15",
+   "last_tested": "2026-11-16",
    "quality": 0.1
   },
   {
@@ -2666,98 +2822,6 @@
    "quality": 0.0
   },
   {
-   "full_name": "MohammadBahemmat/V2ray-Collector",
-   "stars": 94,
-   "contributed": 33082,
-   "last_collected": "2026-11-16",
-   "first_seen": "2026-11-13",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 1545,
-     "uniq": 143.76,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 1571,
-     "uniq": 155.7,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 2105,
-     "uniq": 189.08,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 785,
-     "uniq": 63.01,
-     "fail": 0
-    }
-   ],
-   "quality_history": [
-    {
-     "date": "2026-11-13",
-     "tested": 240,
-     "ok": 6,
-     "rate": 0.025,
-     "latency": 1158
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 98,
-     "ok": 1,
-     "rate": 0.01,
-     "latency": 1076
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 387,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    }
-   ],
-   "score": 34.3,
-   "score_parts": {
-    "rate": 0.0161,
-    "yield": 0.547,
-    "fresh": 1.0,
-    "lat": 0.0,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 725,
-     "ok": 7,
-     "raw": 0.0097
-    },
-    "yield_info": {
-     "daily": 78.8,
-     "uniq_7d": 551.5
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": null
-    }
-   },
-   "push_days": 0,
-   "tested": 725,
-   "ok": 7,
-   "avail_rate": 0.01,
-   "avg_latency": null,
-   "last_tested": "2026-11-15",
-   "quality": 0.7
-  },
-  {
    "full_name": "crashgfw/free-airport-nodes",
    "stars": 305,
    "contributed": 7096,
@@ -2853,110 +2917,6 @@
     "yield_info": {
      "daily": 10.0,
      "uniq_7d": 69.7
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": null
-    }
-   },
-   "push_days": 0
-  },
-  {
-   "full_name": "shabane/kamaji",
-   "stars": 173,
-   "contributed": 279904,
-   "last_collected": "2026-11-16",
-   "tested": 753,
-   "ok": 37,
-   "avail_rate": 0.049,
-   "avg_latency": null,
-   "quality": 3.4,
-   "last_tested": "2026-11-15",
-   "quality_history": [
-    {
-     "date": "2026-10-31",
-     "rate": 0.056,
-     "quality": 19.8,
-     "tested": 340
-    },
-    {
-     "date": "2026-11-01",
-     "rate": 0.067,
-     "quality": 25.9,
-     "tested": 255
-    },
-    {
-     "date": "2026-11-07",
-     "tested": 99,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-10",
-     "tested": 16,
-     "ok": 1,
-     "rate": 0.062,
-     "latency": 1359
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 43,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    }
-   ],
-   "first_seen": "2026-11-13",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 10290,
-     "uniq": 55.92,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 10290,
-     "uniq": 70.09,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 10290,
-     "uniq": 77.26,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 11432,
-     "uniq": 72.05,
-     "fail": 0
-    }
-   ],
-   "score": 33.7,
-   "score_parts": {
-    "rate": 0.0543,
-    "yield": 0.4618,
-    "fresh": 1.0,
-    "lat": 0.0,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 753,
-     "ok": 37,
-     "raw": 0.0491
-    },
-    "yield_info": {
-     "daily": 39.3,
-     "uniq_7d": 275.3
     },
     "fresh_info": {
      "push_days": 0
@@ -3231,98 +3191,6 @@
    "quality": 0.0
   },
   {
-   "full_name": "bzfq21/proxy-singbox",
-   "stars": 8,
-   "contributed": 12364,
-   "first_seen": "",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "last_collected": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 1863,
-     "uniq": 45.53,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 1803,
-     "uniq": 48.19,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 2039,
-     "uniq": 50.58,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 2027,
-     "uniq": 54.96,
-     "fail": 0
-    }
-   ],
-   "quality_history": [
-    {
-     "date": "2026-11-13",
-     "tested": 32,
-     "ok": 3,
-     "rate": 0.094,
-     "latency": 1719
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 16,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 88,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    }
-   ],
-   "score": 32.6,
-   "score_parts": {
-    "rate": 0.0513,
-    "yield": 0.4225,
-    "fresh": 1.0,
-    "lat": 0.0,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 136,
-     "ok": 3,
-     "raw": 0.0221
-    },
-    "yield_info": {
-     "daily": 28.5,
-     "uniq_7d": 199.3
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": null
-    }
-   },
-   "push_days": 0,
-   "tested": 136,
-   "ok": 3,
-   "avail_rate": 0.022,
-   "avg_latency": null,
-   "last_tested": "2026-11-15",
-   "quality": 1.5
-  },
-  {
    "full_name": "chenzhihan1751-cyber/node-sub-zixf",
    "stars": 9,
    "contributed": 2718,
@@ -3383,9 +3251,9 @@
    "quality": 0.0
   },
   {
-   "full_name": "HotDrify/drifyconfigs",
-   "stars": 5,
-   "contributed": 10,
+   "full_name": "bzfq21/proxy-singbox",
+   "stars": 8,
+   "contributed": 12364,
    "first_seen": "",
    "last_seen": "2026-11-16",
    "last_push": "2026-11-16",
@@ -3395,29 +3263,76 @@
    "evict_reason": "",
    "yield_days": [
     {
+     "date": "2026-11-13",
+     "raw": 1863,
+     "uniq": 45.53,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-14",
+     "raw": 1803,
+     "uniq": 48.19,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 2039,
+     "uniq": 50.58,
+     "fail": 0
+    },
+    {
      "date": "2026-11-16",
-     "raw": 10,
-     "uniq": 1.78,
+     "raw": 2027,
+     "uniq": 54.96,
      "fail": 0
     }
    ],
-   "quality_history": [],
-   "score": 30.7,
+   "quality_history": [
+    {
+     "date": "2026-11-13",
+     "tested": 32,
+     "ok": 3,
+     "rate": 0.094,
+     "latency": 1719
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 16,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 88,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 150,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    }
+   ],
+   "score": 31.6,
    "score_parts": {
-    "rate": 0.25,
-    "yield": 0.0283,
+    "rate": 0.0261,
+    "yield": 0.4225,
     "fresh": 1.0,
     "lat": 0.0,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 0,
-     "ok": 0,
-     "raw": null
+     "tested": 286,
+     "ok": 3,
+     "raw": 0.0105
     },
     "yield_info": {
-     "daily": 0.3,
-     "uniq_7d": 1.8
+     "daily": 28.5,
+     "uniq_7d": 199.3
     },
     "fresh_info": {
      "push_days": 0
@@ -3426,7 +3341,13 @@
      "avg_latency": null
     }
    },
-   "push_days": 0
+   "push_days": 0,
+   "tested": 286,
+   "ok": 3,
+   "avail_rate": 0.01,
+   "avg_latency": null,
+   "last_tested": "2026-11-16",
+   "quality": 0.7
   },
   {
    "full_name": "adop1344-bot/LetoVPN_free",
@@ -9525,112 +9446,6 @@
    "push_days": 0
   },
   {
-   "full_name": "cbusifabcap/daily_free_vpn",
-   "stars": 416,
-   "contributed": 204740,
-   "last_collected": "2026-11-16",
-   "tested": 140,
-   "ok": 17,
-   "avail_rate": 0.121,
-   "avg_latency": null,
-   "quality": 8.5,
-   "last_tested": "2026-11-15",
-   "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 71,
-     "ok": 12,
-     "rate": 0.169,
-     "latency": 1696
-    },
-    {
-     "date": "2026-11-10",
-     "tested": 63,
-     "ok": 5,
-     "rate": 0.079,
-     "latency": 1678
-    },
-    {
-     "date": "2026-11-13",
-     "tested": 4,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-14",
-     "tested": 1,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
-    {
-     "date": "2026-11-15",
-     "tested": 1,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    }
-   ],
-   "first_seen": "2026-11-13",
-   "last_seen": "2026-11-16",
-   "last_push": "2026-11-16",
-   "state": "active",
-   "evicted_at": "",
-   "evict_reason": "",
-   "yield_days": [
-    {
-     "date": "2026-11-13",
-     "raw": 0,
-     "uniq": 2.05,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-14",
-     "raw": 0,
-     "uniq": 3.88,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-15",
-     "raw": 0,
-     "uniq": 2.65,
-     "fail": 0
-    },
-    {
-     "date": "2026-11-16",
-     "raw": 0,
-     "uniq": 2.52,
-     "fail": 0
-    }
-   ],
-   "score": 28.5,
-   "score_parts": {
-    "rate": 0.1375,
-    "yield": 0.1187,
-    "fresh": 1.0,
-    "lat": 0.0,
-    "penalty": 1.0,
-    "penalty_reasons": [],
-    "rate_info": {
-     "tested": 140,
-     "ok": 17,
-     "raw": 0.1214
-    },
-    "yield_info": {
-     "daily": 1.6,
-     "uniq_7d": 11.1
-    },
-    "fresh_info": {
-     "push_days": 0
-    },
-    "lat_info": {
-     "avg_latency": null
-    }
-   },
-   "push_days": 0
-  },
-  {
    "full_name": "igareck/vpn-configs-for-russia",
    "stars": 9631,
    "contributed": 24002,
@@ -9746,15 +9561,8 @@
    "avail_rate": 0.0,
    "avg_latency": null,
    "quality": 0.0,
-   "last_tested": "2026-11-15",
+   "last_tested": "2026-11-16",
    "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 3,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
     {
      "date": "2026-11-10",
      "tested": 4,
@@ -9778,6 +9586,13 @@
     },
     {
      "date": "2026-11-15",
+     "tested": 3,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
      "tested": 3,
      "ok": 0,
      "rate": 0.0,
@@ -10110,20 +9925,13 @@
    "stars": 1380,
    "contributed": 311149,
    "last_collected": "2026-11-16",
-   "tested": 11052,
-   "ok": 27,
+   "tested": 5425,
+   "ok": 13,
    "avail_rate": 0.002,
    "avg_latency": null,
    "quality": 0.1,
-   "last_tested": "2026-11-15",
+   "last_tested": "2026-11-16",
    "quality_history": [
-    {
-     "date": "2026-11-09",
-     "tested": 5628,
-     "ok": 14,
-     "rate": 0.002,
-     "latency": 2140
-    },
     {
      "date": "2026-11-10",
      "tested": 5392,
@@ -10148,6 +9956,13 @@
     {
      "date": "2026-11-15",
      "tested": 10,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 1,
      "ok": 0,
      "rate": 0.0,
      "latency": null
@@ -10187,15 +10002,15 @@
    ],
    "score": 27.8,
    "score_parts": {
-    "rate": 0.0029,
+    "rate": 0.0033,
     "yield": 0.3066,
     "fresh": 1.0,
     "lat": 0.0,
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 11052,
-     "ok": 27,
+     "tested": 5425,
+     "ok": 13,
      "raw": 0.0024
     },
     "yield_info": {
@@ -10262,6 +10077,198 @@
     }
    },
    "push_days": 1
+  },
+  {
+   "full_name": "cbusifabcap/daily_free_vpn",
+   "stars": 416,
+   "contributed": 204740,
+   "last_collected": "2026-11-16",
+   "tested": 72,
+   "ok": 5,
+   "avail_rate": 0.069,
+   "avg_latency": null,
+   "quality": 4.8,
+   "last_tested": "2026-11-16",
+   "quality_history": [
+    {
+     "date": "2026-11-10",
+     "tested": 63,
+     "ok": 5,
+     "rate": 0.079,
+     "latency": 1678
+    },
+    {
+     "date": "2026-11-13",
+     "tested": 4,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 1,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 1,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 3,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    }
+   ],
+   "first_seen": "2026-11-13",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-13",
+     "raw": 0,
+     "uniq": 2.05,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-14",
+     "raw": 0,
+     "uniq": 3.88,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 0,
+     "uniq": 2.65,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 0,
+     "uniq": 2.52,
+     "fail": 0
+    }
+   ],
+   "score": 27.3,
+   "score_parts": {
+    "rate": 0.1087,
+    "yield": 0.1187,
+    "fresh": 1.0,
+    "lat": 0.0,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 72,
+     "ok": 5,
+     "raw": 0.0694
+    },
+    "yield_info": {
+     "daily": 1.6,
+     "uniq_7d": 11.1
+    },
+    "fresh_info": {
+     "push_days": 0
+    },
+    "lat_info": {
+     "avg_latency": null
+    }
+   },
+   "push_days": 0
+  },
+  {
+   "full_name": "R3ZARAHIMI/tg-v2ray-configs-every2h",
+   "stars": 56,
+   "contributed": 15201,
+   "last_collected": "2026-11-16",
+   "first_seen": "2026-11-12",
+   "last_seen": "2026-11-14",
+   "last_push": "2026-11-14",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-14",
+     "raw": 2052,
+     "uniq": 225.56,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 2126,
+     "uniq": 265.65,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 2197,
+     "uniq": 294.26,
+     "fail": 0
+    }
+   ],
+   "quality_history": [
+    {
+     "date": "2026-11-14",
+     "tested": 164,
+     "ok": 1,
+     "rate": 0.006,
+     "latency": 2376
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 454,
+     "ok": 1,
+     "rate": 0.002,
+     "latency": 1784
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 122,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    }
+   ],
+   "score": 27.1,
+   "score_parts": {
+    "rate": 0.0092,
+    "yield": 0.5907,
+    "fresh": 0.6,
+    "lat": 0.0,
+    "penalty": 1.0,
+    "penalty_reasons": [],
+    "rate_info": {
+     "tested": 740,
+     "ok": 2,
+     "raw": 0.0027
+    },
+    "yield_info": {
+     "daily": 112.2,
+     "uniq_7d": 785.5
+    },
+    "fresh_info": {
+     "push_days": 2
+    },
+    "lat_info": {
+     "avg_latency": null
+    }
+   },
+   "push_days": 2,
+   "tested": 740,
+   "ok": 2,
+   "avail_rate": 0.003,
+   "avg_latency": null,
+   "last_tested": "2026-11-16",
+   "quality": 0.2
   },
   {
    "full_name": "xrayfree/free-ssr-ss-v2ray-vpn-clash",
@@ -15353,20 +15360,13 @@
    "stars": 205,
    "contributed": 137599,
    "last_collected": "2026-11-16",
-   "tested": 6271,
+   "tested": 6111,
    "ok": 0,
    "avail_rate": 0.0,
    "avg_latency": null,
    "quality": 0.0,
-   "last_tested": "2026-11-14",
+   "last_tested": "2026-11-16",
    "quality_history": [
-    {
-     "date": "2026-11-06",
-     "tested": 162,
-     "ok": 0,
-     "rate": 0.0,
-     "latency": null
-    },
     {
      "date": "2026-11-07",
      "tested": 3037,
@@ -15391,6 +15391,13 @@
     {
      "date": "2026-11-14",
      "tested": 1,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 2,
      "ok": 0,
      "rate": 0.0,
      "latency": null
@@ -15437,7 +15444,7 @@
     "penalty": 1.0,
     "penalty_reasons": [],
     "rate_info": {
-     "tested": 6271,
+     "tested": 6111,
      "ok": 0,
      "raw": 0.0
     },
@@ -18446,6 +18453,107 @@
     }
    },
    "push_days": 2
+  },
+  {
+   "full_name": "10Dream/sub-mod",
+   "stars": 23,
+   "contributed": 280000,
+   "first_seen": "",
+   "last_seen": "2026-11-16",
+   "last_push": "2026-11-16",
+   "last_collected": "2026-11-16",
+   "state": "active",
+   "evicted_at": "",
+   "evict_reason": "",
+   "yield_days": [
+    {
+     "date": "2026-11-13",
+     "raw": 40000,
+     "uniq": 7608.21,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-14",
+     "raw": 40000,
+     "uniq": 7402.02,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-15",
+     "raw": 40000,
+     "uniq": 4091.85,
+     "fail": 0
+    },
+    {
+     "date": "2026-11-16",
+     "raw": 40000,
+     "uniq": 6708.91,
+     "fail": 0
+    }
+   ],
+   "quality_history": [
+    {
+     "date": "2026-11-13",
+     "tested": 1629,
+     "ok": 3,
+     "rate": 0.002,
+     "latency": 706
+    },
+    {
+     "date": "2026-11-14",
+     "tested": 1233,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-15",
+     "tested": 736,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    },
+    {
+     "date": "2026-11-16",
+     "tested": 1346,
+     "ok": 0,
+     "rate": 0.0,
+     "latency": null
+    }
+   ],
+   "score": 13.5,
+   "score_parts": {
+    "rate": 0.0016,
+    "yield": 1.0,
+    "fresh": 1.0,
+    "lat": 0.0,
+    "penalty": 0.3,
+    "penalty_reasons": [
+     "连续3天0可用"
+    ],
+    "rate_info": {
+     "tested": 4944,
+     "ok": 3,
+     "raw": 0.0006
+    },
+    "yield_info": {
+     "daily": 3687.3,
+     "uniq_7d": 25811.0
+    },
+    "fresh_info": {
+     "push_days": 0
+    },
+    "lat_info": {
+     "avg_latency": null
+    }
+   },
+   "push_days": 0,
+   "tested": 4944,
+   "ok": 3,
+   "avail_rate": 0.001,
+   "avg_latency": null,
+   "last_tested": "2026-11-16",
+   "quality": 0.1
   },
   {
    "full_name": "Hidashimora/free-vpn-anti-rkn",
