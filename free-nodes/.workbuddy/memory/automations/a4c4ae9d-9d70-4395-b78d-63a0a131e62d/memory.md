@@ -306,3 +306,23 @@
   所以首窗口只要跑过、第二窗口几乎必然看到它 M —— 属预期尾巴，别当成「第一窗口没发布」的证据；
   真正的未发布信号只看 pending-push.json 与 `rev-list` 的 ahead 数
 
+## 2026-11-16（第十九次记录：GATE: done，未跑验证；首窗口 46.8 分钟回到上限内，但开关仍 on）
+
+- 开工前：`Get-CimInstance Win32_Process -Filter "Name='python.exe'"` 无结果 → 无并发窗口、无残留；
+  未跑 taskkill（闸门 done 本窗口不启动验证，盲杀无意义）
+- 闸门退出码 0：采集日 **2026-11-16（生成于 22:54:57）**，四核均「已测满单轮上限」
+  v2ray 2507/2500、**xray 1447/1445**、**clash 2094/2088**、singbox 2505/2500
+  → 注意 xray / clash 的 cap 已不是 2500，而是弹性反推值 1445 / 2088（用户弹性配额在生效），
+  闸门口径按各自 cap 判，**别看到 1447 < 2500 就以为没测完**
+- 本日可用（summary.ok）：v2ray 20 / xray 74 / clash 72 / singbox **120**；四核 `partial=false`、`exhausted=false`
+  - singbox 120 是历史新高（既往 17~63），xray 74 / clash 72 也偏上；无异常迹象，未取证未调参
+- **开关仍 on**：`Docs/window_switch.json` reason「最近 7 晚跑完 7 晚，耗时达标=False」
+  —— 11-15 的 53.6 分钟把「耗时 ≤50」这条打断，今晚 46.8 已回到上限内但需重新累积 7 晚连续达标
+  → 于是又是「开关开着 + 内容全 done = 启用了也没活干」的组合（与 11-15 同型）
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0
+  （HEAD `1d29978` 已是今日第三次提交：CI 采集 ×2 + 本地发布）；`git status --short -- free-nodes .github`
+  仅一项 `M free-nodes/.workbuddy/memory/automations/a3d7bb22…/memory.md`（主窗口自己的 memory）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写本文件后 publish 一次收掉尾巴
+- **给后续窗口的要点**：闸门的「已测满单轮上限」对应的分母是**各内核自己的 cap**（xray 1445 / clash 2088），
+  不是固定 2500；读 `Docs/summary.json` 时以 `tested vs cap` 比较，不要拿 2500 硬套
+
