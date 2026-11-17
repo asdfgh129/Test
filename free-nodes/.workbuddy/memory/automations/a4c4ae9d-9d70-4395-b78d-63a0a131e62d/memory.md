@@ -326,3 +326,26 @@
 - **给后续窗口的要点**：闸门的「已测满单轮上限」对应的分母是**各内核自己的 cap**（xray 1445 / clash 2088），
   不是固定 2500；读 `Docs/summary.json` 时以 `tested vs cap` 比较，不要拿 2500 硬套
 
+## 2026-11-17（第二十次记录：GATE: done，未跑验证；弹性配额首次把三核压到 800 下限）
+
+- 开工前：`Get-CimInstance Win32_Process -Filter "Name='python.exe'"` 无结果 → 无并发窗口、无残留；
+  未跑 taskkill（闸门 done 本窗口不启动验证，盲杀无意义）
+- 闸门退出码 0：采集日 **2026-11-17（生成于 22:39:41）**，四核均「已测满单轮上限」
+  v2ray 2507/2500、**xray 802/800**、**clash 878/872**、singbox 803/800，`elapsed_min=32.6`
+- **本轮最值得记的变化**：xray/clash/singbox 的 cap 从 11-16 的 1445/2088/2500 一起掉到 **800 档**，
+  即弹性反推撞上 `--min-test 800` 下限（`Docs/quota.md` 第一节：弹性目标 target-avail 30 个/内核）。
+  成因是可用率变好——反推到 30 个可用只需 800 测左右就不再往上加。**不是漏测、不是闸门放宽**：
+  `partial=false` 且 `tested` 已达各自 cap。
+- 本日可用（summary.ok）：v2ray **96** / xray **105** / clash 55 / singbox 70 = 合计 326，
+  远高于 quota.md 的「连续 3 晚 <60」告警阈值，也基本是既往最高水位（v2ray 96 尤为突出，前一晚 20）
+- 开关仍 on：`Docs/window_switch.json` reason「最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」
+  —— 11-15 的 53.6 分钟仍卡着「耗时 ≤50」这条，尽管 11-17 只有 32.6 分钟
+  → 又是「开关开着 + 内容全 done = 启用了也没活干」的组合（与 11-15/11-16 同型）
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0
+  （HEAD `d748ed4`，今日第三次提交：CI 采集 ×2 + 本地发布）；`git status --short -- free-nodes .github`
+  仅一项 `M free-nodes/.workbuddy/memory/automations/a3d7bb22…/memory.md`（主窗口自己的 memory）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写本文件后 publish 一次收掉尾巴
+- **给后续窗口的要点**：cap 掉到 800 不等于「越跑越少」，读 `Docs/quota.md` 第一/二节即可确认；
+  判断是否「结果不理想」只看 quota.md 第二节的六个信号（本次 326 个可用、`partial=false`、候选远大于 cap，
+  六个信号全不命中），**不要因为 tested 从 2500 掉到 800 就去提高上限**
+
