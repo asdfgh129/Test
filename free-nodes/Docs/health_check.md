@@ -2,6 +2,65 @@
 
 > 按日期倒序累积，最新一次运行在最上面
 
+## 2026-11-17 22:40
+
+**结论：无严重问题，1 个告警可优化**
+
+### 关键指标
+
+| 指标 | 值 |
+|---|---|
+| 输出目录 | C:\Users\bemin\WorkBuddy\Test\free-nodes |
+| 目标节点 | 1000 |
+| 去重后节点 | 6971 |
+| 采集总量(过滤前) | 24375 |
+| 各内核订阅 | v2ray 4863、xray 4586、clash 6678、singbox 6447 |
+| 协议分布 | hy2 14 / hysteria2 19 / ss 162 / ssr 6 / trojan 725 / tuic 2 / vless 5528 / vmess 515 |
+| TCP 可达 | 6971/6971（中位数 246ms） |
+| 验证已执行 | 是 |
+| 各内核可用 | {'v2ray': '96/2507', 'xray': '105/802', 'clash': '55/878', 'singbox': '70/803'} |
+| 可用节点池 | v2ray 221、xray 625、clash 367、singbox 378 |
+
+### 发现与建议
+
+#### 🟡 [下载通道] 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/
+
+- 建议动作：失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+
+#### 🔵 [产物] 主清单 6971 条；各内核订阅：v2ray 4863、xray 4586、clash 6678、singbox 6447
+
+
+#### 🔵 [规模] 节点数 6971 达到目标 1000
+
+
+#### 🔵 [仓库效率] 扫描仓库 56 个：有产出 30、解析不到节点 6、下载失败 2、无候选文件 0、部分链接下载失败 1、README 无订阅链接跳过 17（产出率 77%，按有尝试采集的 39 个计算）
+
+
+#### 🔵 [README 采集] 39 个仓库的 README 声明了订阅链接，提取 119852 条节点
+
+
+#### 🔵 [延迟排序] 6971/6971 个服务器 TCP 可达（100%），延迟中位数 246ms，<100ms 共 461 条
+
+
+#### 🔵 [延迟排序] 789/6971 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后
+
+
+#### 🔵 [仓库质量] 已评分 95 个仓库，可用率 >=10% 的 17 个，零可用 42 个（7 天内跳过、过期自动重采，known-issues 53）
+
+
+#### 🔵 [节点池] 池内节点：v2ray 221、xray 625、clash 367、singbox 378
+
+
+#### 🔵 [下载通道] jsDelivr 可用 3/4：fastly.jsdelivr.net、gcore.jsdelivr.net、testingcf.jsdelivr.net（不可达：cdn.jsdelivr.net）
+
+
+#### 🔵 [配额] GitHub 配额剩余 core 4999/5000、search 30/30（已配置 token ghp_…x6hY）
+
+
+### 待办清单（需人工或自动修复）
+
+1. [warn] 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ → 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+
 ## 2026-11-16 22:55
 
 **结论：无严重问题，3 个告警可优化**
