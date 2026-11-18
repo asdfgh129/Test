@@ -349,3 +349,20 @@
   判断是否「结果不理想」只看 quota.md 第二节的六个信号（本次 326 个可用、`partial=false`、候选远大于 cap，
   六个信号全不命中），**不要因为 tested 从 2500 掉到 800 就去提高上限**
 
+## 2026-11-18（第二十一次记录：GATE: done，未跑验证）
+
+- 开工前：`tasklist` 查 python.exe 与四内核均「没有找到进程」→ 无并发窗口、无残留；未跑 taskkill（无活可干）
+- 闸门退出码 0：采集日 **2026-11-18（生成于 22:36:15）**，四核均「已测满单轮上限」，cap 全部 800
+  （弹性反推持续压在下限）：v2ray 813/800、xray 803/800、clash 808/800、singbox 805/800，`elapsed_min=28.4`
+- 本日可用（summary.ok）：v2ray **19** / xray 38 / clash 35 / singbox 65 = 合计 157
+  - v2ray 19 低于弹性目标 30，且 cap 已贴 `--min-test 800` 下限 → 属「800 个候选里只出 19 个可用」的源池质量，
+    不是漏测；quota.md 第二节告警信号按合计 157 看不命中，未调参（连续多晚 <30 才值得取证）
+- 开关仍 on：reason「最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」——今晚 28.4 分钟远低于 50，
+  但 11-15 的 53.6 分钟仍卡着 streak，故维持 on（历史条目里 11-10 那条之后没有 11-11/12，因本机未跑）
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` **无输出**；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD `207c68f` 已是今日发布）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：`Docs/window_switch.json` 的 `history` 已含 11-13~11-18 连续 6 条 done 且耗时全部 ≤42.5，
+  若 11-19 也是 ≤50 且 done，streak 条件（7 晚连续达标）可能首次满足——届时开关会变 off、
+  本窗口当天就是最后一次被启用；看到 off 是正常收敛，不要手动改回 on
+
