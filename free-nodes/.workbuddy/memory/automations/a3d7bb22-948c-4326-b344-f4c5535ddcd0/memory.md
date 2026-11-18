@@ -1,5 +1,42 @@
 # 每日免费节点采集 —— 自动化执行记录
 
+## 2026-11-18 22:00 第一窗口（主窗口）
+
+**结论：CI 一次同步就绪（total 30423）；四核全测完、GATE: done、推送成功（89cd780）；可用 326 → 157
+（弹性反推首次四核全落 800 下限）；修掉「push 退出码 0 却报 up-to-date」的静默失败（known-issues 68）；
+SWITCH: on + keep（两窗口 ACTIVE，未改配置）**
+
+- **同步**：`--sync-only --proxy auto` 一次成功（直连 fetch 失败 → 自建 v2ray @ 202.50.253.54 第 1 次命中），
+  `CI_READY=1`、`generated_at=21:11:31`、`total=30423`；未 dispatch、未兜底
+- 采集（CI 口径）：68 仓库 / 37 订阅文件 / 原始 181951 → 去重 30455 / 302s；README 声明 45 仓库；
+  协议 vless 19661 / vmess 3934 / ss 3378 / trojan 2419；10Dream 与 rtwo2 仍各触 40000 单仓上限
+- 探测 278s：30455 → 可解析 30455 → 探 30423 → 可达 **9928（32.6%）**，CF 前置 2264 排末尾；
+  分流 7419/6864/9618/9268；池内 251 条已登记节点照常刷新
+- 验证 28.4min：**四核 cap 全为 800**（弹性反推：v2ray 783、xray 229、clash 479、singbox 344）；
+  v2ray 19/813、xray 38/803、clash 35/808、singbox 65/805 = **157**（前晚 326）；四核 partial/exhausted 全 False；
+  池 216/605/358/375（singbox 新增 29/刷新 36/淘汰 32）
+- **v2ray 19 条首次低于 target 30**：反推按昨晚 3.8% 需 783 条，今晚实测 2.3%（TLS 419/timeout 363，
+  与昨晚 795/1588 同形）⇒ 估算偏差。按 quota「连续 3 晚才动手」不动参数；已记 review_logs，
+  若连续 3 晚「四核贴 800 且 v2ray < 30」再评估 `--min-test 800 → 1000`（quota 第三节缺这一档，要先补）
+- **墙钟仅 28.4min（预算 4404s 只用约 1700s）**：四核都被 cap 800 截断，时间大量剩余；
+  这是弹性反推的既定代价，**不要临时加测**（会破坏「按上一晚率反推」的可比性）
+- 自检 0 critical / 2 warn：v2ray 2.3%（样本仅 813，噪声大）、镜像**回升到 3/13**（gh-proxy.com /
+  gh-proxy.org / gh.monlor.com），未到停用线；带宽正常（singbox 19/20，中位 11.45Mbps）
+- 内核 `--uplink off`：xray 26.11.9 / clash 1.19.34 有新版本，指纹 12/13/14/14 未变 → 不升级
+- **修复（known-issues 68）**：`publish_free_nodes.py` 新增 `push_landed()` —— 退出码 0 后再复核
+  `rev-list --count origin/<branch>..HEAD`，只在命中 up-to-date 文案且本地仍领先时判未推送。
+  回归 4 例全 PASS（临时仓库）。**动机**：11-17 那晚就出现过 everything-up-to-date，若以退出码 0 出现，
+  会把「没发布」写成「发布成功」并清掉 pending
+- 推送：`89cd780`（32 文件）→ origin/master 成功。**前 4 轮全部报 `Everything up-to-date`、第 5 轮
+  （xray @ 202.50.253.36）才成功**，已用 api.github.com commits/master 核实远端 sha 一致（退出码非 0 分支，
+  属陈旧 ref 广告，不是本地无提交）。`Docs/window_switch.json` 随本次提交入库（闸门放在发布前跑，沿用 11-16 起做法）
+- 流程：`window_gate --first-window` 在发布前跑；`GATE: done` / `SWITCH: on` / `SWITCH_ACTION: keep`
+- **明晚先做**：① 实现「up-to-date 失败时先 `git ls-remote` 复核远端是否已有该提交」——注意 `do_push` 在
+  `finally` 里先清 `GIT_PROXY`，ls-remote 必须放进同一个 try 块，可省 3~4 轮（约 2~3 分钟）；
+  ② 盯「四核贴 800 下限 + v2ray < 30」是否连续出现（连续 3 晚才动下限，且需先把 min-test 档补进 quota.md）；
+  ③ 镜像 3/13，掉到 1 个才补 `DEFAULT_MIRROR_PREFIXES`；④ 仓库根仍有未跟踪调试文件（`_diag.py`/`_dl.json`/
+  `_p_*.go`），待用户确认清理
+
 ## 2026-11-17 22:00 第一窗口（主窗口）
 
 **结论：CI 一次同步就绪（total 24358）；四核全测完、GATE: done、推送成功（d748ed4）；可用 286 → 326；

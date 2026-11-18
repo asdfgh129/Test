@@ -26,6 +26,13 @@
   （gh-proxy.com / gh-proxy.org / gh.monlor.com），未到「只剩 1 个才补候选」的处置线。
 - 内核：xray 26.11.9 / clash 1.19.34 有新版，四核能力指纹 12/13/14/14 **未变** → 不升级（同前几晚）。
 - **本窗口唯一代码改动是发布侧的静默失败护栏**（known-issues 68，`push_landed()`），与验证口径无关。
+- **发布实测：前 4 轮都报 `Everything up-to-date`，第 5 轮（xray @ 202.50.253.36）才成功**（提交 `89cd780`，
+  已用 `api.github.com/repos/.../commits/master` 核实远端 sha 一致）。现象与 11-17 同源，但**这次是退出码非 0**
+  （走的是 `do_push` 的失败分支），说明「陈旧 ref 广告」在这一批节点上很稳定，不是偶发。
+  代价约 2~3 分钟。**下一晚可做的改进（未验证，先记观察不改）**：这类失败不是连通性问题，
+  盲换节点等于抽签；应先 `git ls-remote origin refs/heads/master` 确认远端是否其实已有该提交
+  （若有就直接判成功，可省 3~4 轮）。实现时要注意 `do_push` 现在在 `finally` 里就把 `GIT_PROXY` 清掉了，
+  `ls-remote` 必须放在同一个 `try` 块内（即先把 proxy 撤掉再复核是查不到远端的）。
 
 
 
