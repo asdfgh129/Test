@@ -220,15 +220,39 @@ def ci_ready_status(out_root: Path, after: str = CI_READY_AFTER) -> tuple[bool, 
     return False, f"生成于 {gen}，早于 {deadline}"
 
 
+def push_landed(workspace: Path, branch: str, out: str) -> tuple[bool, str]:
+    """push 退出码 0 之后再复核一次：提交是否真的到了远端。
+
+    为什么要复核（2026-11-17 实测）：走自建通道时 git 可能拿到**陈旧的远端 ref 广告**，
+    于是它认为「Everything up-to-date」并以 0 退出，可本地明明还有未推送提交。
+    直接当成功会把「这晚没发布」写成「发布成功」，比失败更糟——没人会去补推。
+
+    只在文案命中 up-to-date **且** `origin/<branch>..HEAD` 仍领先时判失败
+    （正常推送的产出是 `abc1234..def5678  master -> master`，不含这两个词，不受影响）。
+    """
+    text = out.lower()
+    if "up-to-date" not in text and "一切都是最新的" not in text:
+        return True, out
+    code, ahead = git(workspace, "rev-list", "--count", f"origin/{branch}..HEAD")
+    if code == 0 and ahead.strip().isdigit() and int(ahead.strip()) > 0:
+        return False, f"退出码 0 但远端 ref 陈旧（本地仍有 {ahead.strip()} 个提交未推送）"
+    return True, out
+
+
 def push_with_retry(workspace: Path, branch: str, retries: int, wait: int) -> tuple[bool, str]:
     last_err = ""
     for attempt in range(1, retries + 1):
         log(f"[push] 第 {attempt}/{retries} 次尝试推送到 origin/{branch} …")
         code, out = git(workspace, "push", "origin", branch, timeout=180)
         if code == 0:
-            return True, out
-        last_err = out.strip()
-        log(f"[push] 失败：{last_err.splitlines()[-1] if last_err else '未知错误'}")
+            ok, note = push_landed(workspace, branch, out)
+            if ok:
+                return True, out
+            last_err = note
+            log(f"[push] {note} → 视为未推送，稍后重试")
+        else:
+            last_err = out.strip()
+            log(f"[push] 失败：{last_err.splitlines()[-1] if last_err else '未知错误'}")
         if attempt < retries:
             time.sleep(wait)
     return False, last_err
@@ -272,10 +296,14 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
                 GIT_PROXY = ""
             up_mod.stop(reused)          # 整条流程结束，同时清掉登记
             if code == 0:
-                log(f"[push] 经已有通道推送成功（{reused.describe()}）")
-                return True, out
-            tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"
-            log(f"[push] 已有通道推送失败：{tail} → 改为逐个节点新建通道")
+                ok, note = push_landed(workspace, args.branch, out)
+                if ok:
+                    log(f"[push] 经已有通道推送成功（{reused.describe()}）")
+                    return True, out
+                log(f"[push] 已有通道{note} → 改为逐个节点新建通道")
+            else:
+                tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"
+                log(f"[push] 已有通道推送失败：{tail} → 改为逐个节点新建通道")
 
         tried: set[str] = set()
         rounds = max(1, args.uplink_rounds)
@@ -295,10 +323,14 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
             finally:
                 GIT_PROXY = ""
             if code == 0:
-                up_mod.stop(up)
-                log(f"[push] 经自建代理推送成功（{up.describe()}）")
-                return True, out
-            tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"
+                ok, note = push_landed(workspace, args.branch, out)
+                if ok:
+                    up_mod.stop(up)
+                    log(f"[push] 经自建代理推送成功（{up.describe()}）")
+                    return True, out
+                tail = note
+            else:
+                tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"
             log(f"[push] 该节点推送失败：{tail} → 换节点/内核重试")
             up_mod.stop(up)
         log("[push] 自建代理轮换全部失败，改直连重试")

@@ -96,6 +96,8 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
 
 **退出码**：`health_check.py` 0 健康 / 1 有告警 / 2 有严重问题。`collect_nodes.py` 0 正常 / 3 本次没产出且**保留旧结果**（采集模式=0 条；`--probe-only` 模式=没有候选清单）。`window_gate.py` 0 = 今晚已跑完、不用下一个窗口 / 1 = 需要继续。`publish_free_nodes.py --ci-status` 0 = 今天的产物就绪 / 1 = 未就绪。`ci_dispatch.py` 0 = 已触发（或已在跑）/ 1 = 触发失败 / 2 = 凭据或仓库信息缺失。`test_nodes.py` 非 0 不要整轮重跑，先看日志——已测结果通常已落盘。
 
+**push 的成败不看退出码就够了**：自建通道可能拿到**陈旧的远端 ref 广告**，git 会回 `Everything up-to-date` 并以 0 退出，而本地还有未推送提交。`push_landed()` 在退出码 0 之后再复核 `rev-list --count origin/<branch>..HEAD`，仍领先就判「未推送」并换节点重试（known-issues 第 68 条）。看到日志里「退出码 0 但远端 ref 陈旧」是护栏生效，不是新故障。
+
 **纯 Python 标准库实现，无需安装任何依赖**（CI 侧也只需要 `setup-python`，无 pip 安装步骤）。
 
 ## 硬约束（平台行为，任务内部改不掉）

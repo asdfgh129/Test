@@ -2,6 +2,195 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
+## 2026-11-18 22:36
+
+- 可用节点 **89** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）
+- 延迟测试目标：primary、github、x、cloudflare、youtube（主判据 `primary`）
+- 带宽：2MB 串行下载，每内核最多 20 个
+
+| 节点 | 内核 | 协议 | 主目标 | github | x | cloudflare | youtube | 带宽 |
+|---|---|---|---|---|---|---|---|---|
+| `139.162.20.241:443` | singbox | vless | 465ms | 506ms | 678ms | 377ms | 435ms | 16.04Mbps |
+| `172.104.48.194:443` | singbox | vless | 478ms | 506ms | 636ms | 398ms | 508ms | 12.81Mbps |
+| `172.105.203.15:443` | singbox | vless | 478ms | 452ms | 590ms | 557ms | 479ms | 11.35Mbps |
+| `139.162.91.247:443` | singbox | vless | 492ms | 485ms | 606ms | 462ms | 489ms | 13.24Mbps |
+| `139.162.125.126:443` | singbox | vless | 497ms | 475ms | 600ms | 471ms | 432ms | 11.58Mbps |
+| `139.162.91.239:443` | singbox | vless | 497ms | 473ms | 570ms | 465ms | 496ms | 11.8Mbps |
+| `172.104.86.181:443` | singbox | vless | 540ms | 491ms | 622ms | 510ms | 596ms | 12.25Mbps |
+| `103.29.68.232:443` | singbox | vless | 557ms | 524ms | 583ms | 481ms | 614ms | 11.63Mbps |
+| `13.212.48.8:8443` | singbox/v2ray/xray | ss | 578ms | 581ms | 843ms | 450ms | 581ms | 0.47Mbps |
+| `139.162.101.74:443` | singbox | vless | 614ms | 475ms | 641ms | 516ms | 569ms | 12.51Mbps |
+| `139.162.91.224:443` | singbox | vless | 619ms | 561ms | 705ms | 479ms | 489ms | 11.15Mbps |
+| `18.176.55.211:2377` | clash/singbox | ss | 651ms | 281ms | 407ms | 338ms | 314ms | 12.03Mbps |
+| `172.238.18.103:443` | singbox | vless | 726ms | 510ms | 631ms | 567ms | 522ms | 12.22Mbps |
+| `18.134.253.71:443` | clash/singbox/xray | ss | 791ms | 723ms | 881ms | 666ms | 2023ms | 5.25Mbps |
+| `free.fugui.lol:47396` | clash/singbox/xray | vless | 853ms | 1200ms | 1954ms | 1625ms | 4467ms | 0.58Mbps |
+| `zfapi.zalolink.com:43149` | clash/singbox/xray | vless | 888ms | ✗ | 1779ms | 1615ms | 1347ms | 3.41Mbps |
+| `88.216.189.192:443` | clash/singbox/xray | vless | 963ms | 1432ms | 1072ms | 1061ms | 925ms | 5.09Mbps |
+| `107.161.160.28:8388` | singbox/v2ray | ss | 1005ms | 1042ms | 2712ms | 2350ms | 1368ms | 0.12Mbps |
+| `178.17.58.55:443` | v2ray | hysteria2 | 1024ms | ✗ | ✗ | ✗ | ✗ | - |
+| `3.38.150.98:8443` | clash/singbox/v2ray/xray | ss | 1030ms | 498ms | 455ms | 442ms | 477ms | 0.29Mbps |
+| `202.50.253.36:19999` | clash/singbox/v2ray/xray | ss | 1081ms | ✗ | 1890ms | 4344ms | 1803ms | 0.48Mbps |
+| `47.85.162.44:443` | clash/singbox/xray | ss | 1084ms | ✗ | 995ms | 906ms | 918ms | 4.29Mbps |
+| `163.245.42.85:443` | singbox | vless | 1106ms | ✗ | ✗ | 1094ms | ✗ | - |
+| `48.103.218.241:18443` | clash/xray | ss | 1124ms | ✗ | 1498ms | 970ms | 1112ms | - |
+| `149.28.29.156:443` | singbox | vless | 1134ms | 1551ms | 1998ms | 1712ms | 1125ms | - |
+| `88.216.60.73:443` | clash/singbox/xray | vless | 1146ms | 2333ms | 1478ms | 1312ms | 1606ms | 0.7Mbps |
+| `3.38.150.98:443` | xray | vless | 1171ms | 818ms | 950ms | 913ms | 674ms | 0.56Mbps |
+| `95.133.247.20:8443` | xray | vless | 1275ms | ✗ | 2528ms | 1829ms | 1612ms | 2.61Mbps |
+| `81.200.152.153:443` | clash/singbox/xray | vless | 1313ms | 1460ms | 1529ms | 1314ms | 1466ms | 3.92Mbps |
+| `185.248.141.233:443` | xray | vless | 1364ms | 1207ms | 1280ms | 853ms | 773ms | 6.05Mbps |
+| `191.217.252.92:2053` | clash | vless | 1391ms | 1387ms | ✗ | 1762ms | ✗ | 1.56Mbps |
+| `172.236.227.60:443` | singbox | vless | 1392ms | ✗ | 1134ms | 1461ms | 2369ms | - |
+| `172.233.142.149:443` | singbox | vless | 1400ms | 2538ms | ✗ | 3000ms | 1422ms | - |
+| `150.241.92.19:2096` | xray | vless | 1408ms | ✗ | 2409ms | 1309ms | ✗ | 0.71Mbps |
+| `45.147.200.232:18443` | clash/singbox/v2ray/xray | ss | 1423ms | 2279ms | 1073ms | 809ms | 963ms | 0.37Mbps |
+| `191.217.206.147:8443` | xray | vless | 1431ms | 2853ms | 3501ms | 756ms | 773ms | 1.5Mbps |
+| `198.202.24.214:2083` | singbox/v2ray/xray | vless | 1462ms | 1639ms | 1746ms | 1413ms | 1583ms | 5.31Mbps |
+| `202.50.253.90:19999` | singbox/v2ray/xray | ss | 1477ms | ✗ | 1547ms | 2076ms | 1438ms | 0.58Mbps |
+| `37.114.37.192:443` | clash/singbox | vless | 1478ms | 1381ms | 1438ms | 831ms | 785ms | 4.62Mbps |
+| `18.132.198.49:443` | clash/singbox | ss | 1504ms | 995ms | 1091ms | 862ms | 1232ms | 6.17Mbps |
+| `84.32.108.7:443` | clash | vless | 1531ms | 1858ms | 2083ms | 1543ms | 2380ms | 4.91Mbps |
+| `202.50.253.27:19999` | singbox/xray | ss | 1531ms | 2197ms | 1936ms | 1286ms | 1650ms | - |
+| `91.108.152.89:3051` | clash/singbox/v2ray/xray | vmess | 1534ms | 3011ms | 1639ms | 1567ms | 1587ms | 3.02Mbps |
+| `ipfast.kingmna.com:443` | singbox/v2ray | trojan | 1608ms | 1680ms | 1912ms | 1544ms | 1451ms | 0.97Mbps |
+| `alireza.karamoz1.ir:443` | clash/singbox/xray | trojan | 1614ms | 1397ms | 1151ms | 1013ms | 2689ms | - |
+| `209.206.51.236:2083` | singbox/v2ray | vless | 1640ms | 1688ms | 1607ms | 2488ms | 1514ms | 5.56Mbps |
+| `206.238.239.20:2083` | clash/singbox/v2ray/xray | vless | 1696ms | 1716ms | 1700ms | 1609ms | 1552ms | 1.16Mbps |
+| `45.76.222.108:443` | singbox | vless | 1720ms | 1747ms | 2168ms | ✗ | ✗ | - |
+| `80.47.10.106:443` | singbox | vless | 1788ms | ✗ | 3068ms | 1337ms | 4303ms | - |
+| `46.247.109.32:443` | clash/singbox | vless | 1795ms | 2130ms | 1900ms | 1409ms | 1677ms | 3.42Mbps |
+| `139.180.221.53:443` | singbox | vless | 1807ms | 1577ms | 1031ms | 1807ms | 605ms | - |
+| `202.50.253.99:19999` | singbox/v2ray | ss | 1915ms | ✗ | 1224ms | 2675ms | ✗ | 0.87Mbps |
+| `177.202.76.31:9443` | xray | vless | 1959ms | 2338ms | 3095ms | 1269ms | 1059ms | - |
+| `172.235.37.168:443` | singbox | vless | 1989ms | 2166ms | 2061ms | ✗ | 2266ms | - |
+| `3.144.14.254:443` | clash/singbox | ss | 2014ms | 1943ms | 1293ms | 851ms | 908ms | - |
+| `zfapi.zalolink.com:30322` | clash/singbox/xray | vless | 2072ms | 1633ms | ✗ | 1818ms | 1352ms | - |
+| `v1us9.stablenode.cloud:24413` | clash/v2ray | trojan | 2162ms | 4426ms | 2063ms | 2841ms | 3161ms | 0.93Mbps |
+| `172.235.48.245:443` | singbox | vless | 2281ms | 2224ms | ✗ | 1422ms | 1826ms | - |
+| `free.fugui.lol:62015` | singbox/xray | vless | 2299ms | 3232ms | 1430ms | 1370ms | 1437ms | - |
+| `zfapi.zalolink.com:54528` | clash/singbox/xray | vless | 2353ms | 2265ms | 1478ms | ✗ | 2483ms | 0.13Mbps |
+| `172.236.241.130:443` | singbox | vless | 2359ms | 1218ms | ✗ | 1336ms | 1119ms | - |
+| `202.50.253.63:19999` | clash | ss | 2425ms | ✗ | 2320ms | 1956ms | ✗ | - |
+| `sclass-00.catcat321.com:20103` | singbox/xray | trojan | 2439ms | 2828ms | 2272ms | 3158ms | 2112ms | - |
+| `sclass-00.catcat321.com:20123` | clash/singbox | trojan | 2447ms | ✗ | 3570ms | 1432ms | 2710ms | - |
+| `zfapi.zalolink.com:42120` | clash/xray | vless | 2449ms | 1447ms | 1132ms | 1032ms | 1231ms | - |
+| `198.13.53.39:443` | singbox | vless | 2456ms | 2003ms | 3090ms | 2487ms | 2172ms | - |
+| `5.129.202.80:443` | clash/singbox | vless | 2479ms | ✗ | 2320ms | ✗ | ✗ | - |
+| `202.50.253.81:19999` | clash | ss | 2486ms | ✗ | 2266ms | 969ms | 4086ms | - |
+| `po2.hys.braidx.tech:9443` | xray | vless | 2511ms | 1957ms | 2679ms | 2781ms | 1556ms | - |
+| `172.236.231.45:443` | singbox | vless | 2596ms | 2973ms | ✗ | 2363ms | 1165ms | - |
+| `172.236.233.130:443` | singbox | vless | 2663ms | 2695ms | 1704ms | ✗ | 1320ms | - |
+| `free.fugui.lol:51283` | xray | vless | 2689ms | ✗ | 3351ms | 1585ms | ✗ | - |
+| `172.235.63.167:443` | singbox | vless | 2737ms | ✗ | 1600ms | 1308ms | 2944ms | - |
+| `172.233.129.65:443` | singbox | vless | 2800ms | 1264ms | 3157ms | 2662ms | ✗ | - |
+| `202.50.253.54:19999` | clash/singbox/xray | ss | 2896ms | ✗ | 4052ms | 3636ms | 1835ms | 0.26Mbps |
+| `178.160.228.139:443` | xray | vless | 2921ms | ✗ | 3332ms | ✗ | 1365ms | - |
+| `104.17.128.1:2096` | v2ray | trojan | 3081ms | ✗ | ✗ | ✗ | ✗ | - |
+| `13.141.51.2:443` | xray | vless | 3084ms | 2642ms | 2431ms | ✗ | 2917ms | - |
+| `v1us9.stablenode.cloud:24421` | singbox | trojan | 3106ms | 1831ms | 1827ms | 1998ms | ✗ | - |
+| `45.134.111.131:443` | clash/singbox | vless | 3109ms | 3462ms | 2374ms | 1079ms | 3238ms | - |
+| `202.50.253.72:19999` | clash/singbox/v2ray/xray | ss | 3185ms | ✗ | 3838ms | 1678ms | 1707ms | 1.14Mbps |
+| `107.191.58.86:443` | singbox | vless | 3205ms | 1145ms | 2094ms | 1367ms | 1725ms | - |
+| `109.104.153.43:33336` | clash | ssr | 3213ms | 3080ms | 1746ms | ✗ | ✗ | - |
+| `109.71.245.99:8443` | xray | vless | 3287ms | 2665ms | ✗ | 1418ms | 1749ms | - |
+| `153.56.230.6:443` | clash | vless | 3380ms | ✗ | 1884ms | 2462ms | 1617ms | - |
+| `186.243.218.221:8443` | singbox | vless | 3400ms | ✗ | ✗ | ✗ | ✗ | - |
+| `202.50.253.18:19999` | singbox/v2ray/xray | ss | 3403ms | ✗ | 4006ms | 1400ms | 2960ms | 0.84Mbps |
+| `support.zoom.us:443` | clash/v2ray | vmess | 3569ms | ✗ | ✗ | 3102ms | 2057ms | 1.53Mbps |
+| `202.50.253.45:19999` | v2ray/xray | ss | 4179ms | ✗ | 3371ms | 2536ms | 1756ms | 0.77Mbps |
+
+> 来源仓库（可多个，去重时按 1/N 分摊产量）：
+> - `139.162.20.241:443`：Areral/ScarletDevil
+> - `172.104.48.194:443`：Areral/ScarletDevil
+> - `172.105.203.15:443`：zhuhaiuk/free-nodes
+> - `139.162.91.247:443`：Areral/ScarletDevil
+> - `139.162.125.126:443`：Areral/ScarletDevil
+> - `139.162.91.239:443`：Areral/ScarletDevil
+> - `172.104.86.181:443`：Areral/ScarletDevil
+> - `103.29.68.232:443`：Areral/ScarletDevil
+> - `13.212.48.8:8443`：hello-world-1989/cn-news
+> - `139.162.101.74:443`：Areral/ScarletDevil
+> - `139.162.91.224:443`：Areral/ScarletDevil
+> - `18.176.55.211:2377`：Areral/ScarletDevil
+> - `172.238.18.103:443`：Areral/ScarletDevil
+> - `18.134.253.71:443`：rekt0ro/ProxyRift
+> - `free.fugui.lol:47396`：FLAT447/v2ray-lists
+> - `zfapi.zalolink.com:43149`：zhuhaiuk/free-nodes
+> - `88.216.189.192:443`：JHC000abc/ProxyParseForSing-box
+> - `107.161.160.28:8388`：SoliSpirit/v2ray-configs
+> - `178.17.58.55:443`：rtwo2/FastNodes
+> - `3.38.150.98:8443`：hello-world-1989/cn-news
+> - `202.50.253.36:19999`：JHC000abc/ProxyParseForSing-box
+> - `47.85.162.44:443`：SoliSpirit/v2ray-configs
+> - `163.245.42.85:443`：0xRadikal/Free-v2ray-Configs
+> - `48.103.218.241:18443`：SoliSpirit/v2ray-configs
+> - `149.28.29.156:443`：Areral/ScarletDevil
+> - `88.216.60.73:443`：zhuhaiuk/free-nodes
+> - `3.38.150.98:443`：hello-world-1989/cn-news
+> - `95.133.247.20:8443`：rekt0ro/ProxyRift
+> - `81.200.152.153:443`：JHC000abc/ProxyParseForSing-box
+> - `185.248.141.233:443`：FLAT447/v2ray-lists
+> - `191.217.252.92:2053`：JHC000abc/ProxyParseForSing-box
+> - `172.236.227.60:443`：ermaozi01/free_clash_vpn
+> - `172.233.142.149:443`：Areral/ScarletDevil
+> - `150.241.92.19:2096`：rekt0ro/ProxyRift
+> - `45.147.200.232:18443`：10Dream/sub-mod
+> - `191.217.206.147:8443`：FLAT447/v2ray-lists
+> - `198.202.24.214:2083`：0xRadikal/Free-v2ray-Configs
+> - `202.50.253.90:19999`：FLAT447/v2ray-lists
+> - `37.114.37.192:443`：FLAT447/v2ray-lists
+> - `18.132.198.49:443`：rekt0ro/ProxyRift
+> - `84.32.108.7:443`：rekt0ro/ProxyRift
+> - `202.50.253.27:19999`：zhuhaiuk/free-nodes
+> - `91.108.152.89:3051`：rekt0ro/ProxyRift
+> - `ipfast.kingmna.com:443`：SoliSpirit/v2ray-configs
+> - `alireza.karamoz1.ir:443`：SoliSpirit/v2ray-configs
+> - `209.206.51.236:2083`：0xRadikal/Free-v2ray-Configs
+> - `206.238.239.20:2083`：0xRadikal/Free-v2ray-Configs
+> - `45.76.222.108:443`：Areral/ScarletDevil
+> - `80.47.10.106:443`：JHC000abc/ProxyParseForSing-box
+> - `46.247.109.32:443`：FLAT447/v2ray-lists
+> - `139.180.221.53:443`：Areral/ScarletDevil
+> - `202.50.253.99:19999`：JHC000abc/ProxyParseForSing-box
+> - `177.202.76.31:9443`：rekt0ro/ProxyRift
+> - `172.235.37.168:443`：Areral/ScarletDevil
+> - `3.144.14.254:443`：rekt0ro/ProxyRift
+> - `zfapi.zalolink.com:30322`：FLAT447/v2ray-lists
+> - `v1us9.stablenode.cloud:24413`：free-proxy-nodes/free-nodes
+> - `172.235.48.245:443`：Areral/ScarletDevil
+> - `free.fugui.lol:62015`：Areral/ScarletDevil
+> - `zfapi.zalolink.com:54528`：FLAT447/v2ray-lists
+> - `172.236.241.130:443`：ermaozi01/free_clash_vpn
+> - `202.50.253.63:19999`：JHC000abc/ProxyParseForSing-box
+> - `sclass-00.catcat321.com:20103`：0xRadikal/Free-v2ray-Configs
+> - `sclass-00.catcat321.com:20123`：SoliSpirit/v2ray-configs
+> - `zfapi.zalolink.com:42120`：0xRadikal/Free-v2ray-Configs
+> - `198.13.53.39:443`：Areral/ScarletDevil
+> - `5.129.202.80:443`：JHC000abc/ProxyParseForSing-box
+> - `202.50.253.81:19999`：ermaozi01/free_clash_vpn
+> - `po2.hys.braidx.tech:9443`：rekt0ro/ProxyRift
+> - `172.236.231.45:443`：Areral/ScarletDevil
+> - `172.236.233.130:443`：Areral/ScarletDevil
+> - `free.fugui.lol:51283`：FLAT447/v2ray-lists
+> - `172.235.63.167:443`：Areral/ScarletDevil
+> - `172.233.129.65:443`：ermaozi01/free_clash_vpn
+> - `202.50.253.54:19999`：JHC000abc/ProxyParseForSing-box
+> - `178.160.228.139:443`：rekt0ro/ProxyRift
+> - `104.17.128.1:2096`：rekt0ro/ProxyRift
+> - `13.141.51.2:443`：FLAT447/v2ray-lists
+> - `v1us9.stablenode.cloud:24421`：free-proxy-nodes/free-nodes
+> - `45.134.111.131:443`：Areral/ScarletDevil
+> - `202.50.253.72:19999`：JHC000abc/ProxyParseForSing-box
+> - `107.191.58.86:443`：ermaozi01/free_clash_vpn
+> - `109.104.153.43:33336`：rtwo2/FastNodes
+> - `109.71.245.99:8443`：FLAT447/v2ray-lists
+> - `153.56.230.6:443`：Areral/ScarletDevil
+> - `186.243.218.221:8443`：JHC000abc/ProxyParseForSing-box
+> - `202.50.253.18:19999`：JHC000abc/ProxyParseForSing-box
+> - `support.zoom.us:443`：rekt0ro/ProxyRift
+> - `202.50.253.45:19999`：JHC000abc/ProxyParseForSing-box
+
 ## 2026-11-17 22:39
 
 - 可用节点 **205** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）
