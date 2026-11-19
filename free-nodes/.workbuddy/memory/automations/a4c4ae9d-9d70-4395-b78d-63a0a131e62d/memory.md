@@ -366,3 +366,23 @@
   若 11-19 也是 ≤50 且 done，streak 条件（7 晚连续达标）可能首次满足——届时开关会变 off、
   本窗口当天就是最后一次被启用；看到 off 是正常收敛，不要手动改回 on
 
+## 2026-11-19（第二十二次记录：GATE: done，未跑验证）
+
+- 开工前：`tasklist` 查 python.exe 与四内核均「没有找到进程」→ 无并发窗口、无残留；未跑 taskkill（无活可干）
+- 闸门退出码 0：采集日 **2026-11-19（生成于 22:38:07）**，四核均「已测满单轮上限」，
+  分母各按自己的 cap：v2ray **1298/1284**、xray 802/800、clash 807/800、singbox 803/800，`elapsed_min=29.5`
+- **cap 结构第一次「分开走」**：xray/clash/singbox 仍贴 `--min-test 800` 下限，但 v2ray 从 800 抬到 **1284**
+  ——弹性反推在 v2ray 上没撞下限（可用率偏低 → 需更多测试量才凑够目标），与 11-17/11-18 三核齐贴 800 不同。
+  属正常自适应，不是某核被放宽
+- 本日可用（summary.ok）：v2ray 22 / xray 24 / clash 19 / singbox 29 = 合计 94，四核 `partial=false`、`exhausted=false`
+  - 较 11-18 的 157 回落，v2ray 22 仍低于弹性目标 30 但高于 `min_available` 10；四核均个位数到二十余属既定水位，未调参
+- 开关仍 on：reason「最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」，`streak_done=7`。
+  读 `_streak()` 确认窗口是 `history[-7:]` = 11-13~11-19，**11-15 的 53.6 分钟仍在窗口内**，
+  故即便今晚 29.5 也不达标。**修正 11-18 的预测**：11-15 要滚出「最近 7 晚」得等 11-22
+  （11-20/11-21 的窗口仍含 11-15），所以开关最早 **2026-11-22** 才可能转 off，不是 11-19
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` **无输出**；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD `92af308` 已是今日发布）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：判开关何时转 off 别数「连续几晚 done」，要算 `history[-7:]` 里最慢那晚何时滚出窗口；
+  各内核 cap 已互不相同（800~1284 并存），闸门读 `tested vs cap` 时一律取 summary 里各自的 cap
+
