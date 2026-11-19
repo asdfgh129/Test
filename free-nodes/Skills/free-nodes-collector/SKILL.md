@@ -96,7 +96,12 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
 
 **退出码**：`health_check.py` 0 健康 / 1 有告警 / 2 有严重问题。`collect_nodes.py` 0 正常 / 3 本次没产出且**保留旧结果**（采集模式=0 条；`--probe-only` 模式=没有候选清单）。`window_gate.py` 0 = 今晚已跑完、不用下一个窗口 / 1 = 需要继续。`publish_free_nodes.py --ci-status` 0 = 今天的产物就绪 / 1 = 未就绪。`ci_dispatch.py` 0 = 已触发（或已在跑）/ 1 = 触发失败 / 2 = 凭据或仓库信息缺失。`test_nodes.py` 非 0 不要整轮重跑，先看日志——已测结果通常已落盘。
 
-**push 的成败不看退出码就够了**：自建通道可能拿到**陈旧的远端 ref 广告**，git 会回 `Everything up-to-date` 并以 0 退出，而本地还有未推送提交。`push_landed()` 在退出码 0 之后再复核 `rev-list --count origin/<branch>..HEAD`，仍领先就判「未推送」并换节点重试（known-issues 第 68 条）。看到日志里「退出码 0 但远端 ref 陈旧」是护栏生效，不是新故障。
+**push 的成败不看退出码就够了**：自建通道可能拿到**陈旧的远端 ref 广告**，git 会回 `Everything up-to-date`
+并以 0 退出，而本地还有未推送提交。`push_landed()` 在退出码 0 之后再取两次事实：先 `rev-list --count
+origin/<branch>..HEAD`，仍领先就 `git ls-remote --heads origin <branch>` 直问远端 sha —— 与本地 `HEAD`
+相等判成功（本地跟踪 ref 陈旧，推送其实早已落地），不相等才判「未推送」并换节点重试
+（known-issues 第 68、69 条；`ls-remote` 要出境，所以留在 `do_push` 的 `try` 块里）。
+看到日志里「退出码 0 但远端 ref 陈旧」或「本地跟踪 ref 陈旧，但远端已是 …」都是护栏生效，不是故障。
 
 **纯 Python 标准库实现，无需安装任何依赖**（CI 侧也只需要 `setup-python`，无 pip 安装步骤）。
 
@@ -142,7 +147,9 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
    `DEFAULT_BW_MAX=20` 个/内核，**必须带浏览器 UA**（否则全 403，见第 64 条）。
 - 产物：`nodes/available_nodes.json` + `Docs/available_nodes.md`（各目标延迟 / 带宽 / 所属仓库 /
   内核 / TCP 延迟）；四份订阅文件保持可直接导入的格式不变。
-- 弹性：`--target-avail 30` 反推每内核测试量，clamp 800~2500；采集仓库数按昨日可用总数在 80~120 间伸缩。
+- 弹性：`--target-avail 30` 反推每内核测试量，clamp **1000**~2500（下限 2026-11-19 由 800 抬升，
+  见 known-issues 第 71 条：反推用上一晚可用率，率下滑那晚恒偏小，下限会变成天花板）；
+  采集仓库数按昨日可用总数在 80~120 间伸缩。
   当前因可用率 0.7~2.2% 夜夜顶到 2500，属已知结论，**不要提高 target**（见 `Docs/quota.md`）。
 
 ## 关键口径（结论，理由见参考文件）

@@ -220,6 +220,27 @@ def ci_ready_status(out_root: Path, after: str = CI_READY_AFTER) -> tuple[bool, 
     return False, f"生成于 {gen}，早于 {deadline}"
 
 
+def local_head(workspace: Path) -> str:
+    code, out = git(workspace, "rev-parse", "HEAD")
+    return out.strip() if code == 0 else ""
+
+
+def remote_head(workspace: Path, branch: str) -> str:
+    """问远端 origin/<branch> 到底是什么 sha（唯一事实，不信本地跟踪 ref）。
+
+    必须在**通道还开着**的地方调用：走自建代理时 github.com 直连不通，
+    而 do_push 的 finally 会立刻清 GIT_PROXY，所以要放在同一个 try 块里（known-issues 69）。
+    """
+    code, out = git(workspace, "ls-remote", "--heads", "origin", branch, timeout=60)
+    if code != 0:
+        return ""
+    for line in out.splitlines():
+        parts = line.split()
+        if len(parts) >= 2 and parts[1].rstrip("/").endswith(branch):
+            return parts[0]
+    return ""
+
+
 def push_landed(workspace: Path, branch: str, out: str) -> tuple[bool, str]:
     """push 退出码 0 之后再复核一次：提交是否真的到了远端。
 
@@ -227,16 +248,27 @@ def push_landed(workspace: Path, branch: str, out: str) -> tuple[bool, str]:
     于是它认为「Everything up-to-date」并以 0 退出，可本地明明还有未推送提交。
     直接当成功会把「这晚没发布」写成「发布成功」，比失败更糟——没人会去补推。
 
-    只在文案命中 up-to-date **且** `origin/<branch>..HEAD` 仍领先时判失败
-    （正常推送的产出是 `abc1234..def5678  master -> master`，不含这两个词，不受影响）。
+    但反向的误判同样有代价（2026-11-18 实测：连报 4 轮 up-to-date，第 5 轮才成功）：
+    `origin/<branch>` 这个**本地跟踪 ref** 也可能陈旧，此时 rev-list 说「本地领先」，
+    而远端其实早就收了。所以 ahead>0 时再向远端求一次证（`git ls-remote`），
+    远端 HEAD 与本地 HEAD 一致就直接认成功，不再白换 3~4 个节点。
+
+    只在文案命中 up-to-date 时进入复核（正常推送的产出是
+    `abc1234..def5678  master -> master`，不含这两个词，不受影响）。
     """
     text = out.lower()
     if "up-to-date" not in text and "一切都是最新的" not in text:
         return True, out
     code, ahead = git(workspace, "rev-list", "--count", f"origin/{branch}..HEAD")
-    if code == 0 and ahead.strip().isdigit() and int(ahead.strip()) > 0:
-        return False, f"退出码 0 但远端 ref 陈旧（本地仍有 {ahead.strip()} 个提交未推送）"
-    return True, out
+    if not (code == 0 and ahead.strip().isdigit() and int(ahead.strip()) > 0):
+        return True, out
+    want = local_head(workspace)
+    got = remote_head(workspace, branch)
+    if want and got and want == got:
+        log(f"[push] 本地跟踪 ref 陈旧，但远端 origin/{branch} 已是 {want[:7]}"
+            "（推送其实早已落地）→ 判成功")
+        return True, out
+    return False, f"退出码 0 但远端 ref 陈旧（本地仍有 {ahead.strip()} 个提交未推送）"
 
 
 def push_with_retry(workspace: Path, branch: str, retries: int, wait: int) -> tuple[bool, str]:
@@ -292,15 +324,16 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
             GIT_PROXY = reused.url
             try:
                 code, out = git(workspace, "push", "origin", args.branch, timeout=180)
+                # 落地判定要发 ls-remote 求证远端 sha → 必须留在通道开着的作用域里（known-issues 69）
+                ok, note = push_landed(workspace, args.branch, out) if code == 0 else (False, "")
             finally:
                 GIT_PROXY = ""
             up_mod.stop(reused)          # 整条流程结束，同时清掉登记
+            if code == 0 and ok:
+                log(f"[push] 经已有通道推送成功（{reused.describe()}）")
+                return True, out
             if code == 0:
-                ok, note = push_landed(workspace, args.branch, out)
-                if ok:
-                    log(f"[push] 经已有通道推送成功（{reused.describe()}）")
-                    return True, out
-                log(f"[push] 已有通道{note} → 改为逐个节点新建通道")
+                log(f"[push] 已有通道 {note} → 改为逐个节点新建通道")
             else:
                 tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"
                 log(f"[push] 已有通道推送失败：{tail} → 改为逐个节点新建通道")
@@ -320,14 +353,15 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
             GIT_PROXY = up.url
             try:
                 code, out = git(workspace, "push", "origin", args.branch, timeout=180)
+                # 同上：落地判定里的 ls-remote 必须借这条通道，离开 try 就发不出去
+                ok, note = push_landed(workspace, args.branch, out) if code == 0 else (False, "")
             finally:
                 GIT_PROXY = ""
+            if code == 0 and ok:
+                up_mod.stop(up)
+                log(f"[push] 经自建代理推送成功（{up.describe()}）")
+                return True, out
             if code == 0:
-                ok, note = push_landed(workspace, args.branch, out)
-                if ok:
-                    up_mod.stop(up)
-                    log(f"[push] 经自建代理推送成功（{up.describe()}）")
-                    return True, out
                 tail = note
             else:
                 tail = out.strip().splitlines()[-1] if out.strip() else "未知错误"

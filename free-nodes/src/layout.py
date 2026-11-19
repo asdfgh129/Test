@@ -808,13 +808,19 @@ def append_issue(root, date_str, heading, body):
         out.pop()
     out.append("")
     for title, body_lines in sections:
+        # 标题与正文之间那一行空行是**格式**，不是内容：读回来时它落在 body 的首行，
+        # 若原样再写一遍就会变成两行，于是每晚给每个历史小节 +1 行空行（2026-11-19 实测，
+        # 一晚 diff 34 行纯空白）。首尾空行一律剥掉，写入时统一补一行。
+        body_lines = list(body_lines)
+        while body_lines and not body_lines[0].strip():
+            body_lines.pop(0)
+        while body_lines and not body_lines[-1].strip():
+            body_lines.pop()
         out.append(title)
         out.append("")
-        for ln in body_lines:
-            out.append(ln.rstrip())
-        while out and not out[-1].strip():
-            out.pop()
-        out.append("")
+        out.extend(ln.rstrip() for ln in body_lines)
+        if body_lines:
+            out.append("")
 
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:

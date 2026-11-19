@@ -738,7 +738,14 @@ def elastic_test_cap(core, args, prev):
     """按「每内核目标可用数」反推本内核该测多少个（用户 2026-11-11 口径）。
 
     可用率低的时候多测（才能捞够目标数量），可用率高的时候少测（省时间给带宽与其他内核）。
-    上下限：--min-test（默认 800，防止某天可用率极高就只测几十个）与 --max-test（2500）。
+    上下限：--min-test（默认 1000，防止某天可用率极高就只测几十个）与 --max-test（2500）。
+
+    下限为什么从 800 抬到 1000（2026-11-19，见 known-issues 第 71 条）：
+    11-17/11-18/11-19 连续三晚四核全部 `tested >= cap` 且 `exhausted=false`（候选没测完就被截断），
+    而首窗墙钟只有 28~33 分钟（预算 72 分钟），时间大量空转。真正卡住产出的是这道下限：
+    反推按**上一晚**的可用率算，率往下掉的当晚就系统性少测（11-18 四核全落 800，
+    实测率 2.3~8.1%，恒低于反推用的前一日），于是每晚少 100~200 条/内核。
+    `--max-test 2500` 一直没被触及（cap 实为 800~1284），抬它没有任何效果。
     """
     if args.target_avail <= 0:
         return args.max_test, "弹性关闭（固定上限）"
@@ -1659,8 +1666,8 @@ def main():
     ap.add_argument("--target-avail", type=int, default=30,
                     help="弹性调节目标：每个内核希望拿到多少个可用节点（默认 30）。"
                          "测试量 = clamp(target/上次可用率, --min-test, --max-test)；0=关闭弹性")
-    ap.add_argument("--min-test", type=int, default=800,
-                    help="弹性调节的下限测试量（默认 800）")
+    ap.add_argument("--min-test", type=int, default=1000,
+                    help="弹性调节的下限测试量（默认 1000；2026-11-19 由 800 抬升，见 quota.md）")
     ap.add_argument("--seed-file", default=None,
                     help="仓库清单路径（默认 <root>/src/seed_repos.json），用于写入仓库质量分")
     ap.add_argument("--pool-dir", default=None,
