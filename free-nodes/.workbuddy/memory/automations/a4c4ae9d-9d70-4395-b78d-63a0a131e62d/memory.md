@@ -386,3 +386,21 @@
 - **给后续窗口的要点**：判开关何时转 off 别数「连续几晚 done」，要算 `history[-7:]` 里最慢那晚何时滚出窗口；
   各内核 cap 已互不相同（800~1284 并存），闸门读 `tested vs cap` 时一律取 summary 里各自的 cap
 
+## 2026-11-20（第二十三次记录：GATE: done，未跑验证）
+
+- 开工前：`tasklist` 查 python.exe 与四内核均「没有找到进程」→ 无并发窗口、无残留
+- 闸门退出码 0：采集日 **2026-11-20（生成于 22:34:07）**，四核均「已测满单轮上限」，
+  v2ray **1781/1770**、xray 1003/1002、clash 1279/1274、singbox 1002/1000，`elapsed_min=27.6`。
+  cap 结构继续分化：v2ray 1770 最高（可用率低 → 弹性反推要多测），其余三核 1000~1274
+- 本日可用（summary.ok）：v2ray **5** / xray 16 / clash 16 / singbox 18 = 合计 55；
+  `nodes/available_nodes.json` 去重 38 条（一节点可服务多内核）。四核 `partial=false`、`exhausted=false`
+  - v2ray 5 低于 `min_available` 10，但也已测满 cap 1770 → 属「1770 个候选只出 5 个可用」的源池质量，
+    非漏测；按规则 GATE: done 不补测、不重做自检，仅登记
+- 开关仍 on：reason「最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」，`streak_done=7`；
+  今晚 27.6 分钟远低于 50，但 `history[-7:]` 仍含 11-15 的 53.6 → 与 11-19 预测一致，**最早 11-22 才可能转 off**
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` **无输出**；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 第一窗口已发布完毕
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：`summary.ok` 是「内核维度计数」（可重复），`available_nodes.json.total` 是「去重节点数」，
+  两个数不等是正常；v2ray 个位数可用（5~7）已在 11-13 出现过，属源池波动，别据此调参
+
