@@ -2,55 +2,55 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节。归属按 1/N 分摊，避免转载型聚合站占据产量榜。
 
-## 2026-11-20 05:21
+## 2026-11-20 21:18
 
-- 原始提取：164920 条 → 去重后 28399 条（归属按「同一节点 N 个仓库各记 1/N」分摊）
+- 原始提取：171464 条 → 去重后 27402 条（归属按「同一节点 N 个仓库各记 1/N」分摊）
 - 独有率 = 该仓库给出的节点里「只有它给」的比例；高独有率的小仓库比全量转载的大仓库更有价值
-- 仓库池：active 400 / 出池 11，今日 push 241 个，已实测 90 个
+- 仓库池：active 400 / 出池 11，今日 push 299 个，已实测 89 个
 
 | 仓库 | 原始 | 去重归属 | 覆盖节点 | 独有节点 | 独有率 | 当前分数 |
 |---|---|---|---|---|---|---|
-| rtwo2/FastNodes | 40000 | 15358.14 | 16846 | 14681 | 87% | 53.0 |
-| 10Dream/sub-mod | 40000 | 4910.98 | 8248 | 3419 | 41% | 40.5 |
-| SoliSpirit/v2ray-configs | 25529 | 3576.23 | 6628 | 2131 | 32% | 39.5 |
-| sakha1370/OpenRay | 15575 | 1280.96 | 3058 | 719 | 24% | 42.8 |
-| aviamastersgh/vpn-free-russia | 10123 | 1217.62 | 3740 | 163 | 4% | 39.0 |
-| whoahaow/rjsxrd | 1840 | 579.09 | 1037 | 422 | 41% | 36.3 |
-| rekt0ro/ProxyRift | 3382 | 529.34 | 1543 | 299 | 19% | 47.8 |
-| Areral/ScarletDevil | 1996 | 164.24 | 981 | 10 | 1% | 45.5 |
-| MohammadBahemmat/V2ray-Collector | 1327 | 149.36 | 602 | 38 | 6% | 32.5 |
-| 0xRadikal/Free-v2ray-Configs | 5338 | 124.5 | 901 | 1 | 0% | 46.6 |
-| shabane/kamaji | 10768 | 73.12 | 648 | 1 | 0% | 31.1 |
-| Mehinator/Derafsh | 500 | 63.16 | 477 | 2 | 0% | 30.0 |
-| cbusifabcap/daily_free_vpn | 1808 | 39.13 | 272 | 2 | 1% | 32.4 |
-| igareck/vpn-configs-for-russia | 309 | 35.43 | 106 | 17 | 16% | 33.1 |
-| Maskkost93/kizyak-vpn-4.0 | 662 | 27.78 | 128 | 1 | 1% | 34.4 |
-| F0rc3Run/F0rc3Run | 784 | 26.98 | 265 | 0 | 0% | 31.0 |
-| YawStar/Proxy-Hunter | 1599 | 26.33 | 243 | 1 | 0% | 32.2 |
-| snakem982/proxypool | 179 | 23.48 | 96 | 1 | 1% | 31.9 |
-| FLAT447/v2ray-lists | 284 | 23.33 | 131 | 3 | 2% | 43.8 |
-| HamoonSoleimani/Pr0xySh4rk | 224 | 22.49 | 196 | 0 | 0% | 35.3 |
-| ProblemTheCode/SylphNet-public | 542 | 21.52 | 205 | 0 | 0% | 32.8 |
-| JHC000abc/ProxyParseForSing-box | 63 | 15.83 | 81 | 0 | 0% | 37.8 |
-| TG-NAV/clashnode | 313 | 11.28 | 76 | 0 | 0% | 29.0 |
-| clash-s/clash-s.github.io | 313 | 11.28 | 76 | 0 | 0% | 29.0 |
-| clashv2rayu/clashv2rayu.github.io | 313 | 11.28 | 76 | 0 | 0% | 29.0 |
-| VoroninaYanina/free-nodes | 264 | 11.0 | 44 | 0 | 0% | 38.8 |
-| hysteria350/free-jichang | 264 | 11.0 | 44 | 0 | 0% | 38.8 |
-| crashgfw/free-airport-nodes | 264 | 11.0 | 44 | 0 | 0% | 31.2 |
-| free-proxy-nodes/free-nodes | 264 | 11.0 | 44 | 0 | 0% | 37.2 |
-| ermaozi01/free_clash_vpn | 60 | 7.11 | 44 | 0 | 0% | 43.9 |
-| hello-world-1989/cn-news | 6 | 7.0 | 11 | 4 | 36% | 54.9 |
-| zhuhaiuk/free-nodes | 21 | 6.26 | 22 | 4 | 18% | 49.8 |
-| NiREvil/vless | 0 | 3.9 | 13 | 0 | 0% | 27.5 |
-| HotDrify/drifyconfigs | 6 | 1.94 | 8 | 0 | 0% | 28.2 |
-| kooker/FreeSubsCheck | 0 | 1.75 | 4 | 0 | 0% | 20.1 |
-| Pawdroid/Free-servers | 0 | 0.67 | 2 | 0 | 0% | 24.9 |
-| R3ZARAHIMI/tg-v2ray-configs-every2h | 0 | 0.64 | 2 | 0 | 0% | 24.0 |
-| ishalumi/proxy-node-collector | 0 | 0.64 | 2 | 0 | 0% | 20.5 |
-| VOID-Anonymity/V.O.I.D-VPN_Bypass | 0 | 0.5 | 1 | 0 | 0% | 32.5 |
-| danmaifu/mianfeijiedian | 0 | 0.44 | 3 | 0 | 0% | 25.5 |
-| … | 共 45 个仓库 | | | | | |
+| rtwo2/FastNodes | 40000 | 15225.4 | 16776 | 14548 | 87% | 57.0 |
+| 10Dream/sub-mod | 40000 | 3660.42 | 7011 | 2238 | 32% | 44.3 |
+| SoliSpirit/v2ray-configs | 24842 | 3450.37 | 6552 | 1982 | 30% | 43.5 |
+| aviamastersgh/vpn-free-russia | 10739 | 1273.19 | 3820 | 231 | 6% | 43.0 |
+| sakha1370/OpenRay | 15869 | 1178.51 | 3058 | 649 | 21% | 46.7 |
+| ishalumi/proxy-node-collector | 2550 | 667.93 | 1921 | 323 | 17% | 44.3 |
+| whoahaow/rjsxrd | 1903 | 531.79 | 1021 | 394 | 39% | 40.3 |
+| rekt0ro/ProxyRift | 3210 | 477.8 | 1458 | 284 | 19% | 51.7 |
+| Areral/ScarletDevil | 2192 | 165.8 | 1072 | 12 | 1% | 49.5 |
+| MohammadBahemmat/V2ray-Collector | 1565 | 157.5 | 623 | 72 | 12% | 36.6 |
+| cbusifabcap/daily_free_vpn | 6971 | 119.91 | 853 | 12 | 1% | 37.7 |
+| 0xRadikal/Free-v2ray-Configs | 5461 | 105.21 | 880 | 1 | 0% | 50.5 |
+| shabane/kamaji | 10768 | 67.62 | 648 | 1 | 0% | 31.0 |
+| Mehinator/Derafsh | 500 | 63.61 | 480 | 4 | 1% | 34.0 |
+| igareck/vpn-configs-for-russia | 305 | 40.55 | 112 | 22 | 20% | 37.2 |
+| F0rc3Run/F0rc3Run | 869 | 27.05 | 290 | 0 | 0% | 35.0 |
+| YawStar/Proxy-Hunter | 1391 | 21.35 | 220 | 0 | 0% | 36.1 |
+| clash-s/clash-s.github.io | 313 | 21.25 | 76 | 8 | 11% | 34.4 |
+| snakem982/proxypool | 185 | 20.81 | 95 | 0 | 0% | 35.9 |
+| ProblemTheCode/SylphNet-public | 440 | 18.74 | 180 | 1 | 1% | 36.7 |
+| HamoonSoleimani/Pr0xySh4rk | 226 | 18.64 | 192 | 0 | 0% | 39.2 |
+| Maskkost93/kizyak-vpn-4.0 | 652 | 18.62 | 105 | 2 | 2% | 38.3 |
+| FLAT447/v2ray-lists | 258 | 16.25 | 122 | 0 | 0% | 47.6 |
+| JHC000abc/ProxyParseForSing-box | 64 | 13.79 | 77 | 0 | 0% | 45.7 |
+| FanchangWang/clash_config | 11 | 8.92 | 11 | 8 | 73% | 34.2 |
+| WhiteDNS/WhiteVPN | 102 | 7.14 | 72 | 0 | 0% | 32.2 |
+| ermaozi01/free_clash_vpn | 60 | 5.83 | 43 | 0 | 0% | 47.8 |
+| hello-world-1989/cn-news | 6 | 4.62 | 9 | 2 | 22% | 58.7 |
+| zhuhaiuk/free-nodes | 11 | 4.31 | 23 | 1 | 4% | 53.6 |
+| NiREvil/vless | 0 | 3.95 | 13 | 0 | 0% | 31.5 |
+| kooker/FreeSubsCheck | 0 | 1.25 | 3 | 0 | 0% | 24.0 |
+| R3ZARAHIMI/tg-v2ray-configs-every2h | 0 | 0.59 | 2 | 0 | 0% | 24.0 |
+| Pawdroid/Free-servers | 0 | 0.5 | 2 | 0 | 0% | 28.8 |
+| VOID-Anonymity/V.O.I.D-VPN_Bypass | 0 | 0.5 | 1 | 0 | 0% | 36.5 |
+| jichangx/free-nodes | 0 | 0.5 | 1 | 0 | 0% | 17.2 |
+| danmaifu/mianfeijiedian | 0 | 0.47 | 3 | 0 | 0% | 29.5 |
+| HotDrify/drifyconfigs | 1 | 0.36 | 3 | 0 | 0% | 31.8 |
+| miladtahanian/Config-Collector | 0 | 0.33 | 1 | 0 | 0% | 25.0 |
+| peasoft/NoMoreWalls | 0 | 0.25 | 1 | 0 | 0% | 28.0 |
+| Danialsamadi/v2go | 0 | 0.2 | 1 | 0 | 0% | 27.0 |
+| … | 共 41 个仓库 | | | | | |
 
 ## 2026-11-19 21:11
 
