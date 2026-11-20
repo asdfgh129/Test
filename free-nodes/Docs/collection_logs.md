@@ -2,6 +2,180 @@
 
 > 每次运行一条，含执行阶段、仓库明细与结果；按日期倒序
 
+## 2026-11-21 05:03
+
+- 执行阶段：阶段1·仓库池按评分
+- 仓库优先级（质量分从高到低）：rtwo2/FastNodes(分52.7/可用率0%/push0天前)、zhuhaiuk/free-nodes(分50.1/可用率55%/push0天前)、rekt0ro/ProxyRift(分48.1/可用率11%/push0天前)、0xRadikal/Free-v2ray-Configs(分46.5/可用率14%/push0天前)、Areral/ScarletDevil(分45.7/可用率17%/push0天前)、10Dream/sub-mod(分40.2/可用率0%/push0天前)、hello-world-1989/cn-news(分40.1/可用率53%/push0天前)、WhiteDNS/WhiteVPN(分40.0/可用率17%/push0天前)
+- 阶段1·仓库池按评分 仓库明细（108 个）：
+  - zhuhaiuk/free-nodes：15 条
+  - hello-world-1989/cn-news：6 条
+  - HotDrify/drifyconfigs：4 条
+  - TelegaVPN/free-vpn-keys：0 条（文件已下载但解析不到节点）
+  - FanchangWang/clash_config：11 条
+  - 2dust/v2rayN：0 条（文件已下载但解析不到节点）
+  - DiningFactory/panda-vpn-pro：0 条（文件已下载但解析不到节点）
+  - free-nodes/v2rayfree：README 未声明订阅链接，跳过（readme-only）
+  - ermaozi/get_subscribe：0 条（文件已下载但解析不到节点）
+  - jdnei/JiChangTuiJian：README 未声明订阅链接，跳过（readme-only）
+  - crossxx-labs/free-proxy：0 条（文件已下载但解析不到节点）
+  - LancelotRar/best-cf-ips：README 的链接日期不是当天，按策略跳过
+  - abshare/abshare.github.io：README 未声明订阅链接，跳过（readme-only）
+  - SubBoost/subboost：README 未声明订阅链接，跳过（readme-only）
+  - bq2015/FreeProxies：0 条（文件已下载但解析不到节点）
+  - deezertidal/freevpn：0 条（文件已下载但解析不到节点）
+  - YuanDevTeam/OneXray：README 未声明订阅链接，跳过（readme-only）
+  - OpenNetCN/clash：0 条（文件已下载但解析不到节点）
+  - CCSH/IPTV：0 条（文件已下载但解析不到节点）
+  - clashv2ray-hub/clashv2ray-hub.github.io：0 条（文件已下载但解析不到节点）
+  - MhdiTaheri/V2rayCollector：0 条（文件已下载但解析不到节点）
+  - Surfboardv2ray/TGParse：README 未声明订阅链接，跳过（readme-only）
+  - Lemonochka/keqdroid：README 未声明订阅链接，跳过（readme-only）
+  - V2RayRoot/V2RayConfig：README 未声明订阅链接，跳过（readme-only）
+  - clashnodev2ray/clashnodev2ray.github.io：0 条（文件已下载但解析不到节点）
+  - flclashnode/flclashnode.github.io：0 条（文件已下载但解析不到节点）
+  - junjun266/FreeProxyGo：README 未声明订阅链接，跳过（readme-only）
+  - LancelotRar/free-subs：README 未声明订阅链接，跳过（readme-only）
+  - deezertidal/fee-based：README 未声明订阅链接，跳过（readme-only）
+  - Romaxa55/MegaV_Public：README 未声明订阅链接，跳过（readme-only）
+  - 4n0nymou3/proxy-core-builder：README 未声明订阅链接，跳过（readme-only）
+  - Shayanthn/V2ray-Tester-Pro：README 未声明订阅链接，跳过（readme-only）
+  - Mr-Meshky/vify：README 未声明订阅链接，跳过（readme-only）
+  - aimalygin/xray-rust：README 未声明订阅链接，跳过（readme-only）
+  - CMMUU/serylane：README 未声明订阅链接，跳过（readme-only）
+  - kasesm/Free-Config：6728 条
+  - kort0881/vpn-checker-backend：README 未声明订阅链接，跳过（readme-only）
+  - DreamOfXM/diskwise：README 未声明订阅链接，跳过（readme-only）
+  - jctz123/jichangtizi-youhuima：README 未声明订阅链接，跳过（readme-only）
+  - Arianlavi/RebeldevConfig：README 未声明订阅链接，跳过（readme-only）
+  - freeclashmeta/freeclashmeta.github.io：0 条（文件已下载但解析不到节点）
+  - jiusanzhou/tvbox：0 条（1/3 个链接下载失败，其余已下载但解析不到节点）
+  - XVSVTsama/XVSVT-Clash-Config：README 未声明订阅链接，跳过（readme-only）
+  - hysteria2/hysteria2.github.io：0 条（文件已下载但解析不到节点）
+  - hm4reggggg/jichang：README 未声明订阅链接，跳过（readme-only）
+  - T3stAcc/V2Ray：README 未声明订阅链接，跳过（readme-only）
+  - agentram/ovpn：README 未声明订阅链接，跳过（readme-only）
+  - hysteria2node/hysteria2node.github.io：0 条（文件已下载但解析不到节点）
+  - NezZeen/CoreShift-Release：README 未声明订阅链接，跳过（readme-only）
+  - bgpeer/nodekit：README 未声明订阅链接，跳过（readme-only）
+  - currycan/sb-xray：README 未声明订阅链接，跳过（readme-only）
+  - freesurfboard/freesurfboard.github.io：0 条（文件已下载但解析不到节点）
+  - LalatinaHub/LatinaSub：README 未声明订阅链接，跳过（readme-only）
+  - MohammadBahemmat/npvt-collector：0 条（文件已下载但解析不到节点）
+  - clashstash/clashstash.github.io：0 条（文件已下载但解析不到节点）
+  - freessrnode/freessrnode.github.io：0 条（文件已下载但解析不到节点）
+  - freevpn2025/freevpn2025.github.io：0 条（文件已下载但解析不到节点）
+  - huawuhen/vless-vision-reality-ash：README 未声明订阅链接，跳过（readme-only）
+  - Nelxi/ghostly-vpn：README 未声明订阅链接，跳过（readme-only）
+  - freeclashx/freeclashx.github.io：0 条（文件已下载但解析不到节点）
+  - imrui/xray-pilot：README 未声明订阅链接，跳过（readme-only）
+  - Amesu-afk/TarnVPN：README 未声明订阅链接，跳过（readme-only）
+  - eiler2005/ghostroute：README 未声明订阅链接，跳过（readme-only）
+  - BROadmin/BROray：README 未声明订阅链接，跳过（readme-only）
+  - chaishpish/free_server_v2ray：README 未声明订阅链接，跳过（readme-only）
+  - clashbest/clashbest.github.io：0 条（文件已下载但解析不到节点）
+  - clashv2ray-hub/clashv2rayshare：README 未声明订阅链接，跳过（readme-only）
+  - cybersecplayground/V2Hive：README 未声明订阅链接，跳过（readme-only）
+  - NeuralNode-Dev/vpn：README 未声明订阅链接，跳过（readme-only）
+  - TheCrowCreature/v2rayExtractor：README 未声明订阅链接，跳过（readme-only）
+  - itzsepanta/RyxoN：README 未声明订阅链接，跳过（readme-only）
+  - MFSGA/Chimera：README 未声明订阅链接，跳过（readme-only）
+  - afengleafs/ferridex：README 未声明订阅链接，跳过（readme-only）
+  - fiamitaa/jichangtuijian：README 未声明订阅链接，跳过（readme-only）
+  - HamoonSoleimani/Pr0xySh4rk：226 条
+  - JHC000abc/ProxyParseForSing-box：59 条
+  - VoroninaYanina/free-nodes：264 条
+  - hysteria350/free-jichang：264 条
+  - ermaozi01/free_clash_vpn：60 条
+  - Areral/ScarletDevil：2138 条
+  - WhiteDNS/WhiteVPN：45 条
+  - crashgfw/free-airport-nodes：132 条
+  - snakem982/proxypool：169 条
+  - FLAT447/v2ray-lists：365 条
+  - 0xRadikal/Free-v2ray-Configs：4890 条
+  - YawStar/Proxy-Hunter：1425 条
+  - rekt0ro/ProxyRift：3454 条
+  - free-proxy-nodes/free-nodes：264 条
+  - F0rc3Run/F0rc3Run：885 条
+  - igareck/vpn-configs-for-russia：218 条
+  - Mehinator/Derafsh：500 条
+  - SoliSpirit/v2ray-configs：24947 条
+  - clash-s/clash-s.github.io：0 条（文件已下载但解析不到节点）
+  - rtwo2/FastNodes：40000 条
+  - R3ZARAHIMI/tg-v2ray-configs-every2h：2108 条
+  - 10Dream/sub-mod：40000 条
+  - sakha1370/OpenRay：15927 条
+  - NiREvil/vless：质量过低跳过
+  - aviamastersgh/vpn-free-russia：10360 条
+  - cbusifabcap/daily_free_vpn：6608 条
+  - AmazingCoderA/PypsCFG：质量过低跳过
+  - cheshi888/freesub-v2：质量过低跳过
+  - bzfq21/proxy-singbox：质量过低跳过
+  - fmw86/free-proxy-pool：质量过低跳过
+  - VOID-Anonymity/V.O.I.D-VPN_Bypass：质量过低跳过
+  - Maskkost93/kizyak-vpn-4.0：792 条
+  - ProblemTheCode/SylphNet-public：448 条
+  - ishalumi/proxy-node-collector：质量过低跳过
+- README 订阅链接（56 个仓库声明了链接）：
+  - rtwo2/FastNodes：声明 6 个 → 提取 40000 条
+  - 10Dream/sub-mod：声明 6 个 → 提取 40000 条
+  - SoliSpirit/v2ray-configs：声明 5 个 → 提取 24947 条
+  - sakha1370/OpenRay：声明 6 个 → 提取 15927 条
+  - aviamastersgh/vpn-free-russia：声明 4 个 → 提取 10360 条
+  - kasesm/Free-Config：声明 6 个 → 提取 6728 条
+  - cbusifabcap/daily_free_vpn：声明 6 个 → 提取 6608 条
+  - 0xRadikal/Free-v2ray-Configs：声明 6 个 → 提取 4890 条
+  - rekt0ro/ProxyRift：声明 6 个 → 提取 3454 条
+  - Areral/ScarletDevil：声明 3 个 → 提取 2138 条
+  - R3ZARAHIMI/tg-v2ray-configs-every2h：声明 6 个 → 提取 2108 条
+  - YawStar/Proxy-Hunter：声明 6 个 → 提取 1425 条
+  - F0rc3Run/F0rc3Run：声明 6 个 → 提取 885 条
+  - Maskkost93/kizyak-vpn-4.0：声明 6 个 → 提取 792 条
+  - Mehinator/Derafsh：声明 1 个 → 提取 500 条
+  - ProblemTheCode/SylphNet-public：声明 2 个 → 提取 448 条
+  - FLAT447/v2ray-lists：声明 6 个 → 提取 365 条
+  - VoroninaYanina/free-nodes：声明 6 个 → 提取 264 条
+  - hysteria350/free-jichang：声明 6 个 → 提取 264 条
+  - free-proxy-nodes/free-nodes：声明 6 个 → 提取 264 条
+  - HamoonSoleimani/Pr0xySh4rk：声明 1 个 → 提取 226 条
+  - igareck/vpn-configs-for-russia：声明 6 个 → 提取 218 条
+  - snakem982/proxypool：声明 3 个 → 提取 169 条
+  - crashgfw/free-airport-nodes：声明 3 个 → 提取 132 条
+  - ermaozi01/free_clash_vpn：声明 2 个 → 提取 60 条
+  - JHC000abc/ProxyParseForSing-box：声明 1 个 → 提取 59 条
+  - WhiteDNS/WhiteVPN：声明 1 个 → 提取 45 条
+  - zhuhaiuk/free-nodes：声明 3 个 → 提取 15 条
+  - FanchangWang/clash_config：声明 1 个 → 提取 11 条
+  - hello-world-1989/cn-news：声明 1 个 → 提取 6 条
+  - HotDrify/drifyconfigs：声明 2 个 → 提取 4 条
+  - TelegaVPN/free-vpn-keys：声明 6 个 → 提取 0 条
+  - 2dust/v2rayN：声明 1 个 → 提取 0 条
+  - DiningFactory/panda-vpn-pro：声明 1 个 → 提取 0 条
+  - ermaozi/get_subscribe：声明 1 个 → 提取 0 条
+  - crossxx-labs/free-proxy：声明 1 个 → 提取 0 条
+  - bq2015/FreeProxies：声明 2 个 → 提取 0 条
+  - deezertidal/freevpn：声明 1 个 → 提取 0 条
+  - OpenNetCN/clash：声明 6 个 → 提取 0 条
+  - CCSH/IPTV：声明 3 个 → 提取 0 条
+  - clashv2ray-hub/clashv2ray-hub.github.io：声明 1 个 → 提取 0 条
+  - MhdiTaheri/V2rayCollector：声明 1 个 → 提取 0 条
+  - clashnodev2ray/clashnodev2ray.github.io：声明 1 个 → 提取 0 条
+  - flclashnode/flclashnode.github.io：声明 2 个 → 提取 0 条
+  - freeclashmeta/freeclashmeta.github.io：声明 2 个 → 提取 0 条
+  - jiusanzhou/tvbox：声明 3 个 → 提取 0 条
+  - hysteria2/hysteria2.github.io：声明 2 个 → 提取 0 条
+  - hysteria2node/hysteria2node.github.io：声明 2 个 → 提取 0 条
+  - freesurfboard/freesurfboard.github.io：声明 2 个 → 提取 0 条
+  - MohammadBahemmat/npvt-collector：声明 1 个 → 提取 0 条
+  - clashstash/clashstash.github.io：声明 2 个 → 提取 0 条
+  - freessrnode/freessrnode.github.io：声明 2 个 → 提取 0 条
+  - freevpn2025/freevpn2025.github.io：声明 2 个 → 提取 0 条
+  - freeclashx/freeclashx.github.io：声明 2 个 → 提取 0 条
+  - clashbest/clashbest.github.io：声明 2 个 → 提取 0 条
+  - clash-s/clash-s.github.io：声明 2 个 → 提取 0 条
+- 结果：原始 163312 条 → 两级去重后 28056 条（剔除 135256）
+- 协议分布：vless 16996 / vmess 4010 / ss 3601 / trojan 2497 / hysteria2 778 / tuic 73 / ssr 52 / hysteria 49
+- 输出目录：`/home/runner/work/Test/Test/free-nodes`（nodes/ 下 v2ray_sub.txt / xray_sub.txt / clash_sub.yaml / singbox_sub.json / nodes_uris.txt；Docs/ 下 report.md）
+
 ## 2026-11-20 21:19
 
 - 执行阶段：阶段1·仓库池按评分

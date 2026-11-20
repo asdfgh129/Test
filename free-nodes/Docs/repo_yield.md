@@ -2,6 +2,56 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节。归属按 1/N 分摊，避免转载型聚合站占据产量榜。
 
+## 2026-11-21 05:03
+
+- 原始提取：163312 条 → 去重后 28056 条（归属按「同一节点 N 个仓库各记 1/N」分摊）
+- 独有率 = 该仓库给出的节点里「只有它给」的比例；高独有率的小仓库比全量转载的大仓库更有价值
+- 仓库池：active 400 / 出池 11，今日 push 247 个，已实测 92 个
+
+| 仓库 | 原始 | 去重归属 | 覆盖节点 | 独有节点 | 独有率 | 当前分数 |
+|---|---|---|---|---|---|---|
+| rtwo2/FastNodes | 40000 | 15390.2 | 16888 | 14730 | 87% | 52.7 |
+| 10Dream/sub-mod | 40000 | 4464.74 | 7933 | 2952 | 37% | 41.0 |
+| SoliSpirit/v2ray-configs | 24947 | 3513.33 | 6540 | 2111 | 32% | 40.1 |
+| aviamastersgh/vpn-free-russia | 10360 | 1192.1 | 3785 | 152 | 4% | 39.1 |
+| sakha1370/OpenRay | 15927 | 1184.94 | 3065 | 613 | 20% | 38.3 |
+| kasesm/Free-Config | 6728 | 686.08 | 1643 | 400 | 24% | 40.3 |
+| rekt0ro/ProxyRift | 3454 | 552.93 | 1544 | 326 | 21% | 48.8 |
+| R3ZARAHIMI/tg-v2ray-configs-every2h | 2108 | 285.55 | 917 | 113 | 12% | 32.2 |
+| Areral/ScarletDevil | 2138 | 180.17 | 1049 | 15 | 1% | 46.2 |
+| cbusifabcap/daily_free_vpn | 6608 | 126.84 | 816 | 10 | 1% | 34.5 |
+| 0xRadikal/Free-v2ray-Configs | 4890 | 108.53 | 827 | 1 | 0% | 46.9 |
+| Mehinator/Derafsh | 500 | 66.42 | 482 | 7 | 1% | 30.0 |
+| F0rc3Run/F0rc3Run | 885 | 30.98 | 296 | 0 | 0% | 32.4 |
+| igareck/vpn-configs-for-russia | 218 | 27.83 | 95 | 12 | 13% | 35.3 |
+| YawStar/Proxy-Hunter | 1425 | 24.47 | 224 | 0 | 0% | 32.2 |
+| Maskkost93/kizyak-vpn-4.0 | 792 | 23.23 | 113 | 3 | 3% | 34.4 |
+| FLAT447/v2ray-lists | 365 | 21.73 | 170 | 1 | 1% | 31.5 |
+| HamoonSoleimani/Pr0xySh4rk | 226 | 20.26 | 190 | 0 | 0% | 35.3 |
+| ProblemTheCode/SylphNet-public | 448 | 20.16 | 188 | 0 | 0% | 32.7 |
+| snakem982/proxypool | 169 | 19.4 | 88 | 0 | 0% | 31.8 |
+| whoahaow/rjsxrd | 0 | 17.72 | 58 | 0 | 0% | 10.8 |
+| JHC000abc/ProxyParseForSing-box | 59 | 15.8 | 79 | 0 | 0% | 39.5 |
+| VoroninaYanina/free-nodes | 264 | 11.0 | 44 | 0 | 0% | 38.8 |
+| hysteria350/free-jichang | 264 | 11.0 | 44 | 0 | 0% | 38.8 |
+| crashgfw/free-airport-nodes | 132 | 11.0 | 44 | 0 | 0% | 29.5 |
+| free-proxy-nodes/free-nodes | 264 | 11.0 | 44 | 0 | 0% | 37.2 |
+| FanchangWang/clash_config | 11 | 9.03 | 11 | 8 | 73% | 31.1 |
+| ermaozi01/free_clash_vpn | 60 | 6.38 | 43 | 0 | 0% | 36.4 |
+| hello-world-1989/cn-news | 6 | 5.5 | 7 | 4 | 57% | 40.5 |
+| WhiteDNS/WhiteVPN | 45 | 4.2 | 38 | 0 | 0% | 40.8 |
+| zhuhaiuk/free-nodes | 15 | 3.14 | 22 | 0 | 0% | 50.5 |
+| NiREvil/vless | 0 | 3.02 | 11 | 0 | 0% | 26.2 |
+| MohammadBahemmat/V2ray-Collector | 0 | 1.25 | 4 | 0 | 0% | 9.7 |
+| kooker/FreeSubsCheck | 0 | 1.25 | 3 | 0 | 0% | 19.6 |
+| shabane/kamaji | 0 | 1.09 | 6 | 0 | 0% | 8.0 |
+| HotDrify/drifyconfigs | 4 | 0.9 | 6 | 0 | 0% | 28.1 |
+| Pawdroid/Free-servers | 0 | 0.53 | 2 | 0 | 0% | 24.7 |
+| VOID-Anonymity/V.O.I.D-VPN_Bypass | 0 | 0.5 | 1 | 0 | 0% | 32.0 |
+| danmaifu/mianfeijiedian | 0 | 0.34 | 2 | 0 | 0% | 24.4 |
+| miladtahanian/Config-Collector | 0 | 0.33 | 1 | 0 | 0% | 21.0 |
+| … | 共 46 个仓库 | | | | | |
+
 ## 2026-11-20 21:18
 
 - 原始提取：171464 条 → 去重后 27402 条（归属按「同一节点 N 个仓库各记 1/N」分摊）
