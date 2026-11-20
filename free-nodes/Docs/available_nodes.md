@@ -2,6 +2,93 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
+## 2026-11-20 22:34
+
+- 可用节点 **38** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）
+- 延迟测试目标：primary、github、x、cloudflare、youtube（主判据 `primary`）
+- 带宽：2MB 串行下载，每内核最多 20 个
+
+| 节点 | 内核 | 协议 | 主目标 | github | x | cloudflare | youtube | 带宽 |
+|---|---|---|---|---|---|---|---|---|
+| `168.138.177.98:56927` | clash/xray | ss | 358ms | 317ms | 414ms | 267ms | 248ms | - |
+| `45.83.85.31:1080` | v2ray/xray | ss | 778ms | 788ms | 948ms | 1369ms | 779ms | 5.65Mbps |
+| `18.156.128.31:443` | clash/singbox/xray | ss | 801ms | 714ms | 794ms | 692ms | 850ms | 5.6Mbps |
+| `146.190.21.145:443` | singbox | vless | 804ms | ✗ | ✗ | ✗ | ✗ | - |
+| `31.59.179.215:443` | xray | vless | 1119ms | 1078ms | ✗ | 1189ms | ✗ | 5.68Mbps |
+| `178.17.58.55:443` | v2ray | hysteria2 | 1153ms | ✗ | ✗ | ✗ | ✗ | - |
+| `104.171.135.229:443` | clash | vless | 1259ms | 1399ms | 1555ms | 1468ms | ✗ | 1.68Mbps |
+| `tg.skvoz-dpi.com:443` | xray | vless | 1286ms | ✗ | ✗ | ✗ | ✗ | - |
+| `176.98.176.60:443` | clash | vless | 1451ms | 2060ms | 1619ms | 1878ms | 2792ms | 1.51Mbps |
+| `89.169.2.136:443` | clash | vless | 1763ms | 1655ms | 1721ms | 1632ms | 1615ms | 1.38Mbps |
+| `31.59.116.20:443` | clash/xray | hysteria2 | 1902ms | 1644ms | 1212ms | 732ms | 767ms | 0.97Mbps |
+| `202.50.253.27:19999` | xray | ss | 2011ms | ✗ | ✗ | ✗ | ✗ | 0.2Mbps |
+| `192.220.47.85:44441` | clash | vmess | 2308ms | 927ms | 917ms | 701ms | 1737ms | - |
+| `202.50.253.81:19999` | xray | ss | 2419ms | 2373ms | 1601ms | 3682ms | ✗ | 0.03Mbps |
+| `177.1.193.28:443` | xray | vless | 2445ms | ✗ | 3013ms | 2243ms | ✗ | 0.2Mbps |
+| `104.18.139.67:443` | clash | vless | 2490ms | 2750ms | 3514ms | ✗ | 2775ms | - |
+| `139.180.221.53:443` | singbox | vless | 2517ms | ✗ | ✗ | 659ms | ✗ | 3.75Mbps |
+| `202.50.253.45:19999` | xray | ss | 2588ms | ✗ | ✗ | 2346ms | 2800ms | 0.09Mbps |
+| `47.254.128.109:443` | singbox | ss | 2597ms | ✗ | 3100ms | ✗ | ✗ | - |
+| `151.241.128.46:443` | clash/singbox | vless | 2658ms | ✗ | ✗ | 1988ms | ✗ | 0.94Mbps |
+| `172.236.241.130:443` | singbox | vless | 2680ms | ✗ | ✗ | ✗ | ✗ | - |
+| `168.113.254.183:443` | clash | hysteria2 | 2750ms | 1616ms | 1937ms | 1357ms | 881ms | - |
+| `89.117.172.45:443` | clash/singbox/xray | hysteria2 | 2758ms | 1995ms | 1265ms | 762ms | 1494ms | 3.51Mbps |
+| `31.58.117.133:443` | clash/singbox/xray | hysteria2 | 2795ms | 891ms | 917ms | 1417ms | 1084ms | 2.15Mbps |
+| `pl9.h1cloud.net:25700` | xray | vless | 2896ms | ✗ | 2005ms | 2904ms | 2186ms | 0.42Mbps |
+| `139.162.91.247:443` | singbox | vless | 2899ms | 3096ms | 3003ms | 2930ms | 2901ms | 4.17Mbps |
+| `103.29.68.232:443` | singbox | vless | 2974ms | 3003ms | 2996ms | 2888ms | 2921ms | 4.12Mbps |
+| `136.148.83.69:443` | clash/singbox | hysteria2 | 2984ms | 1110ms | 2414ms | 1332ms | 3064ms | 1.75Mbps |
+| `139.162.91.224:443` | singbox | vless | 2994ms | 2813ms | 2979ms | 2914ms | 2957ms | 4.24Mbps |
+| `172.105.203.15:443` | singbox | vless | 3001ms | 2997ms | 3037ms | 2930ms | 2888ms | 4.08Mbps |
+| `31.59.169.225:443` | clash/singbox/v2ray/xray | hysteria2 | 3050ms | 1344ms | 1406ms | 1126ms | 1065ms | 4.41Mbps |
+| `172.238.18.103:443` | singbox | vless | 3085ms | 3262ms | 3036ms | ✗ | 3025ms | 4.11Mbps |
+| `172.66.0.1:8443` | singbox | vmess | 3219ms | ✗ | ✗ | ✗ | ✗ | - |
+| `yngrfnubcecn.hostc.app:443` | v2ray | vless | 3250ms | 1785ms | ✗ | ✗ | ✗ | 1.55Mbps |
+| `139.162.91.239:443` | singbox | vless | 3341ms | 2978ms | 3008ms | 2941ms | 2997ms | 4.13Mbps |
+| `13.143.187.220:443` | clash | vless | 3985ms | 3421ms | ✗ | ✗ | ✗ | 0.23Mbps |
+| `168.113.254.247:443` | clash/singbox/v2ray/xray | hysteria2 | 4015ms | 1487ms | 2411ms | 2855ms | 3197ms | 4.1Mbps |
+| `202.50.253.54:19999` | xray | ss | 4353ms | 1686ms | 3012ms | ✗ | ✗ | - |
+
+> 来源仓库（可多个，去重时按 1/N 分摊产量）：
+> - `168.138.177.98:56927`：rekt0ro/ProxyRift
+> - `45.83.85.31:1080`：rekt0ro/ProxyRift
+> - `18.156.128.31:443`：rekt0ro/ProxyRift
+> - `146.190.21.145:443`：WhiteDNS/WhiteVPN
+> - `31.59.179.215:443`：rekt0ro/ProxyRift
+> - `178.17.58.55:443`：rtwo2/FastNodes
+> - `104.171.135.229:443`：JHC000abc/ProxyParseForSing-box
+> - `tg.skvoz-dpi.com:443`：0xRadikal/Free-v2ray-Configs
+> - `176.98.176.60:443`：zhuhaiuk/free-nodes
+> - `89.169.2.136:443`：0xRadikal/Free-v2ray-Configs
+> - `31.59.116.20:443`：igareck/vpn-configs-for-russia
+> - `202.50.253.27:19999`：clash-s/clash-s.github.io
+> - `192.220.47.85:44441`：JHC000abc/ProxyParseForSing-box
+> - `202.50.253.81:19999`：JHC000abc/ProxyParseForSing-box
+> - `177.1.193.28:443`：rekt0ro/ProxyRift
+> - `104.18.139.67:443`：igareck/vpn-configs-for-russia
+> - `139.180.221.53:443`：ermaozi01/free_clash_vpn
+> - `202.50.253.45:19999`：JHC000abc/ProxyParseForSing-box
+> - `47.254.128.109:443`：rekt0ro/ProxyRift
+> - `151.241.128.46:443`：rekt0ro/ProxyRift
+> - `172.236.241.130:443`：ermaozi01/free_clash_vpn
+> - `168.113.254.183:443`：Areral/ScarletDevil
+> - `89.117.172.45:443`：rekt0ro/ProxyRift
+> - `31.58.117.133:443`：Areral/ScarletDevil
+> - `pl9.h1cloud.net:25700`：rekt0ro/ProxyRift
+> - `139.162.91.247:443`：Areral/ScarletDevil
+> - `103.29.68.232:443`：Areral/ScarletDevil
+> - `136.148.83.69:443`：Areral/ScarletDevil
+> - `139.162.91.224:443`：Areral/ScarletDevil
+> - `172.105.203.15:443`：ermaozi01/free_clash_vpn
+> - `31.59.169.225:443`：JHC000abc/ProxyParseForSing-box
+> - `172.238.18.103:443`：Areral/ScarletDevil
+> - `172.66.0.1:8443`：Areral/ScarletDevil
+> - `yngrfnubcecn.hostc.app:443`：rekt0ro/ProxyRift
+> - `139.162.91.239:443`：ermaozi01/free_clash_vpn
+> - `13.143.187.220:443`：JHC000abc/ProxyParseForSing-box
+> - `168.113.254.247:443`：JHC000abc/ProxyParseForSing-box
+> - `202.50.253.54:19999`：JHC000abc/ProxyParseForSing-box
+
 ## 2026-11-19 22:38
 
 - 可用节点 **54** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）

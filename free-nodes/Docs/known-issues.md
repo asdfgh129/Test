@@ -2109,7 +2109,46 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 - **教训**：**「结果不理想就提高上限」要分清上限和下限**。这种弹性设计的失效方向不是「测得不够多」，
   而是「下限把反推压平」；抬错那一边等于白改。判据要从产物反推（cap 贴着谁），不要凭印象。
 
+## 72. v2ray 可用率 0.3% 不是 v2ray 故障：产量全在头部，尾部 1481 条 0 产出（2026-11-20 第一窗口）
+
+- **现象**：11-20 首窗 v2ray 只有 **5/1781 = 0.3%**，同日 xray 1.6% / clash 1.3% / singbox 1.8%，
+  自检连报四条「可用率异常低」。可疑点是**取样深度**：v2ray 的 cap 1770 占其候选池 5505 的 **32%**，
+  另三核只有 14~19%（1002/5158、1274/7293、1000/7000）。
+- **复现**（隔离目录，`--no-pool --no-bw --no-escalate`，不碰今晚产物）：把 `nodes/` 复制到
+  `~/.workbuddy/data/free-nodes-tools/debug/diag_v2ray`，只测 v2ray **排序头部 300 条**
+  → **5/300 = 1.67%**，与 11-19 的 1.7% 完全一致；而全量 1781 条命中的那 5 个可用节点
+  **全部落在这 300 条里** ⇒ 后 1481 条产出为 **0**。
+- **根因**：不是 v2ray 的转换器或内核问题（头部率与前晚持平），而是**弹性反推按全局率线性外推**：
+  按 1.7% 反推「目标 30 个需 1770 条」，于是把池子三分之一都测了，而可用节点在头部就已被覆盖，
+  多出的 1481 条是**纯空转**（约 12 分钟，占本窗 27.6 分钟的 43%）。排序把高价值节点排前，
+  尾部天生是死节点——这与 `is_known_bad_repo`、CF 前置排末尾是同一个道理。
+- **处置**：本次**不改参数、不改代码**（quota 第二节要求同向连续 3 晚才动；且今晚是
+  `--min-test 1000` 的观察首晚，混入第二个变量会让 3 晚对比失效）。已记 `Docs/review_logs.md`。
+  待 3 晚复现后才考虑两条改法之一：① `test_nodes.py` 加「连续 N 条 0 产出即提前收尾」的自适应停止
+  （省墙钟、不影响产出）；② 弹性反推改用**最近窗口的边际产出率**而不是全程累计率。
+- **教训**：单核率骤降先看两件事——**取样深度占候选池的比例**，以及**头部单独复测**；
+  别一上来怀疑内核、转换器或探测地址。`health_check` 的「可用率异常低」只反映比例、不反映分布。
+  也**别为了让率好看去缩 cap**：头部之外偶尔仍有可用节点，缩 cap 会漏测。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
+
+### 2026-11-20 自检发现
+
+**结论：无严重问题，6 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 6 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 8680 条, 下载失败)、VoroninaYanina/free-nodes(历史 4876 条, 下载失败)、hysteria350/free-jichang(历史 4612 条, 下载失败)、free-proxy-nodes/free-nodes(历史 2376 条, 下载失败)、TG-NAV/clashnode(历史 313 条, 部分链接下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 0.3%（5/1781） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | xray 可用率异常低 1.6%（16/1003） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | clash 可用率异常低 1.3%（16/1279） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | singbox 可用率异常低 1.8%（18/1002） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+### 2026-11-20 内核检查发现
+
+- xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
+- clash 有新版本 1.19.34（本地 1.19.33），可用 --update 自动升级
 
 ### 2026-11-19 自检发现
 
@@ -2329,22 +2368,5 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 | warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ### 2026-11-04 内核检查发现
-
-- xray 有新版本 26.10.31（本地 26.10.21），可用 --update 自动升级
-
-### 2026-11-03 自检发现
-
-**结论：无严重问题，6 个告警可优化**
-
-| 级别 | 领域 | 问题 | 建议动作 |
-|---|---|---|---|
-| warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 1950 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
-| warn | 验证 | v2ray 可用率异常低 1.2%（30/2507） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | xray 可用率异常低 2.9%（74/2509） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | clash 可用率异常低 2.0%（51/2507） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | singbox 可用率异常低 1.8%（46/2506） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
-
-### 2026-11-03 内核检查发现
 
 - xray 有新版本 26.10.31（本地 26.10.21），可用 --update 自动升级
