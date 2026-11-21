@@ -404,3 +404,28 @@
 - **给后续窗口的要点**：`summary.ok` 是「内核维度计数」（可重复），`available_nodes.json.total` 是「去重节点数」，
   两个数不等是正常；v2ray 个位数可用（5~7）已在 11-13 出现过，属源池波动，别据此调参
 
+## 2026-11-21（第二十四次记录：GATE: done，未跑验证）
+
+- 开工前：`tasklist` 查 python.exe 与四内核均「没有找到进程」→ 无并发窗口、无残留；未跑 taskkill（无活可干）
+- 闸门退出码 0：采集日 **2026-11-21（生成于 23:10:15）**，四核均「已测满单轮上限」，
+  v2ray **2511/2500**、xray 1882/1881、clash 2402/2398、singbox 1671/1670，`elapsed_min=56.0`
+  - cap 再次整体上抬（11-20 是 1770/1002/1274/1000，今晚回到 2500/1881/2398/1670）——弹性反推随前一晚
+    可用率变化而放大，属自适应，不是口径放宽
+- 本日可用（summary.ok）：v2ray 29 / xray 56 / clash **12** / singbox 36 = 合计 133；
+  `nodes/available_nodes.json` 去重 **90** 条（一节点可服务多内核）。四核 `partial=false`、`exhausted=false`
+  - clash 12 仅略高于 `min_available` 10，但已测满 cap 2398 → 属源池质量，非漏测；按规则 GATE: done 不补测
+  - v2ray 失败分布仍以 timeout 为主（1852/2511）+ tls 595，与 11-20 同型
+- **开关再次转为 on（本次是真触发）**：`Docs/window_switch.json` reason「今晚验证耗时 **56.0** 分钟 > 50 分钟上限，
+  窗口吃紧；第 2/3 窗口保持/恢复启用」，`streak_done=7`。虽然 11-15 的 53.6 分钟今晚仍是 `history[-7:]`
+  （11-15~11-21）里的一员，但**本次不需要靠它**——首窗口自己就超了 50 分钟
+  - 推演：11-22 的窗口变成 11-16~11-22，11-15 滚出但 **11-21 的 56.0 进来**，故仍不达标；
+    最早转 off 要等 **11-28**（11-21 滚出「最近 7 晚」）。此结论覆盖 11-19/11-20 记的「最早 11-22」
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github`
+  仅一项 `M free-nodes/.workbuddy/memory/automations/a3d7bb22…/memory.md`（主窗口自己的 memory）；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD `156f9bd`，今日第三次提交：CI 采集 ×2 + 本地发布）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写完本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：① 判开关转 off 的日期要「逐日重算 history[-7:]」，一旦当晚又超 50 分钟就会把
+  最晚那晚刷新成新日期（本次把 11-22 推到 11-28）；② 首窗口 `elapsed_min` 已连续多晚 27~33，今晚突然
+  56.0，与 cap 从 800~1770 档抬回 2500 档同步 —— 上限抬高 → 测试量翻倍 → 耗时翻倍，两者是同一条因果链，
+  属「按现状运行」的正常代价，别因此回调 cap
+
