@@ -5,212 +5,162 @@
  "log-level": "info",
  "proxies": [
   {
-   "name": "ProxyRift 269",
+   "name": "ProxyRift 1898",
+   "type": "trojan",
+   "server": "ikr200.zxom.eu.org",
+   "port": 20045,
+   "password": "463f7453753f4d47",
+   "udp": true,
+   "tls": true
+  },
+  {
+   "name": "@npv_vpn11",
    "type": "ss",
-   "server": "18.156.128.31",
-   "port": 443,
-   "cipher": "2022-blake3-chacha20-poly1305",
-   "password": "8yO3ANWefuuGs1lRKXECQA1FEhxlWFV2ppQMcBaZo5Y=",
+   "server": "202.50.253.27",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
    "udp": true
   },
   {
-   "name": "🇳🇱 荷兰 | NLD",
-   "type": "vless",
-   "server": "104.171.135.229",
-   "port": 443,
-   "uuid": "Fluffy_VPN-Oth8rOq3",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "absolute-disaster.org",
-   "client-fingerprint": "chrome",
-   "reality-opts": {
-    "public-key": "mpo4BIcoWiMXAQGt5a8IJ4MFkPJQyLC50dO_bXzC7z0"
-   }
+   "name": "109.104.153.43:33336",
+   "type": "ssr",
+   "server": "109.104.153.43",
+   "port": 33336,
+   "cipher": "chacha20-ietf",
+   "password": "dongtaiwang.com",
+   "obfs": "tls1.2_ticket_auth",
+   "protocol": "auth_chain_a",
+   "udp": true
   },
   {
-   "name": "🇭🇰 香港 | HKG",
+   "name": "🇷🇺",
    "type": "hysteria2",
-   "server": "31.59.169.225",
+   "server": "185.175.45.4",
    "port": 443,
-   "password": "ca60984f-b1f0-4073-bd33-4c75168f749a",
+   "password": "457805fb-7409-0001-88f4-419d10f2444f",
    "udp": true,
-   "sni": "ge-beer-1.fantoff.online",
-   "skip-cert-verify": true
-  },
-  {
-   "name": "DE - zhuhai.uk 05",
-   "type": "vless",
-   "server": "176.98.176.60",
-   "port": 443,
-   "uuid": "7ad63b26-bf70-4872-8fab-ebaf73a1e19d",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "mosaic.topp-con.xyz",
-   "alpn": [
-    "h2",
-    "http",
-    "1.1"
-   ],
-   "client-fingerprint": "firefox"
-  },
-  {
-   "name": "RU",
-   "type": "vless",
-   "server": "89.169.2.136",
-   "port": 443,
-   "uuid": "1547ed3d-3bb7-4153-afdc-8eb3e9373c84",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "us2.nztvpn.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "Yn9rswmNTIdVx8jKgZkvQcqw61BRu_h_ZOl2blShDT4",
-    "short-id": "0da7e14db353e7d0"
-   }
-  },
-  {
-   "name": "🇵🇱 PL | kraw-pl-5.fantoff.online | HYSTERIA2 [6028] | @ScDevNetwork",
-   "type": "hysteria2",
-   "server": "31.58.117.133",
-   "port": 443,
-   "password": "ca60984f-b1f0-4073-bd33-4c75168f749a",
-   "udp": true,
-   "sni": "kraw-pl-5.fantoff.online",
-   "skip-cert-verify": true
-  },
-  {
-   "name": "ProxyRift 956",
-   "type": "hysteria2",
-   "server": "89.117.172.45",
-   "port": 443,
-   "password": "HPzKAhFXV5XgEmRSTM33DRuTHeFcB5ON",
-   "udp": true,
-   "sni": "eth.todsm.com",
-   "obfs": "salamander",
-   "obfs-password": "0dRexOATy4t9J1ckKOLpPy9HrNoU5FmN",
+   "sni": "envbi-ru-31sel.my-fade.cloud",
    "skip-cert-verify": false
   },
   {
-   "name": "192.220.47.85:44441",
-   "type": "vmess",
-   "server": "192.220.47.85",
-   "port": 44441,
-   "uuid": "de4e0335-2a3b-4006-d746-c939fa85fdc3",
-   "alterId": 0,
-   "cipher": "auto",
+   "name": "@npv_vpn11 #2",
+   "type": "vless",
+   "server": "109.107.189.69",
+   "port": 8443,
+   "uuid": "cfd6ce74-f4c5-4815-bba4-2fd0fa77bf4e",
    "udp": true,
-   "network": "http",
-   "http-opts": {
-    "path": [
-     "/"
-    ],
-    "method": "GET"
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "gw-721bd5.dobry.monster",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "q1EhO97gyUBlF7LiAfeAESI0O2Mg95T4yIk7keOnMEE",
+    "short-id": "0912cc7f28aa26ba"
    }
   },
   {
-   "name": "🇳🇴 Norway, Oslo | [BL]",
+   "name": "@npv_vpn11 #3",
    "type": "vless",
-   "server": "104.18.139.67",
-   "port": 443,
-   "uuid": "0280c276-641b-49af-b699-4931c30ac137",
+   "server": "193.233.89.130",
+   "port": 8443,
+   "uuid": "7bd7c4aa-52c4-482c-bdcc-e7380fa6b5fe",
    "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/api",
-    "mode": "auto",
-    "host": "norway.xn--nlqaa425dbaab446bbabd698meae.online"
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "grpc"
    },
    "tls": true,
-   "servername": "norway.xn--nlqaa425dbaab446bbabd698meae.online.",
-   "alpn": [
-    "h2"
-   ],
+   "servername": "g.play2go.gay",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "xx8KWdR4HbVmvqPb0wRPAstBHGN2Uk99m7AF794_E3c"
+   }
+  },
+  {
+   "name": "防失联网址https://www.stableproxy.net",
+   "type": "trojan",
+   "server": "v1us9.stablenode.cloud",
+   "port": 24421,
+   "password": "fab946fd-5cb1-4b83-8b15-3b6955ff38a4",
+   "udp": true,
+   "tls": true,
    "client-fingerprint": "chrome"
   },
   {
-   "name": "🇪🇸 Spain, Madrid | [BL]",
-   "type": "hysteria2",
-   "server": "31.59.116.20",
-   "port": 443,
-   "password": "ca60984f-b1f0-4073-bd33-4c75168f749a",
-   "udp": true,
-   "sni": "kraw-pl-5.fantoff.online",
-   "skip-cert-verify": false
-  },
-  {
-   "name": "ProxyRift 231",
-   "type": "vless",
-   "server": "151.241.128.46",
-   "port": 443,
-   "uuid": "57beeeb0-03fc-4fc9-94da-7604488a7134",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "psstatic.cdn.bcebos.com",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "rf-Thys7hJwt_ZgndODmH-aAiXbnqH7nOJlRLVRUEl4",
-    "short-id": "bf69305d"
-   }
-  },
-  {
-   "name": "🇷🇺 RU | xykmh-ru-70sb.my-fade.cloud | HYSTERIA2 [181A] | @ScDevNetwork",
-   "type": "hysteria2",
-   "server": "168.113.254.183",
-   "port": 443,
-   "password": "3098af7f-dd3e-0001-b8e5-05a194206ac0",
-   "udp": true,
-   "sni": "xykmh-ru-70sb.my-fade.cloud",
-   "alpn": [
-    "h3"
-   ],
-   "skip-cert-verify": true
-  },
-  {
-   "name": "ProxyRift 1447",
+   "name": "IT - zhuhai.uk",
    "type": "ss",
-   "server": "168.138.177.98",
-   "port": 56927,
-   "cipher": "2022-blake3-chacha20-poly1305",
-   "password": "c11JMfCMQ3Y4aGlhMX5LrMpM13uvw+UVbjGfHP+eKkY=",
+   "server": "202.50.253.81",
+   "port": 19999,
+   "cipher": "aes-256-gcm",
+   "password": "ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=",
    "udp": true
   },
   {
-   "name": "🇫🇷 FR | szqbx-ru-77dc.my-fade.cloud | HYSTERIA2 [F2DB] | @ScDevNetwork",
-   "type": "hysteria2",
-   "server": "136.148.83.69",
-   "port": 443,
-   "password": "87bb2ac4-b7a1-0001-b11d-2107709ea6cb",
-   "udp": true,
-   "sni": "szqbx-ru-77dc.my-fade.cloud",
-   "skip-cert-verify": true
-  },
-  {
-   "name": "🇳🇴 挪威 | NOR",
-   "type": "hysteria2",
-   "server": "168.113.254.247",
-   "port": 443,
-   "password": "b006650f-8771-0001-b7fa-e18fc6e80ef1",
-   "udp": true,
-   "sni": "vcerx-ru-67sb.my-fade.cloud",
-   "skip-cert-verify": true
-  },
-  {
-   "name": "🇩🇪 德国 | DEU",
+   "name": "🇷🇺 RU | max.ru | VLESS [C3A4] | @ScDevNetwork",
    "type": "vless",
-   "server": "13.143.187.220",
+   "server": "135.106.208.37",
    "port": 443,
-   "uuid": "66c78912-4e2d-41dc-8742-aaae2590804e",
+   "uuid": "7384d777-cd1b-56f3-a31a-d7f69daf45ed",
    "udp": true,
    "flow": "xtls-rprx-vision",
    "tls": true,
-   "servername": "fi-s1.kadrhub.tech",
+   "servername": "max.ru",
    "client-fingerprint": "firefox",
    "reality-opts": {
-    "public-key": "eDzVz3bxkv3IoN3BUCa_aA-RicoeG7ACylYSnmS2Pgg"
+    "public-key": "VgX9N3I4ELJA5PCSaEXwJMly3GprvfDWhNTAu5yfgm0",
+    "short-id": "c00d8a77"
+   }
+  },
+  {
+   "name": "🇺🇸 Kansas City 3",
+   "type": "trojan",
+   "server": "95.182.89.242",
+   "port": 8443,
+   "password": "YektaCloud",
+   "udp": true,
+   "tls": true,
+   "alpn": [
+    "http",
+    "1.1",
+    "h3",
+    "h2"
+   ],
+   "client-fingerprint": "firefox",
+   "skip-cert-verify": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud----@YektaCloud"
+   }
+  },
+  {
+   "name": "美国节点0903 | 1倍率",
+   "type": "trojan",
+   "server": "v1us9.stablenode.cloud",
+   "port": 24413,
+   "password": "fab946fd-5cb1-4b83-8b15-3b6955ff38a4",
+   "udp": true,
+   "tls": true,
+   "client-fingerprint": "qq"
+  },
+  {
+   "name": "@npv_vpn11 #4",
+   "type": "vless",
+   "server": "136.234.9.19",
+   "port": 443,
+   "uuid": "d92038b6-b470-4267-9c69-2c649bf3f4a4",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/c2ebbdd6f634",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "6b878dx.nl2.h1clayd.click",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "_nAced6S7uyPz0sjigvwEmN7CsYvJMOsumtBnqldEC8",
+    "short-id": "eaf16e75feabc584"
    }
   }
  ],
@@ -219,22 +169,18 @@
    "name": "PROXY",
    "type": "select",
    "proxies": [
-    "ProxyRift 269",
-    "🇳🇱 荷兰 | NLD",
-    "🇭🇰 香港 | HKG",
-    "DE - zhuhai.uk 05",
-    "RU",
-    "🇵🇱 PL | kraw-pl-5.fantoff.online | HYSTERIA2 [6028] | @ScDevNetwork",
-    "ProxyRift 956",
-    "192.220.47.85:44441",
-    "🇳🇴 Norway, Oslo | [BL]",
-    "🇪🇸 Spain, Madrid | [BL]",
-    "ProxyRift 231",
-    "🇷🇺 RU | xykmh-ru-70sb.my-fade.cloud | HYSTERIA2 [181A] | @ScDevNetwork",
-    "ProxyRift 1447",
-    "🇫🇷 FR | szqbx-ru-77dc.my-fade.cloud | HYSTERIA2 [F2DB] | @ScDevNetwork",
-    "🇳🇴 挪威 | NOR",
-    "🇩🇪 德国 | DEU",
+    "ProxyRift 1898",
+    "@npv_vpn11",
+    "109.104.153.43:33336",
+    "🇷🇺",
+    "@npv_vpn11 #2",
+    "@npv_vpn11 #3",
+    "防失联网址https://www.stableproxy.net",
+    "IT - zhuhai.uk",
+    "🇷🇺 RU | max.ru | VLESS [C3A4] | @ScDevNetwork",
+    "🇺🇸 Kansas City 3",
+    "美国节点0903 | 1倍率",
+    "@npv_vpn11 #4",
     "DIRECT"
    ]
   }

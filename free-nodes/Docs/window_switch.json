@@ -1,8 +1,8 @@
 {
   "version": 1,
   "followup_windows": "on",
-  "updated_at": "2026-11-20 22:39:05",
-  "reason": "维持 on：最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）",
+  "updated_at": "2026-11-21 23:11:49",
+  "reason": "今晚验证耗时 56.0 分钟 > 50 分钟上限，窗口吃紧；第 2/3 窗口保持/恢复启用",
   "streak_done": 7,
   "required_streak": 7,
   "max_elapsed_min": 50.0,
@@ -111,10 +111,18 @@
       "pending": [],
       "summary_date": "2026-11-20",
       "source": "first_window"
+    },
+    {
+      "date": "2026-11-21",
+      "gate": "done",
+      "elapsed_min": 56.0,
+      "pending": [],
+      "summary_date": "2026-11-21",
+      "source": "first_window"
     }
   ],
   "followup_used": [],
   "last_pause_at": "2026-11-14 22:58:31",
-  "last_resume_at": "2026-11-15 23:04:31",
+  "last_resume_at": "2026-11-21 23:11:49",
   "stale_recovered": false
 }

@@ -1,5 +1,30 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-20 采集日（2026-11-21 01:30 运行）
+
+- 闸门退出码 0：四内核「已测满单轮上限」（v2ray 1781/1770、xray 1003/1002、clash 1279/1274、
+  singbox 1002/1000）→ GATE: done → 本窗口未采集、未跑验证、未重跑自检（未占用验证资源）
+- 本日可用 **v2ray 5 / xray 16 / clash 16 / singbox 18**（池 205/566/338/346）；
+  采集 27402 → 去重 7548，TCP 可达 7548/7548（100%，中位 247ms），扫描仓库 100 个
+- **v2ray 5 条跌破 min_available(10)，为近期最低**（前几日 22/19/14/18/29/26/31）。
+  弹性 cap 按 11-19 的 1.7% 反推 1770（目标 30），当日可用率跌到 0.3% ⇒ 测满 cap 仍只 5 条。
+  `exhausted=false`、cand 5268 未耗尽 ⇒ 闸门判 done 合规；**cap 由昨日可用率反推，当日可用率
+  再跌一半时达不到目标数是正常现象，不要据此提 cap，也不要放宽探测地址**
+- 产物核对：available 条目 5/16/16/**19（含 1 条 direct，净 18）** 与 summary 的 ok 逐项一致；
+  `nodes_uris` 7548 = `nodes_meta.total/reachable` 7548；tested_state date=11-20（四核 1781/1003/1279/1002）
+- **尾巴三处全干净**：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 无需补推
+- 本日发布链：CI `f66afa3`(05:21，属 11-19 侧 cron 迟到派发)/`3aba6a2`(21:19) + 第一窗口
+  `9cf7aee`(22:41)/`5b75218`(22:44) + 第二窗口 `8fa2a10`(23:46)，已全部在 origin/master
+- 自检（第一窗口 22:34 产物）：**0 critical / 6 warn** = 四核可用率 0.3/1.6/1.3/1.8% 低水位
+  + 四仓 0 条（crashgfw / VoroninaYanina / hysteria350 / free-proxy-nodes 全 URLError，
+  各声明 6 条链接）+ 镜像失效 11/13（可用 gh-proxy.com / gh-proxy.org）
+  → 四仓即 known-issues 60 那组同运营方镜像（同指 ndxy.fn0821.xyz），属 CI(Azure) 出口不可达，
+  非采集代码问题；其余为既定口径，不改代码
+- 窗口开关仍 on（`streak_done` 7/7，`reason` 写 `耗时达标=False`）→ 本窗口被正常触发，属「宁可多跑一次」设计
+- 本窗口按 prompt 第 1 步明文规则「GATE: done 且无尾巴 → 直接结束」，**未发布**；
+  本记忆文件在核查之后写入，形成 1 个纯文档尾巴，按既有约定留待明晚第一窗口发布时顺带提交
+
 ## 2026-11-19 采集日（2026-11-20 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（v2ray 1298/1284、xray 802/800、clash 807/800、

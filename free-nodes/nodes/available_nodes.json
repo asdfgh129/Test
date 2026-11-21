@@ -1,6 +1,6 @@
 {
- "date": "2026-11-20",
- "generated_at": "2026-11-20 22:34:07",
+ "date": "2026-11-21",
+ "generated_at": "2026-11-21 23:10:15",
  "targets": [
   "primary",
   "github",
@@ -9,1195 +9,11 @@
   "youtube"
  ],
  "bw_enabled": true,
- "total": 38,
+ "total": 90,
  "nodes": [
   {
-   "key": "168.138.177.98:56927",
-   "host": "168.138.177.98",
-   "port": 56927,
-   "proto": "ss",
-   "cores": [
-    "xray",
-    "clash"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 76,
-   "latency": {
-    "xray": 358,
-    "clash": 2796
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 358,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 317,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 414,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 267,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 248,
-     "code": 200
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "45.83.85.31:1080",
-   "host": "45.83.85.31",
-   "port": 1080,
-   "proto": "ss",
-   "cores": [
-    "v2ray",
-    "xray"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 237,
-   "latency": {
-    "v2ray": 778,
-    "xray": 1421
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 778,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 788,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 948,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1369,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 779,
-     "code": 200
-    }
-   },
-   "bw_mbps": 5.65,
-   "in_pool": false
-  },
-  {
-   "key": "18.156.128.31:443",
-   "host": "18.156.128.31",
-   "port": 443,
-   "proto": "ss",
-   "cores": [
-    "xray",
-    "clash",
-    "singbox"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 235,
-   "latency": {
-    "xray": 801,
-    "clash": 935,
-    "singbox": 922
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 801,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 714,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 794,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 692,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 850,
-     "code": 200
-    }
-   },
-   "bw_mbps": 5.6,
-   "in_pool": false
-  },
-  {
-   "key": "146.190.21.145:443",
-   "host": "146.190.21.145",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "singbox"
-   ],
-   "repos": [
-    "WhiteDNS/WhiteVPN"
-   ],
-   "tcp_latency": 296,
-   "latency": {
-    "singbox": 804
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 804,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 1590,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "x": {
-     "ok": false,
-     "ms": 1601,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "cloudflare": {
-     "ok": false,
-     "ms": 1554,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3012,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "31.59.179.215:443",
-   "host": "31.59.179.215",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "xray"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 247,
-   "latency": {
-    "xray": 1119
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 1119,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1078,
-     "code": 200
-    },
-    "x": {
-     "ok": false,
-     "ms": 3031,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1189,
-     "code": 200
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3007,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": 5.68,
-   "in_pool": false
-  },
-  {
-   "key": "178.17.58.55:443",
-   "host": "178.17.58.55",
-   "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "v2ray"
-   ],
-   "repos": [
-    "rtwo2/FastNodes"
-   ],
-   "tcp_latency": 261,
-   "latency": {
-    "v2ray": 1153
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 1153,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 277,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "x": {
-     "ok": false,
-     "ms": 274,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "cloudflare": {
-     "ok": false,
-     "ms": 280,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 278,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "104.171.135.229:443",
-   "host": "104.171.135.229",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "clash"
-   ],
-   "repos": [
-    "JHC000abc/ProxyParseForSing-box"
-   ],
-   "tcp_latency": 290,
-   "latency": {
-    "clash": 1259
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 1259,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1399,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1555,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1468,
-     "code": 200
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3038,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": 1.68,
-   "in_pool": false
-  },
-  {
-   "key": "tg.skvoz-dpi.com:443",
-   "host": "tg.skvoz-dpi.com",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "xray"
-   ],
-   "repos": [
-    "0xRadikal/Free-v2ray-Configs"
-   ],
-   "tcp_latency": 284,
-   "latency": {
-    "xray": 1286
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 1286,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 827,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "x": {
-     "ok": false,
-     "ms": 826,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "cloudflare": {
-     "ok": false,
-     "ms": 782,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 872,
-     "code": 0,
-     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "176.98.176.60:443",
-   "host": "176.98.176.60",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "clash"
-   ],
-   "repos": [
-    "zhuhaiuk/free-nodes"
-   ],
-   "tcp_latency": 281,
-   "latency": {
-    "clash": 1451
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 1451,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 2060,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1619,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1878,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 2792,
-     "code": 200
-    }
-   },
-   "bw_mbps": 1.51,
-   "in_pool": false
-  },
-  {
-   "key": "89.169.2.136:443",
-   "host": "89.169.2.136",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "clash"
-   ],
-   "repos": [
-    "0xRadikal/Free-v2ray-Configs"
-   ],
-   "tcp_latency": 236,
-   "latency": {
-    "clash": 1763
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 1763,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1655,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1721,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1632,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 1615,
-     "code": 200
-    }
-   },
-   "bw_mbps": 1.38,
-   "in_pool": false
-  },
-  {
-   "key": "31.59.116.20:443",
-   "host": "31.59.116.20",
-   "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "xray",
-    "clash"
-   ],
-   "repos": [
-    "igareck/vpn-configs-for-russia"
-   ],
-   "tcp_latency": 345,
-   "latency": {
-    "xray": 1902,
-    "clash": 2497
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 1902,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1644,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1212,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 732,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 767,
-     "code": 200
-    }
-   },
-   "bw_mbps": 0.97,
-   "in_pool": false
-  },
-  {
-   "key": "202.50.253.27:19999",
-   "host": "202.50.253.27",
-   "port": 19999,
-   "proto": "ss",
-   "cores": [
-    "xray"
-   ],
-   "repos": [
-    "clash-s/clash-s.github.io"
-   ],
-   "tcp_latency": 323,
-   "latency": {
-    "xray": 2011
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2011,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 1490,
-     "code": 403,
-     "err": "httperror 403"
-    },
-    "x": {
-     "ok": false,
-     "ms": 3025,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "cloudflare": {
-     "ok": false,
-     "ms": 3015,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3006,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": 0.2,
-   "in_pool": false
-  },
-  {
-   "key": "192.220.47.85:44441",
-   "host": "192.220.47.85",
-   "port": 44441,
-   "proto": "vmess",
-   "cores": [
-    "clash"
-   ],
-   "repos": [
-    "JHC000abc/ProxyParseForSing-box"
-   ],
-   "tcp_latency": 198,
-   "latency": {
-    "clash": 2308
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2308,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 927,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 917,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 701,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 1737,
-     "code": 200
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "202.50.253.81:19999",
-   "host": "202.50.253.81",
-   "port": 19999,
-   "proto": "ss",
-   "cores": [
-    "xray"
-   ],
-   "repos": [
-    "JHC000abc/ProxyParseForSing-box"
-   ],
-   "tcp_latency": 326,
-   "latency": {
-    "xray": 2419
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2419,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 2373,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1601,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 3682,
-     "code": 200
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3005,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": 0.03,
-   "in_pool": false
-  },
-  {
-   "key": "177.1.193.28:443",
-   "host": "177.1.193.28",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "xray"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 279,
-   "latency": {
-    "xray": 2445
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2445,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 3011,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "x": {
-     "ok": true,
-     "ms": 3013,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 2243,
-     "code": 200
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3013,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": 0.2,
-   "in_pool": false
-  },
-  {
-   "key": "104.18.139.67:443",
-   "host": "104.18.139.67",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "clash"
-   ],
-   "repos": [
-    "igareck/vpn-configs-for-russia"
-   ],
-   "tcp_latency": 1224,
-   "latency": {
-    "clash": 2490
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2490,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 2750,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 3514,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": false,
-     "ms": 3009,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 2775,
-     "code": 200
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "139.180.221.53:443",
-   "host": "139.180.221.53",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "singbox"
-   ],
-   "repos": [
-    "ermaozi01/free_clash_vpn"
-   ],
-   "tcp_latency": 273,
-   "latency": {
-    "singbox": 2517
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2517,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 3015,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "x": {
-     "ok": false,
-     "ms": 3010,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 659,
-     "code": 200
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3010,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": 3.75,
-   "in_pool": false
-  },
-  {
-   "key": "202.50.253.45:19999",
-   "host": "202.50.253.45",
-   "port": 19999,
-   "proto": "ss",
-   "cores": [
-    "xray"
-   ],
-   "repos": [
-    "JHC000abc/ProxyParseForSing-box"
-   ],
-   "tcp_latency": 1341,
-   "latency": {
-    "xray": 2588
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2588,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 3010,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "x": {
-     "ok": false,
-     "ms": 3009,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 2346,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 2800,
-     "code": 200
-    }
-   },
-   "bw_mbps": 0.09,
-   "in_pool": false
-  },
-  {
-   "key": "47.254.128.109:443",
-   "host": "47.254.128.109",
-   "port": 443,
-   "proto": "ss",
-   "cores": [
-    "singbox"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 218,
-   "latency": {
-    "singbox": 2597
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2597,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 3006,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "x": {
-     "ok": true,
-     "ms": 3100,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": false,
-     "ms": 3025,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3010,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "151.241.128.46:443",
-   "host": "151.241.128.46",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "clash",
-    "singbox"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 218,
-   "latency": {
-    "clash": 2658,
-    "singbox": 2036
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2658,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 3002,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "x": {
-     "ok": false,
-     "ms": 3009,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1988,
-     "code": 200
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3008,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": 0.94,
-   "in_pool": false
-  },
-  {
-   "key": "172.236.241.130:443",
-   "host": "172.236.241.130",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "singbox"
-   ],
-   "repos": [
-    "ermaozi01/free_clash_vpn"
-   ],
-   "tcp_latency": 221,
-   "latency": {
-    "singbox": 2680
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2680,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 3015,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "x": {
-     "ok": false,
-     "ms": 3007,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "cloudflare": {
-     "ok": false,
-     "ms": 3013,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "youtube": {
-     "ok": false,
-     "ms": 3022,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "168.113.254.183:443",
-   "host": "168.113.254.183",
-   "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "clash"
-   ],
-   "repos": [
-    "Areral/ScarletDevil"
-   ],
-   "tcp_latency": 325,
-   "latency": {
-    "clash": 2750
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2750,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1616,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1937,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1357,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 881,
-     "code": 200
-    }
-   },
-   "bw_mbps": null,
-   "in_pool": false
-  },
-  {
-   "key": "89.117.172.45:443",
-   "host": "89.117.172.45",
-   "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "xray",
-    "clash",
-    "singbox"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 215,
-   "latency": {
-    "xray": 2758,
-    "clash": 2209,
-    "singbox": 2095
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2758,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1995,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1265,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 762,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 1494,
-     "code": 200
-    }
-   },
-   "bw_mbps": 3.51,
-   "in_pool": false
-  },
-  {
-   "key": "31.58.117.133:443",
-   "host": "31.58.117.133",
-   "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "xray",
-    "clash",
-    "singbox"
-   ],
-   "repos": [
-    "Areral/ScarletDevil"
-   ],
-   "tcp_latency": 325,
-   "latency": {
-    "xray": 2795,
-    "clash": 1837,
-    "singbox": 1768
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2795,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 891,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 917,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1417,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 1084,
-     "code": 200
-    }
-   },
-   "bw_mbps": 2.15,
-   "in_pool": false
-  },
-  {
-   "key": "pl9.h1cloud.net:25700",
-   "host": "pl9.h1cloud.net",
-   "port": 25700,
-   "proto": "vless",
-   "cores": [
-    "xray"
-   ],
-   "repos": [
-    "rekt0ro/ProxyRift"
-   ],
-   "tcp_latency": 531,
-   "latency": {
-    "xray": 2896
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2896,
-     "code": 204
-    },
-    "github": {
-     "ok": false,
-     "ms": 3014,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
-    },
-    "x": {
-     "ok": true,
-     "ms": 2005,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 2904,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 2186,
-     "code": 200
-    }
-   },
-   "bw_mbps": 0.42,
-   "in_pool": false
-  },
-  {
-   "key": "139.162.91.247:443",
-   "host": "139.162.91.247",
+   "key": "172.104.48.194:443",
+   "host": "172.104.48.194",
    "port": 443,
    "proto": "vless",
    "cores": [
@@ -1206,43 +22,43 @@
    "repos": [
     "Areral/ScarletDevil"
    ],
-   "tcp_latency": 85,
+   "tcp_latency": 86,
    "latency": {
-    "singbox": 2899
+    "singbox": 547
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 2899,
+     "ms": 547,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 3096,
+     "ms": 664,
      "code": 200
     },
     "x": {
      "ok": true,
-     "ms": 3003,
+     "ms": 984,
      "code": 200
     },
     "cloudflare": {
      "ok": true,
-     "ms": 2930,
+     "ms": 558,
      "code": 200
     },
     "youtube": {
      "ok": true,
-     "ms": 2901,
+     "ms": 716,
      "code": 200
     }
    },
-   "bw_mbps": 4.17,
+   "bw_mbps": 10.03,
    "in_pool": false
   },
   {
-   "key": "103.29.68.232:443",
-   "host": "103.29.68.232",
+   "key": "139.162.101.74:443",
+   "host": "139.162.101.74",
    "port": 443,
    "proto": "vless",
    "cores": [
@@ -1251,85 +67,38 @@
    "repos": [
     "Areral/ScarletDevil"
    ],
-   "tcp_latency": 102,
+   "tcp_latency": 79,
    "latency": {
-    "singbox": 2974
+    "singbox": 628
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 2974,
+     "ms": 628,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 3003,
+     "ms": 731,
      "code": 200
     },
     "x": {
      "ok": true,
-     "ms": 2996,
+     "ms": 854,
      "code": 200
     },
     "cloudflare": {
      "ok": true,
-     "ms": 2888,
+     "ms": 600,
      "code": 200
     },
     "youtube": {
      "ok": true,
-     "ms": 2921,
+     "ms": 748,
      "code": 200
     }
    },
-   "bw_mbps": 4.12,
-   "in_pool": false
-  },
-  {
-   "key": "136.148.83.69:443",
-   "host": "136.148.83.69",
-   "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "clash",
-    "singbox"
-   ],
-   "repos": [
-    "Areral/ScarletDevil"
-   ],
-   "tcp_latency": 324,
-   "latency": {
-    "clash": 2984,
-    "singbox": 1822
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 2984,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1110,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 2414,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1332,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 3064,
-     "code": 200
-    }
-   },
-   "bw_mbps": 1.75,
+   "bw_mbps": 11.61,
    "in_pool": false
   },
   {
@@ -1343,134 +112,38 @@
    "repos": [
     "Areral/ScarletDevil"
    ],
-   "tcp_latency": 86,
+   "tcp_latency": 90,
    "latency": {
-    "singbox": 2994
+    "singbox": 777
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 2994,
+     "ms": 777,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 2813,
+     "ms": 666,
      "code": 200
     },
     "x": {
      "ok": true,
-     "ms": 2979,
+     "ms": 982,
      "code": 200
     },
     "cloudflare": {
      "ok": true,
-     "ms": 2914,
+     "ms": 606,
      "code": 200
     },
     "youtube": {
      "ok": true,
-     "ms": 2957,
+     "ms": 692,
      "code": 200
     }
    },
-   "bw_mbps": 4.24,
-   "in_pool": false
-  },
-  {
-   "key": "172.105.203.15:443",
-   "host": "172.105.203.15",
-   "port": 443,
-   "proto": "vless",
-   "cores": [
-    "singbox"
-   ],
-   "repos": [
-    "ermaozi01/free_clash_vpn"
-   ],
-   "tcp_latency": 88,
-   "latency": {
-    "singbox": 3001
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 3001,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 2997,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 3037,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 2930,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 2888,
-     "code": 200
-    }
-   },
-   "bw_mbps": 4.08,
-   "in_pool": false
-  },
-  {
-   "key": "31.59.169.225:443",
-   "host": "31.59.169.225",
-   "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "v2ray",
-    "xray",
-    "clash",
-    "singbox"
-   ],
-   "repos": [
-    "JHC000abc/ProxyParseForSing-box"
-   ],
-   "tcp_latency": 219,
-   "latency": {
-    "v2ray": 3050,
-    "xray": 1802,
-    "clash": 1383,
-    "singbox": 1650
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 3050,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1344,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 1406,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 1126,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 1065,
-     "code": 200
-    }
-   },
-   "bw_mbps": 4.41,
+   "bw_mbps": 12.5,
    "in_pool": false
   },
   {
@@ -1484,79 +157,1332 @@
    "repos": [
     "Areral/ScarletDevil"
    ],
-   "tcp_latency": 98,
+   "tcp_latency": 84,
    "latency": {
-    "singbox": 3085
+    "singbox": 829
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 3085,
+     "ms": 829,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 3262,
+     "ms": 641,
      "code": 200
     },
     "x": {
      "ok": true,
-     "ms": 3036,
+     "ms": 902,
      "code": 200
     },
     "cloudflare": {
-     "ok": false,
-     "ms": 3004,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+     "ok": true,
+     "ms": 604,
+     "code": 200
     },
     "youtube": {
      "ok": true,
-     "ms": 3025,
+     "ms": 723,
      "code": 200
     }
    },
-   "bw_mbps": 4.11,
+   "bw_mbps": 1.23,
    "in_pool": false
   },
   {
-   "key": "172.66.0.1:8443",
-   "host": "172.66.0.1",
+   "key": "54.255.214.149:8443",
+   "host": "54.255.214.149",
    "port": 8443,
-   "proto": "vmess",
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "hello-world-1989/cn-news"
+   ],
+   "tcp_latency": 129,
+   "latency": {
+    "v2ray": 839,
+    "xray": 1250
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 839,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 758,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 768,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 636,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 667,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.34,
+   "in_pool": false
+  },
+  {
+   "key": "62.144.51.95:443",
+   "host": "62.144.51.95",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "v2ray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 232,
+   "latency": {
+    "v2ray": 843
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 843,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 910,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1019,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 798,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 850,
+     "code": 200
+    }
+   },
+   "bw_mbps": 1.4,
+   "in_pool": false
+  },
+  {
+   "key": "139.162.91.247:443",
+   "host": "139.162.91.247",
+   "port": 443,
+   "proto": "vless",
    "cores": [
     "singbox"
    ],
    "repos": [
     "Areral/ScarletDevil"
    ],
-   "tcp_latency": 244,
+   "tcp_latency": 79,
    "latency": {
-    "singbox": 3219
+    "singbox": 853
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 3219,
+     "ms": 853,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 609,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 809,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 633,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 698,
+     "code": 200
+    }
+   },
+   "bw_mbps": 12.39,
+   "in_pool": false
+  },
+  {
+   "key": "152.53.120.90:50955",
+   "host": "152.53.120.90",
+   "port": 50955,
+   "proto": "vless",
+   "cores": [
+    "v2ray",
+    "singbox"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 218,
+   "latency": {
+    "v2ray": 914,
+    "singbox": 2109
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 914,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1094,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1254,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 894,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 918,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.69,
+   "in_pool": false
+  },
+  {
+   "key": "18.156.128.31:443",
+   "host": "18.156.128.31",
+   "port": 443,
+   "proto": "ss",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 203,
+   "latency": {
+    "xray": 939
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 939,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 778,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 884,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 737,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 775,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.64,
+   "in_pool": false
+  },
+  {
+   "key": "31.59.150.180:443",
+   "host": "31.59.150.180",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 381,
+   "latency": {
+    "xray": 1191
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1191,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1569,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1284,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1252,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1689,
+     "code": 200
+    }
+   },
+   "bw_mbps": 1.74,
+   "in_pool": false
+  },
+  {
+   "key": "13.141.51.100:25700",
+   "host": "13.141.51.100",
+   "port": 25700,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 311,
+   "latency": {
+    "xray": 1199
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1199,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1046,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1211,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 538,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 583,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.59,
+   "in_pool": false
+  },
+  {
+   "key": "54.36.102.152:2083",
+   "host": "54.36.102.152",
+   "port": 2083,
+   "proto": "vless",
+   "cores": [
+    "v2ray",
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 231,
+   "latency": {
+    "v2ray": 1213,
+    "singbox": 1116
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1213,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1272,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1686,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1009,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1266,
+     "code": 200
+    }
+   },
+   "bw_mbps": 5.48,
+   "in_pool": false
+  },
+  {
+   "key": "161.33.20.255:8880",
+   "host": "161.33.20.255",
+   "port": 8880,
+   "proto": "vmess",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 97,
+   "latency": {
+    "xray": 1227,
+    "singbox": 689
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1227,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 548,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 587,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 999,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 573,
+     "code": 200
+    }
+   },
+   "bw_mbps": 13.24,
+   "in_pool": false
+  },
+  {
+   "key": "89.125.175.204:8443",
+   "host": "89.125.175.204",
+   "port": 8443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 281,
+   "latency": {
+    "xray": 1251
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1251,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1646,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1480,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1252,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2372,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.55,
+   "in_pool": false
+  },
+  {
+   "key": "31.77.28.8:443",
+   "host": "31.77.28.8",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 222,
+   "latency": {
+    "xray": 1253
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1253,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1216,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1658,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1298,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1120,
+     "code": 200
+    }
+   },
+   "bw_mbps": 2.15,
+   "in_pool": false
+  },
+  {
+   "key": "84.54.58.149:443",
+   "host": "84.54.58.149",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 261,
+   "latency": {
+    "xray": 1331
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1331,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1651,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1687,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 3712,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1452,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "70.34.211.236:40118",
+   "host": "70.34.211.236",
+   "port": 40118,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 327,
+   "latency": {
+    "xray": 1332
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1332,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1341,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1434,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1347,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1385,
+     "code": 200
+    }
+   },
+   "bw_mbps": 3.71,
+   "in_pool": false
+  },
+  {
+   "key": "ikr200.zxom.eu.org:20045",
+   "host": "ikr200.zxom.eu.org",
+   "port": 20045,
+   "proto": "trojan",
+   "cores": [
+    "v2ray",
+    "clash",
+    "singbox"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 220,
+   "latency": {
+    "v2ray": 1337,
+    "clash": 956,
+    "singbox": 923
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1337,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 626,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 750,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 466,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 696,
+     "code": 200
+    }
+   },
+   "bw_mbps": 11.83,
+   "in_pool": false
+  },
+  {
+   "key": "109.104.153.43:33336",
+   "host": "109.104.153.43",
+   "port": 33336,
+   "proto": "ssr",
+   "cores": [
+    "clash"
+   ],
+   "repos": [
+    "rtwo2/FastNodes"
+   ],
+   "tcp_latency": 255,
+   "latency": {
+    "clash": 1360
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1360,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2647,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1509,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1278,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1236,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "153.80.22.106:443",
+   "host": "153.80.22.106",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 234,
+   "latency": {
+    "xray": 1389
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1389,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1525,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1541,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1334,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1205,
+     "code": 200
+    }
+   },
+   "bw_mbps": 5.19,
+   "in_pool": false
+  },
+  {
+   "key": "191.217.253.12:443",
+   "host": "191.217.253.12",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "FLAT447/v2ray-lists"
+   ],
+   "tcp_latency": 258,
+   "latency": {
+    "singbox": 1398
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1398,
      "code": 204
     },
     "github": {
      "ok": false,
-     "ms": 290,
+     "ms": 1337,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1405,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2375,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1150,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.67,
+   "in_pool": false
+  },
+  {
+   "key": "208.76.223.30:40118",
+   "host": "208.76.223.30",
+   "port": 40118,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 310,
+   "latency": {
+    "xray": 1402
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1402,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1815,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1534,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2947,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1566,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.77,
+   "in_pool": false
+  },
+  {
+   "key": "45.63.115.136:46122",
+   "host": "45.63.115.136",
+   "port": 46122,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 1301,
+   "latency": {
+    "xray": 1431
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1431,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1382,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1553,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1751,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2459,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.2,
+   "in_pool": false
+  },
+  {
+   "key": "194.26.229.207:2200",
+   "host": "194.26.229.207",
+   "port": 2200,
+   "proto": "vless",
+   "cores": [
+    "v2ray",
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 298,
+   "latency": {
+    "v2ray": 1456,
+    "singbox": 1483
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1456,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3043,
      "code": 0,
-     "err": "URLError: <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>"
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
     },
     "x": {
      "ok": false,
-     "ms": 3032,
+     "ms": 3018,
      "code": 0,
      "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
     },
     "cloudflare": {
      "ok": false,
-     "ms": 3003,
+     "ms": 3014,
      "code": 0,
      "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1395,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.63:19999",
+   "host": "202.50.253.63",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 1330,
+   "latency": {
+    "v2ray": 1510,
+    "singbox": 1328
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1510,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3020,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1289,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1441,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2063,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.62,
+   "in_pool": false
+  },
+  {
+   "key": "192.204.58.87:2053",
+   "host": "192.204.58.87",
+   "port": 2053,
+   "proto": "vmess",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "JHC000abc/ProxyParseForSing-box"
+   ],
+   "tcp_latency": 288,
+   "latency": {
+    "singbox": 1541
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1541,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 1635,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1347,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 780,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 733,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.1,
+   "in_pool": false
+  },
+  {
+   "key": "83.217.201.82:443",
+   "host": "83.217.201.82",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 267,
+   "latency": {
+    "xray": 1543,
+    "singbox": 1660
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1543,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 904,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "x": {
+     "ok": false,
+     "ms": 992,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 1149,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 755,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "194.26.229.207:4100",
+   "host": "194.26.229.207",
+   "port": 4100,
+   "proto": "vless",
+   "cores": [
+    "v2ray",
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 300,
+   "latency": {
+    "v2ray": 1552,
+    "singbox": 1408
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1552,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3028,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3019,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3012,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1373,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "servhostdead2.5gvpn.pw:2053",
+   "host": "servhostdead2.5gvpn.pw",
+   "port": 2053,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 229,
+   "latency": {
+    "xray": 1596,
+    "singbox": 2442
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1596,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1090,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1123,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1131,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1141,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.76,
+   "in_pool": false
+  },
+  {
+   "key": "168.113.254.217:443",
+   "host": "168.113.254.217",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 285,
+   "latency": {
+    "xray": 1599
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1599,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1405,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 2185,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1585,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1603,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.13,
+   "in_pool": false
+  },
+  {
+   "key": "13.143.187.220:443",
+   "host": "13.143.187.220",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 259,
+   "latency": {
+    "xray": 1620,
+    "singbox": 3682
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1620,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1735,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1404,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1549,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1527,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.79,
+   "in_pool": false
+  },
+  {
+   "key": "109.107.189.69:8443",
+   "host": "109.107.189.69",
+   "port": 8443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "clash",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 292,
+   "latency": {
+    "xray": 1631,
+    "clash": 1688,
+    "singbox": 1455
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1631,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1553,
+     "code": 200
+    },
+    "x": {
+     "ok": false,
+     "ms": 3038,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1526,
+     "code": 200
     },
     "youtube": {
      "ok": false,
@@ -1569,127 +1495,1883 @@
    "in_pool": false
   },
   {
-   "key": "yngrfnubcecn.hostc.app:443",
-   "host": "yngrfnubcecn.hostc.app",
+   "key": "185.175.45.4:443",
+   "host": "185.175.45.4",
    "port": 443,
-   "proto": "vless",
+   "proto": "hysteria2",
    "cores": [
-    "v2ray"
+    "v2ray",
+    "clash"
    ],
    "repos": [
-    "rekt0ro/ProxyRift"
+    "FLAT447/v2ray-lists"
    ],
-   "tcp_latency": 1126,
+   "tcp_latency": 265,
    "latency": {
-    "v2ray": 3250
+    "v2ray": 1747,
+    "clash": 1576
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 3250,
+     "ms": 1747,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 1785,
+     "ms": 1294,
      "code": 200
     },
     "x": {
-     "ok": false,
-     "ms": 3007,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+     "ok": true,
+     "ms": 1244,
+     "code": 200
     },
     "cloudflare": {
-     "ok": false,
-     "ms": 3008,
-     "code": 0,
-     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+     "ok": true,
+     "ms": 868,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 949,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.61,
+   "in_pool": false
+  },
+  {
+   "key": "192.74.236.148:30004",
+   "host": "192.74.236.148",
+   "port": 30004,
+   "proto": "vmess",
+   "cores": [
+    "v2ray",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 223,
+   "latency": {
+    "v2ray": 1754,
+    "singbox": 2118
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1754,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2863,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1911,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2048,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1666,
+     "code": 200
+    }
+   },
+   "bw_mbps": 2.47,
+   "in_pool": false
+  },
+  {
+   "key": "151.241.128.46:443",
+   "host": "151.241.128.46",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 121,
+   "latency": {
+    "xray": 1769,
+    "singbox": 2669
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1769,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2237,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1091,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1988,
+     "code": 200
     },
     "youtube": {
      "ok": false,
-     "ms": 3002,
+     "ms": 3016,
      "code": 0,
      "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
     }
    },
-   "bw_mbps": 1.55,
+   "bw_mbps": null,
    "in_pool": false
   },
   {
-   "key": "139.162.91.239:443",
-   "host": "139.162.91.239",
+   "key": "202.50.253.18:19999",
+   "host": "202.50.253.18",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 325,
+   "latency": {
+    "v2ray": 1784,
+    "xray": 2435
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1784,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 2922,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 3336,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1468,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1113,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.59,
+   "in_pool": false
+  },
+  {
+   "key": "45.132.179.90:443",
+   "host": "45.132.179.90",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 252,
+   "latency": {
+    "xray": 1814
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1814,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1313,
+     "code": 200
+    },
+    "x": {
+     "ok": false,
+     "ms": 1996,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 2562,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1731,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "172.236.231.45:443",
+   "host": "172.236.231.45",
    "port": 443,
    "proto": "vless",
    "cores": [
     "singbox"
    ],
    "repos": [
-    "ermaozi01/free_clash_vpn"
+    "Areral/ScarletDevil"
    ],
-   "tcp_latency": 86,
+   "tcp_latency": 211,
    "latency": {
-    "singbox": 3341
+    "singbox": 1844
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 3341,
+     "ms": 1844,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3084,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": true,
+     "ms": 2004,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3011,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1908,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.07,
+   "in_pool": false
+  },
+  {
+   "key": "136.148.83.69:443",
+   "host": "136.148.83.69",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 274,
+   "latency": {
+    "xray": 1880,
+    "singbox": 3263
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1880,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 1984,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "x": {
+     "ok": false,
+     "ms": 2184,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1334,
+     "code": 200
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 1812,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "193.233.89.130:8443",
+   "host": "193.233.89.130",
+   "port": 8443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "clash"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 307,
+   "latency": {
+    "xray": 1904,
+    "clash": 1841
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1904,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 2978,
+     "ms": 856,
      "code": 200
     },
     "x": {
      "ok": true,
-     "ms": 3008,
+     "ms": 910,
      "code": 200
     },
     "cloudflare": {
      "ok": true,
-     "ms": 2941,
+     "ms": 998,
      "code": 200
     },
     "youtube": {
      "ok": true,
-     "ms": 2997,
+     "ms": 1085,
      "code": 200
     }
    },
-   "bw_mbps": 4.13,
+   "bw_mbps": 1.83,
    "in_pool": false
   },
   {
-   "key": "13.143.187.220:443",
-   "host": "13.143.187.220",
+   "key": "104.171.133.209:443",
+   "host": "104.171.133.209",
    "port": 443,
    "proto": "vless",
    "cores": [
-    "clash"
+    "singbox"
    ],
    "repos": [
-    "JHC000abc/ProxyParseForSing-box"
+    "kasesm/Free-Config"
    ],
-   "tcp_latency": 291,
+   "tcp_latency": 303,
    "latency": {
-    "clash": 3985
+    "singbox": 1906
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 3985,
+     "ms": 1906,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 1416,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "x": {
+     "ok": false,
+     "ms": 1149,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 1136,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 1071,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "158.220.95.242:443",
+   "host": "158.220.95.242",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 241,
+   "latency": {
+    "xray": 1949
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1949,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 3421,
+     "ms": 1338,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1480,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1376,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2482,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.90:19999",
+   "host": "202.50.253.90",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 1415,
+   "latency": {
+    "v2ray": 1970,
+    "xray": 1998,
+    "singbox": 3076
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 1970,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 2509,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 2038,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2418,
+     "code": 200
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 4027,
+     "code": 0,
+     "err": "TimeoutError: The read operation timed out"
+    }
+   },
+   "bw_mbps": 0.49,
+   "in_pool": false
+  },
+  {
+   "key": "178.17.58.55:443",
+   "host": "178.17.58.55",
+   "port": 443,
+   "proto": "hysteria2",
+   "cores": [
+    "v2ray"
+   ],
+   "repos": [
+    "rtwo2/FastNodes"
+   ],
+   "tcp_latency": 237,
+   "latency": {
+    "v2ray": 2037
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2037,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 248,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "x": {
+     "ok": false,
+     "ms": 259,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 267,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 245,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "212.109.193.194:2096",
+   "host": "212.109.193.194",
+   "port": 2096,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 298,
+   "latency": {
+    "xray": 2072
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2072,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 792,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 968,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 748,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 812,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "vps3.nemnogogo.com:443",
+   "host": "vps3.nemnogogo.com",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "zhuhaiuk/free-nodes"
+   ],
+   "tcp_latency": 305,
+   "latency": {
+    "xray": 2122
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2122,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 810,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 920,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 818,
+     "code": 200
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 3073,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "48.102.173.24:444",
+   "host": "48.102.173.24",
+   "port": 444,
+   "proto": "vless",
+   "cores": [
+    "v2ray",
+    "singbox"
+   ],
+   "repos": [
+    "JHC000abc/ProxyParseForSing-box"
+   ],
+   "tcp_latency": 261,
+   "latency": {
+    "v2ray": 2164,
+    "singbox": 2865
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2164,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1754,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 3305,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2946,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2536,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "132.243.67.124:25389",
+   "host": "132.243.67.124",
+   "port": 25389,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 404,
+   "latency": {
+    "xray": 2240
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2240,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 2023,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1983,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3014,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1906,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "fi-hel-hostvds-01.cccpbot.fuck-rkn.xyz:443",
+   "host": "fi-hel-hostvds-01.cccpbot.fuck-rkn.xyz",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 425,
+   "latency": {
+    "xray": 2272
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2272,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2249,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 2462,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3042,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 3012,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.54:19999",
+   "host": "202.50.253.54",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 323,
+   "latency": {
+    "v2ray": 2326,
+    "xray": 2446
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2326,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 2091,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 3910,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1061,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1234,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.68,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.99:19999",
+   "host": "202.50.253.99",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 1338,
+   "latency": {
+    "v2ray": 2451,
+    "xray": 2672
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2451,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 1417,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3015,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1639,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2007,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.41,
+   "in_pool": false
+  },
+  {
+   "key": "8.209.117.187:443",
+   "host": "8.209.117.187",
+   "port": 443,
+   "proto": "ss",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 1244,
+   "latency": {
+    "xray": 2487
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2487,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3026,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3017,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3014,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 3131,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.27:19999",
+   "host": "202.50.253.27",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "clash",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 330,
+   "latency": {
+    "v2ray": 2496,
+    "clash": 1251,
+    "singbox": 4152
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2496,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3208,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1479,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1022,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2177,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.63,
+   "in_pool": false
+  },
+  {
+   "key": "v1us9.stablenode.cloud:24413",
+   "host": "v1us9.stablenode.cloud",
+   "port": 24413,
+   "proto": "trojan",
+   "cores": [
+    "v2ray",
+    "clash"
+   ],
+   "repos": [
+    "VoroninaYanina/free-nodes"
+   ],
+   "tcp_latency": 332,
+   "latency": {
+    "v2ray": 2497,
+    "clash": 2997
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2497,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1984,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 2102,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1862,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 4561,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.56,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.45:19999",
+   "host": "202.50.253.45",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 1320,
+   "latency": {
+    "v2ray": 2498,
+    "xray": 2347,
+    "singbox": 3326
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2498,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2408,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 3532,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1756,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 3378,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "free.fugui.lol:19482",
+   "host": "free.fugui.lol",
+   "port": 19482,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 70,
+   "latency": {
+    "xray": 2538
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2538,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2315,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 3037,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3011,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2447,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "48.103.230.81:443",
+   "host": "48.103.230.81",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 333,
+   "latency": {
+    "singbox": 2540
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2540,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1664,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 2015,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3022,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2715,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "168.113.252.11:443",
+   "host": "168.113.252.11",
+   "port": 443,
+   "proto": "hysteria2",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 270,
+   "latency": {
+    "v2ray": 2584,
+    "xray": 3031
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2584,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 3119,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1719,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2038,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1173,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "201.51.12.98:443",
+   "host": "201.51.12.98",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "zhuhaiuk/free-nodes"
+   ],
+   "tcp_latency": 244,
+   "latency": {
+    "xray": 2594
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2594,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 779,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1085,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 757,
+     "code": 200
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 3129,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "v1us9.stablenode.cloud:24421",
+   "host": "v1us9.stablenode.cloud",
+   "port": 24421,
+   "proto": "trojan",
+   "cores": [
+    "v2ray",
+    "clash",
+    "singbox"
+   ],
+   "repos": [
+    "VoroninaYanina/free-nodes"
+   ],
+   "tcp_latency": 314,
+   "latency": {
+    "v2ray": 2663,
+    "clash": 1928,
+    "singbox": 2558
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2663,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 3173,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1549,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2643,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2775,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.44,
+   "in_pool": false
+  },
+  {
+   "key": "nl-next.mediastvor.cc:443",
+   "host": "nl-next.mediastvor.cc",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 2131,
+   "latency": {
+    "v2ray": 2669,
+    "xray": 1555
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2669,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 945,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 729,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 523,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 516,
+     "code": 200
+    }
+   },
+   "bw_mbps": 4.29,
+   "in_pool": false
+  },
+  {
+   "key": "95.182.89.242:8443",
+   "host": "95.182.89.242",
+   "port": 8443,
+   "proto": "trojan",
+   "cores": [
+    "clash"
+   ],
+   "repos": [
+    "Mehinator/Derafsh"
+   ],
+   "tcp_latency": 262,
+   "latency": {
+    "clash": 2743
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2743,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2561,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 3286,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1994,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2514,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.24,
+   "in_pool": false
+  },
+  {
+   "key": "178.17.53.154:48982",
+   "host": "178.17.53.154",
+   "port": 48982,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 235,
+   "latency": {
+    "xray": 2757
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2757,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 941,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "x": {
+     "ok": false,
+     "ms": 1428,
+     "code": 0,
+     "err": "URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING]"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 832,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1033,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "95.85.227.171:443",
+   "host": "95.85.227.171",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 311,
+   "latency": {
+    "xray": 2811
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2811,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 3797,
      "code": 200
     },
     "x": {
      "ok": false,
+     "ms": 3031,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2604,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2645,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "185.86.145.173:443",
+   "host": "185.86.145.173",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 271,
+   "latency": {
+    "xray": 2851
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2851,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3038,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3044,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 1733,
+     "code": 0,
+     "err": "URLError: <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>"
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 3005,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "api.floweroom.vip:443",
+   "host": "api.floweroom.vip",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 616,
+   "latency": {
+    "xray": 2879,
+    "singbox": 3107
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2879,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1876,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 2104,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1631,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1720,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "188.225.32.175:443",
+   "host": "188.225.32.175",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 242,
+   "latency": {
+    "xray": 2883
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2883,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3007,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": true,
+     "ms": 2400,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2271,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 3463,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "31.177.111.107:443",
+   "host": "31.177.111.107",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 261,
+   "latency": {
+    "v2ray": 2925,
+    "xray": 1916
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2925,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1561,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1910,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2095,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2058,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "yt.vmagnum.win:443",
+   "host": "yt.vmagnum.win",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 331,
+   "latency": {
+    "xray": 2929
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2929,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3020,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3075,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3039,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 3008,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "heatherfield.moltex.click:443",
+   "host": "heatherfield.moltex.click",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 240,
+   "latency": {
+    "xray": 2938
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2938,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3011,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1867,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1442,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1585,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "138.249.14.235:443",
+   "host": "138.249.14.235",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 468,
+   "latency": {
+    "xray": 2977
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 2977,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2797,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 2516,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2360,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2482,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "47.254.128.109:443",
+   "host": "47.254.128.109",
+   "port": 443,
+   "proto": "ss",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 230,
+   "latency": {
+    "singbox": 3060
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3060,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
      "ms": 3012,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3005,
      "code": 0,
      "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
     },
@@ -1701,110 +3383,854 @@
     },
     "youtube": {
      "ok": false,
-     "ms": 3006,
+     "ms": 3011,
      "code": 0,
      "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
     }
    },
-   "bw_mbps": 0.23,
+   "bw_mbps": null,
    "in_pool": false
   },
   {
-   "key": "168.113.254.247:443",
-   "host": "168.113.254.247",
+   "key": "85.192.48.20:443",
+   "host": "85.192.48.20",
    "port": 443,
-   "proto": "hysteria2",
-   "cores": [
-    "v2ray",
-    "xray",
-    "clash",
-    "singbox"
-   ],
-   "repos": [
-    "JHC000abc/ProxyParseForSing-box"
-   ],
-   "tcp_latency": 274,
-   "latency": {
-    "v2ray": 4015,
-    "xray": 2038,
-    "clash": 3045,
-    "singbox": 2062
-   },
-   "targets": {
-    "primary": {
-     "ok": true,
-     "ms": 4015,
-     "code": 204
-    },
-    "github": {
-     "ok": true,
-     "ms": 1487,
-     "code": 200
-    },
-    "x": {
-     "ok": true,
-     "ms": 2411,
-     "code": 200
-    },
-    "cloudflare": {
-     "ok": true,
-     "ms": 2855,
-     "code": 200
-    },
-    "youtube": {
-     "ok": true,
-     "ms": 3197,
-     "code": 200
-    }
-   },
-   "bw_mbps": 4.1,
-   "in_pool": false
-  },
-  {
-   "key": "202.50.253.54:19999",
-   "host": "202.50.253.54",
-   "port": 19999,
-   "proto": "ss",
+   "proto": "vless",
    "cores": [
     "xray"
    ],
    "repos": [
-    "JHC000abc/ProxyParseForSing-box"
+    "rekt0ro/ProxyRift"
    ],
-   "tcp_latency": 338,
+   "tcp_latency": 297,
    "latency": {
-    "xray": 4353
+    "xray": 3092
    },
    "targets": {
     "primary": {
      "ok": true,
-     "ms": 4353,
+     "ms": 3092,
      "code": 204
     },
     "github": {
      "ok": true,
-     "ms": 1686,
+     "ms": 3923,
      "code": 200
     },
     "x": {
      "ok": true,
-     "ms": 3012,
+     "ms": 1875,
      "code": 200
     },
     "cloudflare": {
+     "ok": true,
+     "ms": 1465,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1746,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "seaglass.gerqix.online:443",
+   "host": "seaglass.gerqix.online",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 277,
+   "latency": {
+    "xray": 3132
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3132,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1773,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1844,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1190,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1795,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "89.124.122.19:443",
+   "host": "89.124.122.19",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 380,
+   "latency": {
+    "singbox": 3145
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3145,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2124,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 4150,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 3029,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2548,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "13.141.51.2:443",
+   "host": "13.141.51.2",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 370,
+   "latency": {
+    "singbox": 3209
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3209,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2056,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 4193,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2943,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2193,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "135.106.208.37:443",
+   "host": "135.106.208.37",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "clash"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 296,
+   "latency": {
+    "xray": 3268,
+    "clash": 2664
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3268,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 3795,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 2334,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2872,
+     "code": 200
+    },
+    "youtube": {
      "ok": false,
-     "ms": 3014,
+     "ms": 3013,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": 0.22,
+   "in_pool": false
+  },
+  {
+   "key": "153.56.230.6:443",
+   "host": "153.56.230.6",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 340,
+   "latency": {
+    "singbox": 3270
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3270,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 2169,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 4048,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 3033,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2554,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "v1us9.stablenode.cloud:24422",
+   "host": "v1us9.stablenode.cloud",
+   "port": 24422,
+   "proto": "trojan",
+   "cores": [
+    "v2ray"
+   ],
+   "repos": [
+    "VoroninaYanina/free-nodes"
+   ],
+   "tcp_latency": 292,
+   "latency": {
+    "v2ray": 3314
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3314,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1503,
+     "code": 200
+    },
+    "x": {
+     "ok": false,
+     "ms": 3009,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 3505,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1990,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "153.56.230.77:25155",
+   "host": "153.56.230.77",
+   "port": 25155,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 335,
+   "latency": {
+    "xray": 3376
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3376,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3040,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3016,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3080,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 3110,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "162.159.160.117:2083",
+   "host": "162.159.160.117",
+   "port": 2083,
+   "proto": "vless",
+   "cores": [
+    "v2ray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 204,
+   "latency": {
+    "v2ray": 3423
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3423,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3011,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3024,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3018,
      "code": 0,
      "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
     },
     "youtube": {
      "ok": false,
-     "ms": 4078,
+     "ms": 3009,
      "code": 0,
-     "err": "TimeoutError: The read operation timed out"
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
     }
    },
    "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "detun.primesell.ir:3535",
+   "host": "detun.primesell.ir",
+   "port": 3535,
+   "proto": "vless",
+   "cores": [
+    "singbox"
+   ],
+   "repos": [
+    "R3ZARAHIMI/tg-v2ray-configs-every2h"
+   ],
+   "tcp_latency": 435,
+   "latency": {
+    "singbox": 3441
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3441,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1960,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1997,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1894,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1836,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "48.102.205.89:22444",
+   "host": "48.102.205.89",
+   "port": 22444,
+   "proto": "vless",
+   "cores": [
+    "xray",
+    "singbox"
+   ],
+   "repos": [
+    "Areral/ScarletDevil"
+   ],
+   "tcp_latency": 325,
+   "latency": {
+    "xray": 3457,
+    "singbox": 1634
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3457,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1400,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1547,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1370,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 1530,
+     "code": 200
+    }
+   },
+   "bw_mbps": 2.65,
+   "in_pool": false
+  },
+  {
+   "key": "43.201.17.144:8443",
+   "host": "43.201.17.144",
+   "port": 8443,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "hello-world-1989/cn-news"
+   ],
+   "tcp_latency": 107,
+   "latency": {
+    "v2ray": 3500,
+    "xray": 1703
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3500,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 944,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 737,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 559,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 571,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "196.196.149.81:443",
+   "host": "196.196.149.81",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 312,
+   "latency": {
+    "xray": 3505
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3505,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3025,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": false,
+     "ms": 3017,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": false,
+     "ms": 3006,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 4127,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "89.18.60.1:443",
+   "host": "89.18.60.1",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "xray"
+   ],
+   "repos": [
+    "rekt0ro/ProxyRift"
+   ],
+   "tcp_latency": 1478,
+   "latency": {
+    "xray": 3766
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3766,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1937,
+     "code": 200
+    },
+    "x": {
+     "ok": false,
+     "ms": 3007,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1880,
+     "code": 200
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 3019,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.72:19999",
+   "host": "202.50.253.72",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 342,
+   "latency": {
+    "v2ray": 3951,
+    "xray": 4755
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 3951,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3006,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "x": {
+     "ok": true,
+     "ms": 1602,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 4980,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 4068,
+     "code": 200
+    }
+   },
+   "bw_mbps": null,
+   "in_pool": false
+  },
+  {
+   "key": "136.234.9.19:443",
+   "host": "136.234.9.19",
+   "port": 443,
+   "proto": "vless",
+   "cores": [
+    "clash"
+   ],
+   "repos": [
+    "kasesm/Free-Config"
+   ],
+   "tcp_latency": 300,
+   "latency": {
+    "clash": 4165
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 4165,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 3323,
+     "code": 200
+    },
+    "x": {
+     "ok": false,
+     "ms": 3095,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 3349,
+     "code": 200
+    },
+    "youtube": {
+     "ok": false,
+     "ms": 3005,
+     "code": 0,
+     "err": "URLError: <urlopen error _ssl.c:1015: The handshake operatio"
+    }
+   },
+   "bw_mbps": 0.01,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.36:19999",
+   "host": "202.50.253.36",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray"
+   ],
+   "repos": [
+    "zhuhaiuk/free-nodes"
+   ],
+   "tcp_latency": 315,
+   "latency": {
+    "v2ray": 5285,
+    "xray": 1156
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 5285,
+     "code": 204
+    },
+    "github": {
+     "ok": true,
+     "ms": 1932,
+     "code": 200
+    },
+    "x": {
+     "ok": true,
+     "ms": 1774,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 1637,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2371,
+     "code": 200
+    }
+   },
+   "bw_mbps": 1.05,
+   "in_pool": false
+  },
+  {
+   "key": "202.50.253.81:19999",
+   "host": "202.50.253.81",
+   "port": 19999,
+   "proto": "ss",
+   "cores": [
+    "v2ray",
+    "xray",
+    "clash"
+   ],
+   "repos": [
+    "zhuhaiuk/free-nodes"
+   ],
+   "tcp_latency": 329,
+   "latency": {
+    "v2ray": 5295,
+    "xray": 1754,
+    "clash": 2411
+   },
+   "targets": {
+    "primary": {
+     "ok": true,
+     "ms": 5295,
+     "code": 204
+    },
+    "github": {
+     "ok": false,
+     "ms": 3505,
+     "code": 403,
+     "err": "httperror 403"
+    },
+    "x": {
+     "ok": true,
+     "ms": 2471,
+     "code": 200
+    },
+    "cloudflare": {
+     "ok": true,
+     "ms": 2200,
+     "code": 200
+    },
+    "youtube": {
+     "ok": true,
+     "ms": 2605,
+     "code": 200
+    }
+   },
+   "bw_mbps": 0.43,
    "in_pool": false
   }
  ]
