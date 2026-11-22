@@ -1,5 +1,30 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-21 采集日（2026-11-22 01:30 运行）
+
+- 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2511/2500、xray 1882/1881、clash 2402/2398、
+  singbox 1671/1670）→ GATE: done → 本窗口未采集、未跑验证、未重跑自检（未占用验证资源）
+- 本日可用 **v2ray 29 / xray 56 / clash 12 / singbox 36**（池 215/573/327/355）；
+  采集 28433 → 去重 8558，TCP 可达 8558/8558（100%，中位 231ms），扫描仓库 100 个
+- **clash 12 条为近期最低**（前几日 16/16/19/35/24），可用率 0.5%，但仍 > min_available(10)；
+  `exhausted=false`、cand 8067 未耗尽 ⇒ 闸门判 done 合规，属源池质量波动，**不要放宽探测地址**
+- 产物核对：available 条目 29/56/12/**37（含 1 条 direct，净 36）** 与 summary 的 ok 逐项一致；
+  `nodes_uris` 8558 = `nodes_meta.total/reachable` 8558；tested_state date=11-21（四核 2511/1882/2402/1671）
+- **尾巴三处全干净**：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 无需补推
+- 本日发布链：CI `00f1e16`(05:03，属 11-20 侧 cron 迟到派发)/`e6d156d`(21:13) + 第一窗口
+  `156f9bd`(23:12) + 第二窗口 `932d3c9`(23:51，仅两份 automation memory)，已全部在 origin/master
+- 自检（第一窗口 23:10 产物）：**0 critical / 6 warn** = 四核可用率 1.2/3.0/0.5/2.2% 低水位
+  + `clash-s/clash-s.github.io` 0 条（历史 626 条，判定「解析不到节点」，单仓、单晚）
+  + 镜像失效 10/13（可用 gh-proxy.com / gh-proxy.org / gh.monlor.com / 3 个）
+  → 均属既定口径，不改代码；clash-s 若连续两晚报同样原因再按 known-issues 47 查格式覆盖
+- 窗口开关仍 on（`elapsed_min=56.0 > 50`，`reason` 写「窗口吃紧」）→ 本窗口被正常触发，属设计
+- **仓库根目录有 14 个 10-25 遗留的未跟踪调试文件**（`_diag.py`、`_dl.json`、`_pcfg*.json`、
+  `_p_client.go` 等，都不在 free-nodes 下）。publish 走路径限定暂存 ⇒ 不会被误提交；
+  按文件安全规则**未删除**，留待用户确认后清理（或加忽略规则）
+- 本窗口按 prompt 第 1 步明文规则「GATE: done 且无尾巴 → 直接结束」，**未发布**；
+  本记忆文件在核查之后写入，形成 1 个纯文档尾巴，按既有约定留待明晚第一窗口发布时顺带提交
+
 ## 2026-11-20 采集日（2026-11-21 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（v2ray 1781/1770、xray 1003/1002、clash 1279/1274、

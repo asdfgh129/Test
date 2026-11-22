@@ -2,6 +2,30 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-11-22 22:00 第一窗口：可用 133 → 91（量源整体收缩，四向同幅）；四核全测完、GATE done；未改代码
+
+- **运行结果**：CI 产物一次同步就绪（`--sync-only --proxy auto` 一次成功，`generated_at=2026-11-22 21:10:35`、
+  `total=20616`，未 dispatch、未兜底、未走本地采集）；探测 20616 候选 → 可解析 20609 → 可达 **5633
+  （27.3%，中位 235ms，<100ms 491）**，CF 前置 439（7.8%）排末尾；分流 v2ray 3834 / xray 3600 / clash 5384 / singbox 5123。
+- **验证 44.5 分钟**（预算 4439s，未主动收尾；四核 `partial`/`exhausted` 全 False，均按 cap 截断）：
+  v2ray 23/2510（cap 2500）、xray 33/1011（cap 1008）、clash 21/2504（cap 2500）、
+  singbox 14/1393（cap 1392）= **91**（前一晚 133）。总测试量 7418 条（昨晚 8466，−12%）。
+  带宽出数 v2ray 14/20、xray 12/20、clash 13/20、singbox 11/14（中位 0.99 / 1.87 / 3.21 / 0.62Mbps）。
+- **可用数回落判「上游量源收缩」而非本机出口**：原始 171829 → 97403（−43%）、去重 28397 → 20616（−27%）、
+  可达 8558 → 5633（−34%）四个数字同向；而中位延迟 231 → 235ms 持平、失败构成同形
+  （v2ray timeout/tls、singbox reset 987、clash timeout 1742）⇒ **不动 timeout/workers/探测地址**。
+- **`--min-test 1000` 第 2 晚**：可用 91 < 110，首次命中 quota 第六节「可用数仍 <110」回退条件（1/3）；
+  墙钟 44.5min ≤ 50（昨晚的「>50」本次不成立）。两条条件各自计数、均需连续 3 晚 ⇒ 今晚不回调。
+- **`clash-s/clash-s.github.io` 连续两晚 0 条查清（known-issues 60 追记，不改代码）**：本机取同一对链接
+  200/81609B + 19738B，用仓库自己的 `extract_text_into()` 得 209 条 ⇒ 解析器无缺陷，是 CI 出口被该域限制。
+- **内核 `--uplink off` 25.6s**：v2ray 5.53.0 / xray 26.10.21 / clash 1.19.33 / singbox 1.14.4，能力指纹
+  12/13/14/14 未变；xray 26.11.9、clash 1.19.34 有新版本但不影响节点处理逻辑 → 不升级。昨晚的「首跑超时」未复现。
+- **自检 0 critical / 5 warn**：三核可用率 0.9/0.8/1.0%（已知水位）、clash-s 0 条（同上）、镜像失效 10/13
+  （可用 3 个，未到停用线）。
+- **窗口**：`GATE: done`、`SWITCH: on`、`SWITCH_ACTION: keep`（7 晚连续 done，但耗时达标=False ⇒ 维持启用）。
+- 产物：`nodes/` 四订阅 + available_* 四件 + tested_state.json + pool 四件，`Docs/` report/summary/health_check/
+  known-issues/collection_logs/window_switch 全部覆盖更新。
+
 ## 2026-11-21 22:00 第一窗口：可用 55 → 133（测试量翻倍 + 上游回升）；四核 cap 全撞、墙钟 56min；未改代码
 
 - **运行结果**：CI 产物一次同步就绪（`--sync-only --proxy auto`，第 6 次尝试命中 clash @ 202.50.253.90，

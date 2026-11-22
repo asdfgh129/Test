@@ -1882,6 +1882,14 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   （`VoroninaYanina` 昨日 7/32）。所以要动它的理由比原文更弱，**继续保持不修**。
   若以后要收紧告警信噪比，方向是「按外链主域名聚合后再判高贡献」，但需要先把 repo→README 域名落盘，
   属独立改造，不要在夜间窗口顺手改。
+- **2026-11-22 复核（第三个域，同一个机制：`clash-s/clash-s.github.io` 连续两晚 0 条）**：
+  `health_check` 报「高贡献仓库本次 0 条（历史 626 条，解析不到节点）」，采集日志「声明 2 个 → 提取 0 条」。
+  两个链接指向 `sfdr.zaixianyouxi.dpdns.org/uploads/2026/11/20261122.{yaml,txt}`（URL 里就是当天日期，
+  不存在「日期不符被跳过」）。本机直取 **200 / 81609B(yaml) + 19738B(txt)**，再拿仓库自己的
+  `extract_text_into()` 解析同一份内容得 **104 + 105 = 209 条**（vless 为主）⇒ **解析器无缺陷**，
+  CI 侧拿到的是另一份内容（datacenter IP 被该域拦成 HTML/空壳，与本文原结论同因）。
+  **判别方法可复用**：日志只要说「已下载但解析不到」，就在本机取同一 URL 并用 `extract_text_into()` 回归——
+  能出节点即出口问题，出 0 条才是格式/解析问题。本次历史贡献 626 条（0.6% 量级）⇒ 同样**不改代码**。
 
 ## 61. `window_gate` 只信 summary 内容不信日期：本地连续几晚没跑，闸门会一直回 done（2026-11-13 第二窗口）
 
@@ -2132,6 +2140,23 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 
 ## 自检发现（health_check 自动维护，按日期倒序）
 
+### 2026-11-22 自检发现
+
+**结论：无严重问题，5 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：clash-s/clash-s.github.io(历史 626 条, 解析不到节点) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 0.9%（23/2510） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | clash 可用率异常低 0.8%（21/2504） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | singbox 可用率异常低 1.0%（14/1393） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+### 2026-11-22 内核检查发现
+
+- xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
+- clash 有新版本 1.19.34（本地 1.19.33），可用 --update 自动升级
+
 ### 2026-11-21 自检发现
 
 **结论：无严重问题，6 个告警可优化**
@@ -2353,22 +2378,5 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 | warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ### 2026-11-06 内核检查发现
-
-- xray 有新版本 26.10.31（本地 26.10.21），可用 --update 自动升级
-
-### 2026-11-05 自检发现
-
-**结论：无严重问题，6 个告警可优化**
-
-| 级别 | 领域 | 问题 | 建议动作 |
-|---|---|---|---|
-| warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：crashgfw/free-airport-nodes(历史 2220 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
-| warn | 验证 | v2ray 可用率异常低 0.7%（18/2509） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | xray 可用率异常低 1.8%（44/2510） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | clash 可用率异常低 0.9%（23/2508） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | singbox 可用率异常低 1.0%（26/2507） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 11/13：https://gh-proxy.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
-
-### 2026-11-05 内核检查发现
 
 - xray 有新版本 26.10.31（本地 26.10.21），可用 --update 自动升级
