@@ -429,3 +429,23 @@
   56.0，与 cap 从 800~1770 档抬回 2500 档同步 —— 上限抬高 → 测试量翻倍 → 耗时翻倍，两者是同一条因果链，
   属「按现状运行」的正常代价，别因此回调 cap
 
+## 2026-11-22（第二十五次记录：GATE: done，未跑验证）
+
+- 开工前：taskkill 四内核均「没有找到进程」；`Get-CimInstance Win32_Process` 查 python 无结果 → 无并发窗口、无残留
+- 闸门退出码 0：采集日 **2026-11-22（生成于 22:51:52）**，四核均「已测满单轮上限」，
+  v2ray **2510/2500**、xray 1011/1008、clash 2504/2500、singbox 1393/1392，`elapsed_min=44.5`
+- 本日可用（summary.ok）：v2ray 23 / xray 33 / clash 21 / singbox 14 = 合计 91；
+  `nodes/available_nodes.json` 去重 **67** 条。四核 `partial=false`、`exhausted=false`
+  - singbox 14 仅略高于 `min_available` 10，但已测满 cap 1392 → 属源池质量，非漏测；按规则不补测
+- 开关仍 on：reason「维持 on：最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」，`streak_done=7`；
+  今晚 44.5 分钟达标，但 `history[-7:]`（11-16~11-22）仍含 **11-21 的 56.0**，故不达停用条件
+  - 开关推演（复核 11-21 的结论，那条是对的）：`history[-7:]` 今晚为 11-16~11-22，11-21 的 56.0 在内；
+    要让它滚出窗口需其后再攒满 7 条（11-22~11-28）→ 最早 **11-28** 才可能转 off
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github`
+  仅一项 `M free-nodes/.workbuddy/memory/automations/a3d7bb22…/memory.md`（主窗口自己的 memory）；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0（HEAD `bd60f61` 已是今日发布）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写完本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：`nodes/available_nodes.json` 现在的字段是 `date/generated_at/targets/bw_enabled/total/nodes`，
+  **没有 `cores` 字段**（历史条目里写「读 cores 字段」已过时），按内核计数只能看 `Docs/summary.json` 的 `cores`
+  或读订阅文件；本文件里 `/available_nodes.json` 的 `total` 是去重节点数
+
