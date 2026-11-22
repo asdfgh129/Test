@@ -90,6 +90,8 @@ python <free-nodes>/src/collect_nodes.py --out <输出根目录> --readme-only \
 
 **口径差异是有意的**：`Docs/report.md`、`Docs/collection_logs.md` 记的是 CI 采集口径（探测前，含 TCP 不可达）；`nodes/nodes_uris.txt` 与 `nodes/nodes_meta.json` 是本地探测口径（只含可达）。两处数字不同不是故障。
 
+**日期识别口径（`--readme-date-tolerance` 的依据）**：链接自身带的日期优先于小标题日期；8 位紧凑形式（`20261122`）与分隔形式（`2026-11-22` / `2026/11/22` / `2026年11月22日`）都认，且**紧凑形式先匹配**——否则「年/月目录 + 紧凑文件名」（`.../uploads/2026/11/20261122.yaml`）会被贪婪读成 `2026-11-20`，当天的真订阅被判成 3 天前、tolerance=0 下整批丢弃（known-issues 73）。排查时**先比对日志里的「声明 N 个」与 README 真订阅数**：少了就是链接筛选层丢了，此时在本机跑 `extract_text_into()` 出多少条都不代表链接被选中。
+
 **`--probe-only` 的实现要点**：复用 `probe_latencies` / `write_outputs` / `write_nodes_meta`，不复制格式转换；合成记录必须带 `parsed`（`record_hostport()` 先读 `parsed`，缺失会返回 None，探测目标数直接归零）；仓库/来源字段从 CI 写下的 `nodes_meta.json` 按 host:port 继承。
 
 **参数名陷阱（踩过）**：`test_nodes.py` 用 `--full-below` / `--max-test` / `--time-budget`（**不带** `--test-` 前缀）；`--test-full-below` / `--test-max-test` 是 `collect_nodes.py` 的透传名，传给 `test_nodes.py` 会直接报错退出。

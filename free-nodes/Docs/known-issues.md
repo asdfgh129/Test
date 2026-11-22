@@ -1890,6 +1890,14 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   CI 侧拿到的是另一份内容（datacenter IP 被该域拦成 HTML/空壳，与本文原结论同因）。
   **判别方法可复用**：日志只要说「已下载但解析不到」，就在本机取同一 URL 并用 `extract_text_into()` 回归——
   能出节点即出口问题，出 0 条才是格式/解析问题。本次历史贡献 626 条（0.6% 量级）⇒ 同样**不改代码**。
+- **2026-11-23 订正（上面这条结论错了，真因是链接筛选层的日期误解析）**：所谓「不存在日期不符被跳过」不成立。
+  当晚 README 实际声明 **3 个**订阅链接（`.yaml/.txt/.json`），而 CI 日志写「声明 **2** 个」——那 2 个是
+  `install.appcenter.ms/...clashx` 与 `play.google.com/...psiphon3` 两个**应用商店链接**，三个真订阅全在
+  链接筛选阶段被 `date_skipped` 丢掉了：`2026/11/20261122` 被 `DATE_TOKEN_RE` 切成 `2026-11-20`，
+  差 3 天 ⇒ tolerance=0 全砍。所以「下载的是另一份内容」这个推断不成立，CI 根本没下载那三个文件；
+  本机 `extract_text_into()` 出 209 条只能证明**内容→节点**没问题，证明不了**链接被选中**。
+  详见第 73 条（已修）。教训：`extract_text_into()` 回归只能排除「解析」这一层，**还要先看日志里的
+  「声明 N 个」与 README 里真订阅数是否一致**——不一致就是筛选层丢了，别再往下猜出口。
 
 ## 61. `window_gate` 只信 summary 内容不信日期：本地连续几晚没跑，闸门会一直回 done（2026-11-13 第二窗口）
 
@@ -2138,6 +2146,47 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   别一上来怀疑内核、转换器或探测地址。`health_check` 的「可用率异常低」只反映比例、不反映分布。
   也**别为了让率好看去缩 cap**：头部之外偶尔仍有可用节点，缩 cap 会漏测。
 
+## 73. 日期误解析把当天的真订阅挤掉：`2026/11/20261122.yaml` 被读成 `2026-11-20`（2026-11-23 第三窗口）
+
+- **现象**：`clash-s/clash-s.github.io` 连续两晚 0 条，`health_check` 报「高贡献仓库本次 0 条
+  （历史 626 条，解析不到节点）」，采集日志「声明 2 个 → 提取 0 条」。11-22 首窗判为「CI 出口受限」，
+  **该结论已被本文第 60 条的订正推翻**。
+- **决定性证据（一句话）**：README 里其实有 3 个真订阅链接（同一批文件的 `.yaml/.txt/.json`），
+  日志却说「声明 2 个」——多出来的 2 个是 `install.appcenter.ms/.../clashx` 与
+  `play.google.com/.../psiphon3.subscription`。出口受限只会让**下载**失败，不可能让**声明数变少**；
+  声明数少 = 链接在筛选阶段就被丢了。
+- **复现**（本机，只调函数不跑采集）：
+  ```
+  parse_date_token("https://…/uploads/2026/11/20261122.yaml")  ->  2026-11-20   # 应为 2026-11-22
+  extract_readme_links(README, repo, today=2026-11-22)
+      -> declared 2, date_skipped 3, dates_seen {"2026-11-20": 3}
+  ```
+- **根因**：`DATE_TOKEN_RE = (20\d{2})[-_/.年]?(\d{1,2})[-_/.月]?(\d{1,2})` 的分隔符全可省，
+  在「**年/月目录 + 紧凑日期文件名**」这种 URL 上从最左开始匹配、且每组贪婪两位：
+  `2026` + `/` + `11` + `/` + 文件名前两位 `20` ⇒ `2026-11-20`。当天的链接因此被判成 3 天前，
+  `--readme-date-tolerance 0` 下全数 `date_skipped`，只剩两个无日期的应用商店链接（通用订阅）被保留，
+  下载后自然解析 0 条 ⇒ 整仓归零。
+- **还有一层放大**：`day = parse_date_token(raw) or ctx_date(pos)` 意味着链接自身日期读错时会**静默采用错的日期**，
+  而不是回退到上下文或直接放行；日志只记一条 `date_skipped` 计数，不带样本，肉眼极难发现。
+  「`313 条` / `0 条` 交替」也由此解释：取决于当天 README 用的是「年/月目录 + 紧凑日期」还是别的形态
+  （历史上能出 313 条的那晚，README 的链接形态不同）。
+- **修法**（`src/collect_nodes.py`，两处）：新增 `DATE_COMPACT_RE = (?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)`，
+  `parse_date_token()` 改为**两遍扫描**——先 8 位紧凑日期，再分隔形式。顺序不能反：
+  同一起点上的分隔式正则仍会先吃掉 `20` 那两位。
+- **验证**：
+  1. 单点回归 14 个用例全过（`uploads/2026/11/20261122.yaml`→11-22、`2026/10/25/…`→10-25、
+     `Nodes-2026-10-25.txt`→10-25、`20261025/clash.yaml`→10-25、`2026年10月25日`→10-25、
+     `2026/20261122`→11-22、`20261399`→None、`?token=abc`→None）。
+  2. A/B 12 个真实 README（`DATE_COMPACT_RE` 换成永不匹配即旧行为）：只有 `clash-s` 变化
+     （2 个 → 5 个，`date_skipped` 3 → 0），其余 11 个仓库结果完全一致 ⇒ 无误伤。
+  3. 端到端：3 个链接按新逻辑被保留，内容解析 **105+104+104 = 313 条**，与历史「声明 5 个 → 313 条」吻合。
+- **代价/收益**：改动只影响「链接自带日期」的判定，且只在有 8 位紧凑日期时生效；不动 tolerance 口径、
+  不动探测地址、不动 cap。预期该仓次日恢复约 300 条原始候选（历史贡献 626，量级 0.6%）。
+- **教训（判据留用）**：日志出现「已下载但解析不到」时，**先核对「声明 N 个」是否等于 README 里的真订阅数**。
+  少于真订阅数 ⇒ 问题在**链接筛选层**（日期/内核/去重），此时在本机跑 `extract_text_into()` 出多少条都没用，
+  它证明不了「链接被选中」。判层顺序应是：README 取到没 → 链接**筛出**几个（与 README 真订阅数比）→
+  链接下载成功没 → 内容能解析出节点没。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
 
 ### 2026-11-22 自检发现
@@ -2150,7 +2199,7 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 | warn | 验证 | v2ray 可用率异常低 0.9%（23/2510） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | clash 可用率异常低 0.8%（21/2504） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | singbox 可用率异常低 1.0%（14/1393） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ### 2026-11-22 内核检查发现
 

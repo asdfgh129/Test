@@ -455,6 +455,11 @@ KERNEL_LINK_HINTS = [
 #   ② 用小标题分节：### 2026-10-25 下面才列当天的链接（链接自己没有日期）
 # 两种都要认。只认 4 位年份的完整日期，不猜 "1025" 这类缩写（误伤率太高）。
 DATE_TOKEN_RE = re.compile(r"(20\d{2})[-_/.年]?(\d{1,2})[-_/.月]?(\d{1,2})")
+# 8 位紧凑日期（20261122）。必须单独一条正则并**优先**匹配：订阅站爱把文件放在
+# 「年/月 目录 + 紧凑日期文件名」下，如 `.../uploads/2026/11/20261122.yaml`；
+# 只有 DATE_TOKEN_RE 时，`2026/11/2026` 会被贪婪切成 `2026-11-20`（年/月目录 + 文件名前两位），
+# 当天的真订阅于是被判成三天前、按 tolerance=0 丢弃（known-issues 73）。
+DATE_COMPACT_RE = re.compile(r"(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)")
 DATE_HEADING_RE = re.compile(
     r"^[ \t]{0,3}#{1,6}[^\n]{0,80}?(20\d{2})[-_/.年]?(\d{1,2})[-_/.月]?(\d{1,2})", re.MULTILINE)
 
@@ -815,18 +820,24 @@ def detect_kernel_hint(*texts):
 
 
 def parse_date_token(*texts):
-    """从若干段文本里找第一个合法日期（YYYY-MM-DD），找不到返回 None。"""
+    """从若干段文本里找第一个合法日期（YYYY-MM-DD），找不到返回 None。
+
+    两遍扫描：先 8 位紧凑日期（`20261122`），再分隔形式（`2026-11-22` / `2026/11/22`）。
+    顺序不能反——前者优先级更高，否则 `.../2026/11/20261122.yaml` 这种
+    「年/月 目录 + 紧凑文件名」会被切成 `2026-11-20`（known-issues 73）。
+    """
     for t in texts:
         if not t:
             continue
-        for m in DATE_TOKEN_RE.finditer(t):
-            y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
-            if not (1 <= mo <= 12 and 1 <= d <= 31):
-                continue
-            try:
-                return date(y, mo, d)
-            except ValueError:   # 2 月 30 日之类的非法日期
-                continue
+        for rx in (DATE_COMPACT_RE, DATE_TOKEN_RE):
+            for m in rx.finditer(t):
+                y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+                if not (1 <= mo <= 12 and 1 <= d <= 31):
+                    continue
+                try:
+                    return date(y, mo, d)
+                except ValueError:   # 2 月 30 日之类的非法日期
+                    continue
     return None
 
 
