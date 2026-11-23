@@ -449,3 +449,20 @@
   **没有 `cores` 字段**（历史条目里写「读 cores 字段」已过时），按内核计数只能看 `Docs/summary.json` 的 `cores`
   或读订阅文件；本文件里 `/available_nodes.json` 的 `total` 是去重节点数
 
+## 2026-11-23（第二十六次记录：GATE: done，未跑验证）
+
+- 开工前：`tasklist` 查 python.exe 与四内核均「没有找到进程」→ 无并发窗口、无残留；未跑 taskkill（无活可干）
+- 闸门退出码 0：采集日 **2026-11-23（生成于 22:53:31）**，四核均「已测满单轮上限」，
+  v2ray **2510/2500**、xray 1005/1000、clash 2502/2500、singbox 2501/2500，`elapsed_min=47.2`
+- 本日可用（summary.ok）：v2ray 24 / xray 63 / clash 25 / singbox 28 = 合计 140；
+  `nodes/available_nodes.json` 去重 **99** 条（`bw_enabled=true`）。四核 `partial=false`、`exhausted=false`
+- 开关仍 on：reason「维持 on：最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」，`streak_done=7`；
+  今晚 47.2 分钟达标（≤50），但 `history[-7:]`（11-17~11-23）仍含 **11-21 的 56.0** → 不达停用条件，
+  与 11-22 的推演一致：最早 **11-28** 才可能转 off（11-21 滚出窗口）
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0
+  （HEAD `c72b319`，今日第三次提交：CI 采集 + 本地发布 ×2）；`git status --short -- free-nodes .github` 两项，
+  均为 automation memory（`2026-11-23.md` M + 主窗口 a3d7bb22 memory M）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写完本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：三核 cap 回到 2500 档、xray 仍是 1000 档，说明弹性反推按各核可用率独立浮动；
+  今晚 `elapsed_min=47.2` 已贴近 50 上限，若 11-24 再超 50 会把「最晚那晚」刷新成 11-24，转 off 日期继续后移
+
