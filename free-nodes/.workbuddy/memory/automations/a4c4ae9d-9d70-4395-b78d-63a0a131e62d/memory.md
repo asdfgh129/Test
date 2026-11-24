@@ -466,3 +466,21 @@
 - **给后续窗口的要点**：三核 cap 回到 2500 档、xray 仍是 1000 档，说明弹性反推按各核可用率独立浮动；
   今晚 `elapsed_min=47.2` 已贴近 50 上限，若 11-24 再超 50 会把「最晚那晚」刷新成 11-24，转 off 日期继续后移
 
+## 2026-11-24（第二十七次记录：GATE: done，未跑验证）
+
+- 开工前：taskkill 四内核均「没有找到进程」；`Get-CimInstance Win32_Process` 查 python 无结果 → 无并发窗口、无残留
+- 闸门退出码 0：采集日 **2026-11-24（生成于 22:50:42）**，四核均「已测满单轮上限」，
+  v2ray **2511/2500**、xray 1004/1000、clash 2505/2500、singbox 2503/2500，`elapsed_min=43.9`
+- 本日可用（summary.ok）：v2ray **7** / xray 14 / clash 14 / singbox 25 = 合计 60；
+  `nodes/available_nodes.json` 去重 **48** 条（`bw_enabled=true`）。四核 `partial=false`、`exhausted=false`
+  - v2ray 7 低于 `min_available` 10，但已测满 cap 2500 → 属源池质量，非漏测；与 11-20 的 5、11-13 的 7 同型
+- 开关仍 on：reason「维持 on：最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」；
+  今晚 43.9 分钟达标，`history[-7:]`（11-18~11-24）仍含 **11-21 的 56.0** → 与 11-22/11-23 推演一致，
+  最早 **11-28** 才可能转 off
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`rev-list --left-right --count` = 0/0
+  （HEAD 已是今日发布）；`git status --short -- free-nodes .github` 两项，均为 automation memory
+  （`2026-11-24.md` ?? + 主窗口 a3d7bb22 memory M）
+- 本窗口零验证、零自检、零修复（GATE: done 按规则不重做自检）；写完本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：可用数低位（合计 60、v2ray 个位数）在 cap 已测满时属源池质量，
+  quota.md 第二节告警看的是「连续 3 晚合计 <60」，今晚刚好 60 不命中，别据此提上限
+
