@@ -1,5 +1,34 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-23 采集日（2026-11-24 01:30 运行）
+
+- 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2510/2500、xray 1005/1000、clash 2502/2500、
+  singbox 2501/2500）→ GATE: done → 本窗口未采集、未跑验证、未重跑自检（未占用验证资源）
+- 开始前三处尾巴全干净：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 按规则不开工，未发布
+- 本日可用 **v2ray 24 / xray 63 / clash 25 / singbox 28**（池 210/550/339/346）；
+  CI 采集 28142 → 去重 8583，TCP 可达 8583/8583（100%，中位 235ms），扫描仓库 100 个
+- 产物核对：available 条目 24/63/25/**29（含 1 条 direct，净 28）** 与 summary ok 逐项一致；
+  `nodes_uris` 8583 = `nodes_meta.total/reachable` 8583；tested_state date=11-23（四核 2510/1005/2502/2501）
+- 自检（第一窗口 22:53 产物）：**0 critical / 5 warn** = v2ray 1.0%、clash 1.0%、singbox 1.1% 低水位
+  + `Areral/ScarletDevil` 0 条（HTTP 402）+ 镜像失效 10/13（可用 gh-proxy.com / gh-proxy.org / gh.monlor.com）
+  → 均为既定口径，未改代码
+- **ScarletDevil 402 取证（结论：上游付费/配额，非采集问题）**：API 取 README（14342B，sha 3c626e5b），
+  3 个订阅全在 `scarlet-devil.vercel.app/sub{,/bs,/chs}`；本机直连该域 **TCP 超时**
+  （DNS 解析到 199.96.61.1），而 CI（Azure）拿到的是服务器明确回的 **402 Payment Required**
+  ⇒ 是 Vercel 侧账号额度/停用，属服务端状态而非路径或请求头问题，镜像也救不了（非 raw 源）
+- **长期记忆里「update_repo_quality 用当日小样本覆盖历史大样本（待落地）」已不成立**：
+  `collect_nodes.py:3487` 现已是 `QUALITY_WINDOW` 滚动汇总（sum(tested)/sum(ok)），
+  实测 ScarletDevil 11-23 样本 `tested=1/ok=0` 后聚合仍是 `555 测 / 57 可用 / 10.3%`，
+  仅从 quality≈25 降到 7.2，未被踢出。**别再按「覆盖」去改这段代码**
+- 新观察项（未改，无功能影响）：`update_repo_quality` 的 `avail_rate` 是窗口汇总，
+  但 `entry["avg_latency"]` 取的是**最近一次样本**；最近样本全死时 latency=None，
+  `quality_score` 的两个分支会丢掉 30 分延迟项（ScarletDevil 7.2 vs 应约 24.9）。
+  消费面只有 `collect_nodes.py:3253` 的表排序与 `health_check` 展示，
+  `repo_sort_key` 用的是 avail_rate，**不影响采集优先级**，故本窗口不动代码
+- 窗口开关仍 on（`streak_done` 7/7、`elapsed_min=47.2<50`，`reason` 写历史某晚超 50）→ 本窗口被正常触发
+- 本记忆文件在核查之后写，形成 1 个纯文档尾巴，按既有约定留待明晚第一窗口顺带提交
+
 ## 2026-11-22 采集日（2026-11-23 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2510/2500、xray 1011/1008、clash 2504/2500、

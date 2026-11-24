@@ -2187,7 +2187,58 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   它证明不了「链接被选中」。判层顺序应是：README 取到没 → 链接**筛出**几个（与 README 真订阅数比）→
   链接下载成功没 → 内容能解析出节点没。
 
+## 74. 可用数 140 → 60 不是网络变差：池内复测按「历史最低延迟」取样，专门挑到最陈旧的死节点（2026-11-24 第一窗口，待落地）
+
+- **现象**：可用总数 140（11-23）→ **60**（11-24），而测试量几乎不变（7518 → 7523）、候选规模同量级
+  （可达 8583 → 7517，率 30.5% → 27.5%）、中位延迟 235 → 250ms（+6%）。四核同向下滑：
+  v2ray 24→7、xray 63→14、clash 25→14、singbox 28→25；四核可用率 0.3 / 1.4 / 0.6 / 1.0%。
+- **控制组证明本机网络正常**（本次核心取证）：从 11-23 四份 available 产物（git HEAD）抽出 **90 个唯一端点**，
+  与今日 `nodes_uris.txt` 求交后 42 个仍 TCP 可达（另 48 个即 53% 在 24h 内 TCP 死亡，免费节点即如此短命），
+  把这 42 个放进隔离目录跑同一套 `test_nodes.py`（同 URL/超时/并发）：**v2ray 8/12、xray 21/41、
+  clash 7/42、singbox 22/38 = 58/133 通过（≈44%）**。而今日 2500 条候选取样只有 ≈0.8%。
+  ⇒ 本机出口、链路、探测参数都没问题，差的是「取样里有多少已经证明能用的节点」。
+- **池内复测为什么没救回来**：`pool.retest_candidates()` 的排序是 `best_latency` 升序
+  （`src/pool.py:238`），`best_latency` 是**历史最小值**，最能排到前面的恰恰是「很久以前很快、现在早已消失」的节点。
+  实测今日取样：v2ray 池 202 条取 40，其中 `last_ok ≥ 11-20` 的只有 **18** 个；xray 487 取 40 → 18；
+  clash 311 取 40 → 10；singbox 328 取 40 → 14。后果直接可见：**singbox 池内复测 40 个，TCP 可达仅 3 个**
+  （3/40 = 7.5%，而池里「近 3 天还 ok」的条目本应远高于此）。
+- **代价**：`--pool-retest` 默认只有 40/内核（`pool.DEFAULT_RETEST`），这 40 个名额是每晚最贵的一档
+  （已验证过），却被历史最低延迟占满，几乎全打在死节点上。
+- **拟修（待单点回归后落地，一次只动一个变量）**：`retest_candidates()` 改为三级稳定排序
+  —— **`last_ok` 倒序 → `ok_count` 倒序 → `best_latency` 升序**（实现上用三次 `list.sort`，Python 稳定排序）：
+  ```python
+  cand.sort(key=lambda n: (1 if n.get("best_latency") is None else 0, n.get("best_latency") or 0))
+  cand.sort(key=lambda n: int(n.get("ok_count") or 0), reverse=True)
+  cand.sort(key=lambda n: str(n.get("last_ok") or ""), reverse=True)
+  ```
+  **名额仍留 40**（不抬 `DEFAULT_RETEST`，避免同晚改两个变量）。预期：40 个名额全落在近 1~3 天的节点上，
+  按控制组 44% 的通过率，单核可多出 10~15 个可用节点。
+- **验证方式（留给落地那晚）**：改完直接用真实池状态跑 `retest_candidates()` 出 40 条 → `tcp_prefilter()`
+  统计可达率，与今日「3/40」对比；再跑一次受影响内核的 `test_nodes.py` 确认 available 条数不回退。
+- **教训**：判断「可用数下滑」时，**先做控制组，再谈上游**。本次三点取证（可达率仅 −3pt、中位延迟持平、
+  失败构成同形）本来足以判「上游波动」就收工，但控制组把矛头指向了**取样组成**——这是本项目第一次证明
+  「不是源池变差，是我们取样时把已验证节点排在了后面」。同类判断以后都该带一个控制组：
+  「昨天的 available 今天还能过多少」，成本 2 分钟（42 个端点、`--no-bw`），信息量远高于翻查历史失败分布。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
+
+### 2026-11-24 自检发现
+
+**结论：无严重问题，6 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：Areral/ScarletDevil(历史 43446 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 0.3%（7/2511） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | xray 可用率异常低 1.4%（14/1004） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | clash 可用率异常低 0.6%（14/2505） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | singbox 可用率异常低 1.0%（25/2503） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+### 2026-11-24 内核检查发现
+
+- xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
+- clash 有新版本 1.19.34（本地 1.19.33），可用 --update 自动升级
 
 ### 2026-11-23 自检发现
 
@@ -2412,20 +2463,5 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 | warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ### 2026-11-08 内核检查发现
-
-- xray 有新版本 26.10.31（本地 26.10.21），可用 --update 自动升级
-
-### 2026-11-07 自检发现
-
-**结论：无严重问题，4 个告警可优化**
-
-| 级别 | 领域 | 问题 | 建议动作 |
-|---|---|---|---|
-| warn | 验证 | v2ray 可用率异常低 1.2%（31/2511） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | clash 可用率异常低 1.0%（24/2511） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | singbox 可用率异常低 1.0%（24/2508） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
-
-### 2026-11-07 内核检查发现
 
 - xray 有新版本 26.10.31（本地 26.10.21），可用 --update 自动升级
