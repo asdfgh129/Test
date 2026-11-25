@@ -466,6 +466,36 @@
 - **给后续窗口的要点**：三核 cap 回到 2500 档、xray 仍是 1000 档，说明弹性反推按各核可用率独立浮动；
   今晚 `elapsed_min=47.2` 已贴近 50 上限，若 11-24 再超 50 会把「最晚那晚」刷新成 11-24，转 off 日期继续后移
 
+## 2026-11-25（第二十八次记录：**GATE: continue，本窗口代跑完整验证 + 补探测**；推送被 deploy key 权限拒绝）
+
+- **异常起点**：23:46 开工，闸门 `GATE: continue（summary 停在昨天）`。查证：`Docs/summary.json`、
+  `available_*`、`tested_state.json` 全停在 **11-24** ⇒ 今晚第一窗口（22:00）**一点没跑**（本机未触发/休眠）。
+  CI 今天 **07:01:44** 才产出（`CI_READY=0`，早于 20:00 判据），本地只有 09:48 的 `--sync-only` 拉回 CI 原始产物。
+- 开工前 `tasklist` 查 python 与四内核均无进程 → 无并发窗口、无残留（未跑 taskkill）
+- **验证（本窗口代跑）**：`test_nodes.py --cores v2ray,xray,clash,singbox --resume-tested --fair-budget --time-budget 4800`
+  → 51.5 分钟，候选 33421 → 预筛 9963/33419 → 四核 2513/2156/2503/2503，
+  可用 **16/26/12/59**（合计 113，去重 76）；四核 `partial=false`、`tested ≥ cap`（xray cap 2151）
+- **修掉的真实缺口（known-issues 75）**：自检首轮 **1 critical**「所有节点 TCP 均不可达」。
+  归因不是网络：`nodes_meta.json` 的 `generated_at=07:01:44`（CI 时刻）、`reachable=0`、`tcp_latency` 全 null
+  ⇒ 清单是 CI 原始未探测版。若不补探测就发布，等于把 33421 条（含 **23537 死节点**）当主清单推出去。
+  补 `collect_nodes.py --probe-only --date 2026-11-25`：33385 → 可达 **9882（29.6%）**、313s，
+  主清单重写为 9882 条 → 自检 **0 critical / 6 warn**
+  - 交叉验证：预筛 9963/33419 vs probe 9882/33385，差 0.2% ⇒ 两边口径一致
+  - 安全性已确认：`--probe-only` 只写 `nodes_uris.txt` + 四份 `*_sub`，**不碰 `available_*`**
+- 文档：`known-issues` 75、`review_logs` 11-25 观察段、`CHANGELOGS` 11-25 小节、`SKILL.md` 加一行判据
+- **推送失败（本次未完成）**：本地已提交 `250fda8`（暂存范围正确，未带用户 C++ 项目），
+  但 push 报 **`ERROR: Permission to asdfgh129/Test.git denied to deploy key`** ——
+  5 轮通道 + 3 次直连共 8 次全部同一错，属**凭据权限**问题（remote 是 `ssh://git@github.com/asdfgh129/Test.git`，
+  key `~/.ssh/github_ed25519`），不是网络也不是非快进。已写 `.git/free-nodes-pending-push.json`，下次自动补推
+  - **另注**：`origin/master` 还有 CI 的 `1749201`（本地 `0185cbc` 之后又采了一次）→ 权限修好后
+    补推前需先合并远端，别 force
+  - 按规则**没有**改 remote/配置、没有手动反复 push
+- **给后续窗口的要点**：
+  ① 闸门 continue 且 summary 停在昨天时，默认「第一窗口没跑」，**探测也归自己**（先跑 test_nodes，再补 probe，顺序可反）；
+  ② 判「清单有没有探测过」只看 `nodes_meta.generated_at` 与 `reachable`，别被文件 mtime 骗（sync 也会更新 mtime）；
+  ③ 推送报 `denied to deploy key` 就别再试节点了，那是 GitHub 侧 key 权限，换 8 个节点也一样；
+  ④ 本窗口写 memory 又产生尾巴，下次 publish 会一起带上（届时仍需先解决 key 权限）。
+
 ## 2026-11-24（第二十七次记录：GATE: done，未跑验证）
 
 - 开工前：taskkill 四内核均「没有找到进程」；`Get-CimInstance Win32_Process` 查 python 无结果 → 无并发窗口、无残留
