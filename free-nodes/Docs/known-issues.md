@@ -2220,7 +2220,45 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   「不是源池变差，是我们取样时把已验证节点排在了后面」。同类判断以后都该带一个控制组：
   「昨天的 available 今天还能过多少」，成本 2 分钟（42 个端点、`--no-bw`），信息量远高于翻查历史失败分布。
 
+## 75. 自检报「所有节点 TCP 均不可达」不等于网络故障：多半是第一窗口没跑 `--probe-only`（2026-11-25 第二窗口）
+
+- **现象**：第二窗口闸门 `GATE: continue（summary 停在昨天）`，说明本地验证没跑。开工后自检报 **1 critical**
+  ：「[延迟排序] 所有节点 TCP 均不可达」「订阅前 50 条里有 50 条不可达」，而 `nodes_uris.txt` 明明有 33421 行。
+- **归因（1 分钟可判）**：读 `nodes/nodes_meta.json` 三个字段即可 ——
+  `generated_at=2026-11-25 07:01:44`（**CI 的生成时间**，不是本地探测时间）、`reachable=0`、
+  `latency.buckets.不可达 = total`、`nodes[*].tcp_latency` 全为 null。
+  ⇒ 这份清单是 **CI 的原始产物**（CI 只跑 `--readme-only --no-latency-sort`，从不做可达探测），
+  文件 mtime 是 `--sync-only` 拉下来的时刻（本次 09:48），**不代表探测过**。
+- **为什么危险**：`nodes_uris.txt` 的既定口径是「本地探测后只含可达」，一旦第一窗口缺跑，
+  清单会以 CI 原始版（33421 条，其中 **23537 条 TCP 不可达**）被发布出去；自检 critical 也会天天复现，
+  文案却写着「网络出口异常或节点集体失效，先确认本机连通性」——**极易把人带向排查本机网络**。
+- **处置**（本窗口实测可行，约 5.5 分钟）：
+  1. 先跑 `test_nodes.py` 拿验证结果（它自带 256 并发/1.5s 预筛，不依赖 meta，结果可信）；
+  2. 再补 `collect_nodes.py --out <root> --probe-only --date <采集日>`（默认 128 并发/1.5s）：
+     实测 33419 条 → 可达 **9882**（29.6%），313s；只重写 `nodes_uris.txt` / 四份 `*_sub` / `nodes_meta.json`，
+     **不碰 `available_*`**（`write_outputs` 写的是候选订阅），所以不会冲掉已验证结果；
+  3. 复跑自检 → critical 消失（本次 0 critical / 6 warn）。
+  两个步骤顺序可反，但 **probe 必须补**：只发布验证结果而不补 probe，等于把 2.3 万条死节点当主清单发出去。
+- **交叉验证**：`test_nodes` 自己的预筛得 9963/33419 可达，独立 probe 得 9882/33385 —— 两者相差 0.2%，
+  说明预筛与 probe 口径一致，任一方都不会把「可达」判错。
+- **教训**：`health_check` 的「所有节点 TCP 均不可达」先把 `nodes_meta.generated_at` 与 `reachable` 读一遍
+  （30 秒），再谈本机网络；`generated_at` 停在 CI 时刻 + `reachable=0` 就是「没探测」的铁证。
+  第二窗口接手时若看到 summary 停在昨天，应默认「第一窗口没跑」，把「探测」也当成自己的活。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
+
+### 2026-11-25 自检发现
+
+**结论：无严重问题，6 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：Areral/ScarletDevil(历史 43446 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 0.6%（16/2513） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | xray 可用率异常低 1.2%（26/2156） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | clash 可用率异常低 0.5%（12/2503） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | singbox 可用率异常低 2.4%（59/2503） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ### 2026-11-24 自检发现
 
@@ -2461,7 +2499,3 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 | warn | 验证 | clash 可用率异常低 1.7%（42/2511） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | singbox 可用率异常低 1.8%（45/2506） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
-
-### 2026-11-08 内核检查发现
-
-- xray 有新版本 26.10.31（本地 26.10.21），可用 --update 自动升级

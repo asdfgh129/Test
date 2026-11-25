@@ -2,6 +2,169 @@
 
 > 按日期倒序累积；同一天重跑会替换当天小节
 
+## 2026-11-25 00:38
+
+- 可用节点 **76** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）
+- 延迟测试目标：primary、github、x、cloudflare、youtube（主判据 `primary`）
+- 带宽：2MB 串行下载，每内核最多 20 个
+
+| 节点 | 内核 | 协议 | 主目标 | github | x | cloudflare | youtube | 带宽 |
+|---|---|---|---|---|---|---|---|---|
+| `139.162.101.74:443` | singbox | vless | 582ms | 579ms | 639ms | 591ms | 474ms | 12.95Mbps |
+| `172.104.86.181:443` | singbox | vless | 585ms | 592ms | 668ms | 516ms | 469ms | 10.8Mbps |
+| `172.104.48.162:443` | singbox | vless | 587ms | 803ms | 591ms | 489ms | 382ms | 6.59Mbps |
+| `139.162.91.137:443` | singbox | vless | 608ms | 716ms | 767ms | 541ms | 645ms | 11.77Mbps |
+| `172.104.48.194:443` | singbox | vless | 628ms | 433ms | 653ms | 385ms | 375ms | 6.48Mbps |
+| `172.104.186.185:443` | singbox | vless | 631ms | 480ms | 812ms | 433ms | 420ms | 11.46Mbps |
+| `172.237.14.205:443` | singbox | vless | 661ms | 990ms | 640ms | 484ms | 431ms | 1.82Mbps |
+| `172.105.203.15:443` | singbox | vless | 693ms | 467ms | 556ms | 440ms | 416ms | 12.68Mbps |
+| `139.162.91.182:443` | singbox | vless | 704ms | 618ms | 619ms | 422ms | 505ms | 10.65Mbps |
+| `172.237.27.143:443` | singbox | vless | 705ms | 593ms | 629ms | 656ms | 575ms | 12.98Mbps |
+| `172.105.212.91:443` | singbox | vless | 723ms | 611ms | 770ms | 604ms | 598ms | 12.17Mbps |
+| `139.162.91.224:443` | singbox | vless | 742ms | 557ms | 672ms | 581ms | 598ms | 11.14Mbps |
+| `172.105.197.24:443` | singbox | vless | 768ms | 727ms | 720ms | 714ms | 657ms | 11.5Mbps |
+| `172.104.105.212:443` | singbox | vless | 794ms | 694ms | 747ms | 687ms | 586ms | 11.9Mbps |
+| `139.162.91.200:443` | singbox | vless | 795ms | 768ms | 774ms | 577ms | 693ms | 11.76Mbps |
+| `172.104.186.205:443` | singbox | vless | 807ms | 575ms | 869ms | 582ms | 620ms | 10.96Mbps |
+| `139.162.91.247:443` | singbox | vless | 818ms | 605ms | 728ms | 508ms | 662ms | 12.35Mbps |
+| `43.163.112.174:443` | clash | vless | 843ms | ✗ | ✗ | ✗ | ✗ | 3.73Mbps |
+| `139.162.91.232:443` | singbox | vless | 846ms | 630ms | 781ms | 694ms | 621ms | 12.57Mbps |
+| `109.248.148.140:11470` | singbox/v2ray | ss | 848ms | 1582ms | 1046ms | 2722ms | 783ms | 5.63Mbps |
+| `202.50.253.27:19999` | singbox/v2ray/xray | ss | 1025ms | ✗ | 2578ms | 981ms | 1313ms | 0.83Mbps |
+| `151.241.128.146:4430` | xray | vless | 1034ms | 1819ms | ✗ | ✗ | 1079ms | 0.93Mbps |
+| `139.180.221.53:443` | singbox | vless | 1069ms | 2008ms | 1162ms | 1001ms | 1413ms | 3.6Mbps |
+| `149.28.152.20:443` | singbox | vless | 1073ms | 1651ms | 1797ms | 1792ms | 779ms | - |
+| `172.238.18.103:443` | singbox | vless | 1109ms | 705ms | 734ms | 955ms | 607ms | - |
+| `178.17.58.55:443` | v2ray | hysteria2 | 1215ms | ✗ | ✗ | ✗ | ✗ | - |
+| `172.235.51.71:443` | singbox | vless | 1246ms | 2421ms | 2871ms | 1926ms | 1152ms | - |
+| `136.148.83.71:443` | clash/singbox/xray | vless | 1276ms | ✗ | ✗ | 1254ms | ✗ | 2.68Mbps |
+| `136.148.83.70:443` | clash/singbox/xray | vless | 1312ms | ✗ | ✗ | 1150ms | ✗ | 1.52Mbps |
+| `202.50.253.90:19999` | clash/singbox/v2ray/xray | ss | 1314ms | ✗ | 1446ms | 2110ms | 1972ms | 0.85Mbps |
+| `free.server.darknetlk.com:443` | singbox | vless | 1347ms | 371ms | 536ms | 553ms | 322ms | - |
+| `209.50.50.174:443` | xray | vless | 1443ms | 2569ms | 3515ms | ✗ | 1093ms | 0.1Mbps |
+| `202.50.253.45:19999` | clash/singbox/v2ray/xray | ss | 1469ms | ✗ | 4221ms | 961ms | 986ms | 1.43Mbps |
+| `172.233.139.98:443` | singbox | vless | 1513ms | 1467ms | 1363ms | 3104ms | 1107ms | - |
+| `m.cnmjin.net:16622` | v2ray/xray | vmess | 1545ms | 2524ms | 2299ms | 2301ms | ✗ | 4.37Mbps |
+| `172.236.239.126:443` | singbox | vless | 1551ms | 2197ms | 2983ms | 1365ms | 1411ms | - |
+| `47.85.227.36:443` | singbox/xray | ss | 1572ms | 1255ms | 1280ms | 1709ms | 1133ms | 1.39Mbps |
+| `84.54.44.117:443` | xray | vless | 1603ms | 1644ms | 1590ms | 2492ms | 2801ms | 3.64Mbps |
+| `172.235.49.52:443` | singbox | vless | 1635ms | 2075ms | ✗ | 4545ms | 1999ms | - |
+| `172.233.129.179:443` | singbox | vless | 1638ms | 1834ms | 1363ms | 1358ms | 2478ms | - |
+| `45.76.191.30:443` | singbox | vless | 1673ms | 1592ms | 1820ms | 814ms | 1734ms | - |
+| `riverside.elvano.website:443` | xray | vless | 1687ms | 1900ms | ✗ | 2273ms | 1084ms | 0.21Mbps |
+| `leviko-ru4448.shopingggg.ir:443` | v2ray | vless | 1736ms | 998ms | 1113ms | 931ms | 753ms | - |
+| `172.235.53.103:443` | singbox | vless | 1773ms | 1349ms | 2533ms | 2166ms | 1398ms | - |
+| `201.24.116.192:443` | v2ray | vless | 1797ms | 741ms | 754ms | 705ms | 796ms | - |
+| `202.50.253.36:19999` | clash/singbox/xray | ss | 1822ms | ✗ | 1041ms | 4224ms | 2217ms | 1.52Mbps |
+| `172.235.50.209:443` | singbox | vless | 1825ms | 3140ms | 3210ms | ✗ | 1071ms | - |
+| `172.236.233.130:443` | singbox | vless | 1881ms | 1158ms | 2073ms | 1580ms | 1405ms | - |
+| `vps3.nemnogogo.com:443` | v2ray | vless | 1900ms | 736ms | 844ms | 683ms | 820ms | - |
+| `172.239.67.142:443` | singbox | vless | 1914ms | 1383ms | 1462ms | 2313ms | 1366ms | - |
+| `139.180.215.25:443` | singbox | vless | 1953ms | 1733ms | 2165ms | 838ms | 1865ms | - |
+| `193.233.89.130:8443` | clash/singbox/xray | vless | 2007ms | 775ms | 878ms | 767ms | 796ms | 2.42Mbps |
+| `172.235.36.11:443` | singbox | vless | 2039ms | 1394ms | 1350ms | 1556ms | 1513ms | - |
+| `202.50.253.81:19999` | clash/singbox/v2ray/xray | ss | 2122ms | 1458ms | 2655ms | 3137ms | 2565ms | 1.22Mbps |
+| `198.13.53.39:443` | singbox | vless | 2128ms | 3057ms | 2526ms | 1190ms | 3174ms | - |
+| `84.54.47.216:443` | singbox | vless | 2153ms | ✗ | ✗ | ✗ | ✗ | - |
+| `202.50.253.99:19999` | singbox/v2ray/xray | ss | 2153ms | ✗ | 2455ms | 3504ms | 997ms | 0.7Mbps |
+| `n4.fernstatic.com:443` | xray | vless | 2200ms | 1591ms | 3815ms | 865ms | 2590ms | 1.12Mbps |
+| `172.233.129.172:443` | singbox | vless | 2246ms | 1394ms | 1105ms | ✗ | 1421ms | - |
+| `202.50.253.18:19999` | clash/singbox/v2ray/xray | ss | 2251ms | 1049ms | 1091ms | 943ms | 1390ms | 1.39Mbps |
+| `186.241.113.196:24605` | xray | vless | 2263ms | 1162ms | 1577ms | 1046ms | 1338ms | 0.26Mbps |
+| `13.141.36.163:443` | xray | vless | 2413ms | ✗ | ✗ | ✗ | 3208ms | - |
+| `birchbark.gerqix.online:443` | singbox/xray | vless | 2422ms | 1062ms | 959ms | 934ms | 1190ms | - |
+| `202.50.253.72:19999` | clash/singbox/v2ray/xray | ss | 2593ms | 2030ms | 3636ms | 940ms | 1009ms | 1.48Mbps |
+| `193.160.208.240:443` | xray | vless | 2673ms | 2364ms | 1529ms | 793ms | 718ms | - |
+| `172.235.32.253:443` | singbox | vless | 2717ms | 2431ms | 1512ms | 2014ms | 1677ms | - |
+| `201.51.12.98:443` | v2ray | vless | 2832ms | 1147ms | 2543ms | 869ms | 1939ms | 0.91Mbps |
+| `31.58.191.93:443` | xray | vless | 2842ms | ✗ | 1784ms | 1142ms | ✗ | - |
+| `172.236.241.130:443` | singbox | vless | 2862ms | 1471ms | 1149ms | 1419ms | 1370ms | - |
+| `172.233.139.212:443` | singbox | vless | 2873ms | 1434ms | 3144ms | 2132ms | 3095ms | - |
+| `196.199.122.2:443` | xray | vless | 2929ms | ✗ | ✗ | ✗ | ✗ | - |
+| `172.236.238.71:443` | singbox | vless | 2936ms | 2775ms | 1208ms | 1833ms | ✗ | - |
+| `202.50.253.54:19999` | clash/singbox/v2ray/xray | ss | 3148ms | 2053ms | 1405ms | 1342ms | 962ms | 1.52Mbps |
+| `202.50.253.63:19999` | clash/singbox/v2ray | ss | 3269ms | 1014ms | 1080ms | 2912ms | 2259ms | 1.92Mbps |
+| `103.88.241.220:443` | singbox/xray | vless | 3623ms | 2818ms | ✗ | 3250ms | ✗ | - |
+| `172.236.231.45:443` | singbox | vless | 4046ms | 1576ms | 1621ms | 1303ms | 2230ms | - |
+
+> 来源仓库（可多个，去重时按 1/N 分摊产量）：
+> - `139.162.101.74:443`：jichangx/free-nodes
+> - `172.104.86.181:443`：jichangx/free-nodes
+> - `172.104.48.162:443`：jichangx/free-nodes
+> - `139.162.91.137:443`：sakha1370/OpenRay
+> - `172.104.48.194:443`：jichangx/free-nodes
+> - `172.104.186.185:443`：jichangx/free-nodes
+> - `172.237.14.205:443`：sakha1370/OpenRay
+> - `172.105.203.15:443`：jichangx/free-nodes
+> - `139.162.91.182:443`：jichangx/free-nodes
+> - `172.237.27.143:443`：jichangx/free-nodes
+> - `172.105.212.91:443`：sakha1370/OpenRay
+> - `139.162.91.224:443`：jichangx/free-nodes
+> - `172.105.197.24:443`：sakha1370/OpenRay
+> - `172.104.105.212:443`：sakha1370/OpenRay
+> - `139.162.91.200:443`：sakha1370/OpenRay
+> - `172.104.186.205:443`：sakha1370/OpenRay
+> - `139.162.91.247:443`：jichangx/free-nodes
+> - `43.163.112.174:443`：0xRadikal/Free-v2ray-Configs
+> - `139.162.91.232:443`：sakha1370/OpenRay
+> - `109.248.148.140:11470`：rtwo2/FastNodes
+> - `202.50.253.27:19999`：jichangx/free-nodes
+> - `151.241.128.146:4430`：shabane/kamaji
+> - `139.180.221.53:443`：jichangx/free-nodes
+> - `149.28.152.20:443`：sakha1370/OpenRay
+> - `172.238.18.103:443`：sakha1370/OpenRay
+> - `178.17.58.55:443`：rtwo2/FastNodes
+> - `172.235.51.71:443`：sakha1370/OpenRay
+> - `136.148.83.71:443`：st0rer/proxy-sub
+> - `136.148.83.70:443`：st0rer/proxy-sub
+> - `202.50.253.90:19999`：WhiteDNS/WhiteVPN
+> - `free.server.darknetlk.com:443`：st0rer/proxy-sub
+> - `209.50.50.174:443`：HamoonSoleimani/Pr0xySh4rk
+> - `202.50.253.45:19999`：jichangx/free-nodes
+> - `172.233.139.98:443`：sakha1370/OpenRay
+> - `m.cnmjin.net:16622`：rtwo2/FastNodes
+> - `172.236.239.126:443`：asgharkapk/Sub-Config-Extractor
+> - `47.85.227.36:443`：asgharkapk/Sub-Config-Extractor
+> - `84.54.44.117:443`：0xRadikal/Free-v2ray-Configs
+> - `172.235.49.52:443`：asgharkapk/Sub-Config-Extractor
+> - `172.233.129.179:443`：sakha1370/OpenRay
+> - `45.76.191.30:443`：sakha1370/OpenRay
+> - `riverside.elvano.website:443`：0xRadikal/Free-v2ray-Configs
+> - `leviko-ru4448.shopingggg.ir:443`：asgharkapk/Sub-Config-Extractor
+> - `172.235.53.103:443`：asgharkapk/Sub-Config-Extractor
+> - `201.24.116.192:443`：asgharkapk/Sub-Config-Extractor
+> - `202.50.253.36:19999`：jichangx/free-nodes
+> - `172.235.50.209:443`：sakha1370/OpenRay
+> - `172.236.233.130:443`：jichangx/free-nodes
+> - `vps3.nemnogogo.com:443`：asgharkapk/Sub-Config-Extractor
+> - `172.239.67.142:443`：asgharkapk/Sub-Config-Extractor
+> - `139.180.215.25:443`：sakha1370/OpenRay
+> - `193.233.89.130:8443`：st0rer/proxy-sub
+> - `172.235.36.11:443`：sakha1370/OpenRay
+> - `202.50.253.81:19999`：jichangx/free-nodes
+> - `198.13.53.39:443`：jichangx/free-nodes
+> - `84.54.47.216:443`：whoahaow/rjsxrd
+> - `202.50.253.99:19999`：WhiteDNS/WhiteVPN
+> - `n4.fernstatic.com:443`：grisha-seleznev/free-vless-keys-russia
+> - `172.233.129.172:443`：jichangx/free-nodes
+> - `202.50.253.18:19999`：WhiteDNS/WhiteVPN
+> - `186.241.113.196:24605`：HamoonSoleimani/Pr0xySh4rk
+> - `13.141.36.163:443`：rekt0ro/ProxyRift
+> - `birchbark.gerqix.online:443`：jichangx/free-nodes
+> - `202.50.253.72:19999`：jichangx/free-nodes
+> - `193.160.208.240:443`：0xRadikal/Free-v2ray-Configs
+> - `172.235.32.253:443`：sakha1370/OpenRay
+> - `201.51.12.98:443`：asgharkapk/Sub-Config-Extractor
+> - `31.58.191.93:443`：0xRadikal/Free-v2ray-Configs
+> - `172.236.241.130:443`：jichangx/free-nodes
+> - `172.233.139.212:443`：sakha1370/OpenRay
+> - `196.199.122.2:443`：jichangx/free-nodes
+> - `172.236.238.71:443`：sakha1370/OpenRay
+> - `202.50.253.54:19999`：SoliSpirit/v2ray-configs
+> - `202.50.253.63:19999`：jichangx/free-nodes
+> - `103.88.241.220:443`：rekt0ro/ProxyRift
+> - `172.236.231.45:443`：jichangx/free-nodes
+
 ## 2026-11-24 22:50
 
 - 可用节点 **48** 个（按主目标延迟升序；同一服务器在多个内核可用时合并成一行）

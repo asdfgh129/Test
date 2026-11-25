@@ -117,6 +117,7 @@ origin/<branch>..HEAD`，仍领先就 `git ls-remote --heads origin <branch>` �
 | 后两个窗口空转 | 第一窗口通常已测满四内核 | 每个窗口收尾跑 `window_gate.py`：`GATE: done` 就跳过，别再白跑 90 分钟 |
 | 内核顺序跑，首个内核吃光预算 | 实测首窗口 v2ray 吃满 2321s，其余三内核零数据 | 第二/第三窗口加 `--fair-budget` 均分墙钟 |
 | 增量落盘 | 每内核测完立即写 available / summary / 池 | 被强杀只丢当前内核，不会新旧混排 |
+| 后窗口接手时 summary 停在昨天 | 第一窗口整晚没跑（休眠/未触发），清单也是 CI 原始未探测版 | 先看 `nodes_meta.json` 的 `generated_at` 与 `reachable`：`reachable=0` 且 `generated_at` 是 CI 时刻 ⇒ 探测也归自己做，跑完 `test_nodes.py` 后补 `collect_nodes.py --probe-only --date <采集日>`（详见 known-issues 第 75 条；不补会把 2~3 万条死节点当主清单发出去） |
 
 **测试量不设人为上限**：`--max-test` 一律给 2500，与 `layout.py` 的 `FULL_BELOW = MAX_TEST = 2500` 保持一致（10-28 从 3000 下调，理由见 known-issues 第 40 条）。不要因为「怕超时」自行降到 1000 或 600——那些数字是拍脑袋估的，与实测吞吐对不上，压了反而白少测一批；也不要自己抬回 3000，那是另外两条口径（3s 超时 / 24 并发）定下来之前的旧值。
 

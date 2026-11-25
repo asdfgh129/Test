@@ -1,5 +1,28 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-24 采集日（2026-11-25 01:30 运行）
+
+- 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2511/2500、xray 1004/1000、clash 2505/2500、
+  singbox 2503/2500）→ GATE: done → 本窗口未采集、未跑验证、未重跑自检（未占用验证资源）
+- 开始前尾巴三处全干净：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 按规则不开工、未发布
+- 本日可用 **v2ray 7 / xray 14 / clash 14 / singbox 25**（池 202/487/311/328）；
+  采集 27327 → 去重 7517，TCP 可达 7517/7517（100%，中位 250ms）
+- **v2ray 7 跌破 min_available(10)**，与 11-20（5 条）同型：cap 2500 由昨日 1.0% 反推、当日可用率再跌到
+  0.3% ⇒ 测满 cap 仍达不到目标 30。`exhausted=false`、cand 5192 未耗尽 ⇒ 闸门判 done 合规，
+  **不要据此提 cap、不要放宽探测地址**。第一窗口已把「可用数下滑」根因定位到 known-issues 74
+  （`pool.retest_candidates()` 按最旧 best_latency 取名，40 名额里只有 10~18 个是近 5 天条目），
+  拟次晚落地三级排序并回归 —— 本窗口 GATE done 无从验证，**未动代码**
+- 产物核对：available 条目 7/14/14/**26（含 1 条 direct，净 25）** 与 summary ok 逐项一致；
+  `nodes_uris` 7517 = `nodes_meta.total/reachable` 7517；tested_state date=11-24（四核 2511/1004/2505/2503）
+- 自检（第一窗口 22:54 产物）：**0 critical / 6 warn** = 四核可用率 0.3/1.4/0.6/1.0% 低水位
+  + `Areral/ScarletDevil` 0 条（HTTP 402，与 11-23 同因，上游 Vercel 侧额度）+ 镜像失效 11/13
+  （可用 gh-proxy.com / gh-proxy.org）→ 均为既定口径，未改代码
+- 本日发布链：CI `aa76e29`(08:50，属 11-23 侧 cron 迟到派发)/`916822e`(21:11) + 第一窗口
+  `458e701`(22:56) + 第二窗口 `617bce7`(23:46)，已全部在 origin/master
+- 窗口开关仍 on（`streak_done` 7/7，`reason` 写 `耗时达标=False`）→ 本窗口被正常触发，属设计
+- 本记忆文件在核查之后写，形成 1 个纯文档尾巴，按既有约定留待明晚第一窗口顺带提交
+
 ## 2026-11-23 采集日（2026-11-24 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2510/2500、xray 1005/1000、clash 2502/2500、
