@@ -2,6 +2,28 @@
 
 > 按日期倒序；包含脚本修复、参数调整、内核版本升级等
 
+## 2026-11-26 01:30 第三窗口：推送因「deploy key 无写权限」全败；publish 加 SSH→HTTPS 自动回退
+
+- **闸门**：`GATE: done`（四核均「已测满单轮上限」：v2ray 2513/2500、xray 2156/2151、clash 2503/2500、
+  singbox 2503/2500）⇒ 本窗口未跑验证、未重做自检，只收尾巴。
+- **发现**：`.git/free-nodes-pending-push.json` 有第二窗口的推送失败记录
+  `ERROR: Permission to asdfgh129/Test.git denied to deploy key`。取证：`ssh -T git@github.com` 回
+  `Hi asdfgh129/tracker-client!`，而 `.git/config` 的 origin 当天上午被改成
+  `ssh://git@github.com/asdfgh129/Test.git` ⇒ 默认密钥是**另一个仓库**的 deploy key，写权限从一开始就没有。
+- **另一个并发问题**：本地与远端已分叉（`1 1`）。远端 `1749201` 是 CI 当晚 21:12 的采集提交，
+  本地 `250fda8` 挂在它的父提交 `0185cbc` 上。用 `git merge --no-ff` 造合并提交 `b65484c`，
+  三个冲突文件取本地版（`nodes_uris.txt`/`nodes_meta.json`/`seed_repos.json` —— 本地是探测后只含可达的口径，
+  远端是 CI 原始清单 `reachable=0`），Docs 里只远端改过的三份（report/collection_logs/repo_yield）取远端。
+- **代码改动**（`src/publish_free_nodes.py`）：新增 `_ssh_denied()` / `https_counterpart()` / `push_once()`，
+  把 4 处 `git push` 调用统一改为 `push_once()`。仅当输出命中 `denied to deploy key` 时才用
+  `-c remote.origin.pushurl=<https>` 把这一次 push 换成 HTTPS（凭据走 credential helper，
+  token 不落 URL/日志/文件），**不写 `.git/config`、不改用户 remote**；SSH 能推时行为不变。
+  见 `known-issues` 76。
+- **验证**：`_ssh_denied` 4 例 + URL 转换 5 例单测通过；真实仓库实跑 `push_once()` 命中回退并返回 rc 0
+  （`Everything up-to-date`）；随后 `publish_free_nodes.py --proxy auto --date 2026-11-25` 经自建通道
+  推送成功（v2ray @ 202.50.253.54:19999，第 1 次命中），提交 `b65484c` + `1402676` 已在 origin/master，
+  `pending-push.json` 已清、`rev-list` 0/0。
+
 ## 2026-11-25 23:45 第二窗口：第一窗口整晚未跑，本窗口代跑完整验证并补探测；无代码/参数改动
 
 - **今晚结构与既往不同**：23:46 开工时 `GATE: continue`，而 `Docs/summary.json`、`available_*`、

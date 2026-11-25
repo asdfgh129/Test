@@ -98,6 +98,16 @@ python <root>/src/test_nodes.py --input <root> --cores v2ray,xray,clash,singbox 
 python <root>/src/window_gate.py --input <root> [--date <采集日期>]
 ```
 
+## 推送失败怎么读（2026-11-26 起）
+
+- 日志出现 `denied to deploy key` ⇒ remote 是 SSH 且默认密钥属于**别的仓库**（`ssh -T git@github.com`
+  会直接报出是哪个仓库）。`push_once()` 已内置回退：命中该错误就用 `-c remote.origin.pushurl=<同名 https>`
+  再推一次（不写 `.git/config`、不动用户 remote），看到「SSH 推送被拒…改用 HTTPS」是正常回退，不要人工改配置。
+- 若同时看到「分叉/非快进」：`do_sync` 的 `merge --ff-only` 失败后**不阻断**提交，于是本地会挂在旧 HEAD 上。
+  处置：`git merge --no-ff origin/master`，冲突的三个文件（`nodes_uris.txt`/`nodes_meta.json`/`seed_repos.json`）
+  **一律取 `--ours`**（远端那份是 CI 原始清单，`reachable=0`）；Docs 里只远端改过的取远端。绝不用 rebase/reset/force。
+- 详见 `Docs/known-issues.md` 第 76 条。
+
 ## 口径与依据（2026-10-28 实测）
 
 | 旋钮 | 取值 | 依据 |

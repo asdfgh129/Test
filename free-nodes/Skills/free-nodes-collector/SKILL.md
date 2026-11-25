@@ -105,6 +105,15 @@ origin/<branch>..HEAD`，仍领先就 `git ls-remote --heads origin <branch>` �
 （known-issues 第 68、69 条；`ls-remote` 要出境，所以留在 `do_push` 的 `try` 块里）。
 看到日志里「退出码 0 但远端 ref 陈旧」或「本地跟踪 ref 陈旧，但远端已是 …」都是护栏生效，不是故障。
 
+**`denied to deploy key` 不是网络问题**：报这个错时说明 remote 被换成了 SSH，而默认密钥是**别的仓库**的
+deploy key（`ssh -T git@github.com` 会直接告诉你它是哪个仓库），换节点、换内核都推不上去。
+`push_once()` 会先照常推，只在命中这个错误时用 `-c remote.origin.pushurl=<同名 https>` 再推一次
+（凭据走 credential helper，token 不进 URL/日志；**不写 `.git/config`、不改用户 remote**），
+所以日志里出现「SSH 推送被拒…改用 HTTPS」是自动回退生效，不必人工干预（known-issues 76）。
+同理，`denied` 之后若看到「非快进/分叉」，那是 `do_sync` 的 `merge --ff-only` 失败后仍照常提交造成的：
+用 `git merge --no-ff` 造合并提交，**节点清单三个冲突文件一律取 `--ours`**（远端那份是 CI 原始清单、
+`reachable=0`，覆盖上去等于把死节点发布出去）。
+
 **纯 Python 标准库实现，无需安装任何依赖**（CI 侧也只需要 `setup-python`，无 pip 安装步骤）。
 
 ## 硬约束（平台行为，任务内部改不掉）

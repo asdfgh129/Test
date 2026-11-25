@@ -2245,6 +2245,36 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   （30 秒），再谈本机网络；`generated_at` 停在 CI 时刻 + `reachable=0` 就是「没探测」的铁证。
   第二窗口接手时若看到 summary 停在昨天，应默认「第一窗口没跑」，把「探测」也当成自己的活。
 
+## 76. 每晚推送必失败：「deploy key 对该仓库无写权限」不是网络问题，而是 remote 被换成 SSH（2026-11-26 第三窗口）
+
+- **现象**：第三窗口 `GATE: done` 但有尾巴 —— `.git/free-nodes-pending-push.json` 写着
+  `ERROR: Permission to asdfgh129/Test.git denied to deploy key`。同一晚 `git fetch` 却正常，
+  `git ls-remote --heads origin master` 也回得到 sha ⇒ **读通、写不通**。
+- **30 秒判据（关键：不要按「github.com 被墙」去修通道）**：`ssh -T git@github.com` 回
+  `Hi asdfgh129/tracker-client!` —— 默认身份 `~/.ssh/github_ed25519` 是**另一个仓库**的 deploy key。
+  再 `git config --get remote.origin.url` 看到 `ssh://git@github.com/asdfgh129/Test.git`，
+  `.git/config` 的 mtime 是当天上午（被人改过）⇒ SSH 推送从一开始就不可能成功。
+  **判据口诀：`denied to deploy key` + `ssh -T` 报出的仓库名与 origin 不一致 = 密钥配错仓库，与网络无关。**
+- **为什么自建通道救不了**：`GIT_PROXY` 只给 git 的 http/https 传输生效，SSH 传输完全不经过它；
+  原来的「换节点、换内核、重试 5 轮」会白烧几分钟再报同样的错。
+- **修法（本次落地在 `publish_free_nodes.py`）**：新增 `push_once()` —— 先照常 `git push origin`，
+  只在输出命中 `denied to deploy key` / `Permission to … denied` 时，把 `origin` 的 SSH 地址换成
+  HTTPS 同名地址（`https_counterpart()`，支持 `ssh://git@host/owner/repo(.git)` 与 `git@host:owner/repo.git`
+  两种写法，非 github 主机一律不改），用 **`-c remote.origin.pushurl=<https>` 命令级覆盖**再推一次。
+  凭据由 credential helper（本机 GCM 已存 `asdfgh129`）提供，**token 不进城任何 URL/日志/文件**。
+- **为什么不直接改 `remote.origin.url`**：用户明确要求自动化不得改 git 配置/remote（SSH 可能是他给自己
+  别的仓库准备的）。命令级 `-c` 只影响这一次 push，`.git/config` 原样保留；SSH 哪天能推了，回退分支自动不触发。
+- **验证**：`_ssh_denied` 4 例、URL 转换 5 例单测全过；真实仓库实跑 `push_once()` →
+  日志 `SSH 推送被拒（deploy key 对该仓库无写权限），改用 HTTPS …`，随后 `Everything up-to-date`（rc 0）。
+  当晚上下游：`b65484c`（合并远端 CI）→ `1402676`（订阅）已推上 origin/master。
+- **另一个坑（同一晚遇到）**：CI 当晚 21:12 的采集提交在本地 00:48 那次 fetch 才进来，而第二窗口
+  **在 fetch 之后 4 秒**才 `git commit`，提交仍挂在旧 HEAD 上 ⇒ 直接分叉（`rev-list --left-right` = `1 1`）。
+  `do_sync` 的 `merge --ff-only` 此时必然失败、又**不阻断**后续提交，于是「同步失败 → 照常提交 → push 被
+  非快进拒绝」。处置：`git merge --no-ff origin/master` 造合并提交，**三个冲突文件（`nodes_uris.txt` /
+  `nodes_meta.json` / `seed_repos.json`）一律取 `--ours`** —— 本地版才是「探测后只含可达」的口径，
+  远端版是 CI 原始清单（`reachable=0`、含死节点）。Docs 只远端改的（report/collection_logs/repo_yield）取远端更新。
+  合并后 `git diff <本地提交> HEAD -- <三文件>` 必须为空，才能确认没把口径换掉。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
 
 ### 2026-11-25 自检发现

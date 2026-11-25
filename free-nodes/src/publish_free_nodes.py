@@ -173,6 +173,51 @@ def do_sync(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
     return True, out.strip()
 
 
+def _ssh_denied(out: str) -> bool:
+    """推送输出是否是「这把密钥对该仓库没有写权限」。"""
+    t = out.lower()
+    return "denied to deploy key" in t or ("permission to" in t and "denied" in t)
+
+
+def https_counterpart(workspace: Path) -> str:
+    """把 SSH 形式的 origin 换成 HTTPS 同名地址；不是 github 的 SSH 地址则返回空串。
+
+    只用于「deploy key 无写权限」时的临时替代，绝不写回 .git/config（见 push_once）。
+    """
+    code, out = git(workspace, "config", "--get", "remote.origin.url")
+    url = out.strip() if code == 0 else ""
+    m = re.match(r"^ssh://[^@/]+@([^/:]+)(?::\d+)?/(.+?)(?:\.git)?$", url)
+    if not m:
+        m = re.match(r"^[^@/]+@([^:/]+):(.+?)(?:\.git)?$", url)
+    if not m:
+        return ""
+    host, path = m.group(1), m.group(2)
+    if host.lower() not in ("github.com", "ssh.github.com"):
+        return ""
+    return f"https://github.com/{path}.git"
+
+
+def push_once(workspace: Path, branch: str, timeout: int = 180) -> tuple[int, str]:
+    """一次 git push；若因 deploy key 无写权限被拒，自动改走 HTTPS 同名地址再试一次。
+
+    2026-11-26 取证：仓库 remote 被改成 ssh://git@github.com/asdfgh129/Test.git，而默认身份
+    ~/.ssh/github_ed25519 是 asdfgh129/tracker-client 的 deploy key（`ssh -T git@github.com`
+    回「Hi asdfgh129/tracker-client!」），推送到 Test 必被判 "denied to deploy key" ⇒
+    每晚都只会留下 pending，订阅永远发不出去。这里**只在命中该错误时**用
+    `-c remote.origin.pushurl=<https>` 把这一次命令换成 HTTPS（凭据仍由 credential helper 提供），
+    命令级覆盖、不写 .git/config —— 用户原有的 SSH 设置原样保留；SSH 能推时行为完全不变。
+    """
+    code, out = git(workspace, "push", "origin", branch, timeout=timeout)
+    if code == 0 or not _ssh_denied(out):
+        return code, out
+    url = https_counterpart(workspace)
+    if not url:
+        return code, out
+    log(f"[push] SSH 推送被拒（deploy key 对该仓库无写权限），改用 HTTPS {url} 再试一次")
+    return git(workspace, "-c", f"remote.origin.pushurl={url}",
+               "push", "origin", branch, timeout=timeout)
+
+
 def ci_ready_status(out_root: Path, after: str = CI_READY_AFTER) -> tuple[bool, str]:
     """判定「今天这一轮 CI 采集产物」是否就绪，返回 (就绪?, 一行结论)。
 
@@ -275,7 +320,7 @@ def push_with_retry(workspace: Path, branch: str, retries: int, wait: int) -> tu
     last_err = ""
     for attempt in range(1, retries + 1):
         log(f"[push] 第 {attempt}/{retries} 次尝试推送到 origin/{branch} …")
-        code, out = git(workspace, "push", "origin", branch, timeout=180)
+        code, out = push_once(workspace, branch)
         if code == 0:
             ok, note = push_landed(workspace, branch, out)
             if ok:
@@ -323,7 +368,7 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
         if reused is not None:
             GIT_PROXY = reused.url
             try:
-                code, out = git(workspace, "push", "origin", args.branch, timeout=180)
+                code, out = push_once(workspace, args.branch)
                 # 落地判定要发 ls-remote 求证远端 sha → 必须留在通道开着的作用域里（known-issues 69）
                 ok, note = push_landed(workspace, args.branch, out) if code == 0 else (False, "")
             finally:
@@ -352,7 +397,7 @@ def do_push(workspace: Path, args, up_mod, out_root: str) -> tuple[bool, str]:
             tried.add(up.uri)
             GIT_PROXY = up.url
             try:
-                code, out = git(workspace, "push", "origin", args.branch, timeout=180)
+                code, out = push_once(workspace, args.branch)
                 # 同上：落地判定里的 ls-remote 必须借这条通道，离开 try 就发不出去
                 ok, note = push_landed(workspace, args.branch, out) if code == 0 else (False, "")
             finally:
