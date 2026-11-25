@@ -2,21 +2,21 @@
 
 > 按日期倒序累积，最新一次运行在最上面
 
-## 2026-11-25 07:01
+## 2026-11-25 21:12
 
 ### 概览
 
 - 扫描仓库：**108** 个
-- 抓取订阅文件：**40** 个
-- 原始提取节点：**202147** 条
-- 两级去重后（完整链接 + 服务器:端口）：**33423** 条（剔除重复 168724 条）
-- 各内核可处理节点数（按协议/传输/加密分流）：v2ray 24026、xray 26208、clash 32913、singbox 31948
-- 耗时：233 秒
+- 抓取订阅文件：**38** 个
+- 原始提取节点：**212598** 条
+- 两级去重后（完整链接 + 服务器:端口）：**33695** 条（剔除重复 178903 条）
+- 各内核可处理节点数（按协议/传输/加密分流）：v2ray 24066、xray 26301、clash 33204、singbox 32215
+- 耗时：331 秒
 
 ### TCP 延迟分布
 
-- 可达服务器：**0/33393**（延迟中位数 Nonems，最低 Nonems）
-- Cloudflare 前置节点：**2827** 条（TCP 握手快但代理多不通，已整体排在真实节点之后）
+- 可达服务器：**0/33665**（延迟中位数 Nonems，最低 Nonems）
+- Cloudflare 前置节点：**2878** 条（TCP 握手快但代理多不通，已整体排在真实节点之后）
 
 | 延迟区间 | 节点数 |
 |---|---|
@@ -24,208 +24,208 @@
 | 100-300ms | 0 |
 | 300-800ms | 0 |
 | >800ms | 0 |
-| 不可达（排在订阅末尾） | 33393 |
+| 不可达（排在订阅末尾） | 33665 |
 
 > 订阅文件已按 TCP 握手延迟升序排列：低延迟节点在最前面，客户端测速/选路时优先命中。
 
 ### README 订阅链接采集
 
-共 **56** 个仓库在 README 里给出订阅链接，从中提取 **202147** 条节点。
+共 **61** 个仓库在 README 里给出订阅链接，从中提取 **212598** 条节点。
 
 | 仓库 | 声明链接数 | 提取节点数 |
 |---|---|---|
 | asgharkapk/Sub-Config-Extractor | 6 | 40000 |
 | rtwo2/FastNodes | 6 | 40000 |
 | 10Dream/sub-mod | 6 | 40000 |
-| SoliSpirit/v2ray-configs | 5 | 24004 |
-| sakha1370/OpenRay | 6 | 15874 |
-| aviamastersgh/vpn-free-russia | 4 | 11828 |
-| 0xRadikal/Free-v2ray-Configs | 6 | 4378 |
-| shabane/kamaji | 3 | 4147 |
-| kasesm/Free-Config | 6 | 3968 |
-| rekt0ro/ProxyRift | 6 | 3150 |
-| whoahaow/rjsxrd | 6 | 2123 |
+| SoliSpirit/v2ray-configs | 5 | 23947 |
+| sakha1370/OpenRay | 6 | 15527 |
+| shabane/kamaji | 6 | 11330 |
+| aviamastersgh/vpn-free-russia | 4 | 10180 |
+| kasesm/Free-Config | 6 | 6966 |
+| 0xRadikal/Free-v2ray-Configs | 6 | 4244 |
+| rekt0ro/ProxyRift | 6 | 2576 |
+| zueston/proxy-hub | 5 | 2156 |
 | R3ZARAHIMI/tg-v2ray-configs-every2h | 6 | 2045 |
-| zueston/proxy-hub | 3 | 1617 |
-| YawStar/Proxy-Hunter | 3 | 1316 |
-| yy1588133/proxy-pool | 4 | 1160 |
+| whoahaow/rjsxrd | 6 | 2027 |
+| YawStar/Proxy-Hunter | 6 | 1983 |
+| MohammadBahemmat/V2ray-Collector | 6 | 1778 |
 
 ### 协议分布
 
 | 协议 | 数量 |
 |---|---|
-| vless | 16930 |
-| vmess | 6217 |
-| ss | 5504 |
-| trojan | 3661 |
-| hysteria2 | 932 |
+| vless | 17265 |
+| vmess | 6199 |
+| ss | 5451 |
+| trojan | 3698 |
+| hysteria2 | 919 |
 | tuic | 64 |
-| hysteria | 64 |
-| ssr | 51 |
+| hysteria | 50 |
+| ssr | 49 |
 
 ### 输出文件
 
-- `v2ray_sub.txt`（24026 条，base64 订阅）
-- `xray_sub.txt`（26208 条，base64 订阅）
-- `clash_sub.yaml`（32913 个代理）
-- `singbox_sub.json`（31948 个 outbound）
-- `nodes_uris.txt`（33421 条，内部主清单，验证阶段的输入）
+- `v2ray_sub.txt`（24066 条，base64 订阅）
+- `xray_sub.txt`（26301 条，base64 订阅）
+- `clash_sub.yaml`（33204 个代理）
+- `singbox_sub.json`（32215 个 outbound）
+- `nodes_uris.txt`（33691 条，内部主清单，验证阶段的输入）
 - `nodes_meta.json`（节点 TCP 延迟 + 来源仓库）
 
 ### 仓库质量排行（历史四内核实测）
 
 | 仓库 | 质量分 | 实测可用率 | 平均延迟 | 累计贡献 |
 |---|---|---|---|---|
-| WhiteDNS/WhiteVPN | 44.0 | 44%（11/25） | 2803ms | 459 |
-| hello-world-1989/cn-news | 43.5 | 29%（16/56） | 1092ms | 297 |
-| st0rer/proxy-sub | 40.4 | 25%（1/4） | 1184ms | 208 |
-| JHC000abc/ProxyParseForSing-box | 30.1 | 12%（22/185） | 1364ms | 1086 |
-| grisha-seleznev/free-vless-keys-russia | 25.5 | 9%（3/33） | 1811ms | 391 |
-| rtwo2/FastNodes | 23.5 | 0%（9/8122） | 1089ms | 9997326 |
-| free-proxy-nodes/free-nodes | 22.9 | 10%（3/29） | 2384ms | 4224 |
-| rekt0ro/ProxyRift | 21.6 | 8%（133/1653） | 2339ms | 83253 |
-| FLAT447/v2ray-lists | 21.2 | 5%（16/296） | 2093ms | 11599 |
-| yy1588133/proxy-pool | 19.9 | 3%（15/482） | 2044ms | 5796 |
-| shabane/kamaji | 17.5 | 13%（24/188） | 3569ms | 60617 |
-| HamoonSoleimani/Pr0xySh4rk | 17.5 | 25%（8/32） | -ms | 5355 |
+| WhiteDNS/WhiteVPN | 44.0 | 44%（11/25） | 2803ms | 489 |
+| hello-world-1989/cn-news | 43.5 | 29%（16/56） | 1092ms | 303 |
+| st0rer/proxy-sub | 40.4 | 25%（1/4） | 1184ms | 316 |
+| JHC000abc/ProxyParseForSing-box | 30.1 | 12%（22/185） | 1364ms | 1143 |
+| grisha-seleznev/free-vless-keys-russia | 25.5 | 9%（3/33） | 1811ms | 464 |
+| rtwo2/FastNodes | 23.5 | 0%（9/8122） | 1089ms | 10037326 |
+| free-proxy-nodes/free-nodes | 22.9 | 10%（3/29） | 2384ms | 4488 |
+| rekt0ro/ProxyRift | 21.6 | 8%（133/1653） | 2339ms | 85829 |
+| FLAT447/v2ray-lists | 21.2 | 5%（16/296） | 2093ms | 12224 |
+| yy1588133/proxy-pool | 19.9 | 3%（15/482） | 2044ms | 7404 |
+| shabane/kamaji | 17.5 | 13%（24/188） | 3569ms | 71947 |
+| HamoonSoleimani/Pr0xySh4rk | 17.5 | 25%（8/32） | -ms | 5585 |
 
-- 本次采集优先级（质量从高到低）：rtwo2/FastNodes(分52.8/可用率0%/push0天前)、SoliSpirit/v2ray-configs(分46.4/可用率0%/push0天前)、sakha1370/OpenRay(分45.8/可用率1%/push0天前)、rekt0ro/ProxyRift(分44.8/可用率8%/push0天前)、hello-world-1989/cn-news(分43.9/可用率29%/push0天前)、kasesm/Free-Config(分42.1/可用率1%/push0天前)、WhiteDNS/WhiteVPN(分41.2/可用率44%/push0天前)、FLAT447/v2ray-lists(分39.2/可用率5%/push0天前)
+- 本次采集优先级（质量从高到低）：rtwo2/FastNodes(分52.8/可用率0%/push1天前)、asgharkapk/Sub-Config-Extractor(分48.4/可用率0%/push1天前)、SoliSpirit/v2ray-configs(分47.3/可用率0%/push1天前)、sakha1370/OpenRay(分46.2/可用率1%/push1天前)、rekt0ro/ProxyRift(分45.4/可用率8%/push1天前)、hello-world-1989/cn-news(分44.8/可用率29%/push1天前)、kasesm/Free-Config(分42.4/可用率1%/push1天前)、WhiteDNS/WhiteVPN(分41.6/可用率44%/push1天前)
 
 ### 当天接触到的仓库
 
 | 仓库 | Stars | 最近推送 |
 |---|---|---|
-| rtwo2/FastNodes | ⭐110 | 2026-11-24 |
-| SoliSpirit/v2ray-configs | ⭐650 | 2026-11-24 |
-| sakha1370/OpenRay | ⭐256 | 2026-11-24 |
-| rekt0ro/ProxyRift | ⭐6 | 2026-11-24 |
-| hello-world-1989/cn-news | ⭐672 | 2026-11-24 |
-| kasesm/Free-Config | ⭐43 | 2026-11-24 |
+| rtwo2/FastNodes | ⭐110 | 2026-11-25 |
+| asgharkapk/Sub-Config-Extractor | ⭐63 | 2026-11-25 |
+| SoliSpirit/v2ray-configs | ⭐650 | 2026-11-25 |
+| sakha1370/OpenRay | ⭐256 | 2026-11-25 |
+| rekt0ro/ProxyRift | ⭐7 | 2026-11-25 |
+| hello-world-1989/cn-news | ⭐675 | 2026-11-25 |
+| kasesm/Free-Config | ⭐43 | 2026-11-25 |
+| FLAT447/v2ray-lists | ⭐116 | 2026-11-25 |
+| 10Dream/sub-mod | ⭐24 | 2026-11-25 |
+| shabane/kamaji | ⭐174 | 2026-11-25 |
+| free-proxy-nodes/free-nodes | ⭐41 | 2026-11-25 |
 | WhiteDNS/WhiteVPN | ⭐406 | 2026-11-24 |
-| FLAT447/v2ray-lists | ⭐116 | 2026-11-24 |
+| yy1588133/proxy-pool | ⭐58 | 2026-11-25 |
 | st0rer/proxy-sub | ⭐0 | 2026-11-24 |
-| 10Dream/sub-mod | ⭐24 | 2026-11-24 |
-| free-proxy-nodes/free-nodes | ⭐41 | 2026-11-24 |
+| 0xRadikal/Free-v2ray-Configs | ⭐937 | 2026-11-25 |
+| aviamastersgh/vpn-free-russia | ⭐83 | 2026-11-25 |
+| HamoonSoleimani/Pr0xySh4rk | ⭐7 | 2026-11-25 |
+| Areral/ScarletDevil | ⭐15 | 2026-11-25 |
+| FanchangWang/clash_config | ⭐12 | 2026-11-25 |
+| F0rc3Run/F0rc3Run | ⭐339 | 2026-11-25 |
+| cbusifabcap/daily_free_vpn | ⭐453 | 2026-11-25 |
+| jichangx/free-nodes | ⭐265 | 2026-11-25 |
+| whoahaow/rjsxrd | ⭐894 | 2026-11-25 |
 | JHC000abc/ProxyParseForSing-box | ⭐5 | 2026-11-23 |
-| 0xRadikal/Free-v2ray-Configs | ⭐930 | 2026-11-24 |
-| HamoonSoleimani/Pr0xySh4rk | ⭐7 | 2026-11-24 |
-| Areral/ScarletDevil | ⭐15 | 2026-11-24 |
-| aviamastersgh/vpn-free-russia | ⭐81 | 2026-11-24 |
-| yy1588133/proxy-pool | ⭐56 | 2026-11-24 |
+| ProblemTheCode/SylphNet-public | ⭐15 | 2026-11-25 |
 | grisha-seleznev/free-vless-keys-russia | ⭐5 | 2026-11-24 |
-| cbusifabcap/daily_free_vpn | ⭐450 | 2026-11-24 |
-| F0rc3Run/F0rc3Run | ⭐337 | 2026-11-24 |
+| MohammadBahemmat/V2ray-Collector | ⭐97 | 2026-11-25 |
+| ishalumi/proxy-node-collector | ⭐39 | 2026-11-25 |
+| YawStar/Proxy-Hunter | ⭐11 | 2026-11-25 |
+| crashgfw/free-airport-nodes | ⭐312 | 2026-11-25 |
+| snakem982/proxypool | ⭐2296 | 2026-11-25 |
+| hysteria350/free-jichang | ⭐75 | 2026-11-25 |
+| VoroninaYanina/free-nodes | ⭐107 | 2026-11-25 |
 | R3ZARAHIMI/tg-v2ray-configs-every2h | ⭐56 | 2026-11-24 |
-| whoahaow/rjsxrd | ⭐894 | 2026-11-24 |
-| ProblemTheCode/SylphNet-public | ⭐15 | 2026-11-24 |
-| jichangx/free-nodes | ⭐265 | 2026-11-24 |
 | AzadNetCH/Clash | ⭐463 | 2026-11-24 |
-| Mehinator/Derafsh | ⭐6 | 2026-11-24 |
-| ishalumi/proxy-node-collector | ⭐39 | 2026-11-24 |
-| MohammadBahemmat/V2ray-Collector | ⭐97 | 2026-11-24 |
-| YawStar/Proxy-Hunter | ⭐11 | 2026-11-24 |
-| crashgfw/free-airport-nodes | ⭐311 | 2026-11-24 |
-| snakem982/proxypool | ⭐2296 | 2026-11-24 |
+| igareck/vpn-configs-for-russia | ⭐9823 | 2026-11-25 |
+| Maskkost93/kizyak-vpn-4.0 | ⭐63 | 2026-11-25 |
+| zhuhaiuk/free-nodes | ⭐461 | 2026-11-25 |
+| RKPchannel/RKP_bypass_configs | ⭐153 | 2026-11-25 |
 | zueston/proxy-hub | ⭐2 | 2026-11-24 |
-| shabane/kamaji | ⭐173 | 2026-11-22 |
-| hysteria350/free-jichang | ⭐75 | 2026-11-24 |
-| VoroninaYanina/free-nodes | ⭐107 | 2026-11-24 |
-| Maskkost93/kizyak-vpn-4.0 | ⭐63 | 2026-11-24 |
-| wa3duck/freenodes | ⭐1 | 2026-11-24 |
-| igareck/vpn-configs-for-russia | ⭐9803 | 2026-11-24 |
-| zhuhaiuk/free-nodes | ⭐460 | 2026-11-24 |
-| Andrejewild/megavpn-russia-official | ⭐2 | 2026-11-24 |
-| Andrejewild/vless-free-keys-russia | ⭐2 | 2026-11-24 |
-| VOID-Anonymity/V.O.I.D-VPN_Bypass | ⭐46 | 2026-11-24 |
-| ermaozi01/free_clash_vpn | ⭐843 | 2026-11-24 |
-| nichecer/clash-node-share | ⭐0 | 2026-11-24 |
-| nichecer/v2ray-node-share | ⭐3 | 2026-11-24 |
-| Andrejewild/youtube-discord-vless-2026 | ⭐1 | 2026-11-24 |
-| Arianlavi/RebeldevConfig | ⭐30 | 2026-11-24 |
-| CCSH/IPTV | ⭐571 | 2026-11-24 |
-| CatEacc/vps-singbox-runbook | ⭐8 | 2026-11-24 |
-| CatEacc/vps-xray-runbook | ⭐8 | 2026-11-24 |
-| Egor051/vpnbot | ⭐7 | 2026-11-24 |
-| JohnWatsoon/WatTunnel | ⭐146 | 2026-11-24 |
-| LalatinaHub/LatinaSub | ⭐12 | 2026-11-24 |
-| LancelotRar/best-cf-ips | ⭐1725 | 2026-11-24 |
-| LancelotRar/free-subs | ⭐137 | 2026-11-24 |
-| Leadaxe/LxBox | ⭐783 | 2026-11-24 |
-| LuoPoJunZi/sing-box | ⭐10 | 2026-11-24 |
-| MFSGA/Chimera | ⭐5 | 2026-11-24 |
-| MhdiTaheri/V2rayCollector | ⭐324 | 2026-11-24 |
-| Mistgate/mistgate | ⭐324 | 2026-11-24 |
-| MohammadBahemmat/npvt-collector | ⭐10 | 2026-11-24 |
-| Mr-Meshky/vify | ⭐59 | 2026-11-24 |
-| NamiraNet/V2Configs | ⭐2 | 2026-11-24 |
-| NeuralNode-Dev/vpn | ⭐6 | 2026-11-24 |
-| OpenNetCN/clash | ⭐665 | 2026-11-24 |
-| PavelLizunov/VPNRouter | ⭐8 | 2026-11-24 |
-| Q7DF1/XrayFA | ⭐148 | 2026-11-24 |
-| RikkaSaiko1/clash_config | ⭐9 | 2026-11-24 |
-| Romaxa55/MegaV_Public | ⭐109 | 2026-11-24 |
-| ScrewCodeArm/Hola-Vpn-2026 | ⭐0 | 2026-11-24 |
-| Shawshank01/proxy_sh | ⭐6 | 2026-11-24 |
-| Shayanthn/V2ray-Tester-Pro | ⭐70 | 2026-11-24 |
-| Surfboardv2ray/TGParse | ⭐297 | 2026-11-24 |
-| T3stAcc/V2Ray | ⭐19 | 2026-11-24 |
-| TelegaVPN/free-vpn-keys | ⭐14 | 2026-11-24 |
-| TheCrowCreature/v2rayExtractor | ⭐6 | 2026-11-24 |
-| V2RayRoot/V2RayConfig | ⭐177 | 2026-11-24 |
-| WilliamQXZ/free-nodes-sr | ⭐2 | 2026-11-24 |
-| XVSVTsama/XVSVT-Clash-Config | ⭐25 | 2026-11-24 |
-| YuanDevTeam/OneXray | ⭐870 | 2026-11-24 |
-| aaANDkk/ClashConfig | ⭐13 | 2026-11-24 |
-| aaronvanston/arbor | ⭐3 | 2026-11-24 |
-| abshare/abshare.github.io | ⭐1130 | 2026-11-24 |
-| aimalygin/xray-rust | ⭐53 | 2026-11-24 |
-| akpig/foxdetector | ⭐0 | 2026-11-24 |
-| alireza786786/Free-V2ray-Configs | ⭐3 | 2026-11-24 |
-| andreiyurik/cheburnet-router | ⭐28 | 2026-11-24 |
-| andrewbakercloudscale/claude-burst | ⭐17 | 2026-11-24 |
-| animeshkundu/github-router | ⭐6 | 2026-11-24 |
-| asgharkapk/Sub-Config-Extractor | ⭐63 | 2026-11-24 |
-| bestnite/sub2clash | ⭐641 | 2026-11-24 |
-| bq2015/FreeProxies | ⭐943 | 2026-11-24 |
-| bushilian/bushilian | ⭐1 | 2026-11-24 |
-| ch-vpn/vpn2026 | ⭐61 | 2026-11-24 |
-| chaishpish/free_server_v2ray | ⭐8 | 2026-11-24 |
-| clashfreenodecom/clashfreenode.com | ⭐8 | 2026-11-24 |
-| clashnodev2ray/clashnodev2ray.github.io | ⭐169 | 2026-11-24 |
-| clashv2ray-hub/clashv2ray-hub.github.io | ⭐326 | 2026-11-24 |
-| clashv2ray-hub/clashv2rayshare | ⭐7 | 2026-11-24 |
-| crazypeace/v2rayN-3.29-VLESS | ⭐172 | 2026-11-24 |
-| crossxx-labs/free-proxy | ⭐1875 | 2026-11-24 |
-| crystalmasta/unbihex | ⭐252 | 2026-11-24 |
-| currycan/sb-xray | ⭐16 | 2026-11-24 |
-| cybersecplayground/V2Hive | ⭐7 | 2026-11-24 |
-| deezertidal/fee-based | ⭐129 | 2026-11-24 |
-| deezertidal/freevpn | ⭐906 | 2026-11-24 |
-| dmulle12/rules | ⭐5 | 2026-11-24 |
-| dudul19/tomato-tunnel | ⭐6 | 2026-11-24 |
+| ermaozi01/free_clash_vpn | ⭐843 | 2026-11-25 |
+| Mehinator/Derafsh | ⭐6 | 2026-11-24 |
+| VOID-Anonymity/V.O.I.D-VPN_Bypass | ⭐47 | 2026-11-25 |
+| 029danio/jichangfree | ⭐164 | 2026-11-25 |
+| 2lab-ai/llmux | ⭐10 | 2026-11-25 |
+| AdamWilliam69/nowhere- | ⭐25 | 2026-11-25 |
+| Arianlavi/RebeldevConfig | ⭐30 | 2026-11-25 |
+| Ars1027/astrbot_plugin_twitter | ⭐50 | 2026-11-25 |
+| BillBlueInnit/boxpilot | ⭐7 | 2026-11-25 |
+| CCSH/IPTV | ⭐573 | 2026-11-25 |
+| CatEacc/vps-singbox-runbook | ⭐23 | 2026-11-25 |
+| CatEacc/vps-xray-runbook | ⭐13 | 2026-11-25 |
+| Dokoyamo-Lisa/Meridian | ⭐24 | 2026-11-25 |
+| FrontierTM/Pantegnos | ⭐112 | 2026-11-25 |
+| GXUser7/yumi | ⭐20 | 2026-11-25 |
+| Hades-Heyds/P7Show | ⭐14 | 2026-11-25 |
+| Jsnzkpg/Jsnzkpg | ⭐4423 | 2026-11-25 |
+| LalatinaHub/LatinaSub | ⭐12 | 2026-11-25 |
+| LancelotRar/best-cf-ips | ⭐1729 | 2026-11-25 |
+| LancelotRar/free-subs | ⭐137 | 2026-11-25 |
+| MhdiTaheri/V2rayCollector | ⭐325 | 2026-11-25 |
+| Mistgate/mistgate | ⭐324 | 2026-11-25 |
+| MohammadBahemmat/npvt-collector | ⭐10 | 2026-11-25 |
+| Mr-Meshky/vify | ⭐60 | 2026-11-25 |
+| Nelxi/ghostly-vpn | ⭐10 | 2026-11-25 |
+| OpenNetCN/clash | ⭐666 | 2026-11-25 |
+| Romaxa55/MegaV_Public | ⭐109 | 2026-11-25 |
+| Shayanthn/V2ray-Tester-Pro | ⭐70 | 2026-11-25 |
+| SocialYjj/clash-sub-merger | ⭐7 | 2026-11-25 |
+| Surfboardv2ray/TGParse | ⭐297 | 2026-11-25 |
+| T3stAcc/V2Ray | ⭐19 | 2026-11-25 |
+| TelegaVPN/free-vpn-keys | ⭐14 | 2026-11-25 |
+| V2RayRoot/V2RayConfig | ⭐178 | 2026-11-25 |
+| YuanDevTeam/OneXray | ⭐871 | 2026-11-25 |
+| aaANDkk/ClashConfig | ⭐13 | 2026-11-25 |
+| abshare/abshare.github.io | ⭐1131 | 2026-11-25 |
+| abshare3/abshare3.github.io | ⭐352 | 2026-11-25 |
+| andrewbakercloudscale/claude-burst | ⭐17 | 2026-11-25 |
+| bq2015/FreeProxies | ⭐946 | 2026-11-25 |
+| cfm019/subone | ⭐8 | 2026-11-25 |
+| chaishpish/free_server_v2ray | ⭐8 | 2026-11-25 |
+| clashnodev2ray/clashnodev2ray.github.io | ⭐169 | 2026-11-25 |
+| clashtaiwan/clashtaiwan.github.io | ⭐10 | 2026-11-25 |
+| clashv2ray-hub/clashv2ray-hub.github.io | ⭐326 | 2026-11-25 |
+| clashv2ray-hub/clashv2rayshare | ⭐7 | 2026-11-25 |
+| clashxmeta/clashxmeta.github.io | ⭐22 | 2026-11-25 |
+| crazypeace/v2rayN-3.29-VLESS | ⭐173 | 2026-11-25 |
+| crossxx-labs/free-proxy | ⭐1876 | 2026-11-25 |
+| currycan/sb-xray | ⭐16 | 2026-11-25 |
+| cybersecplayground/V2Hive | ⭐7 | 2026-11-25 |
+| deezertidal/fee-based | ⭐129 | 2026-11-25 |
+| deezertidal/freevpn | ⭐907 | 2026-11-25 |
+| dhkts1/tcr | ⭐25 | 2026-11-25 |
+| dimthink/PriceAI | ⭐6061 | 2026-11-25 |
+| dtzp555-max/ocp | ⭐145 | 2026-11-25 |
+| duckerapp/ducker | ⭐8 | 2026-11-25 |
+| ermaozi/get_subscribe | ⭐9537 | 2026-11-25 |
+| everett7623/airport-recommendations-2026 | ⭐1664 | 2026-11-25 |
+| fiamitaa/jichangtuijian | ⭐6 | 2026-11-25 |
+| free-nodes/v2rayfree | ⭐15428 | 2026-11-25 |
+| freev2raynodes/freev2raynodes.github.io | ⭐13 | 2026-11-25 |
+| freevpntuijian/freevpntuijian.github.io | ⭐20 | 2026-11-25 |
+| hm4reggggg/jichang | ⭐20 | 2026-11-25 |
+| hoatv2211/BrProxies | ⭐8 | 2026-11-25 |
+| hongkongclash/hongkongclash.github.io | ⭐45 | 2026-11-25 |
+| indiavpn/indiavpn.github.io | ⭐41 | 2026-11-25 |
+| jctz123/jichang-tuijian | ⭐74 | 2026-11-25 |
+| jctz123/jichangtizi-youhuima | ⭐31 | 2026-11-25 |
 
 ### 节点来源分布（去重后，前 20）
 
-- `rtwo2/FastNodes/sub/everything.txt`：12347 个节点
-- `asgharkapk/Sub-Config-Extractor/output_configs/mixed/rasool083-sub.yaml`：6834 个节点
-- `asgharkapk/Sub-Config-Extractor/output_configs/clash/rasool083-sub.yaml`：3413 个节点
-- `10Dream/sub-mod/sub/normal/mix.txt`：2674 个节点
-- `asgharkapk/Sub-Config-Extractor/output_configs/clash/Surfboardv2ray/TGParse/mixed.yaml`：2565 个节点
+- `rtwo2/FastNodes/sub/everything.txt`：12325 个节点
+- `asgharkapk/Sub-Config-Extractor/output_configs/mixed/rasool083-sub.yaml`：7435 个节点
+- `asgharkapk/Sub-Config-Extractor/output_configs/clash/rasool083-sub.yaml`：3483 个节点
+- `10Dream/sub-mod/sub/normal/mix.txt`：2946 个节点
+- `asgharkapk/Sub-Config-Extractor/output_configs/clash/Surfboardv2ray/TGParse/splitted/mixed.yaml`：2115 个节点
 - `asgharkapk/Sub-Config-Extractor/output_configs/clash/moneyfly1_merged_proxies_new.yaml`：1002 个节点
-- `sakha1370/OpenRay/output/all_valid_proxies.txt`：805 个节点
-- `rtwo2/FastNodes/sub/ipv6_only.txt`：526 个节点
-- `SoliSpirit/v2ray-configs/Protocols/vless.txt`：509 个节点
-- `rekt0ro/ProxyRift/subscriptions/all-base64.txt`：388 个节点
-- `SoliSpirit/v2ray-configs/Protocols/ss.txt`：384 个节点
-- `kasesm/Free-Config/vless_raw.txt`：278 个节点
-- `rtwo2/FastNodes/sub/top.txt`：235 个节点
-- `HamoonSoleimani/Pr0xySh4rk/Pr0xySh4rk_SubBase64.txt`：188 个节点
-- `aviamastersgh/vpn-free-russia/all_configs.txt`：163 个节点
-- `jichangx/free-nodes/README→raw.githubusercontent.com`：121 个节点
-- `R3ZARAHIMI/tg-v2ray-configs-every2h/conf-week.txt`：109 个节点
-- `0xRadikal/Free-v2ray-Configs/verified/configs_base64.txt`：107 个节点
-- `MohammadBahemmat/V2ray-Collector/all_servers.txt`：82 个节点
-- `rtwo2/FastNodes/sub/top_ipv6.txt`：77 个节点
+- `SoliSpirit/v2ray-configs/Protocols/vless.txt`：555 个节点
+- `rtwo2/FastNodes/sub/ipv6_only.txt`：522 个节点
+- `kasesm/Free-Config/vless_raw.txt`：451 个节点
+- `sakha1370/OpenRay/output/converted/all_valid_proxies_singbox_config.json`：378 个节点
+- `sakha1370/OpenRay/output/all_valid_proxies.txt`：369 个节点
+- `SoliSpirit/v2ray-configs/Protocols/ss.txt`：357 个节点
+- `rekt0ro/ProxyRift/subscriptions/all-base64.txt`：258 个节点
+- `rtwo2/FastNodes/sub/top.txt`：231 个节点
+- `aviamastersgh/vpn-free-russia/all_configs.txt`：160 个节点
+- `R3ZARAHIMI/tg-v2ray-configs-every2h/conf-week.txt`：129 个节点
+- `rtwo2/FastNodes/sub/top_ipv6.txt`：86 个节点
+- `0xRadikal/Free-v2ray-Configs/verified/configs_base64.txt`：85 个节点
+- `MohammadBahemmat/V2ray-Collector/all_servers.txt`：76 个节点
+- `yy1588133/proxy-pool/v2ray.txt`：70 个节点
 
 ## 2026-11-24 21:11
 
