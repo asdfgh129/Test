@@ -1,107 +1,95 @@
 {
- "generated_at": "2026-11-26T00:46:38+08:00",
- "date": "2026-11-25",
- "verdict": "无严重问题，6 个告警可优化",
+ "generated_at": "2026-11-26T23:47:44+08:00",
+ "date": "2026-11-26",
+ "verdict": "无严重问题，4 个告警可优化",
  "metrics": {
   "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
   "目标节点": 1000,
-  "去重后节点": 9882,
-  "采集总量(过滤前)": 33423,
-  "各内核订阅": "v2ray 7338、xray 8119、clash 9693、singbox 9336",
-  "协议分布": "hy2 9 / hysteria2 38 / ss 244 / ssr 4 / trojan 888 / tuic 4 / vless 5840 / vmess 2855",
-  "TCP 可达": "9882/9882（中位数 243ms）",
+  "去重后节点": 8136,
+  "采集总量(过滤前)": 20989,
+  "各内核订阅": "v2ray 6380、xray 7045、clash 8073、singbox 7778",
+  "协议分布": "hysteria2 29 / ss 189 / trojan 579 / vless 4654 / vmess 2685",
+  "TCP 可达": "8136/8136（中位数 233ms）",
   "验证已执行": "是",
   "各内核可用": {
-   "v2ray": "16/2513",
-   "xray": "26/2156",
-   "clash": "12/2503",
-   "singbox": "59/2503"
+   "v2ray": "34/2510",
+   "xray": "90/2496",
+   "clash": "54/2511",
+   "singbox": "97/1294"
   },
-  "可用节点池": "v2ray 193、xray 455、clash 287、singbox 311"
+  "可用节点池": "v2ray 209、xray 519、clash 325、singbox 348"
  },
  "findings": [
   {
    "level": "warn",
    "area": "来源稳定性",
-   "title": "1 个高贡献仓库本次 0 条：Areral/ScarletDevil(历史 43446 条, 下载失败)",
+   "title": "2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败)",
    "action": "按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 0.6%（16/2513）",
+   "title": "v2ray 可用率异常低 1.4%（34/2510）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "xray 可用率异常低 1.2%（26/2156）",
-   "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
-  },
-  {
-   "level": "warn",
-   "area": "验证",
-   "title": "clash 可用率异常低 0.5%（12/2503）",
-   "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
-  },
-  {
-   "level": "warn",
-   "area": "验证",
-   "title": "singbox 可用率异常低 2.4%（59/2503）",
+   "title": "clash 可用率异常低 2.2%（54/2511）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
+   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   },
   {
    "level": "info",
    "area": "产物",
-   "title": "主清单 9882 条；各内核订阅：v2ray 7338、xray 8119、clash 9693、singbox 9336",
+   "title": "主清单 8136 条；各内核订阅：v2ray 6380、xray 7045、clash 8073、singbox 7778",
    "action": ""
   },
   {
    "level": "info",
    "area": "规模",
-   "title": "节点数 9882 达到目标 1000",
+   "title": "节点数 8136 达到目标 1000",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库效率",
-   "title": "扫描仓库 101 个：有产出 40、解析不到节点 15、下载失败 1、无候选文件 0、README 无订阅链接跳过 45（产出率 71%，按有尝试采集的 56 个计算）",
+   "title": "扫描仓库 76 个：有产出 33、解析不到节点 11、下载失败 2、无候选文件 0、README 无订阅链接跳过 30（产出率 72%，按有尝试采集的 46 个计算）",
    "action": ""
   },
   {
    "level": "info",
    "area": "README 采集",
-   "title": "56 个仓库的 README 声明了订阅链接，提取 202147 条节点",
+   "title": "46 个仓库的 README 声明了订阅链接，提取 163185 条节点",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "9882/9882 个服务器 TCP 可达（100%），延迟中位数 243ms，<100ms 共 525 条",
+   "title": "8136/8136 个服务器 TCP 可达（100%），延迟中位数 233ms，<100ms 共 334 条",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "2664/9882 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
+   "title": "3280/8136 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库质量",
-   "title": "已评分 112 个仓库，可用率 >=10% 的 17 个，零可用 48 个（7 天内跳过、过期自动重采，known-issues 53）",
+   "title": "已评分 110 个仓库，可用率 >=10% 的 16 个，零可用 46 个（7 天内跳过、过期自动重采，known-issues 53）",
    "action": ""
   },
   {
    "level": "info",
    "area": "节点池",
-   "title": "池内节点：v2ray 193、xray 455、clash 287、singbox 311",
+   "title": "池内节点：v2ray 209、xray 519、clash 325、singbox 348",
    "action": ""
   },
   {
@@ -113,7 +101,7 @@
   {
    "level": "info",
    "area": "配额",
-   "title": "GitHub 配额剩余 core 5000/5000、search 30/30（已配置 token ghp_…x6hY）",
+   "title": "GitHub 配额剩余 core 4991/5000、search 30/30（已配置 token ghp_…x6hY）",
    "action": ""
   }
  ],
@@ -121,37 +109,25 @@
   {
    "level": "warn",
    "area": "来源稳定性",
-   "title": "1 个高贡献仓库本次 0 条：Areral/ScarletDevil(历史 43446 条, 下载失败)",
+   "title": "2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败)",
    "action": "按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 0.6%（16/2513）",
+   "title": "v2ray 可用率异常低 1.4%（34/2510）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "xray 可用率异常低 1.2%（26/2156）",
-   "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
-  },
-  {
-   "level": "warn",
-   "area": "验证",
-   "title": "clash 可用率异常低 0.5%（12/2503）",
-   "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
-  },
-  {
-   "level": "warn",
-   "area": "验证",
-   "title": "singbox 可用率异常低 2.4%（59/2503）",
+   "title": "clash 可用率异常低 2.2%（54/2511）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
+   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   }
  ]

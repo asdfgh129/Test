@@ -1,5 +1,36 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-25 采集日（2026-11-26 01:30 运行）
+
+- 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2513/2500、xray 2156/2151、clash 2503/2500、
+  singbox 2503/2500）→ GATE: done → 未跑验证、未重做自检（未占用验证资源）
+- 本日可用 **v2ray 16 / xray 26 / clash 12 / singbox 59**（合计 113）；`nodes_uris` 9882 行、
+  `tested_state` date=11-25、四核 `partial=false`。今晚是**第二窗口代跑**的完整验证（第一窗口整晚没跑，
+  详见 CHANGELOGS 11-25 23:45 节与 known-issues 75）
+- **本窗口有尾巴且已收干净**：`.git/free-nodes-pending-push.json`（第二窗口 00:52 推送失败）+
+  本地/远端分叉 `1 1`。两处根因：
+  - **remote 在 11-25 09:48 被改成 `ssh://git@github.com/asdfgh129/Test.git`**，而 `ssh -T git@github.com`
+    回 `Hi asdfgh129/tracker-client!` ⇒ 默认密钥是**另一个仓库**的 deploy key，SSH 推送永远被拒。
+    **判据：`denied to deploy key` + `ssh -T` 的仓库名 ≠ origin 仓库名 = 密钥配错仓库，与网络/通道无关**
+    （`GIT_PROXY` 只管 http/https，救不了 SSH 传输，别按「github.com 被墙」排查）
+  - 第二窗口 fetch 拿到 CI 21:12 的 `1749201` 后 4 秒才 commit，提交仍挂在旧 HEAD `0185cbc` 上 ⇒ 分叉；
+    `do_sync` 的 `merge --ff-only` 失败**不阻断**，于是「同步失败→照常提交→push 非快进被拒」
+- **修法（代码，不碰用户配置）**：`publish_free_nodes.py` 新增 `_ssh_denied()` / `https_counterpart()` /
+  `push_once()`，4 处 `git push` 统一走它；只在命中 `denied to deploy key` 时用
+  `-c remote.origin.pushurl=<同名 https>` 换协议重推一次（凭据走 GCM，token 不落 URL/日志/文件），
+  **不写 `.git/config`**。分叉用 `git merge --no-ff origin/master` 解决，三个冲突文件
+  （`nodes_uris.txt`/`nodes_meta.json`/`seed_repos.json`）**一律取 `--ours`** —— 远端那份是 CI 原始清单
+  （`reachable=0`、33691 行含死节点），覆盖等于把死节点发出去；Docs 只远端改过的三份取远端
+  （`seed_repos` 两侧各 409 条、各差 30 个仓库，取本地是为保住今晚的本地质量分）
+- 新代码在真实流程里跑通：日志先打 `SSH 推送被拒（deploy key 对该仓库无写权限），改用 HTTPS …`，
+  随后推送成功（v2ray @ 202.50.253.54:19999，第 1 次命中）
+- 提交：`b65484c`（合并）→ `1402676`（订阅+2 个 memory）→ `c8f7a59`（known-issues 76 + CHANGELOGS +
+  SKILL.md + automation-prompt.md + publish 修复），全部在 origin/master；推后 `status` 空、
+  `rev-list` 0/0、pending 已清
+- **待用户决定**：remote 是 SSH 而密钥属 `tracker-client`，若不改回 HTTPS 或补正确 deploy key，
+  今后每晚都靠这条回退兜底（可用但多一次 SSH 失败尝试）；本窗口按规则未改 remote
+- 本记忆文件在发布之后写，形成 1 个纯文档尾巴，按既有约定留待明晚第一窗口顺带提交
+
 ## 2026-11-24 采集日（2026-11-25 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2511/2500、xray 1004/1000、clash 2505/2500、

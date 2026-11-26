@@ -230,13 +230,21 @@ def save(root, core, pool, date_str, state=None):
 # ---------------------------------------------------------------- 查询
 
 def retest_candidates(pool, exclude_keys, limit):
-    """挑出池里今天还没测过的节点做复测（低延迟优先）。"""
+    """挑出池里今天还没测过的节点做复测（近期通过优先，其次通过次数，最后看延迟）。
+
+    排序口径（known-issues 74）：**last_ok 倒序 → ok_count 倒序 → best_latency 升序**。
+    只按 `best_latency`（历史最小值）排会把「很久以前很快、早已消失」的节点排在最前，
+    40 个最贵的复测名额几乎全打在死节点上（2026-11-24 实测 4 核仅 3/40 可达）。
+    实现用三次 `list.sort`（Python 保证稳定）完成多级排序。
+    """
     if limit <= 0:
         return []
     cand = [n for n in pool.get("nodes", [])
             if n.get("key") not in exclude_keys and n.get("uri")]
     cand.sort(key=lambda n: (1 if n.get("best_latency") is None else 0,
                              n.get("best_latency") or 0))
+    cand.sort(key=lambda n: int(n.get("ok_count") or 0), reverse=True)
+    cand.sort(key=lambda n: str(n.get("last_ok") or ""), reverse=True)
     out = []
     for n in cand[:limit]:
         out.append({"uri": n["uri"], "proto": n.get("proto", ""),

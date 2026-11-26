@@ -2187,7 +2187,7 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   它证明不了「链接被选中」。判层顺序应是：README 取到没 → 链接**筛出**几个（与 README 真订阅数比）→
   链接下载成功没 → 内容能解析出节点没。
 
-## 74. 可用数 140 → 60 不是网络变差：池内复测按「历史最低延迟」取样，专门挑到最陈旧的死节点（2026-11-24 第一窗口，待落地）
+## 74. 可用数 140 → 60 不是网络变差：池内复测按「历史最低延迟」取样，专门挑到最陈旧的死节点（2026-11-24 第一窗口；2026-11-26 已落地）
 
 - **现象**：可用总数 140（11-23）→ **60**（11-24），而测试量几乎不变（7518 → 7523）、候选规模同量级
   （可达 8583 → 7517，率 30.5% → 27.5%）、中位延迟 235 → 250ms（+6%）。四核同向下滑：
@@ -2219,6 +2219,14 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   失败构成同形）本来足以判「上游波动」就收工，但控制组把矛头指向了**取样组成**——这是本项目第一次证明
   「不是源池变差，是我们取样时把已验证节点排在了后面」。同类判断以后都该带一个控制组：
   「昨天的 available 今天还能过多少」，成本 2 分钟（42 个端点、`--no-bw`），信息量远高于翻查历史失败分布。
+- **落地（2026-11-26 第一窗口）**：按上面拟改实现三级稳定排序（`last_ok` 倒序 → `ok_count` 倒序 →
+  `best_latency` 升序），`DEFAULT_RETEST` 仍为 40，未动任何其它参数。
+  验证用真实池状态跑 `pool.retest_candidates()` + `test_nodes.tcp_prefilter()`（64 并发 / 1.5s）：
+  改前 v2ray 16/40、xray 7/40、clash 10/40、singbox 26/40 = **59/160（37%）**，
+  改后 27/40、30/40、24/40、39/40 = **120/160（75%）**；选中条目的 `last_ok` 中位从 11-18/19 前移到
+  11-24/25、最旧从 11-13 前移到 11-22/23。单测 6 例（含 `last_ok` 缺失、`best_latency` 为 null、
+  limit 截断、exclude 过滤）全 PASS。**注意**：排序变的是「哪 40 个名额被复测」，不改变取样总量与
+  验证参数，所以不必等 3 晚观察期；短期看可用数应回补，若连续 3 晚仍低再谈抬 `DEFAULT_RETEST`。
 
 ## 75. 自检报「所有节点 TCP 均不可达」不等于网络故障：多半是第一窗口没跑 `--probe-only`（2026-11-25 第二窗口）
 
@@ -2276,6 +2284,22 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   合并后 `git diff <本地提交> HEAD -- <三文件>` 必须为空，才能确认没把口径换掉。
 
 ## 自检发现（health_check 自动维护，按日期倒序）
+
+### 2026-11-26 自检发现
+
+**结论：无严重问题，4 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 1.4%（34/2510） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 验证 | clash 可用率异常低 2.2%（54/2511） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+### 2026-11-26 内核检查发现
+
+- xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
+- clash 有新版本 1.19.34（本地 1.19.33），可用 --update 自动升级
 
 ### 2026-11-25 自检发现
 
@@ -2514,18 +2538,3 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 | warn | 验证 | clash 可用率异常低 2.0%（50/2509） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | singbox 可用率异常低 1.7%（42/2505） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
-
-### 2026-11-09 内核检查发现
-
-- xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
-
-### 2026-11-08 自检发现
-
-**结论：无严重问题，4 个告警可优化**
-
-| 级别 | 领域 | 问题 | 建议动作 |
-|---|---|---|---|
-| warn | 验证 | v2ray 可用率异常低 1.4%（29/2142） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | clash 可用率异常低 1.7%（42/2511） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | singbox 可用率异常低 1.8%（45/2506） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
