@@ -514,3 +514,30 @@
 - **给后续窗口的要点**：可用数低位（合计 60、v2ray 个位数）在 cap 已测满时属源池质量，
   quota.md 第二节告警看的是「连续 3 晚合计 <60」，今晚刚好 60 不命中，别据此提上限
 
+## 2026-11-26（第二十九次记录：GATE: done，但第一窗口漏了自检与发布，本窗口补做两步）
+
+- 开工前：`tasklist` 查 python 与四内核均「没有找到进程」；`rev-list` 0/0、无 pending-push
+  （11-25 那笔 `250fda8` 已由后续窗口推送成功，记忆里「待补推」的风险条目可关闭）
+- 闸门退出码 0：采集日 **2026-11-26（生成于 23:03:02）**，四核均「已测满单轮上限」
+  v2ray 2510/2500、xray 2496/2488、clash 2511/2500、singbox 1294/1273，`elapsed_min=52.7`
+- 本日可用（summary.ok）：v2ray 34 / xray 90 / clash 54 / singbox **97** = 合计 275；
+  `available_nodes.json` 去重 **176** 条（bw_enabled=true）。四核 `partial=false`、`exhausted=false`
+  - singbox 97 是近期高位（前几晚 14~70），xray 90 也偏高，未见异常
+- **与规则的一处偏离（有意）**：GATE: done 规定本窗口「不重做自检与发布」，但取证发现第一窗口
+  **只跑了验证就结束**——`Docs/health_check.md` 仍停在 11-25、`HEAD` 停在 CI 提交 `92f2acb`，
+  工作区躺着 30 个未提交产物（含 `src/pool.py` 的 known-issues 74 修复）。若只补推不补自检，
+  等于把当晚清单不经自检推出去（11-25 的教训就是未探测版差点上线）。
+  → 本窗口补跑 `health_check --date 2026-11-26`（0 critical / 4 warn）+ publish，判定仍按闸门为准
+- **主清单已探测**：`nodes_meta.generated_at=22:05:44`、8136 条全带 `tcp_latency`、`reachable=8136`
+  → 第一窗口的 probe 正常，不是 11-25 那种「CI 原始未探测版」
+- 自检 4 warn 全属既定类别，未改代码：2 个高贡献仓库 0 条（日志带标签，`Areral/ScarletDevil` HTTP 402、
+  `rtwo2/FastNodes` HTTP 404 ⇒ 上游链接失效）、v2ray 可用率 1.4%、clash 2.2%、镜像失效 11/13
+- **known-issues 74 已落地**（第一窗口改动，本窗口随发布入库）：`pool.retest_candidates()`
+  三级稳定排序 `last_ok` 倒序 → `ok_count` 倒序 → `best_latency` 升序，`DEFAULT_RETEST` 仍 40
+- 发布：commit `4590d65` → origin/master 成功（30 文件）。**SSH 又被拒**（deploy key 无写权限），
+  但脚本已自动回退 HTTPS 重试并成功 ⇒ 11-25 那种「必须人工解决 key 权限」的阻塞已不复现
+- **给后续窗口的要点**：① GATE: done 不等于「第一窗口全做完了」——发布前先看
+  `Docs/health_check.md` 的日期与 `HEAD` 是否含当晚发布，两者缺一就补做，别机械跳过；
+  ② SSH deploy key 被拒时不用管，`publish_free_nodes.py` 会自己切 HTTPS；
+  ③ 判清单是否探测过仍只看 `nodes_meta.generated_at` + `tcp_latency` 是否全非空
+
