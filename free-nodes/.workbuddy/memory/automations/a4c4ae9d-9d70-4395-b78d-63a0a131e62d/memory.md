@@ -541,3 +541,31 @@
   ② SSH deploy key 被拒时不用管，`publish_free_nodes.py` 会自己切 HTTPS；
   ③ 判清单是否探测过仍只看 `nodes_meta.generated_at` + `tcp_latency` 是否全非空
 
+## 2026-11-28 凌晨 02:33（第三十次记录：GATE: done，未跑验证；本机休眠把两晚窗口全推后）
+
+- 开工前：`tasklist` 查 python 与四内核均「没有找到进程」→ 无并发窗口、无残留；未跑 taskkill
+- **时间异常（本次要点）**：本窗口本应 11-27 23:45 触发，实际 **11-28 02:33** 才跑起来；
+  第一窗口同样被推后，采集日在 01:39 起算 ⇒ `Docs/summary.json` 记成 **2026-11-28（生成于 02:11:58）**、
+  `elapsed_min=32.1`。属 known-issues 54「schedule 迟到」同型，不是口径错
+- 闸门退出码 0：采集日 2026-11-28，四核均「已测满单轮上限」，分母各按自己 cap：
+  v2ray **2226/2215**、xray 1016/1000、clash 1406/1395、singbox 1007/1000
+- 本日可用（summary.ok）：v2ray **16** / xray **95** / clash 57 / singbox **85** = 合计 253；
+  主清单 6160 条全 TCP 可达（中位数 246ms）、去重后发布 6160。四核 `partial=false`、`exhausted=false`
+- **按 11-26 的教训做了「闸门之外的两项核对」，均通过**：`Docs/health_check.json` 的 `date=2026-11-28`、
+  `generated_at=02:22:28`（第一窗口确实做了自检）；`HEAD` 已有两次当日发布（`36d61b7`、`7d31a0e`）
+  ⇒ 第一窗口三件事（验证/自检/发布）齐全，本窗口无需补做任何一步
+- 自检 0 critical / 3 warn，全属既定类别：2 个高贡献仓库 0 条（`rtwo2/FastNodes`、`Areral/ScarletDevil`，
+  均「下载失败」，与 11-26 同两仓，上游 402/404）、v2ray 可用率 0.7%（16/2226，已测满 cap 2215 ⇒ 源池质量）、
+  镜像失效 10/13（环境）。**未改任何代码、未调任何参数**
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` **无输出**；
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 第一窗口已干净发布
+- 开关仍 on：reason「最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」，`streak_done=7`；
+  `history[-7:]` = 11-19~11-24 + 11-28（11-25/26/27 未落 history），其中 **11-21 的 56.0** 仍在
+  ⇒ 与 11-21 起的一贯推演一致，**仍未到转 off 条件**（"最早 11-28" 的预测今晚不成立，因 11-21 尚未滚出且中间有空档）
+- 本窗口零验证、零自检、零修复；写完本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：① 本机休眠会让**整晚窗口顺延**，跨零点后采集日按 `date +%F` 变成次日，
+  闸门读到的日期与「昨晚」对不上是正常的，别判成故障；② 11-27 晚本地**没有任何发布**
+  （`git log` 只有 CI 的 `3648558`，无「更新 2026-11-27」）⇒ 订阅跳过了一天，属本机没跑，恢复后无需补采（CI 数据仍在）
+- **给后续窗口的要点（续）**：③ 判「是否要 publish 收尾」只看 `git status --short -- free-nodes .github`
+  与 `rev-list` 的 ahead 数；本文件自身被跟踪，写完必然产生一处改动，所以 done 夜晚基本都要 publish 一次
+
