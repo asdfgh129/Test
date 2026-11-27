@@ -870,6 +870,15 @@ def classify_readme_link(url, repo_full, link_text=""):
         kernel = (detect_kernel_hint(base) or detect_kernel_hint(rel)
                   or url_kernel or detect_kernel_hint(link_text))
         if repo.lower() == repo_full.lower():
+            # 同仓库但链接指向**非默认分支**时必须走 url 通道：repo_path 由
+            # fetch_repo_file_text 下载，它固定拼 `/HEAD/<path>`（默认分支），
+            # 换个分支的文件必然 404。2026-11-28 实测 rtwo2/FastNodes 把产物迁到
+            # `outputs` 分支，6 条链接全 404、整仓 0 条（该仓历史上是 4 万条量源）；
+            # 同一路径 `HEAD/` 404、`outputs/` 200+311687B（known-issues 77）。
+            ref = (branch or "").strip()
+            if ref and ref not in ("HEAD", "main", "master"):
+                return ("url",
+                        f"https://raw.githubusercontent.com/{repo}/{ref}/{rel}", kernel)
             return ("repo_path", rel, kernel)
         # 别的仓库的 blob 页面是 HTML，换成 raw 地址（镜像回退链照样生效）
         raw = f"https://raw.githubusercontent.com/{repo}/{branch or 'main'}/{rel}"

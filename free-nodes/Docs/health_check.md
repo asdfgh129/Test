@@ -2,6 +2,75 @@
 
 > 按日期倒序累积，最新一次运行在最上面
 
+## 2026-11-28 02:12
+
+**结论：无严重问题，3 个告警可优化**
+
+### 关键指标
+
+| 指标 | 值 |
+|---|---|
+| 输出目录 | C:\Users\bemin\WorkBuddy\Test\free-nodes |
+| 目标节点 | 1000 |
+| 去重后节点 | 6160 |
+| 采集总量(过滤前) | 17317 |
+| 各内核订阅 | v2ray 4782、xray 5362、clash 6099、singbox 5866 |
+| 协议分布 | hysteria2 72 / ss 229 / ssr 1 / trojan 385 / vless 3045 / vmess 2428 |
+| TCP 可达 | 6160/6160（中位数 246ms） |
+| 验证已执行 | 是 |
+| 各内核可用 | {'v2ray': '16/2226', 'xray': '95/1016', 'clash': '57/1406', 'singbox': '85/1007'} |
+| 可用节点池 | v2ray 208、xray 532、clash 337、singbox 357 |
+
+### 发现与建议
+
+#### 🟡 [来源稳定性] 2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败)
+
+- 建议动作：按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理
+
+#### 🟡 [验证] v2ray 可用率异常低 0.7%（16/2226）
+
+- 建议动作：同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+
+#### 🟡 [下载通道] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/
+
+- 建议动作：失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+
+#### 🔵 [产物] 主清单 6160 条；各内核订阅：v2ray 4782、xray 5362、clash 6099、singbox 5866
+
+
+#### 🔵 [规模] 节点数 6160 达到目标 1000
+
+
+#### 🔵 [仓库效率] 扫描仓库 65 个：有产出 32、解析不到节点 7、下载失败 2、无候选文件 0、README 无订阅链接跳过 24（产出率 78%，按有尝试采集的 41 个计算）
+
+
+#### 🔵 [README 采集] 41 个仓库的 README 声明了订阅链接，提取 111720 条节点
+
+
+#### 🔵 [延迟排序] 6160/6160 个服务器 TCP 可达（100%），延迟中位数 246ms，<100ms 共 222 条
+
+
+#### 🔵 [延迟排序] 2198/6160 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后
+
+
+#### 🔵 [仓库质量] 已评分 110 个仓库，可用率 >=10% 的 16 个，零可用 46 个（7 天内跳过、过期自动重采，known-issues 53）
+
+
+#### 🔵 [节点池] 池内节点：v2ray 208、xray 532、clash 337、singbox 357
+
+
+#### 🔵 [下载通道] jsDelivr 可用 3/4：fastly.jsdelivr.net、gcore.jsdelivr.net、testingcf.jsdelivr.net（不可达：cdn.jsdelivr.net）
+
+
+#### 🔵 [配额] GitHub 配额剩余 core 4987/5000、search 30/30（已配置 token ghp_…x6hY）
+
+
+### 待办清单（需人工或自动修复）
+
+1. [warn] 2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败) → 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理
+2. [warn] v2ray 可用率异常低 0.7%（16/2226） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
+3. [warn] 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ → 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
+
 ## 2026-11-26 23:47
 
 **结论：无严重问题，4 个告警可优化**
@@ -2260,59 +2329,3 @@
 
 1. [warn] v2ray 可用率异常低 2.2%（69/3097） → 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准
 2. [warn] 镜像失效 10/13：https://gh.monlor.com/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://ghfast.top/ → 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选
-
-## 2026-10-26 23:25
-
-**结论：无严重问题，1 个告警可优化**
-
-### 关键指标
-
-| 指标 | 值 |
-|---|---|
-| 输出目录 | C:\Users\bemin\WorkBuddy\Test\free-nodes |
-| 目标节点 | 1000 |
-| 去重后节点 | 7897 |
-| 各内核订阅 | v2ray 7603、xray 6484、clash 7757、singbox 7546 |
-| 协议分布 | hy2 3 / hysteria 1 / hysteria2 182 / ss 569 / ssr 1 / trojan 331 / tuic 2 / vless 4781 / vmess 2027 |
-| TCP 可达 | 2842/7908（中位数 209ms） |
-| 验证已执行 | 是 |
-| 各内核可用 | {'v2ray': '32/1000', 'xray': '37/1000', 'clash': '43/1000', 'singbox': '46/1000'} |
-| 可用节点池 | v2ray 48、xray 66、clash 85、singbox 84 |
-
-### 发现与建议
-
-#### 🟡 [验证] v2ray 文件条数 52 ≠ 汇总可用数 32
-
-- 建议动作：汇总与文件写出不一致，需排查
-
-#### 🔵 [产物] 主清单 7897 条；各内核订阅：v2ray 7603、xray 6484、clash 7757、singbox 7546
-
-
-#### 🔵 [规模] 节点数 7897 达到目标 1000
-
-
-#### 🔵 [仓库效率] 扫描仓库 74 个：有产出 17、解析不到节点 18、下载失败 17、无候选文件 0、README 无订阅链接跳过 22（产出率 33%，按有尝试采集的 52 个计算）
-
-
-#### 🔵 [README 采集] 52 个仓库的 README 声明了订阅链接，提取 66944 条节点
-
-
-#### 🔵 [延迟排序] 2842/7908 个服务器 TCP 可达（36%），延迟中位数 209ms，<100ms 共 301 条
-
-
-#### 🔵 [延迟排序] 1107/7908 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后
-
-
-#### 🔵 [仓库质量] 已评分 21 个仓库，可用率 >=10% 的 6 个，长期 0 可用 3 个（下次采集会自动跳过）
-
-
-#### 🔵 [节点池] 池内节点：v2ray 48、xray 66、clash 85、singbox 84
-
-
-#### 🔵 [性能] 采集耗时 36 分钟
-
-- 建议动作：偏慢，可关注是否有大文件反复重试
-
-### 待办清单（需人工或自动修复）
-
-1. [warn] v2ray 文件条数 52 ≠ 汇总可用数 32 → 汇总与文件写出不一致，需排查

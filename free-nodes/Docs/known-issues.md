@@ -2283,7 +2283,54 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
   远端版是 CI 原始清单（`reachable=0`、含死节点）。Docs 只远端改的（report/collection_logs/repo_yield）取远端更新。
   合并后 `git diff <本地提交> HEAD -- <三文件>` 必须为空，才能确认没把口径换掉。
 
+## 77. 「下载失败（HTTP 404）」的第三种成因：上游把产物搬到了**非默认分支**，`repo_path` 固定走 `/HEAD/`（2026-11-28 第一窗口）
+
+- **现象**：`rtwo2/FastNodes` 连续两晚整仓 0 条，`- rtwo2/FastNodes：下载失败（HTTP 404）`、
+  `README 声明 6 个 → 提取 0 条`。该仓历史上是最大量源（单仓常触 4 万条上限），
+  自检因此报「2 个高贡献仓库本次 0 条」。同批另外 66 个仓库正常 ⇒ 不是通道、不是镜像、不是配额。
+- **根因**：该仓把生成产物迁到了 **`outputs` 分支**（README 首行即写
+  「Generated subscriptions are published on the `outputs` branch」），链接形如
+  `https://raw.githubusercontent.com/rtwo2/FastNodes/outputs/sub/top.txt`。
+  `_split_raw_parts()` 其实**正确解析出** ref=`outputs`、rel=`sub/top.txt`，但 `classify_readme_link()`
+  在同仓库分支里把 ref 丢掉、返回 `("repo_path", rel, kernel)`，而 `repo_path` 由
+  `fetch_repo_file_text()` 下载，它固定拼 `{RAW_BASE}/{repo}/HEAD/{path}` —— HEAD 是**默认分支 main**，
+  于是 `main/sub/top.txt` 必然 404。**解析没错，是「ref 在分类阶段被丢弃」。**
+- **取证（单点复现）**：同一路径两条腿直接对比 ——
+  `gh-proxy.com` + `.../FastNodes/HEAD/sub/top.txt` → **HTTP 404**；
+  `gh-proxy.com` + `.../FastNodes/outputs/sub/top.txt` → **200 / 311687B**（gh.monlor.com 同）。
+- **修复**（`src/collect_nodes.py` `classify_readme_link()`）：同仓库但 ref 不属于
+  `HEAD/main/master` 时，不再返回 `repo_path`，改为返回 `("url", .../raw.githubusercontent.com/<repo>/<ref>/<rel>, ...)`
+  —— 走 `fetch_url_text()`，镜像/CDN 各腿会原样带上该 ref。默认分支情形完全不变（`repo_path` 少一次 URL 拼接，仍最优）。
+  只改 4 行、未动任何参数、未改 `fetch_repo_file_text()` 的多腿逻辑。
+- **回归**：① 分类 9 例 —— rtwo2 四条（raw / github blob / 镜像前缀）全部转 `url` 且 ref=`outputs`；
+  默认分支 5 例（`main`/`master`/`refs/heads/main`/`HEAD`/跨仓库）仍返回 `repo_path`（或跨仓库 url），**无一变化**。
+  ② 端到端：修复后 `fetch_url_text()` 取 `top.txt` 311687B → 提取 **995 条**；
+  `everything.txt` 52MB → 提取 **186257 条**（单仓 4 万上限照常生效）。修复前同两个文件 0 条。
+- **影响面**：CI 侧与本机跑的是同一份 `src/`，本次提交后**下一轮 CI 采集**即恢复该仓（约 4 万条量源）。
+  今晚这批产物已生成、不重采（窗口只有 90 分钟，且回补只影响明天的量级）。
+- **教训**：`404` 现在有三种成因，排查顺序固定为
+  ① 自己拼的 URL（`refs/heads` 漏段，第 43 条）→ ② 当日文件还没生成（0 字节占位，第 55 条）→
+  ③ **上游换了分支/目录结构，链接本身仍合法**（本条）。第 ③ 种最容易误判成「通道坏了」，
+  判别法是**拿链接原文里的 ref 路径直接打镜像**：HTTP 200 就说明链路没问题、是我们丢了这个 ref。
+  另：`_repo_path_from_url()` 的返回值里本来就有 `branch`，**任何把它丢掉的下游都该被怀疑一次**。
+
 ## 自检发现（health_check 自动维护，按日期倒序）
+
+### 2026-11-28 自检发现
+
+**结论：无严重问题，3 个告警可优化**
+
+| 级别 | 领域 | 问题 | 建议动作 |
+|---|---|---|---|
+| warn | 来源稳定性 | 2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 0.7%（16/2226） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
+
+### 2026-11-28 内核检查发现
+
+- xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
+- clash 有新版本 1.19.34（本地 1.19.33），可用 --update 自动升级
+- singbox 有新版本 1.14.5（本地 1.14.4），可用 --update 自动升级
 
 ### 2026-11-26 自检发现
 
@@ -2522,19 +2569,4 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 | warn | 验证 | xray 可用率异常低 2.2%（55/2504） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | clash 可用率异常低 1.3%（33/2508） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 验证 | singbox 可用率异常低 1.8%（45/2504） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
-
-### 2026-11-10 内核检查发现
-
-- xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
-
-### 2026-11-09 自检发现
-
-**结论：无严重问题，4 个告警可优化**
-
-| 级别 | 领域 | 问题 | 建议动作 |
-|---|---|---|---|
-| warn | 验证 | v2ray 可用率异常低 1.0%（24/2309） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | clash 可用率异常低 2.0%（50/2509） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
-| warn | 验证 | singbox 可用率异常低 1.7%（42/2505） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |

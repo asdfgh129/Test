@@ -1,23 +1,23 @@
 {
- "generated_at": "2026-11-26T23:47:44+08:00",
- "date": "2026-11-26",
- "verdict": "无严重问题，4 个告警可优化",
+ "generated_at": "2026-11-28T02:12:21+08:00",
+ "date": "2026-11-28",
+ "verdict": "无严重问题，3 个告警可优化",
  "metrics": {
   "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
   "目标节点": 1000,
-  "去重后节点": 8136,
-  "采集总量(过滤前)": 20989,
-  "各内核订阅": "v2ray 6380、xray 7045、clash 8073、singbox 7778",
-  "协议分布": "hysteria2 29 / ss 189 / trojan 579 / vless 4654 / vmess 2685",
-  "TCP 可达": "8136/8136（中位数 233ms）",
+  "去重后节点": 6160,
+  "采集总量(过滤前)": 17317,
+  "各内核订阅": "v2ray 4782、xray 5362、clash 6099、singbox 5866",
+  "协议分布": "hysteria2 72 / ss 229 / ssr 1 / trojan 385 / vless 3045 / vmess 2428",
+  "TCP 可达": "6160/6160（中位数 246ms）",
   "验证已执行": "是",
   "各内核可用": {
-   "v2ray": "34/2510",
-   "xray": "90/2496",
-   "clash": "54/2511",
-   "singbox": "97/1294"
+   "v2ray": "16/2226",
+   "xray": "95/1016",
+   "clash": "57/1406",
+   "singbox": "85/1007"
   },
-  "可用节点池": "v2ray 209、xray 519、clash 325、singbox 348"
+  "可用节点池": "v2ray 208、xray 532、clash 337、singbox 357"
  },
  "findings": [
   {
@@ -29,55 +29,49 @@
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 1.4%（34/2510）",
-   "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
-  },
-  {
-   "level": "warn",
-   "area": "验证",
-   "title": "clash 可用率异常低 2.2%（54/2511）",
+   "title": "v2ray 可用率异常低 0.7%（16/2226）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
+   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   },
   {
    "level": "info",
    "area": "产物",
-   "title": "主清单 8136 条；各内核订阅：v2ray 6380、xray 7045、clash 8073、singbox 7778",
+   "title": "主清单 6160 条；各内核订阅：v2ray 4782、xray 5362、clash 6099、singbox 5866",
    "action": ""
   },
   {
    "level": "info",
    "area": "规模",
-   "title": "节点数 8136 达到目标 1000",
+   "title": "节点数 6160 达到目标 1000",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库效率",
-   "title": "扫描仓库 76 个：有产出 33、解析不到节点 11、下载失败 2、无候选文件 0、README 无订阅链接跳过 30（产出率 72%，按有尝试采集的 46 个计算）",
+   "title": "扫描仓库 65 个：有产出 32、解析不到节点 7、下载失败 2、无候选文件 0、README 无订阅链接跳过 24（产出率 78%，按有尝试采集的 41 个计算）",
    "action": ""
   },
   {
    "level": "info",
    "area": "README 采集",
-   "title": "46 个仓库的 README 声明了订阅链接，提取 163185 条节点",
+   "title": "41 个仓库的 README 声明了订阅链接，提取 111720 条节点",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "8136/8136 个服务器 TCP 可达（100%），延迟中位数 233ms，<100ms 共 334 条",
+   "title": "6160/6160 个服务器 TCP 可达（100%），延迟中位数 246ms，<100ms 共 222 条",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "3280/8136 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
+   "title": "2198/6160 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
    "action": ""
   },
   {
@@ -89,7 +83,7 @@
   {
    "level": "info",
    "area": "节点池",
-   "title": "池内节点：v2ray 209、xray 519、clash 325、singbox 348",
+   "title": "池内节点：v2ray 208、xray 532、clash 337、singbox 357",
    "action": ""
   },
   {
@@ -101,7 +95,7 @@
   {
    "level": "info",
    "area": "配额",
-   "title": "GitHub 配额剩余 core 4991/5000、search 30/30（已配置 token ghp_…x6hY）",
+   "title": "GitHub 配额剩余 core 4987/5000、search 30/30（已配置 token ghp_…x6hY）",
    "action": ""
   }
  ],
@@ -115,19 +109,13 @@
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 1.4%（34/2510）",
-   "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
-  },
-  {
-   "level": "warn",
-   "area": "验证",
-   "title": "clash 可用率异常低 2.2%（54/2511）",
+   "title": "v2ray 可用率异常低 0.7%（16/2226）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
    "level": "warn",
    "area": "下载通道",
-   "title": "镜像失效 11/13：https://gh.monlor.com/、https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/",
+   "title": "镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/",
    "action": "失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选"
   }
  ]
