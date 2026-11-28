@@ -569,3 +569,27 @@
 - **给后续窗口的要点（续）**：③ 判「是否要 publish 收尾」只看 `git status --short -- free-nodes .github`
   与 `rev-list` 的 ahead 数；本文件自身被跟踪，写完必然产生一处改动，所以 done 夜晚基本都要 publish 一次
 
+## 2026-11-28 晚 23:45（第三十一次记录：GATE: done，未跑验证）
+
+- 开工前：`tasklist` 查 python 与四内核均「没有找到进程」→ 无并发窗口、无残留；未跑 taskkill（无活可干）
+- 闸门退出码 0：采集日 **2026-11-28（生成于 22:48:54）**，四核均「已测满单轮上限」，
+  v2ray **2512/2500**、xray 1017/1000、clash 1017/1000、singbox 1015/1000，`elapsed_min=41.2`
+  - 注意：本日**有两次采集周期**（凌晨那次记 11-28 是 11-27 晚顺延过来的，见上一条），summary.json 按日期覆写，
+    今晚这次覆盖了凌晨那次；`window_switch.json` 的 history 里 11-28 也只有一条（41.2）
+- 本日可用（summary.ok）：v2ray 27 / xray 50 / clash 33 / singbox **84** = 合计 194；
+  `available_nodes.json` 去重 **129** 条（bw_enabled=true）。四核 `partial=false`、`exhausted=false`
+- 按 11-26 的教训做了闸门之外的核对，**三项齐全**：`health_check.json` 的 `date=2026-11-28`、
+  `generated_at=22:52:46`；`HEAD` 已有今日两次发布（`f94ed12`、`6e9a558`）；主清单 11294 条全 TCP 可达（中位 229ms）
+  ⇒ 第一窗口验证/自检/发布三件事都做了，本窗口无需补做任何一步
+- 自检 0 critical / 3 warn，全属既定类别：`Areral/ScarletDevil` 0 条（历史 43446，下载失败）、
+  v2ray 可用率 1.1%（27/2512，已测满 cap ⇒ 源池质量）、镜像失效 10/13（环境，可用 3 个）。**未改任何代码、未调任何参数**
+- 尾巴检查（写本文件前）：无 `.git/free-nodes-pending-push.json`；`git status --short -- free-nodes .github` 两项，
+  均为 automation memory（`2026-11-28.md` M + 主窗口 a3d7bb22 memory M）；`rev-list --left-right --count` = 0/0
+- 开关仍 `followup_windows=on`：reason「维持 on：最近 7 晚跑完 7 晚（需 7 晚连续达标才停用，耗时达标=False）」，
+  `streak_done=7`；`history[-7:]` = 11-19~11-24 + 11-28，**11-21 的 56.0 仍在窗口内** ⇒ 仍未到转 off 条件
+  （"最早 11-28" 的预测今晚再次不成立，成因是同一条：中间 11-25/26/27 未落 history，窗口靠新条目滚不出去）
+- 本窗口零验证、零自检、零修复；写完本文件后 publish 一次收掉 memory 尾巴
+- **给后续窗口的要点**：① 「最早某日转 off」的推演只有在**每晚都有 history 条目**时才成立；
+  本机休眠造成空档后，`history[-7:]` 里最慢那晚要等新条目攒够 7 条才滚出，中间会一直维持 on，别再逐日重算日期；
+  ② 同一采集日出现两条 history/两次 summary 时，以 `updated_at`/`generated_at` 较新的为准
+
