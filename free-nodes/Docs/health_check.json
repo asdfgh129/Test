@@ -1,35 +1,35 @@
 {
- "generated_at": "2026-11-28T02:22:28+08:00",
+ "generated_at": "2026-11-28T22:52:46+08:00",
  "date": "2026-11-28",
  "verdict": "无严重问题，3 个告警可优化",
  "metrics": {
   "输出目录": "C:\\Users\\bemin\\WorkBuddy\\Test\\free-nodes",
   "目标节点": 1000,
-  "去重后节点": 6160,
-  "采集总量(过滤前)": 17317,
-  "各内核订阅": "v2ray 4782、xray 5362、clash 6099、singbox 5866",
-  "协议分布": "hysteria2 72 / ss 229 / ssr 1 / trojan 385 / vless 3045 / vmess 2428",
-  "TCP 可达": "6160/6160（中位数 246ms）",
+  "去重后节点": 11294,
+  "采集总量(过滤前)": 35697,
+  "各内核订阅": "v2ray 8663、xray 8984、clash 11089、singbox 10655",
+  "协议分布": "hy2 8 / hysteria2 53 / ss 314 / ssr 4 / trojan 1218 / tuic 3 / vless 6910 / vmess 2784",
+  "TCP 可达": "11294/11294（中位数 229ms）",
   "验证已执行": "是",
   "各内核可用": {
-   "v2ray": "16/2226",
-   "xray": "95/1016",
-   "clash": "57/1406",
-   "singbox": "85/1007"
+   "v2ray": "27/2512",
+   "xray": "50/1017",
+   "clash": "33/1017",
+   "singbox": "84/1015"
   },
-  "可用节点池": "v2ray 208、xray 532、clash 337、singbox 357"
+  "可用节点池": "v2ray 222、xray 562、clash 363、singbox 383"
  },
  "findings": [
   {
    "level": "warn",
    "area": "来源稳定性",
-   "title": "2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败)",
+   "title": "1 个高贡献仓库本次 0 条：Areral/ScarletDevil(历史 43446 条, 下载失败)",
    "action": "按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 0.7%（16/2226）",
+   "title": "v2ray 可用率异常低 1.1%（27/2512）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {
@@ -41,49 +41,49 @@
   {
    "level": "info",
    "area": "产物",
-   "title": "主清单 6160 条；各内核订阅：v2ray 4782、xray 5362、clash 6099、singbox 5866",
+   "title": "主清单 11294 条；各内核订阅：v2ray 8663、xray 8984、clash 11089、singbox 10655",
    "action": ""
   },
   {
    "level": "info",
    "area": "规模",
-   "title": "节点数 6160 达到目标 1000",
+   "title": "节点数 11294 达到目标 1000",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库效率",
-   "title": "扫描仓库 65 个：有产出 32、解析不到节点 7、下载失败 2、无候选文件 0、README 无订阅链接跳过 24（产出率 78%，按有尝试采集的 41 个计算）",
+   "title": "扫描仓库 66 个：有产出 36、解析不到节点 8、下载失败 2、无候选文件 0、README 无订阅链接跳过 20（产出率 78%，按有尝试采集的 46 个计算）",
    "action": ""
   },
   {
    "level": "info",
    "area": "README 采集",
-   "title": "41 个仓库的 README 声明了订阅链接，提取 111720 条节点",
+   "title": "46 个仓库的 README 声明了订阅链接，提取 209458 条节点",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "6160/6160 个服务器 TCP 可达（100%），延迟中位数 246ms，<100ms 共 222 条",
+   "title": "11294/11294 个服务器 TCP 可达（100%），延迟中位数 229ms，<100ms 共 719 条",
    "action": ""
   },
   {
    "level": "info",
    "area": "延迟排序",
-   "title": "2198/6160 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
+   "title": "3388/11294 条为 Cloudflare 前置节点（TCP 快但代理多不通），已排在真实节点之后",
    "action": ""
   },
   {
    "level": "info",
    "area": "仓库质量",
-   "title": "已评分 110 个仓库，可用率 >=10% 的 16 个，零可用 46 个（7 天内跳过、过期自动重采，known-issues 53）",
+   "title": "已评分 112 个仓库，可用率 >=10% 的 14 个，零可用 48 个（7 天内跳过、过期自动重采，known-issues 53）",
    "action": ""
   },
   {
    "level": "info",
    "area": "节点池",
-   "title": "池内节点：v2ray 208、xray 532、clash 337、singbox 357",
+   "title": "池内节点：v2ray 222、xray 562、clash 363、singbox 383",
    "action": ""
   },
   {
@@ -95,7 +95,7 @@
   {
    "level": "info",
    "area": "配额",
-   "title": "GitHub 配额剩余 core 4985/5000、search 30/30（已配置 token ghp_…x6hY）",
+   "title": "GitHub 配额剩余 core 4834/5000、search 30/30（已配置 token ghp_…x6hY）",
    "action": ""
   }
  ],
@@ -103,13 +103,13 @@
   {
    "level": "warn",
    "area": "来源稳定性",
-   "title": "2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败)",
+   "title": "1 个高贡献仓库本次 0 条：Areral/ScarletDevil(历史 43446 条, 下载失败)",
    "action": "按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理"
   },
   {
    "level": "warn",
    "area": "验证",
-   "title": "v2ray 可用率异常低 0.7%（16/2226）",
+   "title": "v2ray 可用率异常低 1.1%（27/2512）",
    "action": "同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准"
   },
   {

@@ -159,6 +159,16 @@
    "client-fingerprint": "firefox"
   },
   {
+   "name": "RU 22 [vless]",
+   "type": "vless",
+   "server": "136.148.83.70",
+   "port": 443,
+   "uuid": "00000000-0000-0001-0000-000000000000",
+   "udp": true,
+   "tls": true,
+   "servername": "aszbk-ru-78dc.my-fade.cloud"
+  },
+  {
    "name": "RU \\U0001F1F7\\U0001F1FA | @Raydikalx | 2A91F2",
    "type": "vless",
    "server": "193.160.208.240",
@@ -198,15 +208,22 @@
    "client-fingerprint": "qq"
   },
   {
-   "name": "136.148.83.70:443",
+   "name": "🇷🇺 俄罗斯 (Russia) 364",
    "type": "vless",
-   "server": "136.148.83.70",
+   "server": "201.51.12.98",
    "port": 443,
-   "uuid": "00000000-0000-0001-0000-000000000000",
+   "uuid": "38308ff1-5aa9-494f-a25a-0f2870d56b3e",
    "udp": true,
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "mobile.api.Event"
+   },
    "tls": true,
-   "servername": "aszbk-ru-78dc.my-fade.cloud",
-   "client-fingerprint": "qq"
+   "servername": "vps3.nemnogogo.com",
+   "alpn": [
+    "h2"
+   ],
+   "client-fingerprint": "firefox"
   },
   {
    "name": "ProxyRift 1437",
@@ -222,6 +239,47 @@
    "tls": true,
    "servername": "vps3.nemnogogo.com",
    "client-fingerprint": "firefox"
+  },
+  {
+   "name": "RU 21 [vless]",
+   "type": "vless",
+   "server": "136.148.83.71",
+   "port": 443,
+   "uuid": "00000000-0000-0001-0000-000000000000",
+   "udp": true,
+   "tls": true,
+   "servername": "wccfu-ru-79dc.my-fade.cloud"
+  },
+  {
+   "name": "DE德国(mibei77.com 米贝节点分享)",
+   "type": "vless",
+   "server": "13.141.36.63",
+   "port": 443,
+   "uuid": "4201786b-d99b-4147-a5f0-20d47acddb81",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "4935e4t.de25.h1clayd.click",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw",
+    "short-id": "6976d670818644cc"
+   }
+  },
+  {
+   "name": "🇸🇨_塞舌尔 (10)",
+   "type": "vless",
+   "server": "196.245.52.187",
+   "port": 443,
+   "uuid": "cda0862a-0f87-4be9-8ed8-1d0c9e382839",
+   "udp": true,
+   "tls": true,
+   "servername": "04535dt.us8.h1clayd.click",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "UoS8qZ74hP_ECcncCz55lzvlcVss3R7VA0WYZE0YQCY",
+    "short-id": "ba2a3dce62b99092"
+   }
   },
   {
    "name": "🇸🇬_新加坡 (3)",
@@ -319,20 +377,6 @@
    "client-fingerprint": "firefox"
   },
   {
-   "name": "RU - zhuhai.uk 03",
-   "type": "vless",
-   "server": "201.51.12.98",
-   "port": 443,
-   "uuid": "38308ff1-5aa9-494f-a25a-0f2870d56b3e",
-   "udp": true,
-   "network": "grpc",
-   "grpc-opts": {
-    "grpc-service-name": "mobile.api.Event"
-   },
-   "tls": true,
-   "servername": "vps3.nemnogogo.com"
-  },
-  {
    "name": "DE - zhuhai.uk 05",
    "type": "vless",
    "server": "176.98.176.60",
@@ -350,29 +394,21 @@
    "client-fingerprint": "firefox"
   },
   {
-   "name": "🇷🇺_俄罗斯 (17)",
-   "type": "vless",
-   "server": "136.148.83.71",
+   "name": "US - zhuhai.uk 02",
+   "type": "trojan",
+   "server": "ipfast.kingmna.com",
    "port": 443,
-   "uuid": "00000000-0000-0001-0000-000000000000",
+   "password": "Z-jckziI1rW4yrUMorrv0Q",
    "udp": true,
    "tls": true,
-   "servername": "wccfu-ru-79dc.my-fade.cloud"
-  },
-  {
-   "name": "🇳🇱_荷兰 (9)",
-   "type": "vless",
-   "server": "13.141.36.63",
-   "port": 443,
-   "uuid": "4201786b-d99b-4147-a5f0-20d47acddb81",
-   "udp": true,
-   "flow": "xtls-rprx-vision",
-   "tls": true,
-   "servername": "4935e4t.de25.h1clayd.click",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw",
-    "short-id": "6976d670818644cc"
+   "sni": "cdn.akamai.steamstatic.com",
+   "skip-cert-verify": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER",
+    "headers": {
+     "Host": "loosnsj5aboijji.global.ssl.fastly.net"
+    }
    }
   },
   {
@@ -405,21 +441,6 @@
    "reality-opts": {
     "public-key": "ZSmetD4e9QG5CiXhniHg5HJB68L4kwbgAkJmMHtVwEE",
     "short-id": "42426c882c5fcd41"
-   }
-  },
-  {
-   "name": "🇸🇨_塞舌尔 (10)",
-   "type": "vless",
-   "server": "196.245.52.187",
-   "port": 443,
-   "uuid": "cda0862a-0f87-4be9-8ed8-1d0c9e382839",
-   "udp": true,
-   "tls": true,
-   "servername": "04535dt.us8.h1clayd.click",
-   "client-fingerprint": "firefox",
-   "reality-opts": {
-    "public-key": "UoS8qZ74hP_ECcncCz55lzvlcVss3R7VA0WYZE0YQCY",
-    "short-id": "ba2a3dce62b99092"
    }
   },
   {
@@ -834,6 +855,22 @@
    }
   },
   {
+   "name": "ProxyRift 454",
+   "type": "vless",
+   "server": "186.246.8.13",
+   "port": 443,
+   "uuid": "00799b08-1090-4ed3-bec0-0fa26816a703",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/api/v2/stream",
+    "mode": "auto"
+   },
+   "tls": true,
+   "servername": "wnl.bootless.ru",
+   "client-fingerprint": "chrome"
+  },
+  {
    "name": "🇩🇪_德国 (20)",
    "type": "vless",
    "server": "153.56.231.73",
@@ -969,24 +1006,6 @@
    }
   },
   {
-   "name": "🇺🇸 United States | 🌐 | [BL]",
-   "type": "trojan",
-   "server": "ipfast.kingmna.com",
-   "port": 443,
-   "password": "auRVImItMy7CqRAY7FC8Wg",
-   "udp": true,
-   "tls": true,
-   "sni": "cdn.akamai.steamstatic.com",
-   "skip-cert-verify": true,
-   "network": "ws",
-   "ws-opts": {
-    "path": "/TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER-TELEGRAM-@NUFiLTER",
-    "headers": {
-     "Host": "copy_az_channel_NUFiLTER_10i.global.ssl.fastly.net."
-    }
-   }
-  },
-  {
    "name": "🇯🇵_日本 (29)",
    "type": "ss",
    "server": "47.74.18.249",
@@ -1032,6 +1051,15 @@
    "udp": true
   },
   {
+   "name": "end-gfw-sg89-SS #2",
+   "type": "ss",
+   "server": "47.131.229.91",
+   "port": 8443,
+   "cipher": "chacha20-ietf-poly1305",
+   "password": "7e68e32f-8015-4f37-9082-70e8b0b58043",
+   "udp": true
+  },
+  {
    "name": "KR \\U0001F1F0\\U0001F1F7 | @Raydikalx | 6B409E",
    "type": "ss",
    "server": "211.233.33.228",
@@ -1041,7 +1069,7 @@
    "udp": true
   },
   {
-   "name": "end-gfw-sg89-SS #2",
+   "name": "end-gfw-sg89-SS #3",
    "type": "ss",
    "server": "54.151.179.216",
    "port": 8443,
@@ -1050,7 +1078,7 @@
    "udp": true
   },
   {
-   "name": "end-gfw-sg89-SS #3",
+   "name": "end-gfw-sg89-SS #4",
    "type": "ss",
    "server": "13.229.234.50",
    "port": 8443,
@@ -1074,7 +1102,7 @@
    "client-fingerprint": "chrome"
   },
   {
-   "name": "end-gfw-sg89-SS #4",
+   "name": "end-gfw-sg89-SS #5",
    "type": "ss",
    "server": "13.229.87.193",
    "port": 8443,
@@ -1129,6 +1157,15 @@
     "public-key": "aHbpNgKYJssDDzN0faQYKh9CzzrEnsCRpB4qpMiv5Ug",
     "short-id": "49170ca81691d962"
    }
+  },
+  {
+   "name": "US美国(mibei77.com 米贝节点分享)",
+   "type": "ss",
+   "server": "waic.pro.main.sys-metric-report.com",
+   "port": 28014,
+   "cipher": "chacha20-ietf-poly1305",
+   "password": "abc62f00-95a8-4c2e-a85d-36a2cdc977da",
+   "udp": true
   },
   {
    "name": "🇻🇳 Vietnam - Unknown | 163.61.182.194:34646",
@@ -1550,6 +1587,22 @@
    "skip-cert-verify": false
   },
   {
+   "name": "end-gfw-sg89-VLESS #2",
+   "type": "vless",
+   "server": "47.131.229.91",
+   "port": 443,
+   "uuid": "7e68e32f-8015-4f37-9082-70e8b0b58043",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "clawfarm.ai.risk-vantagefx.com",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "x8aCD8cJtkDvAjcRrcMG05MNiwh11LaKg70KIRvfN0g",
+    "short-id": "819a87bf1651bf44"
+   }
+  },
+  {
    "name": "ProxyRift 030 #2",
    "type": "vless",
    "server": "84.32.149.211",
@@ -1567,6 +1620,24 @@
     "public-key": "M-cE7q2hNgBeNv7COM8DS2QC3GGi6Pu7pD1lvUfG0mo",
     "short-id": "e4fc6803b3212ad4"
    }
+  },
+  {
+   "name": "🇻🇳_越南",
+   "type": "vless",
+   "server": "221.133.21.135",
+   "port": 8444,
+   "uuid": "2144e802-a64f-4261-af53-41309fee1d99",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/tk",
+    "headers": {
+     "Host": "221.133.21.135"
+    }
+   },
+   "tls": true,
+   "servername": "www.bing.com",
+   "client-fingerprint": "chrome"
   },
   {
    "name": "ProxyRift 1474",
@@ -1651,6 +1722,22 @@
    }
   },
   {
+   "name": "ProxyRift 1182",
+   "type": "vless",
+   "server": "132.243.65.148",
+   "port": 443,
+   "uuid": "9fdec6be-b6b5-4f18-bac0-461cb7953ff0",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "ee.frgcdn.xyz",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "RO5YMxxtJmZo2w370qG-seJ41toowHPbz6i2uXJ2gG0",
+    "short-id": "7a3f9e2b1c8d4f6a"
+   }
+  },
+  {
    "name": "ES",
    "type": "vless",
    "server": "213.182.201.138",
@@ -1672,7 +1759,7 @@
    "udp": true
   },
   {
-   "name": "end-gfw-sg89-VLESS #2",
+   "name": "end-gfw-sg89-VLESS #3",
    "type": "vless",
    "server": "13.212.23.157",
    "port": 443,
@@ -2064,6 +2151,16 @@
    "servername": "vps3.nemnogogo.com"
   },
   {
+   "name": "ProxyRift 204",
+   "type": "hysteria2",
+   "server": "89.37.192.54",
+   "port": 443,
+   "password": "6345ee32-7b62-4584-902d-07cfe588a02e",
+   "udp": true,
+   "sni": "ro-87-58-205-146.sslip.io",
+   "skip-cert-verify": false
+  },
+  {
    "name": "ProxyRift 1286",
    "type": "vless",
    "server": "153.52.84.107",
@@ -2285,6 +2382,21 @@
    }
   },
   {
+   "name": "🇮🇩 印尼 | IDN",
+   "type": "vless",
+   "server": "130.94.95.126",
+   "port": 443,
+   "uuid": "ed94398f-893f-40c6-b14c-bf02b5f6be16",
+   "udp": true,
+   "tls": true,
+   "servername": "navi.bankrate.com",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "UT9tFQOdy54SeW_tg-XQN3QkGYoWUpO_88XFXijkrXc",
+    "short-id": "2da72ce6"
+   }
+  },
+  {
    "name": "🇺🇸 #2",
    "type": "vless",
    "server": "129.101.100.219",
@@ -2338,6 +2450,22 @@
    "udp": true,
    "sni": "ge-beer-1.fantoff.online",
    "skip-cert-verify": true
+  },
+  {
+   "name": "ProxyRift 015",
+   "type": "vless",
+   "server": "48.102.202.183",
+   "port": 443,
+   "uuid": "e894c08a-fecc-46f5-bf03-c95d0274c79d",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "lesson178.schoolpizorbz.xyz",
+   "client-fingerprint": "firefox",
+   "reality-opts": {
+    "public-key": "Dtr_Vep-C3_LsBDGgwZ9sfBfpWcUp_SwMB_fnya5IDo",
+    "short-id": "5167e6149ceb3334"
+   }
   },
   {
    "name": "🇩🇪 德国 | DEU #2",
@@ -2463,6 +2591,16 @@
    "cipher": "chacha20-ietf-poly1305",
    "password": "7e68e32f-8015-4f37-9082-70e8b0b58043",
    "udp": true
+  },
+  {
+   "name": "🇺🇸 #3",
+   "type": "hysteria2",
+   "server": "129.101.107.158",
+   "port": 443,
+   "password": "68eb9113-416b-4ac9-8b10-4de023aec876",
+   "udp": true,
+   "sni": "hysteria-gjrao4f1.concept7.ru",
+   "skip-cert-verify": false
   },
   {
    "name": "ProxyRift 1215",
@@ -2597,6 +2735,25 @@
    "sni": "blog.findconnectwithemployersandbuildprofessionalnetwork.com"
   },
   {
+   "name": "ProxyRift 1146",
+   "type": "vless",
+   "server": "72.56.245.146",
+   "port": 8881,
+   "uuid": "e460e7b2-a146-4468-87ed-52510b2caae6",
+   "udp": true,
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "grpc-tunnel"
+   },
+   "tls": true,
+   "servername": "dl.google.com",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "Dfgu8Ey0M8Hz4gXGZAwQ3H9jLt2HByVsjAOTWiuKDB0",
+    "short-id": "aabbccdd"
+   }
+  },
+  {
    "name": "ProxyRift 030 #3",
    "type": "vless",
    "server": "fi4.h1cloud.net",
@@ -2667,6 +2824,25 @@
    }
   },
   {
+   "name": "ProxyRift 1512",
+   "type": "vless",
+   "server": "5.23.53.44",
+   "port": 443,
+   "uuid": "62713f49-9138-410b-b249-7a53c843c5d2",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/"
+   },
+   "tls": true,
+   "servername": "baza221.wba-pn.ru",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "edge"
+  },
+  {
    "name": "ProxyRift 1688",
    "type": "vless",
    "server": "201.51.11.65",
@@ -2733,6 +2909,21 @@
    "tls": true,
    "servername": "st3b6e5.rumedia-cdn.com",
    "client-fingerprint": "firefox"
+  },
+  {
+   "name": "ProxyRift 1134",
+   "type": "vless",
+   "server": "82.202.182.32",
+   "port": 5269,
+   "uuid": "0d4807a7-260b-4d66-a71e-5e793c46c66e",
+   "udp": true,
+   "tls": true,
+   "servername": "max.ru",
+   "client-fingerprint": "chrome",
+   "reality-opts": {
+    "public-key": "meI7RA9FgxL1yjJsbJBehEKoB2Z1ra4hyYJso9qtmFA",
+    "short-id": "4b198dc3bfffb7af"
+   }
   },
   {
    "name": "ProxyRift 1344",
@@ -3105,6 +3296,28 @@
    }
   },
   {
+   "name": "🇩🇪 德国 | DEU #3",
+   "type": "vless",
+   "server": "woodgrain.filnex.baby",
+   "port": 443,
+   "uuid": "749b1c56-e658-4bf5-94bd-5c3286a4aed1",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/api/de2/stream",
+    "headers": {
+     "Host": "woodgrain.filnex.baby"
+    }
+   },
+   "tls": true,
+   "servername": "larchbank.elvano.website",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "firefox"
+  },
+  {
    "name": "ProxyRift 1184",
    "type": "vless",
    "server": "nl-ams1.connect.accessboy.com",
@@ -3260,6 +3473,24 @@
    }
   },
   {
+   "name": "ProxyRift 1072",
+   "type": "vless",
+   "server": "pebble.gerqix.online",
+   "port": 443,
+   "uuid": "749b1c56-e658-4bf5-94bd-5c3286a4aed1",
+   "udp": true,
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "glush.de2.v1"
+   },
+   "tls": true,
+   "servername": "windlass.gerqix.online",
+   "alpn": [
+    "h2"
+   ],
+   "client-fingerprint": "firefox"
+  },
+  {
    "name": "Бесплатный #2",
    "type": "vless",
    "server": "13.141.36.51",
@@ -3343,6 +3574,52 @@
    "udp": true
   },
   {
+   "name": "ProxyRift 1513",
+   "type": "vless",
+   "server": "foliose.merlano.monster",
+   "port": 443,
+   "uuid": "749b1c56-e658-4bf5-94bd-5c3286a4aed1",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/api/de2/stream"
+   },
+   "tls": true,
+   "servername": "bookcloth.merlano.monster",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "ProxyRift 1433",
+   "type": "hysteria2",
+   "server": "193.124.66.172",
+   "port": 443,
+   "password": "2444df7f-4a0c-45bd-9c62-25a7ff8c4dba",
+   "udp": true,
+   "sni": "lv.0000000000000.space",
+   "skip-cert-verify": false
+  },
+  {
+   "name": "ProxyRift 513",
+   "type": "vless",
+   "server": "201.51.2.188",
+   "port": 443,
+   "uuid": "749b1c56-e658-4bf5-94bd-5c3286a4aed1",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/api/de2/sync",
+    "mode": "auto",
+    "host": "pigment.merlano.monster"
+   },
+   "tls": true,
+   "servername": "fieldmark.merlano.monster",
+   "client-fingerprint": "firefox"
+  },
+  {
    "name": "🇸🇬",
    "type": "vless",
    "server": "157.228.130.145",
@@ -3358,6 +3635,28 @@
    },
    "tls": true,
    "servername": "next-8zs.pages.dev",
+   "client-fingerprint": "firefox"
+  },
+  {
+   "name": "🇩🇪 德国 (Germany) 424",
+   "type": "vless",
+   "server": "72.56.238.135",
+   "port": 443,
+   "uuid": "749b1c56-e658-4bf5-94bd-5c3286a4aed1",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/api/de1/stream",
+    "headers": {
+     "Host": "bookend.filnex.baby"
+    }
+   },
+   "tls": true,
+   "servername": "ferncrest.gerqix.online",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
    "client-fingerprint": "firefox"
   },
   {
@@ -3626,6 +3925,17 @@
    }
   },
   {
+   "name": "🇮🇷_伊朗 (4)",
+   "type": "vless",
+   "server": "ns2.irts.lol",
+   "port": 443,
+   "uuid": "ff1906a5-a446-44e4-8e72-4e2d61775fa0",
+   "udp": true,
+   "tls": true,
+   "servername": "ns2.irts.lol",
+   "client-fingerprint": "chrome"
+  },
+  {
    "name": "ProxyRift 1562",
    "type": "vless",
    "server": "185.71.216.177",
@@ -3745,6 +4055,25 @@
    "client-fingerprint": "chrome"
   },
   {
+   "name": "ProxyRift 041",
+   "type": "vless",
+   "server": "harbor.gerqix.online",
+   "port": 443,
+   "uuid": "749b1c56-e658-4bf5-94bd-5c3286a4aed1",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/api/de1/stream"
+   },
+   "tls": true,
+   "servername": "moorhen.gerqix.online",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "firefox"
+  },
+  {
    "name": "[OpenRay] 🌐XX-255",
    "type": "vless",
    "server": "tg.skvoz-dpi.com",
@@ -3801,6 +4130,26 @@
     "public-key": "bZpzmeWiEJyJQy0W2hHc34Nr6BuFXj1UDd80Cbwh1Fk",
     "short-id": "ff776ff77be48b88"
    }
+  },
+  {
+   "name": "ProxyRift 645",
+   "type": "vless",
+   "server": "109.172.87.68",
+   "port": 443,
+   "uuid": "f4b08bf1-d9bd-4755-aa88-ba922282c608",
+   "udp": true,
+   "network": "xhttp",
+   "xhttp-opts": {
+    "path": "/api/v2/telemetry/c3a474d77a",
+    "mode": "auto",
+    "host": "rusamicro67.richhoodfoc.com"
+   },
+   "tls": true,
+   "servername": "rusamicro67.richhoodfoc.com",
+   "alpn": [
+    "h2"
+   ],
+   "client-fingerprint": "firefox"
   },
   {
    "name": "ProxyRift 1398",
@@ -3912,6 +4261,17 @@
    "client-fingerprint": "firefox"
   },
   {
+   "name": "ProxyRift 1476 #2",
+   "type": "vless",
+   "server": "176.114.83.133",
+   "port": 443,
+   "uuid": "00000000-0000-0001-0000-000000000000",
+   "udp": true,
+   "tls": true,
+   "servername": "dfleafaaejodeytqqe.fcloudservices.site",
+   "client-fingerprint": "firefox"
+  },
+  {
    "name": "ProxyRift 424",
    "type": "vless",
    "server": "b6d267t.es10.h1clayd.shop",
@@ -3925,6 +4285,28 @@
     "public-key": "cxyrz3HGwHEptrO2fvz6EiikFoEDgTl0SQkrNyj5yRc",
     "short-id": "74f848c51d8139d1"
    }
+  },
+  {
+   "name": "🇩🇪 德国 | DEU #4",
+   "type": "vless",
+   "server": "sienna.merlano.monster",
+   "port": 443,
+   "uuid": "749b1c56-e658-4bf5-94bd-5c3286a4aed1",
+   "udp": true,
+   "network": "ws",
+   "ws-opts": {
+    "path": "/api/de4/stream",
+    "headers": {
+     "Host": "sienna.merlano.monster"
+    }
+   },
+   "tls": true,
+   "servername": "sienna.merlano.monster",
+   "alpn": [
+    "http",
+    "1.1"
+   ],
+   "client-fingerprint": "firefox"
   },
   {
    "name": "ProxyRift 1531",
@@ -4199,7 +4581,7 @@
    "udp": true
   },
   {
-   "name": "end-gfw-sg89-VLESS #3",
+   "name": "end-gfw-sg89-VLESS #4",
    "type": "vless",
    "server": "47.129.144.40",
    "port": 443,
@@ -4538,23 +4920,7 @@
    }
   },
   {
-   "name": "🇩🇪 Frankfurt am Main 15",
-   "type": "vless",
-   "server": "186.246.8.13",
-   "port": 443,
-   "uuid": "00799b08-1090-4ed3-bec0-0fa26816a703",
-   "udp": true,
-   "network": "xhttp",
-   "xhttp-opts": {
-    "path": "/api/v2/stream",
-    "mode": "auto"
-   },
-   "tls": true,
-   "servername": "wnl.bootless.ru",
-   "client-fingerprint": "chrome"
-  },
-  {
-   "name": "🇩🇪 德国 | DEU #3",
+   "name": "🇩🇪 德国 | DEU #5",
    "type": "vless",
    "server": "89.124.251.243",
    "port": 443,
@@ -4619,7 +4985,7 @@
    }
   },
   {
-   "name": "🇩🇪 德国 | DEU #4",
+   "name": "🇩🇪 德国 | DEU #6",
    "type": "ss",
    "server": "13.140.86.73",
    "port": 6079,
@@ -4919,7 +5285,7 @@
    }
   },
   {
-   "name": "🇩🇪 德国 | DEU #5",
+   "name": "🇩🇪 德国 | DEU #7",
    "type": "vless",
    "server": "13.143.187.220",
    "port": 443,
@@ -4931,6 +5297,37 @@
    "client-fingerprint": "firefox",
    "reality-opts": {
     "public-key": "eDzVz3bxkv3IoN3BUCa_aA-RicoeG7ACylYSnmS2Pgg"
+   }
+  },
+  {
+   "name": "RU #4",
+   "type": "vless",
+   "server": "196.240.125.12",
+   "port": 8443,
+   "uuid": "f121ffc8-f6dc-4728-a871-a05e3f9cf8c5",
+   "udp": true,
+   "flow": "xtls-rprx-vision",
+   "tls": true,
+   "servername": "api-v2-6b09ce88.vmagnum.win",
+   "client-fingerprint": "chrome"
+  },
+  {
+   "name": "US - zhuhai.uk 03",
+   "type": "vless",
+   "server": "162.35.101.177",
+   "port": 443,
+   "uuid": "cda0862a-0f87-4be9-8ed8-1d0c9e382839",
+   "udp": true,
+   "network": "grpc",
+   "grpc-opts": {
+    "grpc-service-name": "99f2107b03f8"
+   },
+   "tls": true,
+   "servername": "0592efg.us8.h1clayd.click",
+   "client-fingerprint": "edge",
+   "reality-opts": {
+    "public-key": "cO3wYHISTeorXcM8ffaDCDdqZ-olBQL-GyZqb-W7rTk",
+    "short-id": "bd8f712209a9c283"
    }
   },
   {
@@ -4948,6 +5345,18 @@
     "public-key": "jHtC6ayzhkd_GVNF5TIGPu9iVpqUltBAQj1dpGJHwxs",
     "short-id": "55986a94e2228791"
    }
+  },
+  {
+   "name": "ProxyRift 719",
+   "type": "vless",
+   "server": "178.177.17.206",
+   "port": 8446,
+   "uuid": "1bc72df2-f188-4bd1-8c9f-395dbb5f5cf7",
+   "udp": true,
+   "tls": true,
+   "alpn": [
+    "h2"
+   ]
   },
   {
    "name": "ProxyRift 412",
@@ -4986,24 +5395,25 @@
     "美国节点0903 | 1倍率",
     "防失联网址https://www.stableproxy.net",
     "RU - zhuhai.uk 01",
+    "RU 22 [vless]",
     "RU \\U0001F1F7\\U0001F1FA | @Raydikalx | 2A91F2",
     "🇳🇱 荷兰 | NLD",
     "美国节点0902 | 1倍率",
-    "136.148.83.70:443",
+    "🇷🇺 俄罗斯 (Russia) 364",
     "ProxyRift 1437",
+    "RU 21 [vless]",
+    "DE德国(mibei77.com 米贝节点分享)",
+    "🇸🇨_塞舌尔 (10)",
     "🇸🇬_新加坡 (3)",
     "🇹🇼_台湾 (3)",
     "JP - zhuhai.uk 02",
     "[841",
     "JP \\U0001F1EF\\U0001F1F5 | @Raydikalx | 6F81B6",
     "ProxyRift 555",
-    "RU - zhuhai.uk 03",
     "DE - zhuhai.uk 05",
-    "🇷🇺_俄罗斯 (17)",
-    "🇳🇱_荷兰 (9)",
+    "US - zhuhai.uk 02",
     "🇯🇵",
     "🇸🇨_塞舌尔 (3)",
-    "🇸🇨_塞舌尔 (10)",
     "🇨🇳 China - Fuzhou | 112.49.65.212:18000",
     "SE - zhuhai.uk 02",
     "DE - zhuhai.uk 01",
@@ -5030,6 +5440,7 @@
     "FI \\U0001F1EB\\U0001F1EE | @Raydikalx | 73A3DB",
     "🇯🇵 #2",
     "🇹🇷 TR | ec7a81g.de15.h1clayd.click | VLESS [3F1A] | @ScDevNetwork",
+    "ProxyRift 454",
     "🇩🇪_德国 (20)",
     "ProxyRift 1152",
     "🇹🇼_台湾 (2)",
@@ -5038,21 +5449,22 @@
     "ProxyRift 1459 #2",
     "ProxyRift 1013",
     "🇷🇺 RU | 8ba6c3t.nl2.h1clayd.click | VLESS [B49C] | @ScDevNetwork",
-    "🇺🇸 United States | 🌐 | [BL]",
     "🇯🇵_日本 (29)",
     "🇯🇵_日本 (55)",
     "🇯🇵_日本 (16)",
     "SG \\U0001F1F8\\U0001F1EC | @Raydikalx | 430640",
     "end-gfw-sg89-SS",
-    "KR \\U0001F1F0\\U0001F1F7 | @Raydikalx | 6B409E",
     "end-gfw-sg89-SS #2",
+    "KR \\U0001F1F0\\U0001F1F7 | @Raydikalx | 6B409E",
     "end-gfw-sg89-SS #3",
-    "🇸🇬 Singapore - Loyang | 138.2.86.205:443",
     "end-gfw-sg89-SS #4",
+    "🇸🇬 Singapore - Loyang | 138.2.86.205:443",
+    "end-gfw-sg89-SS #5",
     "🇯🇵 JP | 18.176.55.211 | SS [7ED0] | @ScDevNetwork",
     "end-gfw-kr64-SS",
     "end-gfw-kr64-SS #2",
     "ProxyRift 036",
+    "US美国(mibei77.com 米贝节点分享)",
     "🇻🇳 Vietnam - Unknown | 163.61.182.194:34646",
     "ProxyRift 030",
     "🇫🇷 France - Paris | 15.188.27.50:443",
@@ -5084,15 +5496,18 @@
     "\\U0001F1EC\\U0001F1E7 | @WhiteDNS | GB72|24.6MB/s|DNSOK|GPT⁺-GB",
     "🇸🇪 瑞典 | SWE 3",
     "@tootffarangi🍓",
+    "end-gfw-sg89-VLESS #2",
     "ProxyRift 030 #2",
+    "🇻🇳_越南",
     "ProxyRift 1474",
     "ProxyRift 1287",
     "🇫🇮",
     "ProxyRift 1471",
     "🇸🇪 瑞典 | SWE #2",
+    "ProxyRift 1182",
     "ES",
     "ProxyRift 089",
-    "end-gfw-sg89-VLESS #2",
+    "end-gfw-sg89-VLESS #3",
     "[OpenRay] 🇺🇸US-506",
     "ProxyRift 1476",
     "US",
@@ -5118,6 +5533,7 @@
     "EE \\U0001F1EA\\U0001F1EA | @Raydikalx | 708F44",
     "🔒Pr0xySh4rk🦈[HYSTERIA2][21][🇵🇱][848ms]",
     "RU - zhuhai.uk 02",
+    "ProxyRift 204",
     "ProxyRift 1286",
     "DE \\U0001F1E9\\U0001F1EA | @Raydikalx | 2A91F9",
     "🌐 Anycast-IP | 🇩🇪 🇳🇱 [*CIDR] t.me/rjsxrd",
@@ -5132,10 +5548,12 @@
     "ProxyRift 470",
     "ProxyRift 353",
     "ProxyRift 1397",
+    "🇮🇩 印尼 | IDN",
     "🇺🇸 #2",
     "🔥Join+Telegram:@Farah_VPN🟣",
     "🇷🇸",
     "🇭🇰 香港 | HKG",
+    "ProxyRift 015",
     "🇩🇪 德国 | DEU #2",
     "ProxyRift 1330",
     "🇷🇺 俄罗斯 | RUS",
@@ -5145,6 +5563,7 @@
     "[OpenRay] 🌐XX-150",
     "🇺🇸 US | 345739t.de15.h1clayd.click | VLESS [B10C] | @ScDevNetwork",
     "end-gfw-kr64-SS #4",
+    "🇺🇸 #3",
     "ProxyRift 1215",
     "🇩🇪",
     "ProxyRift 264",
@@ -5155,15 +5574,18 @@
     "US \\U0001F1FA\\U0001F1F8 | @Raydikalx | 3274C4",
     "91.108.152.89:3051",
     "US \\U0001F1FA\\U0001F1F8 | @Raydikalx | FFA00A",
+    "ProxyRift 1146",
     "ProxyRift 030 #3",
     "ProxyRift 970",
     "ProxyRift 1291",
     "ProxyRift 240",
+    "ProxyRift 1512",
     "ProxyRift 1688",
     "🇷🇺 #2",
     "🔒Pr0xySh4rk🦈[HYSTERIA2][12][🇩🇪][30.0Mbps][676ms]",
     "ProxyRift 1748",
     "[OpenRay] 🇧🇷BR-253",
+    "ProxyRift 1134",
     "ProxyRift 1344",
     "🇫🇷 Roubaix 3",
     "ProxyRift 1416",
@@ -5188,6 +5610,7 @@
     "ProxyRift 1364",
     "🇩🇪 #3",
     "ProxyRift 1457 #2",
+    "🇩🇪 德国 | DEU #3",
     "ProxyRift 1184",
     "ProxyRift 983",
     "ProxyRift 012",
@@ -5198,13 +5621,18 @@
     "ProxyRift 113",
     "ProxyRift 1738",
     "ProxyRift 1137",
+    "ProxyRift 1072",
     "Бесплатный #2",
     "🇭🇰 HK | 43.103.2.53 | HYSTERIA2 [F4B8] | @ScDevNetwork",
     "RU #3",
     "ProxyRift 1453",
     "ProxyRift 110",
     "ProxyRift 141",
+    "ProxyRift 1513",
+    "ProxyRift 1433",
+    "ProxyRift 513",
     "🇸🇬",
+    "🇩🇪 德国 (Germany) 424",
     "ProxyRift 856",
     "🇯🇵 #3",
     "🇳🇱 #2",
@@ -5222,6 +5650,7 @@
     "ProxyRift 1588",
     "ProxyRift 069",
     "ProxyRift 1504",
+    "🇮🇷_伊朗 (4)",
     "ProxyRift 1562",
     "192.220.47.85:44441",
     "ProxyRift 1328",
@@ -5229,10 +5658,12 @@
     "ProxyRift 1342",
     "ProxyRift 1199",
     "🏳️",
+    "ProxyRift 041",
     "[OpenRay] 🌐XX-255",
     "ProxyRift 370",
     "ProxyRift 1487",
     "ProxyRift 1289",
+    "ProxyRift 645",
     "ProxyRift 1398",
     "🔥Join+Telegram:@Farah_VPN🟣 #2",
     "🔥Join+Telegram:@Farah_VPN🟣 #3",
@@ -5240,37 +5671,15 @@
     "🇮🇳 印度 | IND",
     "🇪🇸 Spain, Madrid | [BL]",
     "ProxyRift 116",
+    "ProxyRift 1476 #2",
     "ProxyRift 424",
+    "🇩🇪 德国 | DEU #4",
     "ProxyRift 1531",
     "https://t.me/ForceRunVPN-🇩🇪-FrankfurtamMain-794ms-Tempest Hosting LLC",
     "ProxyRift 219",
     "support.zoom.us:443",
     "ProxyRift 577",
     "ProxyRift 231",
-    "🇷🇺 RU | max.ru | VLESS [C3A4] | @ScDevNetwork",
-    "ProxyRift 446",
-    "🇯🇵 #4",
-    "end-gfw-kr64-VLESS #2",
-    "ProxyRift 792",
-    "🇸🇬 新加坡 | SGP",
-    "ProxyRift 968",
-    "ProxyRift 1382",
-    "ProxyRift 1460",
-    "🇺🇸 Kansas City 3",
-    "🇷🇺 RU | xykmh-ru-70sb.my-fade.cloud | HYSTERIA2 [181A] | @ScDevNetwork",
-    "ProxyRift 1447",
-    "end-gfw-sg89-VLESS #3",
-    "ProxyRift 410",
-    "🇮🇷 IR | config7x.de5.net | HYSTERIA2 [6C8D] | @ScDevNetwork",
-    "ProxyRift 379",
-    "🇳🇬 NG | c353abt.es5.h1clayd.click | VLESS [35BC] | @ScDevNetwork",
-    "ProxyRift 024",
-    "ProxyRift 051",
-    "🇳🇱 NL | f3b21at.de18.h1clayd.click | VLESS [9341] | @ScDevNetwork",
-    "🇬🇧",
-    "SG \\U0001F1F8\\U0001F1EC | @Raydikalx | A524AE",
-    "🇫🇷 FR | szqbx-ru-77dc.my-fade.cloud | HYSTERIA2 [F2DB] | @ScDevNetwork",
-    "ProxyRift 620",
     "DIRECT"
    ]
   }

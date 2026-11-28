@@ -1,5 +1,23 @@
 # 第三窗口（01:30）执行记忆
 
+## 2026-11-28 采集日（本窗口 15:58 迟到触发）
+
+- **触发时间异常**：本窗口 15:58 才被拉起（正常 01:30），而 `summary.generated_at` = 2026-11-28 02:11:58、
+  `elapsed_min` 32.1 ⇒ 整条链其实已在凌晨跑完，本次触发是「迟到 14h 的空转」，不是当晚第一轮
+- 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2226/2215、xray 1016/1000、clash 1406/1395、
+  singbox 1007/1000）→ GATE: done → 未采集、未跑验证、未重跑自检（未占用验证资源）
+- 本日可用 **v2ray 16 / xray 95 / clash 57 / singbox 85**（池 208/532/337/357）；四核 `partial=false`、
+  `exhausted=false`（cand 4681/5260/5873/5643 未耗尽，属 cap 触顶，正常）
+- **尾巴三处全干净**：无 `pending-push.json`、`git status --short -- free-nodes .github` 空、
+  `rev-list --left-right --count origin/master...HEAD` = 0/0 → 按规则未发布
+- 产物核对（只读）：available 条目 **16/95/57/86（singbox 含 1 条 direct，净 85）** 与 summary 的 ok 逐项一致；
+  `nodes_uris` 6160 = `nodes_meta.total/reachable` 6160；`tested_state` date=2026-11-28（四核 2226/1016/1406/1007）
+- 自检（第一窗口 02:22 产物）：**0 critical / 3 warn** = `rtwo2/FastNodes`+`Areral/ScarletDevil` 0 条（下载失败）
+  + v2ray 可用率 0.7% 低水位 + 镜像失效 10/13（可用 gh-proxy.com / gh-proxy.org / gh.monlor.com）→ 既定口径，未改代码
+- 观察项：v2ray 0.7% 为近期最低（11-26 是 1.4%），cap 2215 由 11-26 的 1.4% 反推 ⇒ 测满仍只 16 条，
+  **属弹性反推的正常失真，不要提 cap、不要放宽探测地址**；若连续 3 晚 <1% 再按 quota.md 分档
+- 本记忆文件在核查之后写，形成 1 个纯文档尾巴，按既有约定留待明晚第一窗口顺带提交
+
 ## 2026-11-25 采集日（2026-11-26 01:30 运行）
 
 - 闸门退出码 0：四内核「已测满单轮上限」（v2ray 2513/2500、xray 2156/2151、clash 2503/2500、

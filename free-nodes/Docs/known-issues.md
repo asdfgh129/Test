@@ -2322,15 +2322,15 @@ V2RayA 的**分类页**和一篇**博客文章**——路径里的 `free-nodes` 
 
 | 级别 | 领域 | 问题 | 建议动作 |
 |---|---|---|---|
-| warn | 来源稳定性 | 2 个高贡献仓库本次 0 条：rtwo2/FastNodes(历史 10006197 条, 下载失败)、Areral/ScarletDevil(历史 43446 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
-| warn | 验证 | v2ray 可用率异常低 0.7%（16/2226） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
+| warn | 来源稳定性 | 1 个高贡献仓库本次 0 条：Areral/ScarletDevil(历史 43446 条, 下载失败) | 按括号里的原因分别处理：下载失败查通道/大文件策略，解析不到查格式覆盖，无候选文件查命名/子目录规则；都不是则属上游停更，无需处理 |
+| warn | 验证 | v2ray 可用率异常低 1.1%（27/2512） | 同上，先看单节点日志；若为协议不支持（如 v2fly 不支持 reality）属正常。注意探测地址是裸域 HTTPS（必须真出境），可用率天然低于旧版明文 HTTP 标准 |
 | warn | 下载通道 | 镜像失效 10/13：https://ghfast.top/、https://ghproxy.net/、https://gh-proxy.net/、https://hub.gitmirror.com/、https://gh.llkk.cc/、https://gitdl.cn/、https://ghproxy.cc/、https://ghp.ci/、https://ghps.cc/、https://raw.gitmirror.com/；可用：https://gh-proxy.com/、https://gh-proxy.org/、https://gh.monlor.com/ | 失效项已从下载链剔除（不再逐个重试），本次不影响采集。若可用数降到 1 个，建议在 DEFAULT_MIRROR_PREFIXES 补新候选 |
 
 ### 2026-11-28 内核检查发现
 
 - xray 有新版本 26.11.9（本地 26.10.21），可用 --update 自动升级
 - clash 有新版本 1.19.34（本地 1.19.33），可用 --update 自动升级
-- singbox 有新版本 1.14.5（本地 1.14.4），可用 --update 自动升级
+- singbox 有新版本 1.14.6（本地 1.14.4），可用 --update 自动升级
 
 ### 2026-11-26 自检发现
 
